@@ -1104,12 +1104,6 @@
                 </span>
             </div>
         </div>
-            <div class="ms-auto d-none d-lg-flex align-items-center gap-2 pe-2">
-                <span class="badge bg-light text-muted border px-2.5 py-1.5" style="font-size:11.5px;">
-                    <i class="bi bi-shield-check text-success me-1"></i> FPT Polytechnic Enterprise Standard
-                </span>
-            </div>
-        </div>
 
         <!-- KPI Metrics Strip -->
         <section class="row g-3 mb-4">
@@ -1864,6 +1858,21 @@ document.addEventListener('DOMContentLoaded', function() {
     renderMonthGrid(currentYear, currentMonth);
     renderMyShiftsTable();
     initQrProjector();
+
+    // Hỗ trợ Deep Link qua URL Query Parameters (?tab=accounting hoặc ?view=day&date=2026-11-15)
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab');
+    const viewParam = urlParams.get('view');
+    const dateParam = urlParams.get('date');
+
+    if (dateParam) {
+        selectedDateStr = dateParam;
+    }
+    if (tabParam) {
+        navigateToPage(tabParam);
+    } else if (viewParam) {
+        changeCalendarView(viewParam);
+    }
 });
 
 /**
@@ -1913,13 +1922,20 @@ function initLucianSideRail() {
 function navigateToPage(pageName) {
     activePage = pageName;
 
-    // Synchronize Central Hub Tabs
-    const hubCal = document.getElementById('hubBtnCalendar');
-    const hubAcc = document.getElementById('hubBtnAccounting');
-    const hubProf = document.getElementById('hubBtnProfile');
-    if (hubCal) hubCal.classList.toggle('active', pageName === 'calendar');
-    if (hubAcc) hubAcc.classList.toggle('active', pageName === 'accounting');
-    if (hubProf) hubProf.classList.toggle('active', pageName === 'student-payroll-profile');
+    // Synchronize Central Hub Tabs (All 7 Tabs)
+    const hubMap = {
+        'calendar': 'hubBtnCalendar',
+        'accounting': 'hubBtnAccounting',
+        'student-payroll-profile': 'hubBtnProfile',
+        'my-shifts': 'hubBtnMyShifts',
+        'events': 'hubBtnEvents',
+        'submissions': 'hubBtnSubmissions',
+        'qr-projector': 'hubBtnQrProjector'
+    };
+    Object.keys(hubMap).forEach(key => {
+        const btn = document.getElementById(hubMap[key]);
+        if (btn) btn.classList.toggle('active', pageName === key);
+    });
 
     // Synchronize Lucian Rail Navigation
     const railItems = document.querySelectorAll('.u040-it');
@@ -2048,7 +2064,7 @@ function renderMonthGrid(year, month) {
     for (let day = 1; day <= totalDaysInMonth; day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const dayShifts = rawShifts.filter(s => s.start_time.startsWith(dateStr));
-        const dayNotes = (rawCalendarNotes || []).filter(n => n.target_date === dateStr);
+        const dayNotes = (rawCalendarNotes || []).filter(n => (n.date || n.target_date) === dateStr);
         const isToday = (dateStr === '2026-11-11');
 
         const cell = document.createElement('div');
@@ -2060,9 +2076,10 @@ function renderMonthGrid(year, month) {
         // Hiển thị ghi chú / lịch hẹn toàn trường (Apple Reminder)
         if (dayNotes.length > 0) {
             dayNotes.slice(0, 1).forEach(n => {
-                previewHtml += `<div class="memo-chip" title="Lưu ý: ${n.content}">
+                const noteTitle = n.title || n.content || 'Ghi chú';
+                previewHtml += `<div class="memo-chip" title="Lưu ý: ${noteTitle}">
                     <i class="fa-solid fa-bookmark" style="font-size:9px; color:#EA580C; flex:none;"></i>
-                    <span class="text-truncate">${n.content}</span>
+                    <span class="text-truncate">${noteTitle}</span>
                 </div>`;
             });
         }
@@ -2130,17 +2147,19 @@ function renderWeekView(targetDateStr) {
         const dateStr = `${y}-${m}-${d}`;
 
         const colShifts = rawShifts.filter(s => s.start_time.startsWith(dateStr));
-        const colNotes = (rawCalendarNotes || []).filter(n => n.target_date === dateStr);
+        const colNotes = (rawCalendarNotes || []).filter(n => (n.date || n.target_date) === dateStr);
         const col = document.createElement('div');
         col.className = 'week-column';
 
         let notesHtml = '';
         if (colNotes.length > 0) {
             colNotes.forEach(n => {
+                const noteType = n.type || n.note_type || 'Lưu ý';
+                const noteTitle = n.title || n.content || '';
                 notesHtml += `
-                    <div class="memo-chip text-truncate mb-2" title="${n.note_type}: ${n.content}">
+                    <div class="memo-chip text-truncate mb-2" title="${noteType}: ${noteTitle}">
                         <i class="fa-solid fa-bookmark text-warning me-1"></i>
-                        <span>${n.content}</span>
+                        <span>${noteTitle}</span>
                     </div>
                 `;
             });
@@ -2194,7 +2213,7 @@ function renderDayView(dateStr) {
 
     document.getElementById('selectedDayLabel').textContent = formatDateVN(dateStr);
     const dayShifts = rawShifts.filter(s => s.start_time.startsWith(dateStr));
-    const dayNotes = (rawCalendarNotes || []).filter(n => n.target_date === dateStr);
+    const dayNotes = (rawCalendarNotes || []).filter(n => (n.date || n.target_date) === dateStr);
 
     // Apple Reminders banner if notes exist
     if (dayNotes.length > 0) {
@@ -2217,14 +2236,19 @@ function renderDayView(dateStr) {
                     </div>
                 </div>
                 <div class="d-flex flex-column gap-2 mt-2">
-                    ${dayNotes.map(n => `
+                    ${dayNotes.map(n => {
+                        const noteType = n.type || n.note_type || 'Lưu ý';
+                        const noteTitle = n.title ? `<strong>${n.title}</strong>: ` : '';
+                        const noteContent = n.content || n.title || '';
+                        const authorName = n.author || n.creator_name || 'BTC';
+                        return `
                         <div class="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-warning-subtle shadow-xs" style="font-size:12.5px;">
                             <i class="fa-regular fa-circle-check text-warning" style="font-size:13px; flex:none;"></i>
-                            <span class="badge bg-light text-secondary border num-tabular" style="font-size:10px; flex:none;">${n.note_type}</span>
-                            <strong class="text-dark">${n.content}</strong>
-                            <span class="ms-auto text-muted small num-tabular" style="flex:none;"><i class="bi bi-person me-1"></i>${n.creator_name || 'BTC'}</span>
+                            <span class="badge bg-light text-secondary border num-tabular" style="font-size:10px; flex:none;">${noteType}</span>
+                            <span class="text-dark">${noteTitle}${noteContent}</span>
+                            <span class="ms-auto text-muted small num-tabular" style="flex:none;"><i class="bi bi-person me-1"></i>${authorName}</span>
                         </div>
-                    `).join('')}
+                    `;}).join('')}
                 </div>
             </div>
         `;
@@ -2279,7 +2303,7 @@ function renderDayView(dateStr) {
             <div class="d-flex align-items-center gap-2">
                 ${isMine 
                     ? `<span class="badge bg-success px-3 py-2 fs-6 fw-bold"><i class="bi bi-check-circle me-1"></i>Bạn Đã Đăng Ký</span>` 
-                    : (currentUser && currentUser.role_name === 'Student' 
+                    : (currentUser && ['Student', 'Media'].includes(currentUser.role_name)
                         ? `<button class="btn-fpt-primary" onclick="openShiftDetail(${s.id})">
                             ${isFull ? 'Đăng Ký Dự Phòng' : 'Đăng Ký Ca Này'}
                            </button>`
@@ -2312,10 +2336,15 @@ function handleAddNoteSubmit(event) {
     const formData = new FormData(form);
     const newNote = {
         id: Date.now(),
+        date: formData.get('date'),
         target_date: formData.get('date'),
+        title: formData.get('title'),
+        content: formData.get('content') || formData.get('title'),
+        type: formData.get('type') || 'EVENT_REMINDER',
         note_type: formData.get('type') || 'EVENT_REMINDER',
-        content: formData.get('title') + (formData.get('content') ? ': ' + formData.get('content') : ''),
-        creator_name: currentUser ? (currentUser.full_name || currentUser.username) : 'BTC'
+        author: currentUser ? (currentUser.full_name || currentUser.username) : 'BTC',
+        creator_name: currentUser ? (currentUser.full_name || currentUser.username) : 'BTC',
+        color: '#EA580C'
     };
 
     rawCalendarNotes.push(newNote);
@@ -2358,7 +2387,7 @@ function openShiftDetail(shiftId) {
     const noticeContainer = document.getElementById('modalRoleNotice');
     const isMine = parseInt(shift.is_registered_by_me) > 0;
 
-    if (currentUser.role_name === 'Student') {
+    if (currentUser && ['Student', 'Media'].includes(currentUser.role_name)) {
         noticeContainer.innerHTML = `
             <i class="bi bi-shield-check fs-5"></i>
             <span>Hệ thống tự động chạy thuật toán <strong>Collision Detection</strong> để đảm bảo bạn không bị trùng lịch học hay ca trực khác.</span>
