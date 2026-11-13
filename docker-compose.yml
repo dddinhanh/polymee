@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: polymee_web
+    ports:
+      - "8000:80"
+    environment:
+      - DB_CONNECTION=sqlite
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-DEMO_KEY_FALLBACK}
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - polymee_network
+
+  db:
+    image: mysql:8.0
+    container_name: polymee_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_2026
+      MYSQL_DATABASE: polymee_db
+      MYSQL_USER: polymee_user
+      MYSQL_PASSWORD: polymee_pass_2026
+    ports:
+      - "3306:3306"
+    volumes:
+      - polymee_db_data:/var/lib/mysql
+      - ./database/schema_mysql.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - polymee_network
+
+volumes:
+  polymee_db_data:
+
+networks:
+  polymee_network:
+    driver: bridge

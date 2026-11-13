@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+    Options -Multiviews
+    RewriteEngine On
+    RewriteBase /
+
+    # Không rewrite nếu truy cập trực tiếp tệp hoặc thư mục tĩnh
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+
+    # Chuyển hướng toàn bộ request vào index.php kèm tham số url
+    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>

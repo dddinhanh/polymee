@@ -1,0 +1,367 @@
+/**
+ * PolyMee - Design Engineered Stylesheet (design-taste-frontend-v1)
+ * WEB212 - FPT Polytechnic Enterprise Standard
+ * Theme: Calibrated FPT Orange (#EA580C) & Deep Navy (#0F172A)
+ * Motion: Fluid CSS cubic-bezier(0.16, 1, 0.3, 1), Tactile Push scale(0.97)
+ */
+
+:root {
+    color-scheme: light;
+    --fpt-primary: #EA580C;
+    --fpt-primary-hover: #C2410C;
+    --fpt-primary-active: #9A3412;
+    --fpt-primary-soft: #FFF7ED;
+    --fpt-primary-border: #FED7AA;
+    
+    --fpt-navy: #0F172A;
+    --fpt-navy-surface: #1E293B;
+    --fpt-slate-bg: #F8FAFC;
+    --fpt-slate-card: #FFFFFF;
+    --fpt-slate-border: #E2E8F0;
+    --fpt-slate-border-focus: #CBD5E1;
+
+    --fpt-text-main: #0F172A;
+    --fpt-text-muted: #475569;
+    --fpt-text-caption: #64748B;
+
+    --fpt-emerald: #059669;
+    --fpt-emerald-hover: #047857;
+    --fpt-emerald-soft: #ECFDF5;
+
+    --fpt-sky: #0284C7;
+    --fpt-sky-hover: #0369A1;
+    --fpt-sky-soft: #F0F9FF;
+
+    --fpt-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--fpt-slate-bg);
+    color: var(--fpt-text-main);
+    letter-spacing: -0.01em;
+}
+
+.num-tabular {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.015em;
+}
+
+/* =========================================================
+   MACHINED BUTTON DESIGN SYSTEM (design-taste-frontend-v1)
+   Tactile feedback: -translate-y-[1px] on hover, :active scale(0.97)
+   1px inner top highlight to eliminate flat plastic feel
+   ========================================================= */
+
+/* 1. Primary Machined Orange Button */
+.btn-fpt-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--fpt-primary);
+    color: #FFFFFF !important;
+    font-weight: 650;
+    font-size: 13.5px;
+    padding: 8px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(194, 65, 12, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 8px rgba(234, 88, 12, 0.22);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s var(--fpt-ease);
+    user-select: none;
+}
+
+.btn-fpt-primary:hover {
+    background: var(--fpt-primary-hover);
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(234, 88, 12, 0.3);
+}
+
+.btn-fpt-primary:active {
+    transform: scale(0.97) translateY(0);
+    background: var(--fpt-primary-active);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 2. Secondary Machined Crisp Slate Button */
+.btn-fpt-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #FFFFFF;
+    color: var(--fpt-text-main) !important;
+    font-weight: 600;
+    font-size: 13.5px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--fpt-slate-border-focus);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s var(--fpt-ease);
+    user-select: none;
+}
+
+.btn-fpt-secondary:hover {
+    background: var(--fpt-slate-bg);
+    border-color: #94A3B8;
+    color: var(--fpt-text-main) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.btn-fpt-secondary:active {
+    transform: scale(0.97) translateY(0);
+    background: #F1F5F9;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+/* 3. Outline Orange Tactile Button */
+.btn-fpt-outline-orange {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--fpt-primary-soft);
+    color: var(--fpt-primary) !important;
+    font-weight: 650;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1.5px solid var(--fpt-primary);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s var(--fpt-ease);
+    user-select: none;
+}
+
+.btn-fpt-outline-orange:hover {
+    background: var(--fpt-primary);
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.25);
+}
+
+.btn-fpt-outline-orange:active {
+    transform: scale(0.97) translateY(0);
+}
+
+/* 4. Emerald Green Button (Duyệt Kế Toán, Tải Excel, Đạt chuẩn) */
+.btn-fpt-emerald {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--fpt-emerald);
+    color: #FFFFFF !important;
+    font-weight: 650;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(4, 120, 87, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(5, 150, 105, 0.2);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s var(--fpt-ease);
+    user-select: none;
+}
+
+.btn-fpt-emerald:hover {
+    background: var(--fpt-emerald-hover);
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 14px rgba(5, 150, 105, 0.28);
+}
+
+.btn-fpt-emerald:active {
+    transform: scale(0.97) translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 5. Sky Blue Button (Đã chuyển khoản, Drive Link) */
+.btn-fpt-sky {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--fpt-sky);
+    color: #FFFFFF !important;
+    font-weight: 650;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(3, 105, 161, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 6px rgba(2, 132, 199, 0.2);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s var(--fpt-ease);
+    user-select: none;
+}
+
+.btn-fpt-sky:hover {
+    background: var(--fpt-sky-hover);
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+
+.btn-fpt-sky:active {
+    transform: scale(0.97) translateY(0);
+}
+
+/* 6. Ghost Slate Button */
+.btn-fpt-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--fpt-text-muted);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s var(--fpt-ease);
+}
+
+.btn-fpt-ghost:hover {
+    background: #F1F5F9;
+    color: var(--fpt-text-main);
+}
+
+.btn-fpt-ghost:active {
+    transform: scale(0.97);
+}
+
+/* Sizing Modifiers */
+.btn-fpt-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 9px;
+    gap: 6px;
+}
+
+.btn-fpt-lg {
+    padding: 12px 24px;
+    font-size: 15px;
+    border-radius: 14px;
+    gap: 10px;
+}
+
+/* =========================================================
+   SEGMENTED CONTROL (BENTO 2.0 PILL SWITCHER)
+   ========================================================= */
+.fpt-segmented-group {
+    display: inline-flex;
+    align-items: center;
+    background: #F1F5F9;
+    padding: 4px;
+    border-radius: 14px;
+    border: 1px solid var(--fpt-slate-border);
+    gap: 2px;
+}
+
+.fpt-segmented-group .segmented-btn {
+    border: none;
+    background: transparent;
+    color: var(--fpt-text-caption);
+    font-size: 13px;
+    font-weight: 650;
+    padding: 6px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.18s var(--fpt-ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fpt-segmented-group .segmented-btn:hover {
+    color: var(--fpt-text-main);
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.fpt-segmented-group .segmented-btn.active {
+    background: #FFFFFF;
+    color: var(--fpt-text-main);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.fpt-segmented-group .segmented-btn:active {
+    transform: scale(0.98);
+}
+
+/* Custom Scrollbar for Chat Dialog */
+#aiChatMessages::-webkit-scrollbar,
+#aiChatHistory::-webkit-scrollbar {
+    width: 5px;
+}
+#aiChatMessages::-webkit-scrollbar-track,
+#aiChatHistory::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+#aiChatMessages::-webkit-scrollbar-thumb,
+#aiChatHistory::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+#aiChatMessages::-webkit-scrollbar-thumb:hover,
+#aiChatHistory::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* AI Chat Message Markdown formatting */
+.ai-bubble-content p {
+    margin-bottom: 0.5rem;
+}
+.ai-bubble-content p:last-child {
+    margin-bottom: 0;
+}
+.ai-bubble-content ul {
+    list-style-type: disc;
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+.ai-bubble-content li {
+    margin-bottom: 0.25rem;
+}
+.ai-bubble-content strong {
+    color: var(--fpt-text-main);
+    font-weight: 700;
+}
+.ai-bubble-content a {
+    color: var(--fpt-primary);
+    text-decoration: underline;
+    word-break: break-all;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.2s var(--fpt-ease) forwards;
+}
