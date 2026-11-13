@@ -94,6 +94,14 @@ CREATE TABLE `shift_assignments` (
     `remuneration_amount` DECIMAL(12,2) DEFAULT 150000.00,
     `accounting_status` VARCHAR(20) DEFAULT 'Pending', -- Pending, Approved, Paid
     `assigned_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `proof_image_url` VARCHAR(500) NULL, -- Ảnh chụp hiện trường có mặt của CTV
+    `proof_note` TEXT NULL, -- Ghi chú vị trí & công việc hiện trường
+    `proof_submitted_at` DATETIME NULL,
+    `lecturer_verified` TINYINT(1) DEFAULT 0, -- Giảng viên thẩm định nghiệm thu
+    `lecturer_name` VARCHAR(100) NULL, -- Tên Giảng viên xác nhận
+    `lecturer_verified_at` DATETIME NULL,
+    `contract_code` VARCHAR(50) NULL, -- Số Hợp đồng / Biên bản nghiệm thu (HDNT-...)
+    `school_status` VARCHAR(30) DEFAULT 'Pending', -- Pending, Approved, Signed_Paid
     CONSTRAINT `fk_assignments_shift` FOREIGN KEY (`shift_id`) REFERENCES `shifts`(`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_assignments_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
     UNIQUE KEY `unique_shift_user` (`shift_id`, `user_id`)

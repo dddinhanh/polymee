@@ -855,11 +855,34 @@
     }
 
     @media print {
-        .u040-wrapper, .dashboard-topbar, .kpi-card, .btn, .view-switcher-group, #calendarViewSwitcher {
+        .u040-wrapper, .dashboard-topbar, .kpi-card, .btn, .view-switcher-group, #calendarViewSwitcher, .modal-backdrop, .modal-header, .modal-footer, .btn-close {
             display: none !important;
+        }
+        body {
+            background: #ffffff !important;
         }
         .main-workspace { padding: 0 !important; }
         .calendar-container, .spa-panel { border: none !important; box-shadow: none !important; }
+        #contractModal {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        #contractModal .modal-dialog {
+            max-width: 100% !important;
+            margin: 0 !important;
+        }
+        #contractModal .modal-content {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        #contractPrintArea {
+            padding: 0 !important;
+        }
     }
     </style>
 </head>
@@ -905,9 +928,9 @@
                         </button>
                     </li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:2" data-page="qr-projector" onclick="navigateToPage('qr-projector')">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h4v4H4zm12 0h4v4h-4zM4 16h4v4H4zm12 0h4v4h-4zM9 4h2v2H9zm4 4h2v2h-2zM4 9h2v2H4zm14 0h2v2h-2zm-5 5h2v2h-2zm4 0h2v2h-2zm-8 4h2v2H9zm4 0h2v2h-2z"/></svg>
-                            <span>Máy Chiếu QR (30s)</span>
+                        <button class="u040-it" type="button" style="--i:2" data-page="contract-dossier" onclick="navigateToPage('contract-dossier')" title="Hồ Sơ Hợp Đồng Nghiệm Thu">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 9V3.5L18.5 8H14zM8 13h8M8 17h5"/></svg>
+                            <span>Hồ Sơ Hợp Đồng</span>
                         </button>
                     </li>
 
@@ -1006,11 +1029,11 @@
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
                     <i class="bi bi-calendar-plus-fill me-1"></i>
-                    <span>+ Đặt Lịch Ca</span>
+                    <span>Đặt Lịch Ca</span>
                 </button>
                 <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="openAddNoteModal()" title="Thêm ghi chú / lịch hẹn toàn trường">
                     <i class="fa-solid fa-note-sticky text-warning me-1"></i>
-                    <span>+ Ghi Chú</span>
+                    <span>Ghi Chú</span>
                 </button>
                 <button type="button" class="btn-fpt-ghost btn-fpt-sm" onclick="toggleAiModal()" title="Trợ lý AI PolyMee">
                     <i class="fa-solid fa-robot text-warning me-1"></i>
@@ -1291,20 +1314,21 @@
                     <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
                         <thead class="table-light text-muted small text-uppercase fw-bold">
                             <tr>
-                                <th style="width: 50px;">STT</th>
-                                <th>Cộng Tác Viên (Họ Tên & SĐT)</th>
-                                <th>Định Danh CCCD / VNeID</th>
-                                <th>Tài Khoản Ngân Hàng (STK)</th>
-                                <th>Ca Trực & Sự Kiện</th>
-                                <th>Mức Thù Lao</th>
-                                <th>Trạng Thái Kế Toán</th>
-                                <th class="text-end" style="width: 140px;">Thao Tác Duyệt</th>
+                                <th style="width: 40px;">STT</th>
+                                <th>Cộng Tác Viên (CTV)</th>
+                                <th>Định Danh VNeID</th>
+                                <th>Ảnh Hiện Trường</th>
+                                <th>Tài Khoản Thụ Hưởng</th>
+                                <th>Ca Trực & Địa Điểm</th>
+                                <th>Thù Lao</th>
+                                <th>Nghiệm Thu & Hợp Đồng</th>
+                                <th class="text-end" style="width: 170px;">Thao Tác Nghiệm Thu</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (empty($accountingList)): ?>
                             <tr>
-                                <td colspan="8" class="text-center py-4 text-muted">Chưa có hồ sơ nghiệm thu nào trong kỳ.</td>
+                                <td colspan="9" class="text-center py-4 text-muted">Chưa có hồ sơ nghiệm thu nào trong kỳ.</td>
                             </tr>
                             <?php else: ?>
                             <?php foreach ($accountingList as $idx => $acc): ?>
@@ -1323,9 +1347,24 @@
                                         <?php endif; ?>
                                         <div>
                                             <span class="badge bg-light text-dark border num-tabular fw-bold"><?= htmlspecialchars($acc['id_card_number'] ?? 'Chưa cập nhật') ?></span>
-                                            <small class="text-success d-block" style="font-size: 11px;"><i class="bi bi-shield-fill-check me-1"></i>Đã xác thực VNeID</small>
+                                            <small class="text-success d-block" style="font-size: 11px;"><i class="bi bi-shield-fill-check me-1"></i>Đã khớp VNeID</small>
                                         </div>
                                     </div>
+                                </td>
+                                <td>
+                                    <?php if (!empty($acc['proof_image_url'])): ?>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div style="width: 48px; height: 34px; flex-shrink: 0; overflow: hidden; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                            <img src="<?= htmlspecialchars($acc['proof_image_url']) ?>" alt="Ảnh Hiện Trường" style="width: 48px; height: 34px; object-fit: cover; display: block; cursor: pointer;" onclick="previewProofModal('<?= htmlspecialchars($acc['full_name']) ?>', '<?= htmlspecialchars($acc['shift_name']) ?>', '<?= htmlspecialchars($acc['proof_image_url']) ?>', '<?= htmlspecialchars($acc['proof_note'] ?? 'Có mặt trực sự kiện') ?>')" title="Nhấp xem ảnh chụp hiện trường">
+                                        </div>
+                                        <div>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 10.5px;"><i class="bi bi-camera me-1"></i>Đã có ảnh</span>
+                                            <small class="text-muted d-block text-truncate" style="max-width: 120px; font-size: 11px;" title="<?= htmlspecialchars($acc['proof_note'] ?? '') ?>"><?= htmlspecialchars($acc['proof_note'] ?? 'Hiện trường') ?></small>
+                                        </div>
+                                    </div>
+                                    <?php else: ?>
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle" style="font-size: 11px;"><i class="bi bi-camera-fill me-1"></i>Chưa nộp ảnh</span>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <strong class="text-primary d-block num-tabular"><?= htmlspecialchars($acc['bank_account_number'] ?? 'Chưa cập nhật') ?></strong>
@@ -1335,7 +1374,7 @@
                                 <td>
                                     <span class="badge bg-secondary mb-1"><?= htmlspecialchars($acc['event_title']) ?></span>
                                     <div class="fw-bold text-dark"><?= htmlspecialchars($acc['shift_name']) ?></div>
-                                    <small class="text-muted num-tabular"><?= substr($acc['start_time'], 11, 5) ?> - <?= substr($acc['end_time'], 11, 5) ?> (<?= substr($acc['start_time'], 0, 10) ?>)</small>
+                                    <small class="text-muted num-tabular"><?= substr($acc['start_time'], 11, 5) ?> - <?= substr($acc['end_time'], 11, 5) ?> • <?= htmlspecialchars($acc['location_name'] ?? 'Hội trường') ?></small>
                                 </td>
                                 <td>
                                     <span class="badge bg-success-subtle text-success border border-success-subtle fs-6 fw-bold num-tabular">
@@ -1344,18 +1383,46 @@
                                     <small class="text-muted d-block mt-0.5">+<?= $acc['points'] ?> điểm rèn luyện</small>
                                 </td>
                                 <td>
-                                    <span id="accStatusBadge_<?= $acc['assignment_id'] ?>" class="badge <?= ($acc['accounting_status'] === 'Approved' ? 'bg-success' : ($acc['accounting_status'] === 'Paid' ? 'bg-primary' : 'bg-warning text-dark')) ?> px-2.5 py-1.5 fw-bold">
-                                        <?= htmlspecialchars($acc['accounting_status'] ?? 'Pending') ?>
-                                    </span>
+                                    <div id="accVerificationCol_<?= $acc['assignment_id'] ?>">
+                                        <?php if (!empty($acc['lecturer_verified']) && $acc['lecturer_verified'] == 1): ?>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle d-inline-block mb-1">
+                                                <i class="bi bi-patch-check-fill me-1"></i>GV: <?= htmlspecialchars($acc['lecturer_name'] ?? 'GV nghiệm thu') ?>
+                                            </span>
+                                            <div>
+                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace" style="font-size: 10.5px;">
+                                                    <?= htmlspecialchars($acc['contract_code'] ?? 'HDNT-2026-FPLY') ?>
+                                                </span>
+                                            </div>
+                                            <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
+                                                <small class="text-success fw-bold d-block mt-1"><i class="bi bi-check2-all me-1"></i>Trường đã chi tiền</small>
+                                            <?php else: ?>
+                                                <small class="text-warning-emphasis d-block mt-1"><i class="bi bi-hourglass-split me-1"></i>Chờ trường ký</small>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+                                                <i class="bi bi-clock me-1"></i>Chờ GV nghiệm thu
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <span id="accStatusBadge_<?= $acc['assignment_id'] ?>" style="display:none;"><?= htmlspecialchars($acc['accounting_status'] ?? 'Pending') ?></span>
                                 </td>
                                 <td class="text-end">
-                                    <div class="d-flex gap-1 justify-content-end">
-                                        <button type="button" class="btn-fpt-emerald btn-fpt-sm" onclick="updateAccountingApproval(<?= $acc['assignment_id'] ?>, 'Approved')" title="Kế toán duyệt hồ sơ">
-                                            <i class="bi bi-check-lg"></i> Duyệt
+                                    <div class="d-flex flex-column gap-1.5 align-items-end" id="accActionBtns_<?= $acc['assignment_id'] ?>">
+                                        <?php if (empty($acc['lecturer_verified']) || $acc['lecturer_verified'] == 0): ?>
+                                        <button type="button" class="btn-fpt-emerald btn-fpt-sm w-100" onclick="verifyLecturerAcceptance(<?= $acc['assignment_id'] ?>)" title="Giảng viên duyệt ảnh hiện trường và lập hợp đồng">
+                                            <i class="bi bi-check2-circle me-1"></i> GV Xác Nhận
                                         </button>
-                                        <button type="button" class="btn-fpt-sky btn-fpt-sm" onclick="updateAccountingApproval(<?= $acc['assignment_id'] ?>, 'Paid')" title="Đã chuyển khoản thù lao">
-                                            <i class="bi bi-credit-card-2-front"></i> Đã Chi
+                                        <?php endif; ?>
+                                        <button type="button" class="btn-fpt-secondary btn-fpt-sm w-100" onclick="openContractModal(<?= $acc['assignment_id'] ?>)" title="Xem Biên bản & Hợp đồng nghiệm thu">
+                                            <i class="bi bi-file-earmark-text me-1"></i> Hợp Đồng
                                         </button>
+                                        <?php if (($acc['school_status'] ?? '') !== 'Signed_Paid'): ?>
+                                        <button type="button" class="btn-fpt-primary btn-fpt-sm w-100" onclick="submitToSchool(<?= $acc['assignment_id'] ?>)" title="Trình lên Nhà trường ký duyệt và chuyển tiền">
+                                            <i class="bi bi-send-check me-1"></i> Trình Trường Ký
+                                        </button>
+                                        <?php else: ?>
+                                        <span class="badge bg-success w-100 py-1.5"><i class="bi bi-check2-all me-1"></i>Đã Chi Tiền</span>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>
@@ -1436,7 +1503,7 @@
                 <div class="d-flex justify-content-between align-items-center pb-3 border-bottom mb-4">
                     <div>
                         <h2 class="h5 fw-bold mb-0 text-dark">Lịch Trực & Ca Phân Công Của Tôi</h2>
-                        <p class="text-muted small mb-0">Theo dõi ca trực đã được phê duyệt, chuẩn bị điểm danh Dynamic QR và nộp link Drive</p>
+                        <p class="text-muted small mb-0">Theo dõi ca trực, nộp ảnh chụp hiện trường chứng minh có mặt để Giảng viên nghiệm thu và xem hợp đồng thanh toán thù lao.</p>
                     </div>
                     <span class="badge bg-primary px-3 py-2 fw-bold" id="myShiftsCountBadge">0 Ca Trực</span>
                 </div>
@@ -1447,8 +1514,9 @@
                                 <th>Thời Gian</th>
                                 <th>Sự Kiện & Ca Trực</th>
                                 <th>Địa Điểm</th>
-                                <th>Trạng Thái</th>
-                                <th>Thù Lao Dự Kiến</th>
+                                <th>Ảnh Hiện Trường</th>
+                                <th>Nghiệm Thu & Hợp Đồng</th>
+                                <th>Thù Lao Quyết Toán</th>
                                 <th class="text-end">Hành Động</th>
                             </tr>
                         </thead>
@@ -1467,7 +1535,7 @@
                         <p class="text-muted small mb-0">Quản trị các chiến dịch tuyển CTV, giám sát tiến độ lấp đầy từng ca trực</p>
                     </div>
                     <button class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
-                        <i class="bi bi-plus-lg me-1"></i> + Đặt Lịch Ca Mới
+                        <i class="bi bi-calendar-plus-fill me-1"></i> Đặt Lịch Ca Mới
                     </button>
                 </div>
                 <div class="row g-4" id="eventsCardsContainer">
@@ -1544,24 +1612,130 @@
                 </div>
             </section>
 
-            <!-- TAB 7: MÁY CHIẾU DYNAMIC QR -->
-            <section class="spa-panel text-center py-5" id="panelQrProjector" style="display:none;">
-                <div class="max-w-md mx-auto" style="max-width: 480px;">
-                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 fw-bold mb-3">
-                        <i class="bi bi-broadcast me-1"></i> DYNAMIC QR 30S ACTIVE
-                    </span>
-                    <h3 class="fw-bold text-dark mb-1">Máy Chiếu Điểm Danh Hội Trường</h3>
-                    <p class="text-muted small mb-4">Mã QR tự động mã hóa HMAC-SHA256 và làm mới mỗi 30 giây để ngăn chặn gian lận điểm danh từ xa</p>
-                    <div class="bg-white p-4 rounded-4 shadow-sm border d-inline-block mb-3">
-                        <div id="projectorQrCanvas" style="width:240px; height:240px; margin:auto;" class="d-grid place-items-center"></div>
+            <!-- TAB 7: HỒ SƠ HỢP ĐỒNG NGHIỆM THU HIỆN TRƯỜNG -->
+            <section class="spa-panel py-3" id="panelContractDossier" style="display:none;">
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-4 gap-3">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-warning text-dark font-monospace fw-bold px-2.5 py-1">QUY TRÌNH MỚI</span>
+                            <h2 class="h5 fw-bold mb-0 text-dark">Hồ Sơ Hợp Đồng Nghiệm Thu & Trình Ký Nhà Trường</h2>
+                        </div>
+                        <p class="text-muted small mb-0">Nghiệm thu bằng ảnh hiện trường thực tế của CTV • Giảng viên thẩm định & lập hợp đồng • Trình Ban Giám Hiệu ký duyệt chuyển tiền</p>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
-                        <div class="spinner-grow spinner-grow-sm text-danger" role="status"></div>
-                        <span class="fw-bold text-muted small">Tự làm mới sau: <strong class="text-danger num-tabular" id="qrCountDown">30s</strong></span>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="exportAccountingCSV()">
+                            <i class="bi bi-file-earmark-excel me-1 text-success"></i> Xuất Bảng Kê (CSV)
+                        </button>
                     </div>
-                    <a href="/admin/qrProjector/1" target="_blank" class="btn-fpt-secondary btn-fpt-sm">
-                        <i class="bi bi-arrows-fullscreen me-1"></i> Mở Chế Độ Toàn Màn Hình Máy Chiếu
-                    </a>
+                </div>
+
+                <!-- 4 KPI Thẻ Nghiệm Thu -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-lg-3">
+                        <div class="p-3 rounded-4 bg-light border">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Tổng Hồ Sơ HĐ</div>
+                            <div class="h3 fw-bold text-dark mb-0 num-tabular"><?= count($accountingList) ?> <small class="fs-6 fw-normal text-muted">bộ</small></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="p-3 rounded-4 bg-light border">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Ảnh Hiện Trường</div>
+                            <div class="h3 fw-bold text-info mb-0 num-tabular"><?= count(array_filter($accountingList, fn($a) => !empty($a['proof_image_url']))) ?> <small class="fs-6 fw-normal text-muted">đã nộp</small></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="p-3 rounded-4 bg-light border">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">GV Đã Nghiệm Thu</div>
+                            <div class="h3 fw-bold text-success mb-0 num-tabular"><?= count(array_filter($accountingList, fn($a) => !empty($a['lecturer_verified']) && $a['lecturer_verified'] == 1)) ?> <small class="fs-6 fw-normal text-muted">hợp đồng</small></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="p-3 rounded-4 bg-light border">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Trường Đã Chi Tiền</div>
+                            <div class="h3 fw-bold text-primary mb-0 num-tabular"><?= count(array_filter($accountingList, fn($a) => ($a['school_status'] ?? '') === 'Signed_Paid')) ?> <small class="fs-6 fw-normal text-muted">đã chi</small></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danh sách Hợp Đồng Dossier Cards -->
+                <div class="row g-3">
+                    <?php foreach ($accountingList as $acc): ?>
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <div class="card h-100 border shadow-xs rounded-4 p-3 bg-white d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace px-2.5 py-1">
+                                        <?= htmlspecialchars($acc['contract_code'] ?? ('HDNT-2026-FPLY-' . str_pad((string)$acc['assignment_id'], 3, '0', STR_PAD_LEFT))) ?>
+                                    </span>
+                                    <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                        <i class="bi bi-check2-all me-1"></i>Trường Đã Ký & Chi Tiền
+                                    </span>
+                                    <?php elseif (!empty($acc['lecturer_verified']) && $acc['lecturer_verified'] == 1): ?>
+                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+                                        <i class="bi bi-hourglass-split me-1"></i>Chờ Trường Ký
+                                    </span>
+                                    <?php else: ?>
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
+                                        <i class="bi bi-clock me-1"></i>Chờ GV Duyệt Ảnh
+                                    </span>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2.5 mb-3">
+                                    <?php if (!empty($acc['proof_image_url'])): ?>
+                                    <div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; cursor: pointer;" onclick="previewProofModal('<?= htmlspecialchars($acc['full_name']) ?>', '<?= htmlspecialchars($acc['shift_name']) ?>', '<?= htmlspecialchars($acc['proof_image_url']) ?>', '<?= htmlspecialchars($acc['proof_note'] ?? 'Hiện trường trực') ?>')">
+                                        <img src="<?= htmlspecialchars($acc['proof_image_url']) ?>" alt="Ảnh Hiện Trường" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                    <?php else: ?>
+                                    <div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 10px; background: #f1f5f9; display: grid; place-items: center; border: 1px dashed #cbd5e1;">
+                                        <i class="bi bi-camera text-muted fs-4"></i>
+                                    </div>
+                                    <?php endif; ?>
+                                    <div class="overflow-hidden">
+                                        <h6 class="fw-bold text-dark mb-0 text-truncate"><?= htmlspecialchars($acc['full_name']) ?></h6>
+                                        <small class="text-muted d-block"><?= htmlspecialchars($acc['student_code']) ?> • CCCD: <?= htmlspecialchars($acc['id_card_number'] ?? '079203014589') ?></small>
+                                        <small class="text-primary fw-semibold d-block text-truncate">STK: <?= htmlspecialchars($acc['bank_account_number'] ?? '') ?> (<?= htmlspecialchars($acc['bank_name'] ?? 'NH') ?>)</small>
+                                    </div>
+                                </div>
+
+                                <div class="bg-light p-2.5 rounded-3 mb-3 small">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="text-muted">Sự kiện:</span>
+                                        <strong class="text-dark text-truncate ms-2" style="max-width: 180px;"><?= htmlspecialchars($acc['event_title']) ?></strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="text-muted">Ca trực:</span>
+                                        <span class="text-dark"><?= htmlspecialchars($acc['shift_name']) ?></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="text-muted">Địa điểm:</span>
+                                        <span class="text-dark"><?= htmlspecialchars($acc['location_name'] ?? 'Hội trường') ?></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between border-top pt-1 mt-1">
+                                        <span class="text-muted fw-bold">Thù lao:</span>
+                                        <strong class="text-success num-tabular"><?= number_format((int)$acc['remuneration_amount']) ?> đ</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn-fpt-secondary btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
+                                    <i class="bi bi-file-earmark-text me-1"></i> Xem Hợp Đồng
+                                </button>
+                                <?php if (($acc['school_status'] ?? '') !== 'Signed_Paid'): ?>
+                                <button type="button" class="btn-fpt-primary btn-fpt-sm flex-fill" onclick="submitToSchool(<?= $acc['assignment_id'] ?>)">
+                                    <i class="bi bi-send-check me-1"></i> Trình Trường Ký
+                                </button>
+                                <?php else: ?>
+                                <button type="button" class="btn-fpt-emerald btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
+                                    <i class="bi bi-printer me-1"></i> In Biên Bản
+                                </button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
             </section>
 
@@ -1722,6 +1896,258 @@
 </div>
 
 <!-- =========================================================
+     MODAL XEM TRƯỚC ẢNH CHỤP HIỆN TRƯỜNG MINH CHỨNG CÓ MẶT
+     ========================================================= -->
+<div class="modal fade" id="previewProofModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden;">
+            <div class="modal-header text-white" style="background:var(--ux-ink); padding:16px 20px;">
+                <div>
+                    <h6 class="modal-title fw-bold mb-0" id="proofModalTitle">Minh Chứng Hiện Trường Có Mặt</h6>
+                    <small class="text-white-50" id="proofModalSub">Sự kiện: FPoly TechDay 2026</small>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3 text-center bg-light">
+                <div class="position-relative d-inline-block rounded-3 overflow-hidden shadow-xs mb-2">
+                    <img id="proofModalImage" src="" alt="Ảnh Hiện Trường" class="img-fluid" style="max-height: 380px; display: block; border-radius: 12px;">
+                </div>
+                <div class="alert alert-info py-2 px-3 small mb-0 text-start">
+                    <strong class="d-block text-dark"><i class="bi bi-chat-left-quote me-1"></i>Ghi chú của CTV:</strong>
+                    <span id="proofModalNote" class="text-muted">Có mặt đúng giờ tại địa điểm trực sự kiện</span>
+                </div>
+            </div>
+            <div class="modal-footer bg-light px-3 py-2 border-0">
+                <button type="button" class="btn-fpt-secondary btn-fpt-sm" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
+     MODAL CTV NỘP ẢNH HIỆN TRƯỜNG CHỨNG MINH CÓ MẶT NGHIỆM THU
+     ========================================================= -->
+<div class="modal fade" id="submitProofModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius:22px; overflow:hidden;">
+            <div class="modal-header text-white" style="background:var(--ux-accent); padding:18px 24px;">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-camera-fill fs-5"></i>
+                    <div>
+                        <h6 class="modal-title fw-bold mb-0">Chụp Ảnh Hiện Trường Nghiệm Thu</h6>
+                        <small class="text-white-50" id="submitProofShiftInfo">Ca trực sự kiện</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="submitProofForm" onsubmit="handleProofSubmit(event)">
+                <input type="hidden" name="assignment_id" id="submitProofAssignmentId" value="">
+                <div class="modal-body p-4">
+                    <div class="alert alert-light border py-2 px-3 small mb-3">
+                        <i class="bi bi-info-circle text-primary me-1"></i> <strong>Quy chế nghiệm thu:</strong> CTV chụp ảnh hiện trường thực tế để Giảng viên thẩm định và làm hợp đồng đề nghị Nhà trường thanh toán thù lao.
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-dark small">Chọn Ảnh Mẫu Hiện Trường Nhanh (Dành cho Demo)</label>
+                        <div class="d-flex flex-wrap gap-1.5 mb-2">
+                            <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="setProofSample('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80', 'Có mặt tại sảnh Hội trường A đón tiếp khách VIP và sinh viên')">
+                                <i class="bi bi-image me-1"></i> Sảnh Hội Trường
+                            </button>
+                            <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="setProofSample('https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80', 'Có mặt tại Sân khấu chính điều phối âm thanh ánh sáng')">
+                                <i class="bi bi-image me-1"></i> Sân Khấu
+                            </button>
+                            <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="setProofSample('https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=800&auto=format&fit=crop&q=80', 'Hoàn tất bàn lễ tân hướng dẫn đăng ký tham dự')">
+                                <i class="bi bi-image me-1"></i> Bàn Tiếp Đón
+                            </button>
+                        </div>
+                        <label class="form-label fw-bold text-dark small mt-2">Hoặc Nhập URL Ảnh Chụp Thực Tế <span class="text-danger">*</span></label>
+                        <input type="url" name="proof_image_url" id="submitProofImageUrl" class="form-control" placeholder="https://..." required oninput="previewProofInput(this.value)">
+                    </div>
+
+                    <div class="text-center mb-3">
+                        <div id="proofInputPreviewBox" style="height: 150px; border-radius: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; display: grid; place-items: center; overflow: hidden;">
+                            <span class="text-muted small"><i class="bi bi-camera me-1"></i>Ảnh xem trước sẽ hiển thị tại đây</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-dark small">Ghi Chú Công Việc Hoàn Thành Tại Hiện Trường</label>
+                        <textarea name="proof_note" id="submitProofNote" class="form-control" rows="2" placeholder="Ví dụ: Đã có mặt đúng giờ, hỗ trợ check-in đủ 150 sinh viên tại cổng số 1..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light px-4 py-3 border-0 d-flex justify-content-between">
+                    <button type="button" class="btn-fpt-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn-fpt-primary">
+                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Nộp Minh Chứng Nghiệm Thu
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
+     MODAL HỢP ĐỒNG & BIÊN BẢN NGHIỆM THU THÔNG TIN CTV
+     (CHUẨN VĂN BẢN TRƯỜNG CAO ĐẲNG FPT POLYTECHNIC)
+     ========================================================= -->
+<div class="modal fade" id="contractModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius:24px; overflow:hidden;">
+            <div class="modal-header text-white" style="background:#0F172A; padding:18px 24px;">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-file-earmark-check-fill text-warning fs-5"></i>
+                    <div>
+                        <h6 class="modal-title fw-bold mb-0">Hợp Đồng & Biên Bản Nghiệm Thu Thông Tin CTV</h6>
+                        <small class="text-white-50" id="contractModalSub">Mã hồ sơ: HDNT-2026-FPLY-001</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 p-md-5 bg-white" id="contractPrintArea" style="font-family: 'Times New Roman', Times, serif; font-size: 14.5px; line-height: 1.6; color: #111827;">
+                <!-- Header Quốc Hiệu / Đơn Vị -->
+                <div class="row g-2 text-center pb-3 border-bottom mb-4">
+                    <div class="col-6 text-start">
+                        <strong style="font-size: 13px;" class="text-uppercase d-block">TRƯỜNG CAO ĐẲNG FPT POLYTECHNIC</strong>
+                        <span style="font-size: 12.5px;" class="d-block">PHÒNG CÔNG TÁC SINH VIÊN & KẾ TOÁN</span>
+                        <div class="font-monospace text-primary fw-bold mt-1" style="font-size: 12px;" id="contractDocNumber">Số: HDNT-2026-FPLY-001 / HĐNT-FPLY</div>
+                    </div>
+                    <div class="col-6 text-end">
+                        <strong style="font-size: 13px;" class="text-uppercase d-block">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong>
+                        <span style="font-size: 12.5px;" class="fw-bold d-block text-decoration-underline">Độc lập - Tự do - Hạnh phúc</span>
+                        <small class="text-muted fst-italic d-block mt-1" style="font-size: 11.5px;">TP. Hồ Chí Minh, ngày 15 tháng 11 năm 2026</small>
+                    </div>
+                </div>
+
+                <!-- Tiêu Đề Văn Bản -->
+                <div class="text-center my-3">
+                    <h5 class="fw-bold text-uppercase mb-1" style="letter-spacing: 0.5px;">HỢP ĐỒNG & BIÊN BẢN NGHIỆM THU CÔNG VIỆC</h5>
+                    <p class="fst-italic text-muted mb-0" style="font-size: 13.5px;">(V/v: Hoàn thành nhiệm vụ Cộng tác viên phục vụ sự kiện & Đề nghị chi trả thù lao)</p>
+                </div>
+
+                <div class="mb-3 small">
+                    <p class="mb-1">- Căn cứ Kế hoạch tổ chức sự kiện và Điều phối Cộng tác viên của Trường Cao đẳng FPT Polytechnic;</p>
+                    <p class="mb-1">- Căn cứ kết quả thực hiện và ảnh chụp hiện trường có mặt trực tiếp của Cộng tác viên.</p>
+                </div>
+
+                <!-- Bên A & Bên B -->
+                <div class="bg-light p-3 rounded-3 mb-3" style="font-family: system-ui, -apple-system, sans-serif; font-size: 13px;">
+                    <div class="row g-2">
+                        <div class="col-12 col-md-6 border-end">
+                            <strong class="text-primary text-uppercase d-block mb-1">BÊN A: ĐẠI DIỆN ĐƠN VỊ TỔ CHỨC / GIẢNG VIÊN</strong>
+                            <div>Họ và tên: <strong class="text-dark" id="contractLecturer">ThS. Nguyễn Văn A</strong></div>
+                            <div>Chức vụ: <span>Giảng viên Giám sát Hoạt động CTV</span></div>
+                            <div>Đơn vị: <span>Trường Cao đẳng FPT Polytechnic</span></div>
+                        </div>
+                        <div class="col-12 col-md-6 ps-md-3">
+                            <strong class="text-primary text-uppercase d-block mb-1">BÊN B: CỘNG TÁC VIÊN THỰC HIỆN (CTV)</strong>
+                            <div>Họ và tên: <strong class="text-dark" id="contractCtvName">Lê Văn Cường</strong></div>
+                            <div>Mã sinh viên: <span class="fw-bold" id="contractCtvCode">PS02941</span> • SĐT: <span id="contractCtvPhone">0987654321</span></div>
+                            <div>Số CCCD: <span class="fw-bold font-monospace" id="contractCtvCccd">079203014589</span> <span class="badge bg-success-subtle text-success py-0" style="font-size:10px;">Đã khớp VNeID</span></div>
+                            <div>Tài khoản nhận: <strong class="text-primary font-monospace" id="contractCtvBank">1029384756 (Vietcombank)</strong></div>
+                            <div>Chủ tài khoản: <strong class="text-dark text-uppercase" id="contractCtvHolder">LE VAN CUONG</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nội Dung Công Việc & Thù Lao -->
+                <div class="mb-3">
+                    <strong class="d-block mb-1">ĐIỀU 1: NỘI DUNG VÀ KHỐI LƯỢNG CÔNG VIỆC THỰC HIỆN</strong>
+                    <table class="table table-bordered mb-2" style="font-size: 13px;">
+                        <tbody>
+                            <tr>
+                                <td style="width: 25%; font-weight: 600; background: #f8fafc;">Tên Sự Kiện:</td>
+                                <td id="contractEventName">FPoly TechDay 2026</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; background: #f8fafc;">Ca Phân Công:</td>
+                                <td id="contractShiftName">Ca 2: Điều Phối & Đón Tiếp Khách Mời</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; background: #f8fafc;">Thời Gian & Địa Điểm:</td>
+                                <td id="contractTimeLocation">09:30 - 13:00 (15/11/2026) • Hội trường Tòa F</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; background: #f8fafc;">Mức Thù Lao Quyết Toán:</td>
+                                <td>
+                                    <strong class="text-success fs-6" id="contractAmount">150,000 VNĐ</strong>
+                                    <span class="text-muted fst-italic ms-2" id="contractAmountWords">(Một trăm năm mươi nghìn đồng chẵn)</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Minh Chứng Hiện Trường -->
+                <div class="mb-4">
+                    <strong class="d-block mb-1">ĐIỀU 2: ẢNH HIỆN TRƯỜNG MINH CHỨNG CÓ MẶT NGHIỆM THU</strong>
+                    <div class="p-3 bg-light rounded-3 border">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-12 col-md-5 text-center">
+                                <div style="max-height: 200px; overflow: hidden; border-radius: 12px; border: 2px solid #e2e8f0; display: inline-block;">
+                                    <img id="contractProofImg" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80" alt="Ảnh Hiện Trường Nghiệm Thu" style="max-height: 200px; max-width: 100%; object-fit: cover; display: block;">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-7" style="font-size: 13px;">
+                                <div class="badge bg-success mb-2 px-2.5 py-1">
+                                    <i class="bi bi-shield-fill-check me-1"></i> ẢNH HIỆN TRƯỜNG ĐÃ ĐƯỢC GIẢNG VIÊN THẨM ĐỊNH
+                                </div>
+                                <p class="mb-1"><strong>Ghi chú CTV:</strong> <span id="contractProofNoteDisplay" class="fst-italic text-dark">Có mặt đúng giờ, hỗ trợ đón khách tại sảnh</span></p>
+                                <p class="mb-1"><strong>Kết luận Giảng viên:</strong> <span class="text-success fw-bold">CTV có mặt đúng vị trí phân công, hoàn thành đầy đủ nhiệm vụ được giao, đủ điều kiện nghiệm thu thanh toán.</span></p>
+                                <p class="mb-0 text-muted small">Ảnh chụp có xác thực vị trí và nhận diện sinh viên.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ĐIỀU 3 & CHỮ KÝ 3 BÊN -->
+                <div class="mb-3">
+                    <strong class="d-block mb-3">ĐIỀU 3: KÝ DUYỆT & ĐỀ NGHỊ NHÀ TRƯỜNG CHUYỂN TIỀN</strong>
+                    <div class="row g-2 text-center" style="font-size: 13px;">
+                        <div class="col-4">
+                            <strong class="text-uppercase d-block mb-1">CỘNG TÁC VIÊN</strong>
+                            <span class="fst-italic text-muted small d-block mb-4">(Ký, ghi rõ họ tên)</span>
+                            <div class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2 my-2">
+                                <i class="bi bi-fingerprint me-1"></i> Đã Ký Điện Tử (VNeID)
+                            </div>
+                            <strong class="d-block mt-1 text-dark" id="contractSignCtv">Lê Văn Cường</strong>
+                        </div>
+                        <div class="col-4 border-start border-end">
+                            <strong class="text-uppercase d-block mb-1">GIẢNG VIÊN NGHIỆM THU</strong>
+                            <span class="fst-italic text-muted small d-block mb-4">(Ký xác nhận hiện trường)</span>
+                            <div class="badge bg-primary-subtle text-primary border border-primary-subtle py-1 px-2 my-2" id="contractSignLecturerBadge">
+                                <i class="bi bi-patch-check-fill me-1"></i> Đã Xác Nhận Hiện Trường
+                            </div>
+                            <strong class="d-block mt-1 text-dark" id="contractSignLecturer">ThS. Nguyễn Văn A</strong>
+                        </div>
+                        <div class="col-4">
+                            <strong class="text-uppercase d-block mb-1">BAN GIÁM HIỆU / KẾ TOÁN</strong>
+                            <span class="fst-italic text-muted small d-block mb-4">(Ký duyệt chi tiền)</span>
+                            <div id="contractSignSchoolBadge">
+                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle py-1 px-2 my-2">
+                                    <i class="bi bi-hourglass-split me-1"></i> Đang Chờ Ký Duyệt
+                                </span>
+                            </div>
+                            <strong class="d-block mt-1 text-dark">Phòng Kế Toán FPoly</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-light px-4 py-3 border-0 d-flex justify-content-between">
+                <button type="button" class="btn-fpt-secondary" data-bs-dismiss="modal">Đóng</button>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn-fpt-secondary" onclick="printContractModal()">
+                        <i class="bi bi-printer me-1"></i> In Hợp Đồng (PDF)
+                    </button>
+                    <button type="button" class="btn-fpt-primary" id="btnSubmitToSchoolInModal" onclick="submitCurrentModalToSchool()">
+                        <i class="bi bi-send-check-fill me-1"></i> Trình Trường Ký Xác Nhận Chuyển Tiền
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
      MODAL ĐIỀU PHỐI / CHI TIẾT CA TRỰC (ROLE-ADAPTIVE)
      ========================================================= -->
 <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalTitle" aria-hidden="true">
@@ -1863,6 +2289,10 @@ let aiModalInstance = null;
 let createShiftModalInstance = null;
 let previewVneidModalInstance = null;
 let addNoteModalInstance = null;
+let submitProofModalInstance = null;
+let previewProofModalInstance = null;
+let contractModalInstance = null;
+let currentViewingAssignmentId = null;
 let qrCodeObj = null;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1870,6 +2300,9 @@ document.addEventListener('DOMContentLoaded', function() {
     aiModalInstance = new bootstrap.Modal(document.getElementById('aiModal'));
     createShiftModalInstance = new bootstrap.Modal(document.getElementById('createShiftModal'));
     previewVneidModalInstance = new bootstrap.Modal(document.getElementById('previewVneidModal'));
+    submitProofModalInstance = new bootstrap.Modal(document.getElementById('submitProofModal'));
+    previewProofModalInstance = new bootstrap.Modal(document.getElementById('previewProofModal'));
+    contractModalInstance = new bootstrap.Modal(document.getElementById('contractModal'));
     const addNoteModalEl = document.getElementById('addNoteModal');
     if (addNoteModalEl) {
         addNoteModalInstance = new bootstrap.Modal(addNoteModalEl);
@@ -1878,7 +2311,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initLucianSideRail();
     renderMonthGrid(currentYear, currentMonth);
     renderMyShiftsTable();
-    initQrProjector();
 
     // Hỗ trợ Deep Link qua URL Query Parameters (?tab=accounting hoặc ?view=day&date=2026-11-15)
     const urlParams = new URLSearchParams(window.location.search);
@@ -1963,7 +2395,8 @@ function navigateToPage(pageName) {
     document.getElementById('panelMyShifts').style.display = 'none';
     document.getElementById('panelEvents').style.display = 'none';
     document.getElementById('panelSubmissions').style.display = 'none';
-    document.getElementById('panelQrProjector').style.display = 'none';
+    const panelContract = document.getElementById('panelContractDossier');
+    if (panelContract) panelContract.style.display = 'none';
 
     const isCalendar = (pageName === 'calendar');
     document.getElementById('calendarViewSwitcher').style.display = isCalendar ? 'inline-flex' : 'none';
@@ -1998,10 +2431,10 @@ function navigateToPage(pageName) {
         document.getElementById('panelSubmissions').style.display = 'block';
         screenTitle.textContent = 'Thẩm Định Nghiệm Thu Minh Chứng Google Drive';
         breadcrumb.textContent = 'Thẩm Định Drive';
-    } else if (pageName === 'qr-projector') {
-        document.getElementById('panelQrProjector').style.display = 'block';
-        screenTitle.textContent = 'Máy Chiếu Dynamic QR Code Điểm Danh';
-        breadcrumb.textContent = 'Máy Chiếu QR';
+    } else if (pageName === 'contract-dossier' || pageName === 'qr-projector') {
+        if (panelContract) panelContract.style.display = 'block';
+        screenTitle.textContent = 'Hồ Sơ Hợp Đồng Nghiệm Thu & Đề Nghị Chi Tiền';
+        breadcrumb.textContent = 'Hồ Sơ Hợp Đồng';
     }
 }
 
@@ -2664,7 +3097,7 @@ async function submitShiftRegistration(shiftId) {
 }
 
 /**
- * Render Bảng Ca Trực Của Tôi
+ * Render Bảng Ca Trực Của Tôi (Theo quy trình nộp ảnh hiện trường & hợp đồng nghiệm thu)
  */
 function renderMyShiftsTable() {
     const tbody = document.getElementById('myShiftsTableBody');
@@ -2672,16 +3105,79 @@ function renderMyShiftsTable() {
     tbody.innerHTML = '';
 
     const myShifts = rawShifts.filter(s => parseInt(s.is_registered_by_me) > 0);
-    document.getElementById('myShiftsCountBadge').textContent = `${myShifts.length} Ca Trực`;
+    const countBadge = document.getElementById('myShiftsCountBadge');
+    if (countBadge) countBadge.textContent = `${myShifts.length} Ca Trực`;
 
     if (myShifts.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">Bạn chưa đăng ký ca trực nào. Hãy vào Bảng Lịch để nhận ca nhé!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Bạn chưa đăng ký ca trực nào. Hãy vào Bảng Lịch để nhận ca nhé!</td></tr>`;
         return;
     }
 
     myShifts.forEach(s => {
         const tr = document.createElement('tr');
         const allowance = s.remuneration_amount ? Number(s.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150,000 đ';
+        const assignmentId = s.my_assignment_id || s.id;
+        const hasProof = !!s.my_proof_image_url;
+        const isVerified = parseInt(s.my_lecturer_verified) === 1;
+        const isPaid = (s.my_school_status === 'Signed_Paid');
+
+        let proofHtml = '';
+        if (hasProof) {
+            proofHtml = `
+                <div class="d-flex align-items-center gap-2">
+                    <div style="width: 48px; height: 34px; flex-shrink: 0; overflow: hidden; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <img src="${s.my_proof_image_url}" alt="Ảnh Hiện Trường" style="width: 48px; height: 34px; object-fit: cover; display: block; cursor: pointer;" onclick="previewProofModal('${(currentUser.full_name || 'CTV').replace(/'/g, "\\'")}', '${s.name}', '${s.my_proof_image_url}', '${(s.my_proof_note || 'Đã có mặt tại sự kiện').replace(/'/g, "\\'")}')" title="Nhấp xem phóng to">
+                    </div>
+                    <div>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 10.5px;"><i class="bi bi-camera me-1"></i>Đã nộp ảnh</span>
+                        <small class="text-muted d-block text-truncate" style="max-width: 120px; font-size: 11px;">${s.my_proof_note || 'Hiện trường'}</small>
+                    </div>
+                </div>
+            `;
+        } else {
+            proofHtml = `<span class="badge bg-danger-subtle text-danger border border-danger-subtle" style="font-size: 11px;"><i class="bi bi-camera-fill me-1"></i>Chưa nộp ảnh</span>`;
+        }
+
+        let statusHtml = '';
+        if (isVerified) {
+            statusHtml = `
+                <span class="badge bg-success-subtle text-success border border-success-subtle mb-1"><i class="bi bi-patch-check-fill me-1"></i>GV Đã Nghiệm Thu</span>
+                <div class="small font-monospace text-primary">${s.my_contract_code || 'HDNT-2026-FPLY'}</div>
+                ${isPaid ? '<small class="text-success fw-bold d-block mt-0.5"><i class="bi bi-check2-all me-1"></i>Trường đã chi tiền</small>' : '<small class="text-muted d-block mt-0.5">Chờ trường ký duyệt</small>'}
+            `;
+        } else if (hasProof) {
+            statusHtml = `
+                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle mb-1"><i class="bi bi-hourglass-split me-1"></i>Chờ GV Duyệt Ảnh</span>
+                <small class="text-muted d-block">Đang thẩm định</small>
+            `;
+        } else {
+            statusHtml = `
+                <span class="badge bg-light text-muted border mb-1">Chờ Nộp Ảnh</span>
+                <small class="text-danger d-block" style="font-size: 11px;">Chụp ảnh để nghiệm thu</small>
+            `;
+        }
+
+        let actionHtml = '';
+        if (isVerified) {
+            actionHtml = `
+                <button class="btn-fpt-primary btn-fpt-sm w-100 mb-1" onclick="openContractModal(${assignmentId})">
+                    <i class="bi bi-file-earmark-text me-1"></i> Xem Hợp Đồng
+                </button>
+            `;
+        } else if (hasProof) {
+            actionHtml = `
+                <button class="btn-fpt-secondary btn-fpt-sm w-100" onclick="openSubmitProofModal(${assignmentId}, '${s.name}', '${s.start_time}')">
+                    <i class="bi bi-camera me-1"></i> Chụp / Đổi Ảnh
+                </button>
+            `;
+        } else {
+            actionHtml = `
+                <button class="btn-fpt-primary btn-fpt-sm w-100" onclick="openSubmitProofModal(${assignmentId}, '${s.name}', '${s.start_time}')">
+                    <i class="bi bi-camera-fill me-1"></i> Chụp Ảnh Nghiệm Thu
+                </button>
+            `;
+        }
+
         tr.innerHTML = `
             <td>
                 <strong class="text-dark num-tabular">${s.start_time.substring(11, 16)} - ${s.end_time.substring(11, 16)}</strong><br>
@@ -2692,12 +3188,14 @@ function renderMyShiftsTable() {
                 <strong class="text-dark">${s.name}</strong>
             </td>
             <td><i class="bi bi-geo-alt me-1 text-danger"></i>${s.location_name || 'Hội trường'}</td>
-            <td><span class="badge bg-success">Đã Phê Duyệt</span></td>
-            <td><strong class="text-success num-tabular">${allowance}</strong></td>
-            <td class="text-end">
-                <button class="btn-fpt-emerald btn-fpt-sm" onclick="alert('Đã sẵn sàng quét mã Dynamic QR tại hội trường')">
-                    <i class="bi bi-qr-code-scan me-1"></i> Điểm Danh
-                </button>
+            <td>${proofHtml}</td>
+            <td>${statusHtml}</td>
+            <td>
+                <strong class="text-success num-tabular">${allowance}</strong><br>
+                <small class="text-muted">+${s.points || 10} điểm rèn luyện</small>
+            </td>
+            <td class="text-end" style="min-width: 150px;">
+                ${actionHtml}
             </td>
         `;
         tbody.appendChild(tr);
@@ -2705,32 +3203,307 @@ function renderMyShiftsTable() {
 }
 
 /**
- * Máy Chiếu QR Code Tự Đổi 30s
+ * Chọn ảnh mẫu hiện trường nhanh (dành cho demo)
  */
-let qrSeconds = 30;
-function initQrProjector() {
-    const container = document.getElementById('projectorQrCanvas');
-    if (!container) return;
-    container.innerHTML = '';
-    qrCodeObj = new QRCode(container, {
-        text: 'POLYMEE_TOKEN_INIT_DEMO_2026',
-        width: 240,
-        height: 240,
-        colorDark: '#0F172A',
-        colorLight: '#FFFFFF',
-        correctLevel: QRCode.CorrectLevel.H
-    });
+function setProofSample(url, note) {
+    document.getElementById('submitProofImageUrl').value = url;
+    document.getElementById('submitProofNote').value = note;
+    previewProofInput(url);
+}
 
-    setInterval(() => {
-        qrSeconds--;
-        if (qrSeconds <= 0) {
-            qrSeconds = 30;
-            const randToken = 'POLYMEE_' + Math.random().toString(36).substring(2, 10).toUpperCase();
-            if (qrCodeObj) qrCodeObj.makeCode(randToken);
+/**
+ * Preview ảnh hiện trường khi nhập URL
+ */
+function previewProofInput(url) {
+    const box = document.getElementById('proofInputPreviewBox');
+    if (!box) return;
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        box.innerHTML = `<img src="${url}" alt="Preview" style="max-height: 150px; max-width: 100%; object-fit: cover; border-radius: 8px;">`;
+    } else {
+        box.innerHTML = `<span class="text-muted small"><i class="bi bi-camera me-1"></i>Ảnh xem trước sẽ hiển thị tại đây</span>`;
+    }
+}
+
+/**
+ * Mở modal CTV nộp ảnh hiện trường
+ */
+function openSubmitProofModal(assignmentId, shiftName, shiftTime) {
+    document.getElementById('submitProofAssignmentId').value = assignmentId;
+    document.getElementById('submitProofShiftInfo').textContent = `${shiftName} (${shiftTime ? shiftTime.substring(11, 16) : ''})`;
+    document.getElementById('submitProofImageUrl').value = '';
+    document.getElementById('submitProofNote').value = '';
+    previewProofInput('');
+    submitProofModalInstance.show();
+}
+
+/**
+ * Xử lý submit nộp ảnh hiện trường
+ */
+async function handleProofSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('submitProofForm');
+    const formData = new FormData(form);
+    const assignmentId = parseInt(formData.get('assignment_id'));
+    const proofUrl = formData.get('proof_image_url');
+    const proofNote = formData.get('proof_note');
+
+    try {
+        const response = await fetch('/dashboard/submitOnSiteProof', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        if (data.success) {
+            submitProofModalInstance.hide();
+            showToast(data.message, 'success');
+
+            // Cập nhật local state trong rawShifts
+            const shift = rawShifts.find(s => parseInt(s.my_assignment_id) === assignmentId);
+            if (shift) {
+                shift.my_proof_image_url = proofUrl;
+                shift.my_proof_note = proofNote;
+            }
+
+            // Cập nhật local state trong rawAccountingList
+            const acc = rawAccountingList.find(a => parseInt(a.assignment_id) === assignmentId);
+            if (acc) {
+                acc.proof_image_url = proofUrl;
+                acc.proof_note = proofNote;
+            }
+
+            renderMyShiftsTable();
+            setTimeout(() => window.location.reload(), 1200);
+        } else {
+            showToast(data.message || 'Lỗi khi nộp ảnh.', 'danger');
         }
-        const counterEl = document.getElementById('qrCountDown');
-        if (counterEl) counterEl.textContent = qrSeconds + 's';
-    }, 1000);
+    } catch (err) {
+        showToast('Lỗi kết nối khi nộp ảnh minh chứng.', 'danger');
+    }
+}
+
+/**
+ * Xem trước ảnh hiện trường phóng to
+ */
+function previewProofModal(name, shiftName, imgUrl, note) {
+    document.getElementById('proofModalTitle').textContent = `Minh Chứng Hiện Trường: ${name}`;
+    document.getElementById('proofModalSub').textContent = `Ca: ${shiftName}`;
+    document.getElementById('proofModalImage').src = imgUrl;
+    document.getElementById('proofModalNote').textContent = note || 'Có mặt đúng giờ tại vị trí trực sự kiện';
+    previewProofModalInstance.show();
+}
+
+/**
+ * Giảng viên xác nhận nghiệm thu hiện trường & khởi tạo hợp đồng
+ */
+async function verifyLecturerAcceptance(assignmentId) {
+    try {
+        const formData = new FormData();
+        formData.append('assignment_id', assignmentId);
+
+        const response = await fetch('/dashboard/verifyLecturerAcceptance', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        if (data.success) {
+            showToast(data.message, 'success');
+
+            // Cập nhật local state
+            const acc = rawAccountingList.find(a => parseInt(a.assignment_id) === assignmentId);
+            if (acc) {
+                acc.lecturer_verified = 1;
+                acc.contract_code = data.contract_code;
+                acc.lecturer_name = data.lecturer_name;
+                acc.accounting_status = 'Approved';
+            }
+            const shift = rawShifts.find(s => parseInt(s.my_assignment_id) === assignmentId);
+            if (shift) {
+                shift.my_lecturer_verified = 1;
+                shift.my_contract_code = data.contract_code;
+            }
+
+            // Cập nhật UI hàng bảng
+            const verCol = document.getElementById(`accVerificationCol_${assignmentId}`);
+            if (verCol) {
+                verCol.innerHTML = `
+                    <span class="badge bg-success-subtle text-success border border-success-subtle d-inline-block mb-1">
+                        <i class="bi bi-patch-check-fill me-1"></i>GV: ${data.lecturer_name}
+                    </span>
+                    <div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace" style="font-size: 10.5px;">
+                            ${data.contract_code}
+                        </span>
+                    </div>
+                    <small class="text-warning-emphasis d-block mt-1"><i class="bi bi-hourglass-split me-1"></i>Chờ trường ký</small>
+                `;
+            }
+
+            const actionCol = document.getElementById(`accActionBtns_${assignmentId}`);
+            if (actionCol) {
+                actionCol.innerHTML = `
+                    <button type="button" class="btn-fpt-secondary btn-fpt-sm w-100" onclick="openContractModal(${assignmentId})">
+                        <i class="bi bi-file-earmark-text me-1"></i> Hợp Đồng
+                    </button>
+                    <button type="button" class="btn-fpt-primary btn-fpt-sm w-100" onclick="submitToSchool(${assignmentId})">
+                        <i class="bi bi-send-check me-1"></i> Trình Trường Ký
+                    </button>
+                `;
+            }
+
+            renderMyShiftsTable();
+        } else {
+            showToast(data.message || 'Lỗi khi xác nhận nghiệm thu.', 'danger');
+        }
+    } catch (err) {
+        showToast('Lỗi kết nối khi giảng viên duyệt.', 'danger');
+    }
+}
+
+/**
+ * Mở modal Hợp đồng & Biên bản nghiệm thu thông tin CTV
+ */
+function openContractModal(assignmentId) {
+    currentViewingAssignmentId = assignmentId;
+    const acc = rawAccountingList.find(a => parseInt(a.assignment_id) === parseInt(assignmentId)) 
+             || rawShifts.find(s => parseInt(s.my_assignment_id) === parseInt(assignmentId));
+
+    if (!acc) {
+        showToast('Không tìm thấy thông tin hồ sơ hợp đồng.', 'warning');
+        return;
+    }
+
+    const ccode = acc.contract_code || acc.my_contract_code || ('HDNT-2026-FPLY-' + String(assignmentId).padStart(3, '0'));
+    const ctvName = acc.full_name || currentUser.full_name || 'Lê Văn Cường';
+    const ctvCode = acc.student_code || currentUser.student_code || 'PS02941';
+    const ctvPhone = acc.phone || currentUser.phone || '0987654321';
+    const ctvCccd = acc.id_card_number || currentUser.id_card_number || '079203014589';
+    const ctvBank = (acc.bank_account_number || currentUser.bank_account_number || '1029384756') + ' (' + (acc.bank_name || currentUser.bank_name || 'Vietcombank') + ')';
+    const ctvHolder = acc.bank_account_name || currentUser.bank_account_name || ctvName;
+    const eventName = acc.event_title || 'Sự kiện FPT Polytechnic 2026';
+    const shiftName = acc.shift_name || acc.name || 'Ca trực CTV';
+    const timeStr = acc.start_time ? (acc.start_time.substring(11, 16) + ' - ' + acc.end_time.substring(11, 16) + ' (' + formatDateVN(acc.start_time.substring(0, 10)) + ')') : '08:00 - 12:00';
+    const locName = acc.location_name || 'Hội trường Tòa F';
+    const amountNum = acc.remuneration_amount ? Number(acc.remuneration_amount) : 150000;
+    const proofImg = acc.proof_image_url || acc.my_proof_image_url || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80';
+    const proofNote = acc.proof_note || acc.my_proof_note || 'Đã có mặt trực sự kiện đúng giờ và hoàn thành tốt nhiệm vụ được giao';
+    const lecturer = acc.lecturer_name || acc.my_lecturer_name || 'ThS. Hoàng Văn Thụ';
+    const isSignedPaid = (acc.school_status === 'Signed_Paid' || acc.my_school_status === 'Signed_Paid');
+
+    document.getElementById('contractModalSub').textContent = `Mã hồ sơ: ${ccode}`;
+    document.getElementById('contractDocNumber').textContent = `Số: ${ccode} / HĐNT-FPLY`;
+    document.getElementById('contractLecturer').textContent = lecturer;
+    document.getElementById('contractCtvName').textContent = ctvName;
+    document.getElementById('contractCtvCode').textContent = ctvCode;
+    document.getElementById('contractCtvPhone').textContent = ctvPhone;
+    document.getElementById('contractCtvCccd').textContent = ctvCccd;
+    document.getElementById('contractCtvBank').textContent = ctvBank;
+    document.getElementById('contractCtvHolder').textContent = ctvHolder;
+    document.getElementById('contractEventName').textContent = eventName;
+    document.getElementById('contractShiftName').textContent = shiftName;
+    document.getElementById('contractTimeLocation').textContent = `${timeStr} • ${locName}`;
+    document.getElementById('contractAmount').textContent = `${amountNum.toLocaleString('vi-VN')} VNĐ`;
+    document.getElementById('contractProofImg').src = proofImg;
+    document.getElementById('contractProofNoteDisplay').textContent = proofNote;
+    document.getElementById('contractSignCtv').textContent = ctvName;
+    document.getElementById('contractSignLecturer').textContent = lecturer;
+
+    const schoolSignEl = document.getElementById('contractSignSchoolBadge');
+    const submitBtn = document.getElementById('btnSubmitToSchoolInModal');
+    if (isSignedPaid) {
+        schoolSignEl.innerHTML = `
+            <div class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2 my-2">
+                <i class="bi bi-check2-all me-1"></i> ĐÃ KÝ DUYỆT & ĐÃ CHI TIỀN
+            </div>
+        `;
+        if (submitBtn) {
+            submitBtn.style.display = 'none';
+        }
+    } else {
+        schoolSignEl.innerHTML = `
+            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle py-1 px-2 my-2">
+                <i class="bi bi-hourglass-split me-1"></i> Đang Chờ Ký Duyệt
+            </span>
+        `;
+        if (submitBtn) {
+            submitBtn.style.display = 'inline-block';
+        }
+    }
+
+    contractModalInstance.show();
+}
+
+/**
+ * Trình hồ sơ hợp đồng lên Nhà trường ký duyệt & chuyển tiền
+ */
+async function submitToSchool(assignmentId) {
+    try {
+        const formData = new FormData();
+        formData.append('assignment_id', assignmentId);
+
+        const response = await fetch('/dashboard/submitToSchoolForSigning', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        if (data.success) {
+            showToast(data.message, 'success');
+
+            // Cập nhật local state
+            const acc = rawAccountingList.find(a => parseInt(a.assignment_id) === assignmentId);
+            if (acc) {
+                acc.school_status = 'Signed_Paid';
+                acc.accounting_status = 'Paid';
+            }
+            const shift = rawShifts.find(s => parseInt(s.my_assignment_id) === assignmentId);
+            if (shift) {
+                shift.my_school_status = 'Signed_Paid';
+                shift.my_accounting_status = 'Paid';
+            }
+
+            // Cập nhật nút bấm trong bảng
+            const actionCol = document.getElementById(`accActionBtns_${assignmentId}`);
+            if (actionCol) {
+                actionCol.innerHTML = `
+                    <button type="button" class="btn-fpt-secondary btn-fpt-sm w-100" onclick="openContractModal(${assignmentId})">
+                        <i class="bi bi-file-earmark-text me-1"></i> Hợp Đồng
+                    </button>
+                    <span class="badge bg-success w-100 py-1.5"><i class="bi bi-check2-all me-1"></i>Đã Chi Tiền</span>
+                `;
+            }
+
+            renderMyShiftsTable();
+        } else {
+            showToast(data.message || 'Lỗi khi trình trường ký.', 'danger');
+        }
+    } catch (err) {
+        showToast('Lỗi kết nối khi gửi hồ sơ lên trường.', 'danger');
+    }
+}
+
+/**
+ * Trình trường ký từ bên trong Modal Hợp đồng
+ */
+function submitCurrentModalToSchool() {
+    if (currentViewingAssignmentId) {
+        submitToSchool(currentViewingAssignmentId);
+        const schoolSignEl = document.getElementById('contractSignSchoolBadge');
+        if (schoolSignEl) {
+            schoolSignEl.innerHTML = `
+                <div class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2 my-2">
+                    <i class="bi bi-check2-all me-1"></i> ĐÃ KÝ DUYỆT & ĐÃ CHI TIỀN
+                </div>
+            `;
+        }
+        const submitBtn = document.getElementById('btnSubmitToSchoolInModal');
+        if (submitBtn) submitBtn.style.display = 'none';
+    }
+}
+
+/**
+ * In Hợp đồng & Biên bản nghiệm thu (window.print)
+ */
+function printContractModal() {
+    window.print();
 }
 
 /**
