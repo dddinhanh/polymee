@@ -211,6 +211,34 @@
         display: flex;
         flex-direction: column;
         gap: 6px;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+    .u040-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .u040-section-label {
+        padding: 10px 0 2px 14px;
+        list-style: none;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .u040-section-label span {
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity .2s;
+    }
+
+    .u040.is-wide .u040-section-label span {
+        opacity: 1;
+        transition: opacity .3s .15s;
     }
 
     .u040-hl {
@@ -840,10 +868,10 @@
 <div class="app-shell">
 
     <!-- =========================================================
-         EXPANDING SIDE RAIL (LUCIAN UX #040) WITH FULL RBAC
+         EXPANDING SIDE RAIL (LUCIAN UX #040) - MAIN NAVIGATION
          ========================================================= -->
     <aside class="u040-wrapper">
-        <div class="ux u040" id="lucianSideRail">
+        <div class="ux u040 is-wide" id="lucianSideRail">
             <nav class="u040-rail" aria-label="Main menu">
                 <!-- Top Brand -->
                 <div class="u040-top">
@@ -854,76 +882,65 @@
                 </div>
 
                 <!-- Expand/Collapse Button (Bezier Spring Curve) -->
-                <button class="u040-tog" type="button" id="railToggleBtn" aria-expanded="false" aria-label="Expand menu">
+                <button class="u040-tog" type="button" id="railToggleBtn" aria-expanded="true" aria-label="Collapse menu">
                     <svg viewBox="0 0 16 16"><path d="M6 3.5L10.5 8 6 12.5"/></svg>
                 </button>
 
-                <!-- Navigation List -->
+                <!-- Navigation List (Menu Chính Hệ Thống) -->
                 <ul class="u040-nav" id="railNav">
                     <li class="u040-hl" role="presentation"></li>
 
-                    <!-- 1. Bảng Lịch Hoạt Động (Mặc định cho mọi Role) -->
+                    <!-- 1. LỊCH TRÌNH & ĐIỀU PHỐI -->
+                    <li class="u040-section-label"><span>LỊCH TRÌNH & ĐIỀU PHỐI</span></li>
                     <li>
                         <button class="u040-it" type="button" style="--i:0" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
-                            <span>Bảng Lịch Hoạt Động</span>
+                            <span>Lịch Hoạt Động</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" style="--i:1" data-page="my-shifts" onclick="navigateToPage('my-shifts')">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>
+                            <span>Ca Trực Của Tôi</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" style="--i:2" data-page="qr-projector" onclick="navigateToPage('qr-projector')">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h4v4H4zm12 0h4v4h-4zM4 16h4v4H4zm12 0h4v4h-4zM9 4h2v2H9zm4 4h2v2h-2zM4 9h2v2H4zm14 0h2v2h-2zm-5 5h2v2h-2zm4 0h2v2h-2zm-8 4h2v2H9zm4 0h2v2h-2z"/></svg>
+                            <span>Máy Chiếu QR (30s)</span>
                         </button>
                     </li>
 
-                    <!-- 2. BẢNG NGHIỆM THU KẾ TOÁN (CHO KẾ TOÁN, ADMIN & BAN TỔ CHỨC) -->
-                    <?php if (in_array($currentUser['role_name'] ?? '', ['Admin', 'Organizer', 'Accountant', 'Staff'], true)): ?>
+                    <!-- 2. TÀI CHÍNH & VNEID -->
+                    <li class="u040-section-label"><span>TÀI CHÍNH & VNEID</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:1" data-page="accounting" onclick="navigateToPage('accounting')" title="Bảng Nghiệm Thu Kế Toán (Họ tên, CCCD, VNeID, STK)">
+                        <button class="u040-it" type="button" style="--i:3" data-page="accounting" onclick="navigateToPage('accounting')" title="Bảng Nghiệm Thu Kế Toán">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7h6M9 11h6M9 15h4M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
                             <span>Nghiệm Thu Kế Toán</span>
                             <em class="u040-bd" aria-label="Hồ sơ nghiệm thu"><?= count($accountingList) ?></em>
                         </button>
                     </li>
-                    <?php endif; ?>
-
-                    <!-- 3. HỒ SƠ NHẬN THÙ LAO & CA CỦA TÔI (CHO SINH VIÊN / CTV MEDIA) -->
-                    <?php if (in_array($currentUser['role_name'] ?? '', ['Student', 'Media'], true)): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:1" data-page="my-shifts" onclick="navigateToPage('my-shifts')">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>
-                            <span>Lịch Trực Của Tôi</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="u040-it" type="button" style="--i:2" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')">
+                        <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h2"/></svg>
                             <span>Hồ Sơ VNeID & STK</span>
                         </button>
                     </li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:3" data-page="submissions" onclick="navigateToPage('submissions')">
+                        <button class="u040-it" type="button" style="--i:5" data-page="submissions" onclick="navigateToPage('submissions')">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5V13M5 9V4.5M12 19.5V11M12 7V4.5M19 19.5V15M19 11V4.5M3 13h4M10 7h4M17 15h4"/></svg>
-                            <span>Minh Chứng Google Drive</span>
+                            <span>Minh Chứng Drive</span>
                         </button>
                     </li>
-                    <?php endif; ?>
 
-                    <!-- 4. Quản Lý Sự Kiện & Phân Rã Ca Trực (Admin / Organizer / Staff) -->
-                    <?php if (in_array($currentUser['role_name'] ?? '', ['Admin', 'Organizer', 'Staff'], true)): ?>
+                    <!-- 3. QUẢN LÝ TỔ CHỨC -->
+                    <li class="u040-section-label"><span>QUẢN LÝ TỔ CHỨC</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:2" data-page="events" onclick="navigateToPage('events')">
+                        <button class="u040-it" type="button" style="--i:6" data-page="events" onclick="navigateToPage('events')">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>
                             <span>Quản Lý Sự Kiện</span>
                         </button>
                     </li>
-                    <li>
-                        <button class="u040-it" type="button" style="--i:3" data-page="submissions" onclick="navigateToPage('submissions')">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5V13M5 9V4.5M12 19.5V11M12 7V4.5M19 19.5V15M19 11V4.5M3 13h4M10 7h4M17 15h4"/></svg>
-                            <span>Thẩm Định Drive</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="u040-it" type="button" style="--i:4" data-page="qr-projector" onclick="navigateToPage('qr-projector')">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h4v4H4zm12 0h4v4h-4zM4 16h4v4H4zm12 0h4v4h-4zM9 4h2v2H9zm4 4h2v2h-2zM4 9h2v2H4zm14 0h2v2h-2zm-5 5h2v2h-2zm4 0h2v2h-2zm-8 4h2v2H9zm4 0h2v2h-2z"/></svg>
-                            <span>Máy Chiếu QR (30s)</span>
-                        </button>
-                    </li>
-                    <?php endif; ?>
                 </ul>
 
                 <!-- Profile Footer -->
@@ -1078,44 +1095,6 @@
                 </div>
             </div>
         </header>
-
-        <!-- CENTRAL HUB NAVIGATION TABS (Bento 2.0 Liquid Glass Bar) -->
-        <div class="central-mode-bar">
-            <button type="button" class="hub-tab-btn active" id="hubBtnCalendar" onclick="navigateToPage('calendar')">
-                <i class="bi bi-calendar3 fs-6"></i>
-                <span>Lịch Hoạt Động</span>
-            </button>
-            <button type="button" class="hub-tab-btn" id="hubBtnAccounting" onclick="navigateToPage('accounting')">
-                <i class="bi bi-wallet2 fs-6"></i>
-                <span>Nghiệm Thu Kế Toán</span>
-                <span class="badge rounded-pill bg-danger text-white ms-1 num-tabular"><?= count($accountingList) ?></span>
-            </button>
-            <button type="button" class="hub-tab-btn" id="hubBtnProfile" onclick="navigateToPage('student-payroll-profile')">
-                <i class="bi bi-person-vcard fs-6"></i>
-                <span>Hồ Sơ VNeID & STK</span>
-            </button>
-            <button type="button" class="hub-tab-btn" id="hubBtnMyShifts" onclick="navigateToPage('my-shifts')">
-                <i class="bi bi-clock-history fs-6"></i>
-                <span>Ca Của Tôi</span>
-            </button>
-            <button type="button" class="hub-tab-btn" id="hubBtnEvents" onclick="navigateToPage('events')">
-                <i class="bi bi-flag fs-6"></i>
-                <span>Sự Kiện</span>
-            </button>
-            <button type="button" class="hub-tab-btn" id="hubBtnSubmissions" onclick="navigateToPage('submissions')">
-                <i class="fa-brands fa-google-drive fs-6"></i>
-                <span>Minh Chứng Drive</span>
-            </button>
-            <button type="button" class="hub-tab-btn" id="hubBtnQrProjector" onclick="navigateToPage('qr-projector')">
-                <i class="bi bi-qr-code fs-6"></i>
-                <span>Máy Chiếu QR</span>
-            </button>
-            <div class="ms-auto d-none d-xxl-flex align-items-center pe-2">
-                <span class="badge bg-light text-muted border px-2.5 py-1.5" style="font-size:11px;">
-                    <i class="bi bi-shield-check text-success me-1"></i> FPT Poly Standard
-                </span>
-            </div>
-        </div>
 
         <!-- KPI Metrics Strip -->
         <section class="row g-3 mb-4">
@@ -1963,21 +1942,6 @@ function initLucianSideRail() {
  */
 function navigateToPage(pageName) {
     activePage = pageName;
-
-    // Synchronize Central Hub Tabs (All 7 Tabs)
-    const hubMap = {
-        'calendar': 'hubBtnCalendar',
-        'accounting': 'hubBtnAccounting',
-        'student-payroll-profile': 'hubBtnProfile',
-        'my-shifts': 'hubBtnMyShifts',
-        'events': 'hubBtnEvents',
-        'submissions': 'hubBtnSubmissions',
-        'qr-projector': 'hubBtnQrProjector'
-    };
-    Object.keys(hubMap).forEach(key => {
-        const btn = document.getElementById(hubMap[key]);
-        if (btn) btn.classList.toggle('active', pageName === key);
-    });
 
     // Synchronize Lucian Rail Navigation
     const railItems = document.querySelectorAll('.u040-it');
