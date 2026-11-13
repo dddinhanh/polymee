@@ -365,3 +365,39 @@ body {
 .animate-fade-in {
     animation: fadeIn 0.2s var(--fpt-ease) forwards;
 }
+
+/* =========================================================
+   ACCOUNTING & VNEID AUDIT (design-taste-frontend-v1)
+   ========================================================= */
+.vneid-thumb {
+    width: 48px !important;
+    height: 34px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    max-height: 34px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+    border: 1.5px solid var(--fpt-slate-border) !important;
+    cursor: pointer !important;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    flex-shrink: 0 !important;
+}
+
+.vneid-thumb:hover {
+    transform: scale(1.12) !important;
+    box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.15) !important;
+    border-color: var(--fpt-primary) !important;
+}
+
+.ai-audit-banner {
+    background: linear-gradient(135deg, rgba(255, 247, 237, 0.95) 0%, rgba(240, 249, 255, 0.95) 100%);
+    border: 1px solid rgba(254, 215, 170, 0.8);
+    border-radius: 18px;
+    padding: 14px 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.04);
+}
