@@ -966,7 +966,15 @@
             overflow: hidden !important;
         }
 
-        #panelCalendar {
+        /* Panel display overrides: hidden state must always win */
+        .spa-panel[style*="display: none"],
+        .spa-panel[style*="display:none"],
+        #panelCalendar[style*="display: none"],
+        #panelCalendar[style*="display:none"] {
+            display: none !important;
+        }
+
+        #panelCalendar:not([style*="display: none"]):not([style*="display:none"]) {
             flex: 1 !important;
             min-height: 0 !important;
             height: 100% !important;
@@ -986,13 +994,41 @@
             flex-shrink: 0 !important;
         }
 
-        #tierMonthView {
+        /* 3-Tier Views Inside Calendar */
+        #tierMonthView[style*="display: none"],
+        #tierMonthView[style*="display:none"],
+        #tierWeekView[style*="display: none"],
+        #tierWeekView[style*="display:none"],
+        #tierDayView[style*="display: none"],
+        #tierDayView[style*="display:none"] {
+            display: none !important;
+        }
+
+        #tierMonthView:not([style*="display: none"]):not([style*="display:none"]) {
             flex: 1 !important;
             min-height: 0 !important;
             height: 100% !important;
             display: flex !important;
             flex-direction: column !important;
             overflow: hidden !important;
+        }
+
+        #tierWeekView:not([style*="display: none"]):not([style*="display:none"]) {
+            flex: 1 !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+
+        #tierDayView:not([style*="display: none"]):not([style*="display:none"]) {
+            flex: 1 !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow-y: auto !important;
         }
 
         .month-header-grid {
@@ -1042,12 +1078,13 @@
             overflow: hidden !important;
         }
 
-        .spa-panel:not(#panelCalendar) {
+        .spa-panel:not(#panelCalendar):not([style*="display: none"]):not([style*="display:none"]) {
             flex: 1 !important;
             min-height: 0 !important;
             max-height: 100% !important;
             overflow-y: auto !important;
-            padding: 20px !important;
+            padding: 16px 20px !important;
+            display: block !important;
         }
     }
 
@@ -1207,10 +1244,10 @@
 
     /* Reminders Day Callout Widget */
     .apple-reminder-banner {
-        background: rgba(234, 88, 12, 0.08);
-        border: 1px solid rgba(234, 88, 12, 0.25);
-        border-radius: 16px;
-        padding: 12px 16px;
+        background: #F4F4F6 !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        border-radius: 14px;
+        padding: 10px 14px;
         display: flex;
         align-items: flex-start;
         gap: 12px;
@@ -1220,36 +1257,54 @@
     .week-columns-grid {
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
-        gap: 10px;
-        margin-top: 15px;
+        gap: 8px;
+        margin-top: 10px;
         width: 100%;
+        flex: 1;
+        min-height: 0;
         box-sizing: border-box;
     }
 
     .week-column {
-        background: var(--ux-surface-2);
-        border-radius: 16px;
-        padding: 10px;
-        min-height: 480px;
+        background: #FAFAFC;
+        border-radius: 14px;
+        padding: 8px;
+        min-height: 380px;
         min-width: 0;
         width: 100%;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        border: 1px solid var(--ux-line);
-    }
-
-    [data-bs-theme="dark"] .week-column {
-        background: var(--ux-surface-2);
-        border-color: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        overflow: hidden;
     }
 
     .week-col-header {
         text-align: center;
-        padding-bottom: 8px;
-        border-bottom: 1px dashed var(--ux-line);
-        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        margin-bottom: 8px;
         cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .week-col-body {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding-right: 2px;
+    }
+
+    .week-col-body::-webkit-scrollbar {
+        width: 4px;
+    }
+    .week-col-body::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.18);
+        border-radius: 4px;
     }
 
     .week-card-shift {
@@ -1877,89 +1932,44 @@
                     <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
                         <thead class="table-light text-muted small text-uppercase fw-bold">
                             <tr>
-                                <th style="width: 40px;">STT</th>
-                                <th>Cộng Tác Viên (CTV)</th>
-                                <th>Định Danh VNeID</th>
-                                <th>Ảnh Hiện Trường</th>
-                                <th>Tài Khoản Thụ Hưởng</th>
-                                <th>Ca Trực & Địa Điểm</th>
+                                <th style="width: 45px;">#</th>
+                                <th>Cộng Tác Viên</th>
+                                <th>Ca Trực & Sự Kiện</th>
                                 <th>Thù Lao</th>
-                                <th>Nghiệm Thu & Hợp Đồng</th>
-                                <th class="text-end" style="width: 170px;">Thao Tác Nghiệm Thu</th>
+                                <th>Trạng Thái</th>
+                                <th class="text-end" style="width: 200px;">Thao Tác</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (empty($accountingList)): ?>
                             <tr>
-                                <td colspan="9" class="text-center py-4 text-muted">Chưa có hồ sơ nghiệm thu nào trong kỳ.</td>
+                                <td colspan="6" class="text-center py-4 text-muted">Chưa có hồ sơ nghiệm thu nào trong kỳ.</td>
                             </tr>
                             <?php else: ?>
                             <?php foreach ($accountingList as $idx => $acc): ?>
-                            <tr id="accRow_<?= $acc['assignment_id'] ?>">
+                            <tr id="accRow_<?= $acc['assignment_id'] ?>" data-search="<?= strtolower(htmlspecialchars($acc['full_name'] . ' ' . $acc['student_code'] . ' ' . ($acc['id_card_number'] ?? '') . ' ' . ($acc['bank_account_number'] ?? '') . ' ' . $acc['shift_name'])) ?>">
                                 <td class="text-muted fw-bold num-tabular"><?= $idx + 1 ?></td>
                                 <td>
                                     <strong class="text-dark d-block"><?= htmlspecialchars($acc['full_name']) ?></strong>
-                                    <small class="text-muted num-tabular"><?= htmlspecialchars($acc['student_code']) ?> • SĐT: <?= htmlspecialchars($acc['phone'] ?? '0987654321') ?></small>
+                                    <span class="badge bg-light text-secondary border font-monospace" style="font-size: 10px;"><?= htmlspecialchars($acc['student_code']) ?></span>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <?php if (!empty($acc['vneid_image_url'])): ?>
-                                        <div style="width: 48px; height: 34px; flex-shrink: 0; overflow: hidden; border-radius: 8px;">
-                                            <img src="<?= htmlspecialchars($acc['vneid_image_url']) ?>" alt="Ảnh VNeID" class="vneid-thumb" style="width: 48px; height: 34px; object-fit: cover; display: block;" onclick="previewVneidModal('<?= htmlspecialchars($acc['full_name']) ?>', '<?= htmlspecialchars($acc['id_card_number'] ?? '079203014589') ?>', '<?= htmlspecialchars($acc['vneid_image_url']) ?>')" title="Nhấp xem phóng to ảnh VNeID">
-                                        </div>
-                                        <?php endif; ?>
-                                        <div>
-                                            <span class="badge bg-light text-dark border num-tabular fw-bold"><?= htmlspecialchars($acc['id_card_number'] ?? 'Chưa cập nhật') ?></span>
-                                            <small class="text-success d-block" style="font-size: 11px;"><i class="bi bi-shield-fill-check me-1"></i>Đã khớp VNeID</small>
-                                        </div>
-                                    </div>
+                                    <div class="fw-bold text-dark mb-0.5"><?= htmlspecialchars($acc['shift_name']) ?></div>
+                                    <small class="text-muted num-tabular"><?= substr($acc['start_time'], 11, 5) ?> - <?= substr($acc['end_time'], 11, 5) ?> • <?= htmlspecialchars($acc['event_title']) ?></small>
                                 </td>
                                 <td>
-                                    <?php if (!empty($acc['proof_image_url'])): ?>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div style="width: 48px; height: 34px; flex-shrink: 0; overflow: hidden; border-radius: 8px; border: 1px solid #e2e8f0;">
-                                            <img src="<?= htmlspecialchars($acc['proof_image_url']) ?>" alt="Ảnh Hiện Trường" style="width: 48px; height: 34px; object-fit: cover; display: block; cursor: pointer;" onclick="previewProofModal('<?= htmlspecialchars($acc['full_name']) ?>', '<?= htmlspecialchars($acc['shift_name']) ?>', '<?= htmlspecialchars($acc['proof_image_url']) ?>', '<?= htmlspecialchars($acc['proof_note'] ?? 'Có mặt trực sự kiện') ?>')" title="Nhấp xem ảnh chụp hiện trường">
-                                        </div>
-                                        <div>
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 10.5px;"><i class="bi bi-camera me-1"></i>Đã có ảnh</span>
-                                            <small class="text-muted d-block text-truncate" style="max-width: 120px; font-size: 11px;" title="<?= htmlspecialchars($acc['proof_note'] ?? '') ?>"><?= htmlspecialchars($acc['proof_note'] ?? 'Hiện trường') ?></small>
-                                        </div>
-                                    </div>
-                                    <?php else: ?>
-                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle" style="font-size: 11px;"><i class="bi bi-camera-fill me-1"></i>Chưa nộp ảnh</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <strong class="text-primary d-block num-tabular"><?= htmlspecialchars($acc['bank_account_number'] ?? 'Chưa cập nhật') ?></strong>
-                                    <small class="text-dark fw-semibold"><?= htmlspecialchars($acc['bank_name'] ?? 'Ngân hàng') ?></small>
-                                    <small class="text-muted d-block" style="font-size: 11px;">Chủ TK: <?= htmlspecialchars($acc['bank_account_name'] ?? $acc['full_name']) ?></small>
-                                </td>
-                                <td>
-                                    <span class="badge bg-secondary mb-1"><?= htmlspecialchars($acc['event_title']) ?></span>
-                                    <div class="fw-bold text-dark"><?= htmlspecialchars($acc['shift_name']) ?></div>
-                                    <small class="text-muted num-tabular"><?= substr($acc['start_time'], 11, 5) ?> - <?= substr($acc['end_time'], 11, 5) ?> • <?= htmlspecialchars($acc['location_name'] ?? 'Hội trường') ?></small>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle fs-6 fw-bold num-tabular">
+                                    <div class="fw-bold text-dark num-tabular" style="font-size: 14px;">
                                         <?= number_format((int)$acc['remuneration_amount']) ?> đ
-                                    </span>
-                                    <small class="text-muted d-block mt-0.5">+<?= $acc['points'] ?> điểm rèn luyện</small>
+                                    </div>
+                                    <small class="text-muted" style="font-size: 11px;">+<?= $acc['points'] ?> điểm</small>
                                 </td>
                                 <td>
                                     <div id="accVerificationCol_<?= $acc['assignment_id'] ?>">
                                         <?php if (!empty($acc['lecturer_verified']) && $acc['lecturer_verified'] == 1): ?>
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle d-inline-block mb-1">
-                                                <i class="bi bi-patch-check-fill me-1"></i>GV: <?= htmlspecialchars($acc['lecturer_name'] ?? 'GV nghiệm thu') ?>
-                                            </span>
-                                            <div>
-                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace" style="font-size: 10.5px;">
-                                                    <?= htmlspecialchars($acc['contract_code'] ?? 'HDNT-2026-FPLY') ?>
-                                                </span>
-                                            </div>
                                             <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
-                                                <small class="text-success fw-bold d-block mt-1"><i class="bi bi-check2-all me-1"></i>Trường đã chi tiền</small>
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2-all me-1"></i>Đã chi trả</span>
                                             <?php else: ?>
-                                                <small class="text-warning-emphasis d-block mt-1"><i class="bi bi-hourglass-split me-1"></i>Chờ trường ký</small>
+                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><i class="bi bi-hourglass-split me-1"></i>Chờ trường ký</span>
                                             <?php endif; ?>
                                         <?php else: ?>
                                             <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
@@ -1970,21 +1980,17 @@
                                     <span id="accStatusBadge_<?= $acc['assignment_id'] ?>" style="display:none;"><?= htmlspecialchars($acc['accounting_status'] ?? 'Pending') ?></span>
                                 </td>
                                 <td class="text-end">
-                                    <div class="d-flex flex-column gap-1.5 align-items-end" id="accActionBtns_<?= $acc['assignment_id'] ?>">
+                                    <div class="d-flex align-items-center justify-content-end gap-1.5" id="accActionBtns_<?= $acc['assignment_id'] ?>">
+                                        <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-2.5 py-1" onclick="openAccountingDetailModal(<?= $acc['assignment_id'] ?>)" title="Xem toàn bộ thông tin chi tiết hồ sơ">
+                                            <i class="bi bi-eye me-1"></i> Chi Tiết
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-light border rounded-pill px-2 py-1" onclick="openContractModal(<?= $acc['assignment_id'] ?>)" title="Xem Biên bản & Hợp đồng nghiệm thu">
+                                            <i class="bi bi-file-earmark-text"></i>
+                                        </button>
                                         <?php if (empty($acc['lecturer_verified']) || $acc['lecturer_verified'] == 0): ?>
-                                        <button type="button" class="btn-fpt-emerald btn-fpt-sm w-100" onclick="verifyLecturerAcceptance(<?= $acc['assignment_id'] ?>)" title="Giảng viên duyệt ảnh hiện trường và lập hợp đồng">
-                                            <i class="bi bi-check2-circle me-1"></i> GV Xác Nhận
+                                        <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-2 py-1" onclick="verifyLecturerAcceptance(<?= $acc['assignment_id'] ?>)" title="Giảng viên duyệt nghiệm thu">
+                                            <i class="bi bi-check-lg"></i>
                                         </button>
-                                        <?php endif; ?>
-                                        <button type="button" class="btn-fpt-secondary btn-fpt-sm w-100" onclick="openContractModal(<?= $acc['assignment_id'] ?>)" title="Xem Biên bản & Hợp đồng nghiệm thu">
-                                            <i class="bi bi-file-earmark-text me-1"></i> Hợp Đồng
-                                        </button>
-                                        <?php if (($acc['school_status'] ?? '') !== 'Signed_Paid'): ?>
-                                        <button type="button" class="btn-fpt-primary btn-fpt-sm w-100" onclick="submitToSchool(<?= $acc['assignment_id'] ?>)" title="Trình lên Nhà trường ký duyệt và chuyển tiền">
-                                            <i class="bi bi-send-check me-1"></i> Trình Trường Ký
-                                        </button>
-                                        <?php else: ?>
-                                        <span class="badge bg-success w-100 py-1.5"><i class="bi bi-check2-all me-1"></i>Đã Chi Tiền</span>
                                         <?php endif; ?>
                                     </div>
                                 </td>
@@ -3120,6 +3126,160 @@
 </div>
 
 <!-- =========================================================
+     MODAL CHI TIẾT HỒ SƠ NGHIỆM THU & QUYẾT TOÁN THÙ LAO CTV
+     ========================================================= -->
+<div class="modal fade" id="accountingDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius:24px; overflow:hidden;">
+            <div class="modal-header border-bottom" style="background:#FAFAFC; padding:18px 24px;">
+                <div class="d-flex align-items-center gap-2.5">
+                    <div class="rounded-circle d-grid place-items-center bg-white border text-dark" style="width:38px; height:38px; font-size:16px;">
+                        <i class="bi bi-person-lines-fill"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0 text-dark" id="accDetailModalTitle">Chi Tiết Hồ Sơ Nghiệm Thu</h5>
+                        <small class="text-muted" id="accDetailModalSub">Mã hồ sơ: HDNT-2026</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4" style="background:#FFFFFF;">
+                <div class="row g-3">
+                    <!-- Column 1: CTV & Định Danh VNeID -->
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 rounded-4 border h-100" style="background:#FAFAFC; border-color:rgba(0,0,0,0.08) !important;">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <i class="bi bi-person-badge text-primary fs-5"></i>
+                                <strong class="text-dark" style="font-size:13.5px;">Cộng Tác Viên & VNeID</strong>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted small d-block">Họ và tên:</span>
+                                <strong class="text-dark" id="accDetailName">-</strong>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-6">
+                                    <span class="text-muted small d-block">Mã SV:</span>
+                                    <span class="badge bg-white text-dark border font-monospace" id="accDetailCode">-</span>
+                                </div>
+                                <div class="col-6">
+                                    <span class="text-muted small d-block">Điện thoại:</span>
+                                    <span class="text-dark num-tabular" id="accDetailPhone">-</span>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted small d-block">Số CCCD định danh:</span>
+                                <div class="d-flex align-items-center gap-2 mt-0.5">
+                                    <strong class="font-monospace text-dark" id="accDetailCccd">-</strong>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size:10px;"><i class="bi bi-check-circle-fill me-1"></i>Đã khớp VNeID</span>
+                                </div>
+                            </div>
+                            <div class="mt-2" id="accDetailVneidImgContainer">
+                                <span class="text-muted small d-block mb-1">Ảnh thẻ VNeID:</span>
+                                <img id="accDetailVneidImg" src="" alt="VNeID" class="rounded-3 border" style="max-height:90px; width:auto; cursor:pointer;" onclick="previewVneidModal(currentAccDetail?.full_name, currentAccDetail?.id_card_number, this.src)" title="Nhấp để xem ảnh phóng to">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Tài Khoản Thụ Hưởng & Thù Lao -->
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 rounded-4 border h-100" style="background:#FAFAFC; border-color:rgba(0,0,0,0.08) !important;">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <i class="bi bi-bank text-success fs-5"></i>
+                                <strong class="text-dark" style="font-size:13.5px;">Tài Khoản Thụ Hưởng & Thù Lao</strong>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted small d-block">Ngân hàng:</span>
+                                <strong class="text-dark" id="accDetailBankName">-</strong>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted small d-block">Số tài khoản (STK):</span>
+                                <span class="badge bg-white text-primary border font-monospace fs-6 py-1 px-2.5" id="accDetailBankNumber">-</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted small d-block">Chủ tài khoản:</span>
+                                <strong class="text-dark text-uppercase" id="accDetailBankHolder">-</strong>
+                            </div>
+                            <hr class="my-2" style="opacity:0.1;">
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div>
+                                    <span class="text-muted small d-block">Mức thù lao ca:</span>
+                                    <span class="badge bg-success text-white fs-6 py-1 px-3" id="accDetailAmount">0 đ</span>
+                                </div>
+                                <div class="text-end">
+                                    <span class="text-muted small d-block">Điểm rèn luyện:</span>
+                                    <span class="badge bg-light text-dark border" id="accDetailPoints">+0 điểm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Thông Tin Ca Trực & Địa Điểm -->
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 rounded-4 border h-100" style="background:#FAFAFC; border-color:rgba(0,0,0,0.08) !important;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-calendar-event text-warning fs-5"></i>
+                                <strong class="text-dark" style="font-size:13.5px;">Ca Trực & Sự Kiện</strong>
+                            </div>
+                            <div class="mb-1.5">
+                                <span class="text-muted small d-block">Sự kiện:</span>
+                                <strong class="text-dark" id="accDetailEventTitle">-</strong>
+                            </div>
+                            <div class="mb-1.5">
+                                <span class="text-muted small d-block">Ca trực:</span>
+                                <span class="badge bg-white text-dark border" id="accDetailShiftName">-</span>
+                            </div>
+                            <div class="mb-1.5">
+                                <span class="text-muted small d-block">Thời gian:</span>
+                                <span class="num-tabular text-dark" id="accDetailTime">-</span>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block">Địa điểm:</span>
+                                <span class="text-dark" id="accDetailLocation">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 4: Minh Chứng Hiện Trường & Trạng Thái Nghiệm Thu -->
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 rounded-4 border h-100" style="background:#FAFAFC; border-color:rgba(0,0,0,0.08) !important;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-camera text-info fs-5"></i>
+                                <strong class="text-dark" style="font-size:13.5px;">Minh Chứng & Nghiệm Thu</strong>
+                            </div>
+                            <div class="mb-2" id="accDetailProofContainer">
+                                <span class="text-muted small d-block mb-1">Ảnh check-in hiện trường:</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <img id="accDetailProofImg" src="" alt="Proof" class="rounded-3 border" style="width:56px; height:42px; object-fit:cover; cursor:pointer;" onclick="previewProofModal(currentAccDetail?.full_name, currentAccDetail?.shift_name, this.src, currentAccDetail?.proof_note)" title="Nhấp xem phóng to">
+                                    <small class="text-muted" id="accDetailProofNote">-</small>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted small d-block">Giảng viên phụ trách:</span>
+                                <strong class="text-dark" id="accDetailLecturer">-</strong>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block">Trạng thái giải ngân:</span>
+                                <div id="accDetailStatusBadge">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-top d-flex justify-content-between" style="background:#FAFAFC; padding:14px 24px;">
+                <button type="button" class="btn btn-fpt-secondary btn-fpt-sm" data-bs-dismiss="modal">
+                    Đóng
+                </button>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-fpt-primary btn-fpt-sm" id="accDetailContractBtn">
+                        <i class="bi bi-file-earmark-text me-1"></i> Xem Hợp Đồng Nghiệm Thu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
      MODAL HỢP ĐỒNG & BIÊN BẢN NGHIỆM THU THÔNG TIN CTV
      (CHUẨN VĂN BẢN TRƯỜNG CAO ĐẲNG FPT POLYTECHNIC)
      ========================================================= -->
@@ -3611,65 +3771,79 @@ function navigateToPage(pageName) {
         }
     });
 
-    document.getElementById('panelCalendar').style.display = 'none';
-    document.getElementById('panelAccounting').style.display = 'none';
-    document.getElementById('panelStudentPayrollProfile').style.display = 'none';
-    document.getElementById('panelMyShifts').style.display = 'none';
-    document.getElementById('panelEvents').style.display = 'none';
-    document.getElementById('panelSubmissions').style.display = 'none';
-    const panelContract = document.getElementById('panelContractDossier');
-    if (panelContract) panelContract.style.display = 'none';
-    const panelProfile = document.getElementById('panelProfileSettings');
-    if (panelProfile) panelProfile.style.display = 'none';
-    const panelAdmin = document.getElementById('panelAdminManagement');
-    if (panelAdmin) panelAdmin.style.display = 'none';
+    const panelIds = [
+        'panelCalendar', 
+        'panelAccounting', 
+        'panelStudentPayrollProfile', 
+        'panelMyShifts', 
+        'panelEvents', 
+        'panelSubmissions', 
+        'panelContractDossier', 
+        'panelProfileSettings', 
+        'panelAdminManagement'
+    ];
+    panelIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.setProperty('display', 'none', 'important');
+    });
 
     const isCalendar = (pageName === 'calendar');
-    document.getElementById('calendarViewSwitcher').style.display = isCalendar ? 'inline-flex' : 'none';
-    document.getElementById('calendarMonthNav').style.display = isCalendar ? 'inline-flex' : 'none';
+    const switcher = document.getElementById('calendarViewSwitcher');
+    if (switcher) switcher.style.display = isCalendar ? 'inline-flex' : 'none';
+    const monthNav = document.getElementById('calendarMonthNav');
+    if (monthNav) monthNav.style.display = isCalendar ? 'inline-flex' : 'none';
 
     const screenTitle = document.getElementById('activeScreenTitle');
     const breadcrumb = document.getElementById('breadcrumbActive');
 
     if (pageName === 'calendar') {
-        document.getElementById('panelCalendar').style.display = 'block';
-        screenTitle.textContent = 'Lịch Hoạt Động & Điều Phối Ca Trực';
-        breadcrumb.textContent = 'Bảng Lịch Trung Tâm';
+        const cal = document.getElementById('panelCalendar');
+        if (cal) cal.style.setProperty('display', 'flex', 'important');
+        if (screenTitle) screenTitle.textContent = 'Lịch Hoạt Động & Điều Phối Ca Trực';
+        if (breadcrumb) breadcrumb.textContent = 'Bảng Lịch Trung Tâm';
         changeCalendarView(currentCalendarTier);
     } else if (pageName === 'accounting') {
-        document.getElementById('panelAccounting').style.display = 'block';
-        screenTitle.textContent = 'Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán';
-        breadcrumb.textContent = 'Nghiệm Thu Kế Toán';
+        const acc = document.getElementById('panelAccounting');
+        if (acc) acc.style.setProperty('display', 'block', 'important');
+        if (screenTitle) screenTitle.textContent = 'Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán';
+        if (breadcrumb) breadcrumb.textContent = 'Nghiệm Thu Kế Toán';
     } else if (pageName === 'student-payroll-profile') {
-        document.getElementById('panelStudentPayrollProfile').style.display = 'block';
+        const spp = document.getElementById('panelStudentPayrollProfile');
+        if (spp) spp.style.setProperty('display', 'block', 'important');
         const isMgr = ['Admin', 'Organizer', 'Teacher'].includes(currentUser?.role_name || '') || [1, 2, 7].includes(Number(currentUser?.role_id || 0));
-        screenTitle.textContent = isMgr ? 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)' : 'Hồ Sơ Nhận Thù Lao & Thông Tin Định Danh Của Tôi';
-        breadcrumb.textContent = isMgr ? 'Quản Lý Hồ Sơ CTV' : 'Hồ Sơ VNeID & STK';
+        if (screenTitle) screenTitle.textContent = isMgr ? 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)' : 'Hồ Sơ Nhận Thù Lao & Thông Tin Định Danh Của Tôi';
+        if (breadcrumb) breadcrumb.textContent = isMgr ? 'Quản Lý Hồ Sơ CTV' : 'Hồ Sơ VNeID & STK';
     } else if (pageName === 'my-shifts') {
-        document.getElementById('panelMyShifts').style.display = 'block';
-        screenTitle.textContent = 'Lịch Làm Việc & Ca Phân Công Của Tôi';
-        breadcrumb.textContent = 'Ca Trực Của Tôi';
+        const ms = document.getElementById('panelMyShifts');
+        if (ms) ms.style.setProperty('display', 'block', 'important');
+        if (screenTitle) screenTitle.textContent = 'Lịch Làm Việc & Ca Phân Công Của Tôi';
+        if (breadcrumb) breadcrumb.textContent = 'Ca Trực Của Tôi';
         renderMyShiftsTable();
     } else if (pageName === 'events') {
-        document.getElementById('panelEvents').style.display = 'block';
-        screenTitle.textContent = 'Quản Lý Sự Kiện & Phân Rã Ca Trực';
-        breadcrumb.textContent = 'Danh Sách Sự Kiện';
+        const ev = document.getElementById('panelEvents');
+        if (ev) ev.style.setProperty('display', 'block', 'important');
+        if (screenTitle) screenTitle.textContent = 'Quản Lý Sự Kiện & Phân Rã Ca Trực';
+        if (breadcrumb) breadcrumb.textContent = 'Danh Sách Sự Kiện';
     } else if (pageName === 'submissions') {
-        document.getElementById('panelSubmissions').style.display = 'block';
-        screenTitle.textContent = 'Thẩm Định Nghiệm Thu Minh Chứng Google Drive';
-        breadcrumb.textContent = 'Thẩm Định Drive';
+        const sub = document.getElementById('panelSubmissions');
+        if (sub) sub.style.setProperty('display', 'block', 'important');
+        if (screenTitle) screenTitle.textContent = 'Thẩm Định Nghiệm Thu Minh Chứng Google Drive';
+        if (breadcrumb) breadcrumb.textContent = 'Thẩm Định Drive';
     } else if (pageName === 'contract-dossier' || pageName === 'qr-projector') {
-        if (panelContract) panelContract.style.display = 'block';
-        screenTitle.textContent = 'Hồ Sơ Hợp Đồng Nghiệm Thu & Đề Nghị Chi Tiền';
-        breadcrumb.textContent = 'Hồ Sơ Hợp Đồng';
+        const pcd = document.getElementById('panelContractDossier');
+        if (pcd) pcd.style.setProperty('display', 'block', 'important');
+        if (screenTitle) screenTitle.textContent = 'Hồ Sơ Hợp Đồng Nghiệm Thu & Đề Nghị Chi Tiền';
+        if (breadcrumb) breadcrumb.textContent = 'Hồ Sơ Hợp Đồng';
     } else if (pageName === 'profile-settings') {
-        if (panelProfile) panelProfile.style.display = 'block';
-        screenTitle.textContent = 'Cài Đặt Tài Khoản & Thông Tin Cá Nhân';
-        breadcrumb.textContent = 'Tài Khoản Cá Nhân';
+        const ps = document.getElementById('panelProfileSettings');
+        if (ps) ps.style.setProperty('display', 'block', 'important');
+        if (screenTitle) screenTitle.textContent = 'Cài Đặt Tài Khoản & Thông Tin Cá Nhân';
+        if (breadcrumb) breadcrumb.textContent = 'Tài Khoản Cá Nhân';
     } else if (pageName === 'admin-management') {
-        if (panelAdmin) panelAdmin.style.display = 'block';
-        screenTitle.textContent = 'Quản Trị Hệ Thống - Cấp Quyền & Nhật Ký Thao Tác';
-        breadcrumb.textContent = 'Cấp Quyền & Nhật Ký';
+        const am = document.getElementById('panelAdminManagement');
+        if (am) am.style.setProperty('display', 'block', 'important');
+        if (screenTitle) screenTitle.textContent = 'Quản Trị Hệ Thống - Cấp Quyền & Nhật Ký Thao Tác';
+        if (breadcrumb) breadcrumb.textContent = 'Cấp Quyền & Nhật Ký';
     }
 }
 
@@ -3689,28 +3863,35 @@ function quickRegisterShiftModal() {
 function changeCalendarView(viewName) {
     currentCalendarTier = viewName;
 
-    document.getElementById('btnViewMonth').classList.toggle('active', viewName === 'month');
-    document.getElementById('btnViewWeek').classList.toggle('active', viewName === 'week');
-    document.getElementById('btnViewDay').classList.toggle('active', viewName === 'day');
+    const btnMonth = document.getElementById('btnViewMonth');
+    const btnWeek = document.getElementById('btnViewWeek');
+    const btnDay = document.getElementById('btnViewDay');
+    if (btnMonth) btnMonth.classList.toggle('active', viewName === 'month');
+    if (btnWeek) btnWeek.classList.toggle('active', viewName === 'week');
+    if (btnDay) btnDay.classList.toggle('active', viewName === 'day');
 
-    document.getElementById('tierMonthView').style.display = (viewName === 'month') ? 'block' : 'none';
-    document.getElementById('tierWeekView').style.display = (viewName === 'week') ? 'block' : 'none';
-    document.getElementById('tierDayView').style.display = (viewName === 'day') ? 'block' : 'none';
+    const mTier = document.getElementById('tierMonthView');
+    const wTier = document.getElementById('tierWeekView');
+    const dTier = document.getElementById('tierDayView');
+
+    if (mTier) mTier.style.setProperty('display', (viewName === 'month') ? 'flex' : 'none', 'important');
+    if (wTier) wTier.style.setProperty('display', (viewName === 'week') ? 'flex' : 'none', 'important');
+    if (dTier) dTier.style.setProperty('display', (viewName === 'day') ? 'flex' : 'none', 'important');
 
     const heading = document.getElementById('calendarViewHeading');
     const sub = document.getElementById('calendarViewSub');
 
     if (viewName === 'month') {
-        heading.textContent = `Lịch Tổng Quan Tháng ${currentMonth + 1}/${currentYear}`;
-        sub.textContent = 'Nhấp vào ô ngày bất kỳ để vào thẳng Lịch Ngày xem chi tiết các ca trực';
+        if (heading) heading.textContent = `Lịch Tổng Quan Tháng ${currentMonth + 1}/${currentYear}`;
+        if (sub) sub.textContent = 'Nhấp vào ô ngày bất kỳ để vào thẳng Lịch Ngày xem chi tiết các ca trực';
         renderMonthGrid(currentYear, currentMonth);
     } else if (viewName === 'week') {
-        heading.textContent = `Lịch Tuần Có Ngày ${formatDateVN(selectedDateStr)}`;
-        sub.textContent = 'Lưới phân rã các ca trực trong 7 ngày từ Thứ Hai đến Chủ Nhật';
+        if (heading) heading.textContent = `Lịch Tuần Có Ngày ${formatDateVN(selectedDateStr)}`;
+        if (sub) sub.textContent = 'Lưới phân rã các ca trực trong 7 ngày từ Thứ Hai đến Chủ Nhật';
         renderWeekView(selectedDateStr);
     } else if (viewName === 'day') {
-        heading.textContent = `Chi Tiết Ca Trực Ngày ${formatDateVN(selectedDateStr)}`;
-        sub.textContent = 'Danh sách toàn bộ các khung giờ và yêu cầu công việc chi tiết trong ngày';
+        if (heading) heading.textContent = `Chi Tiết Ca Trực Ngày ${formatDateVN(selectedDateStr)}`;
+        if (sub) sub.textContent = 'Danh sách toàn bộ các khung giờ và yêu cầu công việc chi tiết trong ngày';
         renderDayView(selectedDateStr);
     }
 }
@@ -3890,12 +4071,12 @@ function renderWeekView(targetDateStr) {
         }
 
         col.innerHTML = `
-            <div class="week-col-header" onclick="selectedDateStr='${dateStr}'; changeCalendarView('day');">
-                <div class="text-muted fw-bold" style="font-size:12px;">${dayNames[i]}</div>
-                <div class="col-date h5 fw-bolder mb-0 num-tabular">${d}/${m}</div>
-                ${colNotes.length > 0 ? `<span class="badge rounded-pill bg-warning text-dark num-tabular mt-1" style="font-size:9px;"><i class="fa-solid fa-bookmark me-1"></i>${colNotes.length} Lưu ý</span>` : ''}
+            <div class="week-col-header" onclick="selectedDateStr='${dateStr}'; changeCalendarView('day');" title="Nhấp xem chi tiết ngày ${d}/${m}">
+                <div class="text-muted fw-bold" style="font-size:11.5px;">${dayNames[i]}</div>
+                <div class="col-date h6 fw-bolder mb-0 num-tabular">${d}/${m}</div>
+                ${colNotes.length > 0 ? `<span class="badge rounded-pill bg-white text-dark border num-tabular mt-1" style="font-size:9px;"><i class="fa-solid fa-bookmark me-1 text-warning"></i>${colNotes.length} Lưu ý</span>` : ''}
             </div>
-            <div class="d-flex flex-column flex-grow-1">${notesHtml}${shiftsHtml}</div>
+            <div class="week-col-body">${notesHtml}${shiftsHtml}</div>
         `;
 
         container.appendChild(col);
@@ -3916,16 +4097,16 @@ function renderDayView(dateStr) {
         const reminderCard = document.createElement('div');
         reminderCard.className = 'apple-reminder-banner mb-3';
         reminderCard.innerHTML = `
-            <div style="width:36px; height:36px; border-radius:50%; background:#EA580C; color:#fff; flex:none; display:grid; place-items:center; box-shadow:0 2px 6px rgba(234, 88, 12, 0.35); overflow:hidden;">
-                <i class="fa-solid fa-bell" style="font-size:14px; line-height:1; margin:0; padding:0;"></i>
+            <div style="width:34px; height:34px; border-radius:50%; background:#FFFFFF; color:#1D1D1F; border:1px solid rgba(0,0,0,0.08); flex:none; display:grid; place-items:center; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                <i class="fa-solid fa-bell" style="font-size:13px; line-height:1; margin:0; padding:0;"></i>
             </div>
             <div class="flex-grow-1">
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h6 class="fw-bold mb-0" style="color:var(--ux-accent); font-size:13.5px;">
-                        <i class="fa-solid fa-clipboard-list me-1.5"></i> Ghi Chú & Lưu Ý Ngày Này (Apple Reminders)
+                    <h6 class="fw-bold mb-0 text-dark" style="font-size:13px;">
+                        <i class="fa-solid fa-clipboard-list me-1.5 text-secondary"></i> Ghi Chú & Lưu Ý Ngày Này (Apple Reminders)
                     </h6>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge rounded-pill num-tabular" style="background:rgba(234,88,12,0.15); color:#FB923C; border:1px solid rgba(234,88,12,0.3); font-size:10px; font-weight:700;">${dayNotes.length} nhắc nhở</span>
+                        <span class="badge bg-white text-dark border rounded-pill num-tabular" style="font-size:10px; font-weight:700;">${dayNotes.length} nhắc nhở</span>
                         <button class="btn-fpt-ghost btn-fpt-sm py-0 px-2" style="font-size:11px;" onclick="openAddNoteModal()">
                             <i class="fa-solid fa-plus me-1"></i>Thêm
                         </button>
@@ -3938,9 +4119,9 @@ function renderDayView(dateStr) {
                         const noteContent = n.content || n.title || '';
                         const authorName = n.author || n.creator_name || 'BTC';
                         return `
-                        <div class="d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border shadow-xs" style="background:var(--ux-surface); border-color:var(--ux-line) !important; font-size:12.5px;">
+                        <div class="d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border shadow-xs" style="background:#FFFFFF; border-color:rgba(0,0,0,0.08) !important; font-size:12.5px;">
                             <i class="fa-regular fa-circle-check text-warning" style="font-size:13px; flex:none;"></i>
-                            <span class="badge num-tabular" style="background:var(--ux-surface-2); color:var(--ux-ink-2); border:1px solid var(--ux-line); font-size:10px; flex:none;">${noteType}</span>
+                            <span class="badge num-tabular" style="background:#F4F4F6; color:var(--ux-ink-2); border:1px solid rgba(0,0,0,0.08); font-size:10px; flex:none;">${noteType}</span>
                             <span class="flex-grow-1" style="color:var(--ux-ink);">${noteTitle}${noteContent}</span>
                             <span class="small num-tabular" style="color:var(--ux-ink-3); flex:none;"><i class="bi bi-person me-1"></i>${authorName}</span>
                             <button type="button" class="btn btn-sm text-danger p-0 ms-2" style="line-height:1; font-size:13px;" onclick="deleteCalendarNote(${n.id})" title="Xóa lịch hẹn / ghi chú này">
@@ -4673,6 +4854,106 @@ async function verifyLecturerAcceptance(assignmentId) {
     } catch (err) {
         showToast('Lỗi kết nối khi giảng viên duyệt.', 'danger');
     }
+}
+
+/**
+ * Mở modal Chi Tiết Đầy Đủ Hồ Sơ Nghiệm Thu Kế Toán
+ */
+let currentAccDetail = null;
+let accountingDetailModalInstance = null;
+
+function openAccountingDetailModal(assignmentId) {
+    const acc = rawAccountingList.find(a => parseInt(a.assignment_id) === parseInt(assignmentId));
+    if (!acc) {
+        showToast('Không tìm thấy thông tin hồ sơ.', 'warning');
+        return;
+    }
+    currentAccDetail = acc;
+
+    const modalTitle = document.getElementById('accDetailModalTitle');
+    if (modalTitle) modalTitle.textContent = `Hồ Sơ Nghiệm Thu: ${acc.full_name}`;
+    const modalSub = document.getElementById('accDetailModalSub');
+    if (modalSub) modalSub.textContent = `Mã HĐ: ${acc.contract_code || 'HDNT-2026-FPLY'} • MSSV: ${acc.student_code}`;
+
+    const nameEl = document.getElementById('accDetailName');
+    if (nameEl) nameEl.textContent = acc.full_name;
+    const codeEl = document.getElementById('accDetailCode');
+    if (codeEl) codeEl.textContent = acc.student_code;
+    const phoneEl = document.getElementById('accDetailPhone');
+    if (phoneEl) phoneEl.textContent = acc.phone || '0987654321';
+    const cccdEl = document.getElementById('accDetailCccd');
+    if (cccdEl) cccdEl.textContent = acc.id_card_number || '079203014589';
+
+    const vneidContainer = document.getElementById('accDetailVneidImgContainer');
+    const vneidImg = document.getElementById('accDetailVneidImg');
+    if (vneidContainer && vneidImg) {
+        if (acc.vneid_image_url) {
+            vneidImg.src = acc.vneid_image_url;
+            vneidContainer.style.display = 'block';
+        } else {
+            vneidContainer.style.display = 'none';
+        }
+    }
+
+    const bankNameEl = document.getElementById('accDetailBankName');
+    if (bankNameEl) bankNameEl.textContent = acc.bank_name || 'Ngân hàng';
+    const bankNumEl = document.getElementById('accDetailBankNumber');
+    if (bankNumEl) bankNumEl.textContent = acc.bank_account_number || 'Chưa cập nhật';
+    const bankHolderEl = document.getElementById('accDetailBankHolder');
+    if (bankHolderEl) bankHolderEl.textContent = acc.bank_account_name || acc.full_name;
+    const amountEl = document.getElementById('accDetailAmount');
+    if (amountEl) amountEl.textContent = Number(acc.remuneration_amount || 150000).toLocaleString('vi-VN') + ' đ';
+    const pointsEl = document.getElementById('accDetailPoints');
+    if (pointsEl) pointsEl.textContent = `+${acc.points || 10} điểm`;
+
+    const eventEl = document.getElementById('accDetailEventTitle');
+    if (eventEl) eventEl.textContent = acc.event_title || 'Sự kiện FPT';
+    const shiftEl = document.getElementById('accDetailShiftName');
+    if (shiftEl) shiftEl.textContent = acc.shift_name || 'Ca trực';
+    const timeEl = document.getElementById('accDetailTime');
+    if (timeEl) timeEl.textContent = `${(acc.start_time || '').substring(11, 16)} - ${(acc.end_time || '').substring(11, 16)}`;
+    const locEl = document.getElementById('accDetailLocation');
+    if (locEl) locEl.textContent = acc.location_name || 'Hội trường Trịnh Văn Bô';
+
+    const proofContainer = document.getElementById('accDetailProofContainer');
+    const proofImg = document.getElementById('accDetailProofImg');
+    const proofNote = document.getElementById('accDetailProofNote');
+    if (proofContainer && proofImg && proofNote) {
+        if (acc.proof_image_url) {
+            proofImg.src = acc.proof_image_url;
+            proofNote.textContent = acc.proof_note || 'Đã có mặt trực ca';
+            proofContainer.style.display = 'block';
+        } else {
+            proofContainer.style.display = 'none';
+        }
+    }
+
+    const lectEl = document.getElementById('accDetailLecturer');
+    if (lectEl) lectEl.textContent = acc.lecturer_name || (acc.lecturer_verified == 1 ? 'Giảng viên đã duyệt' : 'Chưa có GV nghiệm thu');
+
+    const statusBadgeEl = document.getElementById('accDetailStatusBadge');
+    if (statusBadgeEl) {
+        if (acc.school_status === 'Signed_Paid') {
+            statusBadgeEl.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2-all me-1"></i>Trường đã chi tiền</span>';
+        } else if (acc.lecturer_verified == 1) {
+            statusBadgeEl.innerHTML = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle"><i class="bi bi-hourglass-split me-1"></i>Chờ trường ký</span>';
+        } else {
+            statusBadgeEl.innerHTML = '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle"><i class="bi bi-clock me-1"></i>Chờ GV nghiệm thu</span>';
+        }
+    }
+
+    const contractBtn = document.getElementById('accDetailContractBtn');
+    if (contractBtn) {
+        contractBtn.onclick = function() {
+            if (accountingDetailModalInstance) accountingDetailModalInstance.hide();
+            openContractModal(acc.assignment_id);
+        };
+    }
+
+    if (!accountingDetailModalInstance) {
+        accountingDetailModalInstance = new bootstrap.Modal(document.getElementById('accountingDetailModal'));
+    }
+    accountingDetailModalInstance.show();
 }
 
 /**

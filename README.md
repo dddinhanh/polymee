@@ -590,4 +590,4 @@ polymee/
 | **TỔNG CỘNG** | **10,0** | **Dự án hoàn thành xuất sắc toàn bộ yêu cầu của Assignment Giai đoạn 1** | **10,0 / 10,0** |
 
 ---
-*Thành phố Hồ Chí Minh, Học kỳ Fall 2026 – Nhóm sinh viên PolyMee xin chân thành cảm ơn Thầy Phan Hoàng Khải đã tận tình hướng dẫn!*
+*Thành phố Đồng Nai, Học kỳ Fall 2026 – Nhóm sinh viên PolyMee xin chân thành cảm ơn Thầy Phan Hoàng Khải đã tận tình hướng dẫn!*
