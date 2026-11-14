@@ -69,6 +69,10 @@ class RolePermissionHelper
                 'canSubmitSchoolSigning' => false,
                 'canApproveAccounting' => false,
                 'canManageRoles' => false,
+                'canDeleteAnyEvent' => false,
+                'canDeleteOwnEvent' => false,
+                'canManageCtvProfiles' => false,
+                'canCreateNote' => false,
             ];
         }
 
@@ -125,14 +129,14 @@ class RolePermissionHelper
             // 1. Phân quyền hiển thị Menu Sidebar (Role-based Navigation)
             // Lịch sự kiện mở cho mọi vai trò
             'canViewCalendar' => true,
-            // Ca trực của tôi: Chỉ dành cho CTV, Media (và Admin hỗ trợ)
-            'canViewMyShifts' => in_array($role, ['CTV', 'MEDIA', 'ADMIN'], true),
+            // Ca trực của tôi: Chỉ dành cho CTV và Media (Admin và Giảng viên không có trang ca trực CTV)
+            'canViewMyShifts' => in_array($role, ['CTV', 'MEDIA'], true),
             // Hồ sơ hợp đồng: CTV xem hợp đồng của mình; GV xem ca của mình; Kế toán/Trưởng HC/Admin xem toàn bộ
             'canViewContracts' => in_array($role, ['CTV', 'MEDIA', 'LECTURER', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
             // Nghiệm thu kế toán: CHỈ dành cho Kế toán, Trưởng hành chính và Admin! Tuyệt đối ẩn với CTV và Staff
             'canViewAccounting' => in_array($role, ['ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Quản lý hồ sơ CTV: Kế toán, Trưởng HC, Admin đối soát thông tin toàn trường
-            'canViewCtvProfiles' => in_array($role, ['ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Quản lý hồ sơ CTV: Giảng viên, Kế toán, Trưởng HC, Admin đối soát thông tin toàn trường
+            'canViewCtvProfiles' => in_array($role, ['LECTURER', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
             // Cập nhật hồ sơ VNeID & STK cá nhân: CTV và Media
             'canViewMyProfile' => in_array($role, ['CTV', 'MEDIA'], true),
             // Minh chứng Drive: Media, CTV nộp link; GV, Trưởng HC, Admin kiểm tra
@@ -158,8 +162,18 @@ class RolePermissionHelper
             'canSubmitSchoolSigning' => in_array($role, ['STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
             // Phê duyệt thanh toán / Quyết toán thù lao: Kế toán, Trưởng HC, Admin
             'canApproveAccounting' => in_array($role, ['ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Quản lý hồ sơ CTV: Giảng viên, Kế toán, Trưởng HC, Admin
+            'canManageCtvProfiles' => in_array($role, ['LECTURER', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Xóa sự kiện: Cấp bậc từ Giảng viên trở lên
+            // - Head_Admin và Admin: Xóa được mọi sự kiện
+            // - Giảng viên: Chỉ xóa được sự kiện do mình đặt
+            'canDeleteAnyEvent' => in_array($role, ['HEAD_ADMIN', 'ADMIN'], true),
+            'canDeleteOwnEvent' => in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Thêm/Xóa Ghi chú lịch hẹn: Cán bộ, Giảng viên, Trưởng HC, Admin (CTV KHÔNG có quyền)
+            'canCreateNote' => in_array($role, ['LECTURER', 'STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
             // Quản lý, thay đổi vai trò (cấp quyền): CHỈ Admin
             'canManageRoles' => ($role === 'ADMIN'),
         ];
     }
 }
+

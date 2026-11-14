@@ -937,28 +937,43 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         flex: none;
     }
 
-    /* Clean Desktop Layout with Natural Fluid Scrolling */
+    /* Clean Desktop Layout: Fixed Sidebar Pinned at 100vh, Only Main Workspace Body Scrolls */
     @media (min-width: 993px) {
         html, body {
-            min-height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
         }
 
         .app-shell {
-            min-height: 100vh;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
             width: 100%;
             display: flex;
+        }
+
+        .u040-wrapper {
+            position: sticky !important;
+            top: 0 !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            flex-shrink: 0 !important;
+            overflow-y: auto !important;
+            z-index: 1040;
         }
 
         .main-workspace {
             flex: 1;
             min-width: 0;
+            height: 100vh !important;
+            max-height: 100vh !important;
             padding: 12px 20px 40px 12px;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
-            overflow-y: visible;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            scroll-behavior: smooth;
         }
 
         .dashboard-topbar {
@@ -1522,19 +1537,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </button>
                     </li>
                     <?php endif; ?>
-                    <?php if ($perms['canViewCtvProfiles']): ?>
+                    <?php if (!empty($perms['canViewCtvProfiles'])): ?>
                     <li>
                         <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="Quản lý hồ sơ định danh CCCD, VNeID & STK ngân hàng của CTV">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h2"/></svg>
                             <span>Quản Lý Hồ Sơ CTV</span>
                             <em class="u040-bd" style="background:#0284C7; color:#fff;" aria-label="CTV Count"><?= count($ctvRoster ?? []) ?></em>
-                        </button>
-                    </li>
-                    <?php elseif ($perms['canViewMyProfile']): ?>
-                    <li>
-                        <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="Hồ sơ định danh VNeID & STK nhận thù lao cá nhân">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h2"/></svg>
-                            <span>Hồ Sơ VNeID & STK</span>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -1562,17 +1570,26 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <!-- 4. HỆ THỐNG & TÀI KHOẢN -->
                     <li class="u040-section-label"><span>HỆ THỐNG & TÀI KHOẢN</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:7" data-page="profile-settings" onclick="navigateToPage('profile-settings')" title="Cài đặt thông tin tài khoản cá nhân">
+                        <button class="u040-it" type="button" style="--i:7" data-page="profile-settings" onclick="navigateToPage('profile-settings')" title="Cài đặt thông tin tài khoản cá nhân, CCCD & STK">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                             <span>Tài Khoản Cá Nhân</span>
                         </button>
                     </li>
-                    <?php if ($perms['canViewAdminManagement']): ?>
+                    <?php if (!empty($perms['canManageRoles'])): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:8" data-page="admin-management" onclick="navigateToPage('admin-management')" title="Quản trị viên cấp quyền & xem nhật ký hệ thống">
+                        <button class="u040-it" type="button" style="--i:8" data-page="user-roles" onclick="navigateToPage('user-roles')" title="Trung tâm cấp quyền & phân vai trò người dùng">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                            <span>Cấp Quyền & Nhật Ký</span>
+                            <span>Cấp Quyền Người Dùng</span>
                             <em class="u040-bd" style="background:#EA580C; color:#fff;" aria-label="Admin">Admin</em>
+                        </button>
+                    </li>
+                    <?php endif; ?>
+                    <?php if (!empty($perms['canViewAuditLogs'])): ?>
+                    <li>
+                        <button class="u040-it" type="button" style="--i:9" data-page="audit-trail" onclick="navigateToPage('audit-trail')" title="Nhật ký lịch sử thao tác hệ thống (Audit Trail)">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                            <span>Nhật Ký Audit Trail</span>
+                            <em class="u040-bd" style="background:#0284C7; color:#fff;" aria-label="Logs"><?= count($activityLogs) ?></em>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -1741,56 +1758,18 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <span>Đặt Lịch Ca</span>
                 </button>
                 <?php endif; ?>
+                <?php if (!empty($perms['canCreateNote'])): ?>
                 <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="openAddNoteModal()" title="Thêm ghi chú / lịch hẹn toàn trường">
                     <i class="fa-solid fa-note-sticky text-warning me-1"></i>
                     <span>Ghi Chú</span>
                 </button>
+                <?php endif; ?>
                 <button type="button" class="btn-fpt-ghost btn-fpt-sm" onclick="toggleAiModal()" title="Trợ lý AI PolyMee">
                     <i class="fa-solid fa-robot text-warning me-1"></i>
                     <span>Trợ lý AI</span>
                 </button>
             </div>
         </header>
-
-        <!-- KPI Metrics Strip (Promax Compact High-Density Metric Bar) -->
-        <section class="kpi-metric-strip" id="kpiMetricsStrip">
-            <div class="kpi-mini-card">
-                <div>
-                    <div class="kpi-mini-label">Tổng Sự Kiện</div>
-                    <div class="kpi-mini-val num-tabular"><?= number_format($stats['total_events'] ?? 0) ?></div>
-                </div>
-                <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                    <i class="bi bi-calendar2-event"></i>
-                </div>
-            </div>
-            <div class="kpi-mini-card">
-                <div>
-                    <div class="kpi-mini-label">Tổng Ca Trực</div>
-                    <div class="kpi-mini-val num-tabular"><?= number_format($stats['total_shifts'] ?? 0) ?></div>
-                </div>
-                <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                    <i class="bi bi-clock-history"></i>
-                </div>
-            </div>
-            <div class="kpi-mini-card">
-                <div>
-                    <div class="kpi-mini-label">Tỷ Lệ Lấp Đầy</div>
-                    <div class="kpi-mini-val num-tabular text-dark"><?= $stats['fill_rate_percent'] ?? 0 ?>%</div>
-                </div>
-                <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                    <i class="bi bi-pie-chart"></i>
-                </div>
-            </div>
-            <div class="kpi-mini-card">
-                <div>
-                    <div class="kpi-mini-label">Quy Hoạch Nghiệm Thu</div>
-                    <div class="kpi-mini-val num-tabular text-dark"><?= count($accountingList) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">Hồ sơ</small></div>
-                </div>
-                <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                    <i class="bi bi-cash-coin"></i>
-                </div>
-            </div>
-        </section>
 
         <!-- =========================================================
              DYNAMIC SPA BODY: CHUYỂN TABS KHÔNG RELOAD TRANG
@@ -1799,6 +1778,88 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 1: BẢNG LỊCH TRUNG TÂM (CALENDAR-FIRST) -->
             <section class="calendar-container" id="panelCalendar">
+
+                <!-- KPI Metrics Strip: CHỈ HIỂN THỊ DUY NHẤT Ở TRANG LỊCH HOẠT ĐỘNG -->
+                <div class="kpi-metric-strip mb-3" id="kpiMetricsStrip">
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Tổng Sự Kiện</div>
+                            <div class="kpi-mini-val num-tabular"><?= number_format($stats['total_events'] ?? 0) ?></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-calendar2-event"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Tổng Ca Trực</div>
+                            <div class="kpi-mini-val num-tabular"><?= number_format($stats['total_shifts'] ?? 0) ?></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Tỷ Lệ Lấp Đầy</div>
+                            <div class="kpi-mini-val num-tabular text-dark"><?= $stats['fill_rate_percent'] ?? 0 ?>%</div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-pie-chart"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Quy Hoạch Nghiệm Thu</div>
+                            <div class="kpi-mini-val num-tabular text-dark"><?= count($accountingList) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">Hồ sơ</small></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thước Đo Chú Thích Màu Bộ Môn / Chuyên Ngành Của Giảng Viên & Bộ Lọc Nhanh -->
+                <div class="dept-legend-bar d-flex flex-wrap align-items-center justify-content-between p-2.5 px-3 rounded-4 mb-3" style="background: var(--ux-surface); border: 1px solid var(--ux-line); gap: 8px;">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge rounded-pill text-dark fw-bold" style="background: #F4F4F6; font-size: 11px;">
+                            <i class="bi bi-palette2 me-1 text-primary"></i> MÀU BỘ MÔN
+                        </span>
+                        <span class="text-muted small d-none d-lg-inline" style="font-size: 11.5px;">Phân biệt sự kiện do từng bộ môn / giảng viên đặt lịch:</span>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center gap-2" style="font-size: 11px; font-weight: 600;">
+                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(2, 132, 199, 0.1); color: #0284C7; border: 1px solid rgba(2, 132, 199, 0.25);">
+                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #0284C7;"></span> CNTT & Phần Mềm
+                        </span>
+                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(124, 58, 237, 0.1); color: #7C3AED; border: 1px solid rgba(124, 58, 237, 0.25);">
+                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #7C3AED;"></span> Thiết Kế Đồ Họa
+                        </span>
+                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(234, 88, 12, 0.1); color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.25);">
+                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #EA580C;"></span> QTKD & Marketing
+                        </span>
+                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(5, 150, 105, 0.1); color: #059669; border: 1px solid rgba(5, 150, 105, 0.25);">
+                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #059669;"></span> Du Lịch - Khách Sạn
+                        </span>
+                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(220, 38, 38, 0.1); color: #DC2626; border: 1px solid rgba(220, 38, 38, 0.25);">
+                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #DC2626;"></span> Kỹ Thuật
+                        </span>
+                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(75, 85, 99, 0.1); color: #4B5563; border: 1px solid rgba(75, 85, 99, 0.25);">
+                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #4B5563;"></span> CTSV & Toàn Trường
+                        </span>
+                    </div>
+                    <div>
+                        <select id="departmentFilterSelect" class="form-select form-select-sm rounded-pill border-0 shadow-xs" style="font-size: 11.5px; background-color: #F4F4F6; width: auto; font-weight: 600;" onchange="handleDepartmentFilterChange(this.value)">
+                            <option value="">-- Tất cả bộ môn --</option>
+                            <option value="Công nghệ Thông tin">CNTT & Phần Mềm</option>
+                            <option value="Thiết kế Đồ họa">Thiết Kế Đồ Họa</option>
+                            <option value="Quản trị Kinh doanh">QTKD & Marketing</option>
+                            <option value="Du lịch - Khách sạn">Du Lịch - Khách Sạn</option>
+                            <option value="Kỹ thuật Công nghệ">Kỹ Thuật Công Nghệ</option>
+                            <option value="Công tác Sinh viên">Công Tác Sinh Viên</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-3 gap-2">
                     <div>
                         <h2 class="h5 fw-bold mb-0 text-dark" id="calendarViewHeading">Lịch Tổng Quan Theo Tháng</h2>
@@ -2171,81 +2232,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </table>
                     </div>
                 </div>
-
-                <?php elseif ($perms['canViewMyProfile']): ?>
-                <!-- Giao diện cá nhân dành cho Sinh viên CTV tự kê khai hồ sơ của mình -->
-                <div class="pb-3 border-bottom mb-4">
-                    <h2 class="h5 fw-bold mb-0 text-dark">Hồ Sơ Nhận Thù Lao & Thông Tin Định Danh Của Tôi</h2>
-                    <p class="text-muted small mb-0">Cung cấp chính xác CCCD, ảnh xác thực ứng dụng VNeID và Số tài khoản ngân hàng để Kế toán chuyển khoản thù lao</p>
-                </div>
-
-                <div class="row g-4">
-                    <div class="col-12 col-lg-7">
-                        <form id="payrollProfileForm" onsubmit="handleUpdateProfile(event)" class="bg-light p-4 rounded-4 border">
-                            <div class="row g-3">
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label fw-bold text-dark small">Họ và Tên</label>
-                                    <input type="text" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" readonly>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label fw-bold text-dark small">Mã Sinh Viên</label>
-                                    <input type="text" class="form-control num-tabular" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label fw-bold text-dark small">Số CCCD / Định Danh (12 số) <span class="text-danger">*</span></label>
-                                    <input type="text" name="id_card_number" class="form-control num-tabular" value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '079203014589') ?>" required placeholder="Ví dụ: 079203014589">
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label fw-bold text-dark small">Đường Dẫn Ảnh Thẻ / VNeID <span class="text-danger">*</span></label>
-                                    <input type="url" name="vneid_image_url" class="form-control" value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80') ?>" required placeholder="https://drive.google.com/...">
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label fw-bold text-dark small">Tên Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                    <input type="text" name="bank_name" class="form-control" value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank (Ngân hàng Quân Đội)') ?>" required placeholder="Ví dụ: MB Bank, Vietcombank, TPBank...">
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label fw-bold text-dark small">Số Tài Khoản Ngân Hàng (STK) <span class="text-danger">*</span></label>
-                                    <input type="text" name="bank_account_number" class="form-control num-tabular" value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '098765432199') ?>" required placeholder="Ví dụ: 098765432199">
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-bold text-dark small">Tên Chủ Tài Khoản (In hoa không dấu) <span class="text-danger">*</span></label>
-                                    <input type="text" name="bank_account_name" class="form-control text-uppercase" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? $userProfile['full_name']) ?>" required placeholder="DINH NGUYEN PHUONG ANH">
-                                </div>
-                            </div>
-                            <div class="mt-4 pt-3 border-top d-flex justify-content-end">
-                                <button type="submit" class="btn-fpt-primary">
-                                    <i class="bi bi-floppy me-1"></i> Cập Nhật Hồ Sơ Quyết Toán
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-12 col-lg-5">
-                        <div class="border rounded-4 p-4 bg-white shadow-xs">
-                            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-shield-check text-success me-1"></i> Tiêu Chuẩn Nghiệm Thu Của Kế Toán FPoly</h6>
-                            <ul class="text-muted small ps-3 mb-3" style="line-height: 1.7;">
-                                <li>Tên chủ tài khoản phải khớp hoàn toàn với họ tên trên CCCD của sinh viên.</li>
-                                <li>Ảnh chụp màn hình VNeID mức độ 2 rõ ràng họ tên, số định danh cá nhân và ngày sinh.</li>
-                                <li>Thù lao sẽ được Kế toán chuyển khoản định kỳ vào ngày 15 và 30 hàng tháng sau khi ca trực được nghiệm thu.</li>
-                            </ul>
-                            <div class="text-center p-3 bg-light rounded-3 border">
-                                <span class="text-muted small d-block mb-2 font-monospace">ẢNH MINH HỌA XÁC THỰC VNEID ĐÃ NẠP:</span>
-                                <img id="previewVneidImg" src="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80') ?>" alt="Xem trước ảnh VNeID" style="max-height: 160px; border-radius: 8px; border: 1px solid #CBD5E1;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php else: ?>
-                <!-- Thông báo dành cho Cán bộ / Giảng viên biên chế nhà trường -->
-                <div class="card border-0 rounded-4 p-5 text-center shadow-xs bg-light">
-                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center bg-white border mx-auto mb-3" style="width: 56px; height: 56px;">
-                        <i class="bi bi-person-badge text-secondary fs-3"></i>
-                    </div>
-                    <h5 class="fw-bold text-dark mb-1">Cán Bộ / Giảng Viên Biên Chế Nhà Trường</h5>
-                    <p class="text-muted small mx-auto mb-0" style="max-width: 540px; line-height: 1.6;">
-                        Tài khoản của bạn thuộc khối Cán bộ / Giảng viên (<strong><?= htmlspecialchars($perms['roleNameDisplay']) ?></strong>). Nhân sự nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID tại đây.
-                    </p>
-                </div>
                 <?php endif; ?>
             </section>
 
@@ -2299,18 +2285,40 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
                 <div class="row g-4" id="eventsCardsContainer">
                     <?php foreach ($events as $e): ?>
-                    <div class="col-12 col-md-6 col-xl-4">
+                    <?php
+                    $canDeleteThisEvent = false;
+                    $userRole = $perms['role'] ?? 'GUEST';
+                    $currUid = (int)($currentUser['id'] ?? 0);
+                    $eventCreatorId = (int)($e['created_by'] ?? 0);
+
+                    if (in_array($userRole, ['HEAD_ADMIN', 'ADMIN'], true)) {
+                        $canDeleteThisEvent = true;
+                    } elseif ($userRole === 'LECTURER' && $eventCreatorId === $currUid) {
+                        $canDeleteThisEvent = true;
+                    }
+                    ?>
+                    <div class="col-12 col-md-6 col-xl-4" id="eventCardCol_<?= $e['id'] ?>">
                         <div class="card h-100 border rounded-4 shadow-xs overflow-hidden">
                             <div class="card-body p-4 d-flex flex-column">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><?= htmlspecialchars($e['status']) ?></span>
+                                    <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><?= htmlspecialchars($e['status']) ?></span>
+                                        <span class="badge bg-light text-primary border font-monospace"><?= htmlspecialchars($e['department'] ?? 'Công nghệ Thông tin') ?></span>
+                                    </div>
                                     <small class="text-muted fw-bold num-tabular"><i class="bi bi-clock me-1"></i><?= substr($e['start_time'], 0, 10) ?></small>
                                 </div>
                                 <h5 class="fw-bold text-dark mb-2"><?= htmlspecialchars($e['title']) ?></h5>
                                 <p class="text-muted small text-truncate-2 mb-3"><?= htmlspecialchars($e['description'] ?? 'Không có mô tả') ?></p>
                                 <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center text-muted small">
                                     <span><i class="bi bi-geo-alt me-1 text-danger"></i><?= htmlspecialchars($e['location_name'] ?? 'Hội trường') ?></span>
-                                    <span class="badge bg-light text-dark border"><?= $e['total_shifts'] ?> Ca trực</span>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="badge bg-light text-dark border"><?= $e['total_shifts'] ?> Ca trực</span>
+                                        <?php if ($canDeleteThisEvent): ?>
+                                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2.5 py-0.5" style="font-size: 11.5px;" onclick="confirmDeleteEvent(<?= $e['id'] ?>, '<?= htmlspecialchars(addslashes($e['title'])) ?>')">
+                                            <i class="bi bi-trash3 me-1"></i>Xóa
+                                        </button>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2322,53 +2330,148 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             
             
 
-            <!-- TAB 6: THẨM ĐỊNH MINH CHỨNG GOOGLE DRIVE -->
+            <!-- TAB 6: MINH CHỨNG ĐỂ NGHIỆM THU SAU MỖI SỰ KIỆN HOÀN THÀNH -->
             <section class="spa-panel" id="panelSubmissions" style="display:none;">
-                <div class="d-flex justify-content-between align-items-center pb-3 border-bottom mb-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-4 gap-3">
                     <div>
-                        <h2 class="h5 fw-bold mb-0 text-dark">Hồ Sơ Nghiệm Thu & Minh Chứng Google Drive</h2>
-                        <p class="text-muted small mb-0">Thẩm định hình ảnh/video recap do CTV gửi về để xét duyệt điểm rèn luyện</p>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-warning text-dark font-monospace fw-bold px-2.5 py-1">HẬU SỰ KIỆN</span>
+                            <h2 class="h5 fw-bold mb-0 text-dark">Minh Chứng Nghiệm Thu Sau Mỗi Sự Kiện Hoàn Thành</h2>
+                        </div>
+                        <p class="text-muted small mb-0">Role CTV: Up ảnh hiện trường • Role CTV Media: Up link Google Drive kèm logo & chỉnh sửa sáng • Giảng Viên: Duyệt đã đầy đủ minh chứng để nghiệm thu</p>
                     </div>
-                    <span class="badge bg-warning text-dark px-3 py-2 fw-bold">Chờ Thẩm Định</span>
+                    <div class="d-flex gap-2">
+                        <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-2 fw-bold d-flex align-items-center gap-1">
+                            <i class="bi bi-shield-check"></i> Zero-Fraud Acceptance
+                        </span>
+                    </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+
+                <!-- Banner Hướng Dẫn Quy Trình Minh Chứng Theo Role -->
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 rounded-4 bg-light border h-100">
+                            <div class="d-flex align-items-center gap-2 mb-1.5">
+                                <span class="badge bg-primary text-white rounded-pill px-2 py-0.5">Role CTV Thường</span>
+                                <strong class="small text-dark">Ảnh Hiện Trường Có Mặt</strong>
+                            </div>
+                            <p class="small text-muted mb-0" style="font-size:12px;">CTV có nhiệm vụ chụp ảnh có mặt thực tế tại vị trí trực (đồng phục áo cam FPoly) để chứng minh có mặt nghiệm thu.</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 rounded-4 bg-light border h-100">
+                            <div class="d-flex align-items-center gap-2 mb-1.5">
+                                <span class="badge bg-warning text-dark rounded-pill px-2 py-0.5">Role CTV Media</span>
+                                <strong class="small text-dark">Link Drive Đã Chỉnh Sáng & Logo</strong>
+                            </div>
+                            <p class="small text-muted mb-0" style="font-size:12px;">CTV Media cần tải lên đường link Google Drive bộ ảnh sự kiện đã được <strong>gắn logo FPT Polytechnic</strong> và <strong>hậu kỳ chỉnh sửa sáng</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 rounded-4 bg-light border h-100">
+                            <div class="d-flex align-items-center gap-2 mb-1.5">
+                                <span class="badge bg-success text-white rounded-pill px-2 py-0.5">Role Giảng Viên</span>
+                                <strong class="small text-dark">Duyệt Đầy Đủ Minh Chứng</strong>
+                            </div>
+                            <p class="small text-muted mb-0" style="font-size:12px;">Giảng viên thẩm định tính đầy đủ và hợp lệ của minh chứng để bấm <strong>Duyệt Nghiệm Thu</strong>, kích hoạt xuất hợp đồng thù lao cho CTV.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive bg-white rounded-4 border shadow-xs">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
                         <thead class="table-light text-muted small text-uppercase fw-bold">
                             <tr>
-                                <th>Sinh Viên CTV</th>
+                                <th class="ps-4">Sinh Viên CTV</th>
                                 <th>Sự Kiện & Ca Trực</th>
-                                <th>Đường Link Drive</th>
-                                <th>Thời Gian Nộp</th>
+                                <th>Minh Chứng Đã Nộp</th>
+                                <th>Ghi Chú Nghiệm Thu</th>
                                 <th>Trạng Thái</th>
-                                <th class="text-end">Thao Tác</th>
+                                <th class="text-end pe-4">Thao Tác Giảng Viên</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php foreach ($accountingList as $subItem): ?>
+                            <?php
+                            $subAssId = (int)$subItem['assignment_id'];
+                            $subProofUrl = $subItem['proof_image_url'] ?? '';
+                            $isDriveLink = str_contains($subProofUrl, 'drive.google.com') || str_contains($subProofUrl, 'docs.google.com') || str_contains(strtolower($subItem['shift_name'] . ' ' . $subItem['full_name']), 'media');
+                            $hasProof = !empty($subProofUrl);
+                            $isVerified = (int)($subItem['lecturer_verified'] ?? 0) === 1;
+                            ?>
                             <tr>
-                                <td>
-                                    <strong>Đinh Nguyễn Phương Anh</strong><br>
-                                    <small class="text-muted">PI03084 • Media</small>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 12px;">
+                                            <?= mb_strtoupper(mb_substr($subItem['full_name'], 0, 1)) ?>
+                                        </div>
+                                        <div>
+                                            <strong class="d-block text-dark"><?= htmlspecialchars($subItem['full_name']) ?></strong>
+                                            <small class="text-muted"><span class="badge bg-light text-dark border font-monospace"><?= htmlspecialchars($subItem['student_code']) ?></span> • <?= $isDriveLink ? '<span class="text-warning fw-semibold"><i class="bi bi-camera-reels me-1"></i>CTV Media</span>' : '<span class="text-primary"><i class="bi bi-person me-1"></i>CTV</span>' ?></small>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>
-                                    <span class="fw-bold">FPoly TechDay 2026</span><br>
-                                    <small class="text-muted">Ca 3: Media Phóng Sự Ảnh</small>
+                                    <strong class="text-dark d-block"><?= htmlspecialchars($subItem['event_title']) ?></strong>
+                                    <small class="text-muted"><?= htmlspecialchars($subItem['shift_name']) ?></small>
                                 </td>
                                 <td>
-                                    <a href="https://drive.google.com" target="_blank" class="btn-fpt-secondary btn-fpt-sm">
-                                        <i class="fa-brands fa-google-drive me-1 text-primary"></i> Mở Thư Mục Drive
-                                    </a>
+                                    <?php if ($hasProof): ?>
+                                        <?php if ($isDriveLink): ?>
+                                        <div>
+                                            <a href="<?= htmlspecialchars($subProofUrl) ?>" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill py-1 px-2.5 fw-semibold" style="font-size:11.5px;">
+                                                <i class="fa-brands fa-google-drive me-1 text-primary"></i> Mở Drive Bộ Ảnh Media
+                                            </a>
+                                            <div class="small mt-1 text-success fw-semibold" style="font-size:11px;">
+                                                <i class="bi bi-check-circle-fill me-1"></i>Đã kèm Logo & Chỉnh sáng
+                                            </div>
+                                        </div>
+                                        <?php else: ?>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img src="<?= htmlspecialchars($subProofUrl) ?>" alt="Minh chứng" class="rounded-2 border shadow-xs" style="width: 44px; height: 32px; object-fit: cover;">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-1 px-2" style="font-size: 11px;" onclick="previewProofModal('<?= addslashes($subItem['full_name']) ?>', '<?= addslashes($subItem['shift_name']) ?>', '<?= addslashes($subProofUrl) ?>', '<?= addslashes($subItem['proof_note'] ?? '') ?>')">
+                                                <i class="bi bi-eye"></i> Xem Ảnh Hiện Trường
+                                            </button>
+                                        </div>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <span class="badge bg-light text-muted border py-1.5 px-2.5"><i class="bi bi-clock-history me-1"></i>Chưa nộp minh chứng</span>
+                                    <?php endif; ?>
                                 </td>
-                                <td class="text-muted small num-tabular">15/11/2026 12:15</td>
-                                <td><span class="badge bg-warning text-dark">Pending</span></td>
-                                <td class="text-end">
-                                    <button class="btn-fpt-emerald btn-fpt-sm me-1" onclick="showToast('Đã phê duyệt nghiệm thu hồ sơ thành công!', 'success')">
-                                        <i class="bi bi-check-lg"></i> Duyệt
-                                    </button>
-                                    <button class="btn-fpt-secondary btn-fpt-sm text-danger" onclick="showToast('Đã từ chối bài nộp.', 'danger')">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
+                                <td>
+                                    <small class="text-muted"><?= htmlspecialchars($subItem['proof_note'] ?: ($isDriveLink ? 'Bộ ảnh Media đã chỉnh sửa sáng và gắn logo FPT' : 'Có mặt đúng giờ tại địa điểm trực sự kiện')) ?></small>
+                                </td>
+                                <td>
+                                    <?php if ($isVerified): ?>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle py-1.5 px-2.5">
+                                        <i class="bi bi-check-circle-fill me-1"></i>Đã Nghiệm Thu
+                                    </span>
+                                    <small class="d-block text-muted font-monospace mt-0.5" style="font-size:10.5px;"><?= htmlspecialchars($subItem['contract_code'] ?? '') ?></small>
+                                    <?php elseif ($hasProof): ?>
+                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle py-1.5 px-2.5">
+                                        <i class="bi bi-hourglass-split me-1"></i>Chờ GV Nghiệm Thu
+                                    </span>
+                                    <?php else: ?>
+                                    <span class="badge bg-secondary-subtle text-secondary py-1.5 px-2.5">Chưa gửi</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <?php if ($perms['canVerifyLecturer']): ?>
+                                        <?php if ($isVerified): ?>
+                                        <button class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-3 disabled" disabled>
+                                            <i class="bi bi-patch-check-fill text-success me-1"></i> Đã Duyệt Nghiệm Thu
+                                        </button>
+                                        <?php else: ?>
+                                        <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill py-1 px-3 shadow-xs" onclick="verifyLecturerAcceptance(<?= $subAssId ?>)">
+                                            <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
+                                        </button>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <span class="text-muted small"><i class="bi bi-lock-fill me-1"></i>Chỉ Giảng Viên</span>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -2482,21 +2585,54 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                         <strong class="text-success num-tabular"><?= number_format((int)$acc['remuneration_amount']) ?> đ</strong>
                                     </div>
                                 </div>
-                            </div>
+                            <?php
+                            $isVerified = !empty($acc['lecturer_verified']) && (int)$acc['lecturer_verified'] === 1;
+                            $hasProof = !empty($acc['proof_image_url']);
+                            $hasCccd = !empty($acc['id_card_number']);
+                            $hasBank = !empty($acc['bank_account_number']);
+                            $isReadyToExport = $isVerified && $hasProof && $hasCccd && $hasBank;
+                            ?>
+                            <div class="d-flex flex-column gap-2 pt-2 border-top">
+                                <!-- Trạng thái điều kiện xuất hợp đồng -->
+                                <div class="d-flex align-items-center justify-content-between" style="font-size: 11px;">
+                                    <span class="text-muted">Điều kiện xuất HĐ:</span>
+                                    <?php if ($isReadyToExport): ?>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5">
+                                        <i class="bi bi-patch-check-fill me-1"></i>Đủ điều kiện xuất HĐ
+                                    </span>
+                                    <?php else: ?>
+                                    <span class="badge bg-warning-subtle text-dark border border-warning-subtle px-2 py-0.5" title="Cần GV duyệt và đủ CCCD + STK">
+                                        <i class="bi bi-exclamation-triangle-fill me-1 text-warning"></i>Chưa đủ điều kiện
+                                    </span>
+                                    <?php endif; ?>
+                                </div>
 
-                            <div class="d-flex gap-2">
-                                <button type="button" class="btn-fpt-secondary btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
-                                    <i class="bi bi-file-earmark-text me-1"></i> Xem Hợp Đồng
-                                </button>
-                                <?php if (($acc['school_status'] ?? '') !== 'Signed_Paid'): ?>
-                                <button type="button" class="btn-fpt-primary btn-fpt-sm flex-fill" onclick="submitToSchool(<?= $acc['assignment_id'] ?>)">
-                                    <i class="bi bi-send-check me-1"></i> Trình Trường Ký
-                                </button>
-                                <?php else: ?>
-                                <button type="button" class="btn-fpt-emerald btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
-                                    <i class="bi bi-printer me-1"></i> In Biên Bản
-                                </button>
-                                <?php endif; ?>
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn-fpt-secondary btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
+                                        <i class="bi bi-file-earmark-text me-1"></i> Xem Chi Tiết
+                                    </button>
+                                    
+                                    <!-- Nút Duyệt Nghiệm Thu: Dành riêng cho Giảng viên / Quản trị viên -->
+                                    <?php if (!$isVerified && !empty($perms['canVerifyLecturer'])): ?>
+                                    <button type="button" class="btn-fpt-primary btn-fpt-sm flex-fill" onclick="verifyLecturerInCard(<?= $acc['assignment_id'] ?>)">
+                                        <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
+                                    </button>
+                                    <?php endif; ?>
+
+                                    <!-- Nút Trình Trường Ký: CHỈ Cán bộ Hành chính & Quản trị viên (CTV TUYỆT ĐỐI KHÔNG CÓ) -->
+                                    <?php if (!empty($perms['canSubmitSchoolSigning']) && ($acc['school_status'] ?? '') !== 'Signed_Paid'): ?>
+                                    <button type="button" class="btn-fpt-primary btn-fpt-sm flex-fill" <?= $isReadyToExport ? '' : 'disabled title="Cần nghiệm thu đầy đủ trước khi trình ký"' ?> onclick="submitToSchool(<?= $acc['assignment_id'] ?>)">
+                                        <i class="bi bi-send-check me-1"></i> Trình Trường Ký
+                                    </button>
+                                    <?php endif; ?>
+
+                                    <!-- Nút In Biên Bản: Khi Trường đã ký và chi tiền -->
+                                    <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
+                                    <button type="button" class="btn-fpt-emerald btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
+                                        <i class="bi bi-printer me-1"></i> In Biên Bản
+                                    </button>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2716,12 +2852,10 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             </section>
 
             <!-- =========================================================
-                 PANEL 9: QUẢN TRỊ VIÊN - CẤP QUYỀN & NHẬT KÝ THAO TÁC (ADMIN ONLY)
+                 PANEL 9: TRUNG TÂM CẤP QUYỀN NGƯỜI DÙNG (ADMIN ONLY)
                  ========================================================= -->
-            <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-            <section id="panelAdminManagement" style="display:none;" class="fade-in-up">
-                
-                <!-- Section 1: Cấp Quyền Người Dùng -->
+            <?php if (!empty($perms['canManageRoles'])): ?>
+            <section id="panelUserRoles" style="display:none;" class="fade-in-up">
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
                     <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
                         <div>
@@ -2822,8 +2956,14 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                 </div>
+            </section>
+            <?php endif; ?>
 
-                <!-- Section 2: Lịch Sử Thao Tác Hệ Thống (Audit Trail) -->
+            <!-- =========================================================
+                 PANEL 10: NHẬT KÝ THAO TÁC HỆ THỐNG - AUDIT TRAIL (TRANG RIÊNG BIỆT)
+                 ========================================================= -->
+            <?php if (!empty($perms['canViewAuditLogs'])): ?>
+            <section id="panelAuditTrail" style="display:none;" class="fade-in-up">
                 <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
                     <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
                         <div>
@@ -2866,6 +3006,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                         'UPDATE_PROFILE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px;"><i class="bi bi-person-fill-gear me-1"></i>Sửa Hồ Sơ</span>',
                                         'APPROVE_PAYMENT' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px;"><i class="bi bi-check2-circle me-1"></i>Duyệt Tiền</span>',
                                         'VERIFY_PROOF' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px;"><i class="bi bi-patch-check-fill me-1"></i>Nghiệm Thu</span>',
+                                        'DELETE_EVENT' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(239, 68, 68, 0.15); color: #DC2626; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 11px;"><i class="bi bi-trash3-fill me-1"></i>Xóa Sự Kiện</span>',
+                                        'DELETE_SHIFT' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(239, 68, 68, 0.15); color: #DC2626; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 11px;"><i class="bi bi-trash-fill me-1"></i>Xóa Ca</span>',
                                         'CREATE_NOTE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); font-size: 11px;"><i class="bi bi-calendar-event me-1"></i>Lịch Hẹn</span>',
                                         default => '<span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11px;">' . htmlspecialchars($log['action']) . '</span>'
                                     };
@@ -2908,7 +3050,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                 </div>
-
             </section>
             <?php endif; ?>
 
@@ -2967,7 +3108,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label class="form-label fw-bold text-dark small">Điểm Rèn Luyện Tích Lũy</label>
+                            <label class="form-label fw-bold text-dark small">Điểm Tích Cực (Uy Tín CTV)</label>
                             <div class="input-group">
                                 <input type="number" name="points" class="form-control num-tabular" value="10" min="1" max="50" required>
                                 <span class="input-group-text">Điểm</span>
@@ -3096,16 +3237,16 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 </div>
 
 <!-- =========================================================
-     MODAL CTV NỘP ẢNH HIỆN TRƯỜNG CHỨNG MINH CÓ MẶT NGHIỆM THU
+     MODAL NỘP MINH CHỨNG ĐỂ NGHIỆM THU SAU MỖI SỰ KIỆN HOÀN THÀNH
      ========================================================= -->
 <div class="modal fade" id="submitProofModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius:22px; overflow:hidden;">
             <div class="modal-header text-white" style="background:var(--ux-accent); padding:18px 24px;">
                 <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-camera-fill fs-5"></i>
+                    <i class="bi bi-patch-check-fill fs-5" id="submitProofModalIcon"></i>
                     <div>
-                        <h6 class="modal-title fw-bold mb-0">Chụp Ảnh Hiện Trường Nghiệm Thu</h6>
+                        <h6 class="modal-title fw-bold mb-0" id="submitProofModalTitle">Nộp Minh Chứng Nghiệm Thu Sau Sự Kiện</h6>
                         <small class="text-white-50" id="submitProofShiftInfo">Ca trực sự kiện</small>
                     </div>
                 </div>
@@ -3113,37 +3254,80 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             </div>
             <form id="submitProofForm" onsubmit="handleProofSubmit(event)">
                 <input type="hidden" name="assignment_id" id="submitProofAssignmentId" value="">
+                <input type="hidden" name="proof_type" id="submitProofType" value="on_site">
+                
                 <div class="modal-body p-4">
-                    <div class="alert alert-light border py-2 px-3 small mb-3">
-                        <i class="bi bi-info-circle text-primary me-1"></i> <strong>Quy chế nghiệm thu:</strong> CTV chụp ảnh hiện trường thực tế để Giảng viên thẩm định và làm hợp đồng đề nghị Nhà trường thanh toán thù lao.
+                    <!-- Tab chuyển đổi Vai Trò: CTV Thường vs CTV Media -->
+                    <div class="d-flex p-1 rounded-3 bg-light border mb-3">
+                        <button type="button" class="btn btn-sm flex-fill fw-bold rounded-2 btn-primary" id="tabProofOnSite" onclick="switchProofMode('on_site')">
+                            <i class="bi bi-camera me-1"></i> Role CTV: Ảnh Hiện Trường
+                        </button>
+                        <button type="button" class="btn btn-sm flex-fill fw-bold rounded-2 text-muted" id="tabProofDriveMedia" onclick="switchProofMode('drive_media')">
+                            <i class="fa-brands fa-google-drive me-1 text-primary"></i> Role CTV Media: Link Drive
+                        </button>
+                    </div>
+
+                    <!-- Khu Vực 1: Role CTV Thường - Ảnh Hiện Trường -->
+                    <div id="proofAreaOnSite">
+                        <div class="alert alert-info py-2 px-3 small mb-3 border-0 rounded-3">
+                            <i class="bi bi-info-circle-fill me-1"></i> <strong>Quy chế CTV:</strong> CTV có nhiệm vụ chụp <strong>ảnh hiện trường</strong> có mặt làm nhiệm vụ thực tế (áo cam FPoly) để Giảng viên nghiệm thu.
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark small">Chọn Ảnh Mẫu Hiện Trường Nhanh (Dành cho Demo)</label>
+                            <div class="d-flex flex-wrap gap-1.5 mb-2">
+                                <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="setProofSample('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80', 'Có mặt tại sảnh Hội trường A đón tiếp khách VIP và sinh viên')">
+                                    <i class="bi bi-image me-1"></i> Sảnh Hội Trường
+                                </button>
+                                <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="setProofSample('https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80', 'Có mặt tại Sân khấu chính điều phối âm thanh ánh sáng')">
+                                    <i class="bi bi-image me-1"></i> Sân Khấu
+                                </button>
+                                <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="setProofSample('https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=800&auto=format&fit=crop&q=80', 'Hoàn tất bàn lễ tân hướng dẫn đăng ký tham dự')">
+                                    <i class="bi bi-image me-1"></i> Bàn Tiếp Đón
+                                </button>
+                            </div>
+                            <label class="form-label fw-bold text-dark small mt-2">Hoặc Nhập URL Ảnh Hiện Trường Thực Tế <span class="text-danger">*</span></label>
+                            <input type="url" name="proof_image_url" id="submitProofImageUrl" class="form-control" placeholder="https://..." oninput="previewProofInput(this.value)">
+                        </div>
+
+                        <div class="text-center mb-3">
+                            <div id="proofInputPreviewBox" style="height: 140px; border-radius: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; display: grid; place-items: center; overflow: hidden;">
+                                <span class="text-muted small"><i class="bi bi-camera me-1"></i>Ảnh xem trước sẽ hiển thị tại đây</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Khu Vực 2: Role CTV Media - Link Google Drive -->
+                    <div id="proofAreaDriveMedia" style="display:none;">
+                        <div class="alert alert-warning py-2 px-3 small mb-3 border-0 rounded-3">
+                            <i class="bi bi-camera-reels-fill me-1"></i> <strong>Quy chế CTV Media:</strong> CTV Media cần nộp <strong>Link Google Drive</strong> chứa bộ ảnh sự kiện đã được <strong>chỉnh sửa sáng và gắn kèm logo FPT Polytechnic</strong> chuẩn nhận diện.
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark small">Đường Dẫn Thư Mục Google Drive (Bộ Ảnh Đã Chỉnh Sáng & Gắn Logo) <span class="text-danger">*</span></label>
+                            <input type="url" name="drive_media_url" id="submitDriveMediaUrl" class="form-control" placeholder="https://drive.google.com/drive/folders/..." oninput="syncDriveInput(this.value)">
+                            <div class="form-text small text-muted">Dán link Google Drive chia sẻ quyền xem/tải của bộ phận truyền thông.</div>
+                        </div>
+
+                        <div class="p-2.5 rounded-3 border bg-light mb-3" style="font-size:12px;">
+                            <div class="form-check mb-1">
+                                <input class="form-check-input" type="checkbox" id="checkLogo" checked>
+                                <label class="form-check-label fw-semibold text-dark" for="checkLogo">
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i> Đã gắn Watermark / Logo FPT Polytechnic
+                                </label>
+                            </div>
+                            <div class="form-check mb-0">
+                                <input class="form-check-input" type="checkbox" id="checkBrightness" checked>
+                                <label class="form-check-label fw-semibold text-dark" for="checkBrightness">
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i> Đã hậu kỳ, cân bằng ánh sáng và chỉnh sáng sắc nét
+                                </label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-dark small">Chọn Ảnh Mẫu Hiện Trường Nhanh (Dành cho Demo)</label>
-                        <div class="d-flex flex-wrap gap-1.5 mb-2">
-                            <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="setProofSample('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80', 'Có mặt tại sảnh Hội trường A đón tiếp khách VIP và sinh viên')">
-                                <i class="bi bi-image me-1"></i> Sảnh Hội Trường
-                            </button>
-                            <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="setProofSample('https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80', 'Có mặt tại Sân khấu chính điều phối âm thanh ánh sáng')">
-                                <i class="bi bi-image me-1"></i> Sân Khấu
-                            </button>
-                            <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="setProofSample('https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=800&auto=format&fit=crop&q=80', 'Hoàn tất bàn lễ tân hướng dẫn đăng ký tham dự')">
-                                <i class="bi bi-image me-1"></i> Bàn Tiếp Đón
-                            </button>
-                        </div>
-                        <label class="form-label fw-bold text-dark small mt-2">Hoặc Nhập URL Ảnh Chụp Thực Tế <span class="text-danger">*</span></label>
-                        <input type="url" name="proof_image_url" id="submitProofImageUrl" class="form-control" placeholder="https://..." required oninput="previewProofInput(this.value)">
-                    </div>
-
-                    <div class="text-center mb-3">
-                        <div id="proofInputPreviewBox" style="height: 150px; border-radius: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; display: grid; place-items: center; overflow: hidden;">
-                            <span class="text-muted small"><i class="bi bi-camera me-1"></i>Ảnh xem trước sẽ hiển thị tại đây</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-dark small">Ghi Chú Công Việc Hoàn Thành Tại Hiện Trường</label>
-                        <textarea name="proof_note" id="submitProofNote" class="form-control" rows="2" placeholder="Ví dụ: Đã có mặt đúng giờ, hỗ trợ check-in đủ 150 sinh viên tại cổng số 1..."></textarea>
+                        <label class="form-label fw-bold text-dark small">Ghi Chú Nghiệm Thu Công Việc</label>
+                        <textarea name="proof_note" id="submitProofNote" class="form-control" rows="2" placeholder="Ví dụ: Đã có mặt đúng giờ, hoàn thành nhiệm vụ..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer bg-light px-4 py-3 border-0 d-flex justify-content-between">
@@ -3238,7 +3422,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     <span class="badge bg-success text-white fs-6 py-1 px-3" id="accDetailAmount">0 đ</span>
                                 </div>
                                 <div class="text-end">
-                                    <span class="text-muted small d-block">Điểm rèn luyện:</span>
+                                    <span class="text-muted small d-block">Điểm tích cực:</span>
                                     <span class="badge bg-light text-dark border" id="accDetailPoints">+0 điểm</span>
                                 </div>
                             </div>
@@ -3483,7 +3667,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         <div class="modal-content border-0 shadow-lg" style="border-radius:22px; overflow:hidden;">
             <div class="modal-header border-bottom" style="background:#FAFAFC; padding:20px 24px; color:#1D1D1F;">
                 <div>
-                    <span class="badge bg-warning text-dark font-monospace mb-1" id="modalShiftBadge">+10 Điểm Rèn Luyện</span>
+                    <span class="badge bg-warning text-dark font-monospace mb-1" id="modalShiftBadge">+10 Điểm Tích Cực</span>
                     <h5 class="modal-title fw-bold" id="shiftModalTitle" style="color:#1D1D1F;">Chi Tiết Ca Trực</h5>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -3555,12 +3739,14 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             <i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i>
                         </div>
                         <div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%;">
-                            Xin chào <strong><?= htmlspecialchars($currentUser['full_name'] ?? 'bạn') ?></strong>! Tôi là trợ lý ảo PolyMee. Bạn có thể hỏi tôi về lịch trực, tìm kiếm ca theo kỹ năng, hoặc nộp link Google Drive minh chứng nghiệm thu nhé!
+                            Xin chào <strong><?= htmlspecialchars($currentUser['full_name'] ?? 'bạn') ?></strong> (<?= htmlspecialchars($perms['roleNameDisplay'] ?? 'Thành viên') ?>)! Tôi là trợ lý ảo PolyMee. Bạn có thể chọn nhanh các nghiệp vụ được phân quyền hoặc nhập câu hỏi bên dưới nhé!
                         </div>
                     </div>
                 </div>
 
+                <!-- Các Câu Hỏi Gợi Ý AI Được Phân Quyền Theo Role -->
                 <div class="d-flex flex-wrap gap-1.5 mb-3">
+                    <?php if (in_array($perms['role'], ['HEAD_ADMIN', 'ADMIN'], true)): ?>
                     <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Phòng nào đang trống?')">
                         <i class="bi bi-building-check me-1 text-success"></i> Phòng trống?
                     </button>
@@ -3571,11 +3757,70 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <i class="bi bi-envelope-fill me-1 text-primary"></i> Gửi mail mời CTV
                     </button>
                     <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Đặt giúp lịch sự kiện Hội Thảo AI ngày 22/11, khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu, Đại Diện FPT Telecom')">
-                        <i class="bi bi-calendar-plus-fill me-1 text-danger"></i> Đặt lịch sự kiện & khách mời
+                        <i class="bi bi-calendar-plus-fill me-1 text-danger"></i> Đặt lịch sự kiện VIPs
                     </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Báo cáo xung đột lịch và audit trail')">
+                        <i class="bi bi-shield-check me-1 text-secondary"></i> Báo cáo xung đột & Audit
+                    </button>
+                    <?php elseif (in_array($perms['role'], ['LECTURER', 'STAFF'], true)): ?>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Phòng nào đang trống?')">
+                        <i class="bi bi-building-check me-1 text-success"></i> Phòng trống?
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Tìm CTV có kỹ năng Media quay chụp')">
+                        <i class="bi bi-people-fill me-1 text-warning"></i> CTV kỹ năng Media?
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Đặt giúp lịch sự kiện Workshop Bộ Môn CNTT ngày 22/11, khách mời gồm: Thầy Trưởng Bộ Môn')">
+                        <i class="bi bi-calendar-plus-fill me-1 text-primary"></i> Đặt lịch Workshop bộ môn
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Quy trình duyệt nghiệm thu minh chứng và xuất hợp đồng thù lao')">
+                        <i class="bi bi-patch-check-fill me-1 text-success"></i> Duyệt nghiệm thu minh chứng
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Hồ sơ CTV của bộ môn tôi')">
+                        <i class="bi bi-folder-check me-1 text-secondary"></i> Hồ sơ CTV bộ môn
+                    </button>
+                    <?php elseif ($perms['role'] === 'ACCOUNTANT'): ?>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Tổng hợp quyết toán thù lao đợt này')">
+                        <i class="bi bi-cash-stack me-1 text-success"></i> Tổng hợp quyết toán
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Hồ sơ CTV nào chưa có số CCCD hoặc chưa có ảnh chụp màn hình VNeID?')">
+                        <i class="bi bi-person-exclamation me-1 text-warning"></i> Đối soát CCCD & VNeID
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Phòng nào đang tổ chức sự kiện hôm nay?')">
+                        <i class="bi bi-building me-1 text-info"></i> Phòng sự kiện
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Quy trình giải ngân chuyển khoản thù lao cho sinh viên')">
+                        <i class="bi bi-bank me-1 text-primary"></i> Quy trình giải ngân
+                    </button>
+                    <?php elseif ($perms['role'] === 'MEDIA'): ?>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Tôi có ca trực Media nào sắp tới không?')">
+                        <i class="bi bi-camera-reels me-1 text-primary"></i> Ca trực Media của tôi?
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Điểm tích cực và đánh giá uy tín của tôi là bao nhiêu?')">
+                        <i class="bi bi-star-fill me-1 text-warning"></i> Điểm tích cực & Uy tín
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Quy chuẩn nộp link Google Drive ảnh đã chỉnh sửa sáng và gắn logo FPT')">
+                        <i class="bi bi-file-earmark-image me-1 text-success"></i> Quy chuẩn Drive Media
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Hồ sơ số CCCD và ảnh chụp màn hình VNeID của tôi đã hợp lệ chưa?')">
+                        <i class="bi bi-shield-check me-1 text-info"></i> Kiểm tra CCCD & VNeID
+                    </button>
+                    <?php else: /* CTV */ ?>
                     <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Tôi có ca trực nào sắp tới không?')">
-                        <i class="bi bi-clock me-1 text-secondary"></i> Ca trực của tôi?
+                        <i class="bi bi-clock-history me-1 text-primary"></i> Ca trực của tôi?
                     </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Điểm tích cực và đánh giá uy tín của tôi là bao nhiêu?')">
+                        <i class="bi bi-star-fill me-1 text-warning"></i> Điểm tích cực & Uy tín
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Hướng dẫn chụp ảnh hiện trường minh chứng để được nghiệm thu')">
+                        <i class="bi bi-camera-fill me-1 text-success"></i> Chụp ảnh hiện trường
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Hồ sơ số CCCD và ảnh chụp màn hình VNeID của tôi đã hợp lệ chưa?')">
+                        <i class="bi bi-shield-check me-1 text-info"></i> Kiểm tra CCCD & VNeID
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Bao giờ tôi được nhận tiền thù lao sự kiện?')">
+                        <i class="bi bi-wallet2 me-1 text-secondary"></i> Thời gian nhận thù lao?
+                    </button>
+                    <?php endif; ?>
                 </div>
 
                 <form id="aiChatForm" onsubmit="handleAiChatSubmit(event)" class="d-flex gap-2">
@@ -3793,8 +4038,15 @@ function navigateToPage(pageName) {
         showToast('Bạn không có quyền truy cập Bảng Nghiệm Thu Kế Toán. Quyền này chỉ dành cho Kế toán, Trưởng hành chính và Ban Giám hiệu.', 'warning');
         return navigateToPage('calendar');
     }
-    if (pageName === 'admin-management' && !userPermissions.canViewAdminManagement) {
-        showToast('Bạn không có quyền truy cập Trung tâm Cấp Quyền & Nhật ký. Chức năng chỉ dành riêng cho Quản trị viên hệ thống (Admin).', 'warning');
+    if (pageName === 'user-roles' && !userPermissions.canManageRoles) {
+        showToast('Bạn không có quyền truy cập Trung tâm Cấp Quyền. Chức năng chỉ dành riêng cho Quản trị viên hệ thống (Admin).', 'warning');
+        return navigateToPage('calendar');
+    }
+    if (pageName === 'audit-trail' && !userPermissions.canViewAuditLogs) {
+        showToast('Bạn không có quyền xem Nhật ký Kiểm toán Audit Trail.', 'warning');
+        return navigateToPage('calendar');
+    }
+    if (pageName === 'my-shifts' && !userPermissions.canViewMyShifts) {
         return navigateToPage('calendar');
     }
 
@@ -3823,7 +4075,8 @@ function navigateToPage(pageName) {
         'panelSubmissions', 
         'panelContractDossier', 
         'panelProfileSettings', 
-        'panelAdminManagement'
+        'panelUserRoles',
+        'panelAuditTrail'
     ];
     panelIds.forEach(id => {
         const el = document.getElementById(id);
@@ -3835,6 +4088,10 @@ function navigateToPage(pageName) {
     if (switcher) switcher.style.display = isCalendar ? 'inline-flex' : 'none';
     const monthNav = document.getElementById('calendarMonthNav');
     if (monthNav) monthNav.style.display = isCalendar ? 'inline-flex' : 'none';
+
+    // Ẩn/Hiện Thanh Thông Tin KPI: CHỈ CÓ Ở TRANG LỊCH HOẠT ĐỘNG
+    const kpiStrip = document.getElementById('kpiMetricsStrip');
+    if (kpiStrip) kpiStrip.style.display = isCalendar ? 'grid' : 'none';
 
     const screenTitle = document.getElementById('activeScreenTitle');
     const breadcrumb = document.getElementById('breadcrumbActive');
@@ -3853,9 +4110,8 @@ function navigateToPage(pageName) {
     } else if (pageName === 'student-payroll-profile') {
         const spp = document.getElementById('panelStudentPayrollProfile');
         if (spp) spp.style.setProperty('display', 'block', 'important');
-        const isMgr = !!userPermissions.canViewCtvProfiles;
-        if (screenTitle) screenTitle.textContent = isMgr ? 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)' : 'Hồ Sơ Nhận Thù Lao & Thông Tin Định Danh Của Tôi';
-        if (breadcrumb) breadcrumb.textContent = isMgr ? 'Quản Lý Hồ Sơ CTV' : 'Hồ Sơ VNeID & STK';
+        if (screenTitle) screenTitle.textContent = 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)';
+        if (breadcrumb) breadcrumb.textContent = 'Quản Lý Hồ Sơ CTV';
     } else if (pageName === 'my-shifts') {
         const ms = document.getElementById('panelMyShifts');
         if (ms) ms.style.setProperty('display', 'block', 'important');
@@ -3872,7 +4128,7 @@ function navigateToPage(pageName) {
         if (sub) sub.style.setProperty('display', 'block', 'important');
         if (screenTitle) screenTitle.textContent = 'Thẩm Định Nghiệm Thu Minh Chứng Google Drive';
         if (breadcrumb) breadcrumb.textContent = 'Thẩm Định Drive';
-    } else if (pageName === 'contract-dossier' || pageName === 'qr-projector') {
+    } else if (pageName === 'contract-dossier') {
         const pcd = document.getElementById('panelContractDossier');
         if (pcd) pcd.style.setProperty('display', 'block', 'important');
         if (screenTitle) screenTitle.textContent = 'Hồ Sơ Hợp Đồng Nghiệm Thu & Đề Nghị Chi Tiền';
@@ -3880,13 +4136,18 @@ function navigateToPage(pageName) {
     } else if (pageName === 'profile-settings') {
         const ps = document.getElementById('panelProfileSettings');
         if (ps) ps.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Cài Đặt Tài Khoản & Thông Tin Cá Nhân';
+        if (screenTitle) screenTitle.textContent = 'Cài Đặt Tài Khoản, Định Danh CCCD & STK Cá Nhân';
         if (breadcrumb) breadcrumb.textContent = 'Tài Khoản Cá Nhân';
-    } else if (pageName === 'admin-management') {
-        const am = document.getElementById('panelAdminManagement');
-        if (am) am.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Quản Trị Hệ Thống - Cấp Quyền & Nhật Ký Thao Tác';
-        if (breadcrumb) breadcrumb.textContent = 'Cấp Quyền & Nhật Ký';
+    } else if (pageName === 'user-roles') {
+        const ur = document.getElementById('panelUserRoles');
+        if (ur) ur.style.setProperty('display', 'block', 'important');
+        if (screenTitle) screenTitle.textContent = 'Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng';
+        if (breadcrumb) breadcrumb.textContent = 'Cấp Quyền Người Dùng';
+    } else if (pageName === 'audit-trail') {
+        const at = document.getElementById('panelAuditTrail');
+        if (at) at.style.setProperty('display', 'block', 'important');
+        if (screenTitle) screenTitle.textContent = 'Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)';
+        if (breadcrumb) breadcrumb.textContent = 'Nhật Ký Audit Trail';
     }
 }
 
@@ -4357,7 +4618,7 @@ function openShiftDetail(shiftId) {
 
     const allowance = shift.remuneration_amount ? Number(shift.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150,000 đ';
 
-    document.getElementById('modalShiftBadge').textContent = `+${shift.points} Điểm Rèn Luyện`;
+    document.getElementById('modalShiftBadge').textContent = `+${shift.points} Điểm Tích Cực (Uy tín)`;
     document.getElementById('shiftModalTitle').textContent = shift.name;
     document.getElementById('modalEventTitle').textContent = shift.event_title;
     document.getElementById('modalShiftTime').textContent = `${shift.start_time.substring(11, 16)} - ${shift.end_time.substring(11, 16)} (${shift.start_time.substring(0, 10)})`;
@@ -4369,6 +4630,7 @@ function openShiftDetail(shiftId) {
     const actionContainer = document.getElementById('modalActionButtons');
     const noticeContainer = document.getElementById('modalRoleNotice');
     const isMine = parseInt(shift.is_registered_by_me) > 0;
+    const canDeleteThis = userPermissions.canDeleteAnyEvent || (userPermissions.canDeleteOwnEvent && parseInt(shift.event_created_by) === parseInt(currentUser.id));
 
     if (userPermissions.canRegisterShift) {
         noticeContainer.innerHTML = `
@@ -4378,7 +4640,7 @@ function openShiftDetail(shiftId) {
         if (isMine) {
             actionContainer.innerHTML = `
                 <button type="button" class="btn-fpt-emerald" onclick="shiftModalInstance.hide(); navigateToPage('my-shifts');">
-                    <i class="bi bi-qr-code-scan me-1"></i> Đi Đến Lịch Của Tôi Để Check-in
+                    <i class="bi bi-calendar-check me-1"></i> Đến Lịch Của Tôi Để Nộp Minh Chứng
                 </button>
             `;
         } else {
@@ -4388,16 +4650,25 @@ function openShiftDetail(shiftId) {
                 </button>
             `;
         }
-    } else if (userPermissions.canCreateShift) {
+    } else if (userPermissions.canCreateShift || canDeleteThis) {
         noticeContainer.innerHTML = `
             <i class="bi bi-person-check fs-5"></i>
-            <span>Chế độ Quản lý / Ban tổ chức: Bạn có thể kích hoạt máy chiếu Dynamic QR trực tiếp cho ca này hoặc kiểm tra danh sách CTV đã tuyển.</span>
+            <span>Chế độ Quản lý / Ban tổ chức: Bạn có thể kiểm tra danh sách CTV hoặc quản lý phân rã ca trực.</span>
         `;
+        let deleteBtnHtml = '';
+        if (canDeleteThis) {
+            deleteBtnHtml = `
+                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1.5 fw-semibold" onclick="confirmDeleteShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}')">
+                    <i class="bi bi-trash3 me-1"></i> Xóa Ca Này
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1.5 fw-semibold" onclick="confirmDeleteEvent(${shift.event_id}, '${shift.event_title.replace(/'/g, "\\'")}')">
+                    <i class="bi bi-trash3-fill me-1"></i> Xóa Sự Kiện
+                </button>
+            `;
+        }
         actionContainer.innerHTML = `
-            <div class="d-flex gap-2">
-                <a href="/admin/qrProjector/${shift.id}" target="_blank" class="btn-fpt-emerald">
-                    <i class="bi bi-qr-code me-1"></i> Chiếu Dynamic QR
-                </a>
+            <div class="d-flex align-items-center gap-2">
+                ${deleteBtnHtml}
                 <button type="button" class="btn-fpt-secondary" onclick="shiftModalInstance.hide(); navigateToPage('events')">
                     <i class="bi bi-people me-1"></i> Quản Lý Sự Kiện
                 </button>
@@ -4416,6 +4687,79 @@ function openShiftDetail(shiftId) {
     }
 
     shiftModalInstance.show();
+}
+
+/**
+ * Xóa Sự Kiện & Toàn bộ Ca Trực
+ */
+async function confirmDeleteEvent(eventId, eventTitle) {
+    if (!confirm(`Bạn có chắc chắn muốn xóa sự kiện "${eventTitle}" và toàn bộ các ca trực liên quan? Thao tác này không thể hoàn tác.`)) {
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('event_id', eventId);
+
+        const response = await fetch('/dashboard/deleteEvent', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            showToast(data.message, 'success');
+            for (let i = rawShifts.length - 1; i >= 0; i--) {
+                if (parseInt(rawShifts[i].event_id) === parseInt(eventId)) {
+                    rawShifts.splice(i, 1);
+                }
+            }
+            if (shiftModalInstance) shiftModalInstance.hide();
+            changeCalendarView(currentCalendarTier);
+            renderMyShiftsTable();
+            const cardEl = document.getElementById(`eventCard_${eventId}`);
+            if (cardEl) cardEl.remove();
+        } else {
+            showToast(data.message || 'Lỗi khi xóa sự kiện.', 'danger');
+        }
+    } catch (err) {
+        showToast('Lỗi kết nối khi xóa sự kiện.', 'danger');
+    }
+}
+
+/**
+ * Xóa Ca Trực Đơn Lẻ
+ */
+async function confirmDeleteShift(shiftId, shiftName) {
+    if (!confirm(`Bạn có chắc chắn muốn xóa ca trực "${shiftName}"?`)) {
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('shift_id', shiftId);
+
+        const response = await fetch('/dashboard/deleteShift', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            showToast(data.message, 'success');
+            const idx = rawShifts.findIndex(s => parseInt(s.id) === parseInt(shiftId));
+            if (idx !== -1) {
+                rawShifts.splice(idx, 1);
+            }
+            if (shiftModalInstance) shiftModalInstance.hide();
+            changeCalendarView(currentCalendarTier);
+            renderMyShiftsTable();
+        } else {
+            showToast(data.message || 'Lỗi khi xóa ca trực.', 'danger');
+        }
+    } catch (err) {
+        showToast('Lỗi kết nối khi xóa ca trực.', 'danger');
+    }
 }
 
 /**
@@ -4577,7 +4921,7 @@ function exportAccountingCSV() {
     }
 
     let csvContent = '\uFEFF'; // UTF-8 BOM để Excel đọc tiếng Việt không bị lỗi font
-    csvContent += 'STT,Họ và Tên,Mã Sinh Viên,Số Điện Thoại,Số CCCD,Tên Ngân Hàng,Số Tài Khoản (STK),Chủ Tài Khoản,Tên Sự Kiện,Ca Trực,Thời Gian Bắt Đầu,Thời Gian Kết Thúc,Thù Lao (VNĐ),Điểm Rèn Luyện,Trạng Thái Kế Toán\r\n';
+    csvContent += 'STT,Họ và Tên,Mã Sinh Viên,Số Điện Thoại,Số CCCD,Tên Ngân Hàng,Số Tài Khoản (STK),Chủ Tài Khoản,Tên Sự Kiện,Ca Trực,Thời Gian Bắt Đầu,Thời Gian Kết Thúc,Thù Lao (VNĐ),Điểm Tích Cực,Trạng Thái Kế Toán\r\n';
 
     rawAccountingList.forEach((item, index) => {
         const row = [
@@ -4677,17 +5021,31 @@ function renderMyShiftsTable() {
 
         let proofHtml = '';
         if (hasProof) {
-            proofHtml = `
-                <div class="d-flex align-items-center gap-2">
-                    <div style="width: 48px; height: 34px; flex-shrink: 0; overflow: hidden; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <img src="${s.my_proof_image_url}" alt="Ảnh Hiện Trường" style="width: 48px; height: 34px; object-fit: cover; display: block; cursor: pointer;" onclick="previewProofModal('${(currentUser.full_name || 'CTV').replace(/'/g, "\\'")}', '${s.name}', '${s.my_proof_image_url}', '${(s.my_proof_note || 'Đã có mặt tại sự kiện').replace(/'/g, "\\'")}')" title="Nhấp xem phóng to">
-                    </div>
+            const isDrive = s.my_proof_image_url.includes('drive.google.com') || s.my_proof_image_url.includes('docs.google.com');
+            if (isDrive) {
+                proofHtml = `
                     <div>
-                        <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 10.5px;"><i class="bi bi-camera me-1"></i>Đã nộp ảnh</span>
-                        <small class="text-muted d-block text-truncate" style="max-width: 120px; font-size: 11px;">${s.my_proof_note || 'Hiện trường'}</small>
+                        <a href="${s.my_proof_image_url}" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill py-0.5 px-2 fw-semibold" style="font-size: 11px;">
+                            <i class="fa-brands fa-google-drive me-1 text-primary"></i> Link Drive Media
+                        </a>
+                        <small class="text-success d-block fw-semibold mt-0.5" style="font-size: 10.5px;">
+                            <i class="bi bi-check-circle-fill me-1"></i>Đã kèm Logo & Chỉnh sáng
+                        </small>
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                proofHtml = `
+                    <div class="d-flex align-items-center gap-2">
+                        <div style="width: 48px; height: 34px; flex-shrink: 0; overflow: hidden; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <img src="${s.my_proof_image_url}" alt="Ảnh Hiện Trường" style="width: 48px; height: 34px; object-fit: cover; display: block; cursor: pointer;" onclick="previewProofModal('${(currentUser.full_name || 'CTV').replace(/'/g, "\\'")}', '${s.name}', '${s.my_proof_image_url}', '${(s.my_proof_note || 'Đã có mặt tại sự kiện').replace(/'/g, "\\'")}')" title="Nhấp xem phóng to">
+                        </div>
+                        <div>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 10.5px;"><i class="bi bi-camera me-1"></i>Ảnh hiện trường</span>
+                            <small class="text-muted d-block text-truncate" style="max-width: 120px; font-size: 11px;">${s.my_proof_note || 'Hiện trường'}</small>
+                        </div>
+                    </div>
+                `;
+            }
         } else {
             proofHtml = `<span class="badge bg-danger-subtle text-danger border border-danger-subtle" style="font-size: 11px;"><i class="bi bi-camera-fill me-1"></i>Chưa nộp ảnh</span>`;
         }
@@ -4746,7 +5104,7 @@ function renderMyShiftsTable() {
             <td>${statusHtml}</td>
             <td>
                 <strong class="text-success num-tabular">${allowance}</strong><br>
-                <small class="text-muted">+${s.points || 10} điểm rèn luyện</small>
+                <small class="text-muted">+${s.points || 10} Điểm Tích Cực (Uy tín)</small>
             </td>
             <td class="text-end" style="min-width: 150px;">
                 ${actionHtml}
@@ -4772,32 +5130,92 @@ function previewProofInput(url) {
     const box = document.getElementById('proofInputPreviewBox');
     if (!box) return;
     if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-        box.innerHTML = `<img src="${url}" alt="Preview" style="max-height: 150px; max-width: 100%; object-fit: cover; border-radius: 8px;">`;
+        box.innerHTML = `<img src="${url}" alt="Preview" style="max-height: 140px; max-width: 100%; object-fit: cover; border-radius: 8px;">`;
     } else {
         box.innerHTML = `<span class="text-muted small"><i class="bi bi-camera me-1"></i>Ảnh xem trước sẽ hiển thị tại đây</span>`;
     }
 }
 
 /**
- * Mở modal CTV nộp ảnh hiện trường
+ * Chuyển đổi chế độ nộp minh chứng giữa CTV Thường (Ảnh Hiện Trường) & CTV Media (Link Google Drive)
  */
-function openSubmitProofModal(assignmentId, shiftName, shiftTime) {
+function switchProofMode(mode) {
+    const isMedia = (mode === 'drive_media');
+    const typeInput = document.getElementById('submitProofType');
+    if (typeInput) typeInput.value = mode;
+
+    const areaOnSite = document.getElementById('proofAreaOnSite');
+    const areaMedia = document.getElementById('proofAreaDriveMedia');
+    const tabOnSite = document.getElementById('tabProofOnSite');
+    const tabMedia = document.getElementById('tabProofDriveMedia');
+    const imgInput = document.getElementById('submitProofImageUrl');
+    const driveInput = document.getElementById('submitDriveMediaUrl');
+
+    if (isMedia) {
+        if (areaOnSite) areaOnSite.style.display = 'none';
+        if (areaMedia) areaMedia.style.display = 'block';
+        if (tabOnSite) { tabOnSite.classList.remove('btn-primary', 'active'); tabOnSite.classList.add('text-muted'); }
+        if (tabMedia) { tabMedia.classList.add('btn-primary', 'active'); tabMedia.classList.remove('text-muted'); }
+        if (imgInput) imgInput.removeAttribute('required');
+        if (driveInput) {
+            driveInput.setAttribute('required', 'required');
+            if (driveInput.value && imgInput) imgInput.value = driveInput.value;
+        }
+    } else {
+        if (areaOnSite) areaOnSite.style.display = 'block';
+        if (areaMedia) areaMedia.style.display = 'none';
+        if (tabMedia) { tabMedia.classList.remove('btn-primary', 'active'); tabMedia.classList.add('text-muted'); }
+        if (tabOnSite) { tabOnSite.classList.add('btn-primary', 'active'); tabOnSite.classList.remove('text-muted'); }
+        if (driveInput) driveInput.removeAttribute('required');
+        if (imgInput) imgInput.setAttribute('required', 'required');
+    }
+}
+
+function syncDriveInput(val) {
+    const imgInput = document.getElementById('submitProofImageUrl');
+    if (imgInput) imgInput.value = val;
+}
+
+/**
+ * Mở modal CTV nộp minh chứng nghiệm thu sau sự kiện
+ */
+function openSubmitProofModal(assignmentId, shiftName, shiftTime, isMediaParam) {
     document.getElementById('submitProofAssignmentId').value = assignmentId;
     document.getElementById('submitProofShiftInfo').textContent = `${shiftName} (${shiftTime ? shiftTime.substring(11, 16) : ''})`;
     document.getElementById('submitProofImageUrl').value = '';
+    const driveEl = document.getElementById('submitDriveMediaUrl');
+    if (driveEl) driveEl.value = '';
     document.getElementById('submitProofNote').value = '';
     previewProofInput('');
+
+    // Tự động chọn tab theo vai trò người dùng (CTV thường -> Ảnh Hiện Trường; CTV Media -> Link Drive)
+    const userRole = (userPermissions && userPermissions.role) ? userPermissions.role : (currentUser.role_name || 'CTV');
+    const isMedia = isMediaParam || userRole === 'MEDIA' || (shiftName && shiftName.toLowerCase().includes('media'));
+    switchProofMode(isMedia ? 'drive_media' : 'on_site');
+
+    if (isMedia) {
+        if (driveEl) driveEl.value = 'https://drive.google.com/drive/folders/fpoly-techday-2026-media-edited';
+        syncDriveInput('https://drive.google.com/drive/folders/fpoly-techday-2026-media-edited');
+        document.getElementById('submitProofNote').value = 'Bộ ảnh sự kiện độ phân giải cao đã được chỉnh sửa sáng và gắn logo FPT Polytechnic chuẩn nhận diện.';
+    }
+
     submitProofModalInstance.show();
 }
 
 /**
- * Xử lý submit nộp ảnh hiện trường
+ * Xử lý submit nộp minh chứng nghiệm thu
  */
 async function handleProofSubmit(e) {
     e.preventDefault();
     const form = document.getElementById('submitProofForm');
     const formData = new FormData(form);
     const assignmentId = parseInt(formData.get('assignment_id'));
+    const proofType = formData.get('proof_type');
+
+    if (proofType === 'drive_media') {
+        const driveUrl = formData.get('drive_media_url');
+        formData.set('proof_image_url', driveUrl);
+    }
     const proofUrl = formData.get('proof_image_url');
     const proofNote = formData.get('proof_note');
 

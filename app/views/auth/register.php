@@ -58,14 +58,22 @@
         --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    html, body {
+        height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
+    }
+
     body {
         font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background-color: var(--ux-page);
+        background-color: #F4F4F6;
         color: var(--ux-ink);
-        min-height: 100vh;
+        height: 100vh;
+        max-height: 100vh;
         display: flex;
         flex-direction: column;
         margin: 0;
+        overflow: hidden;
     }
 
     .num-tabular {
@@ -77,16 +85,17 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px 16px;
+        padding: 12px 16px;
+        overflow-y: auto;
     }
 
     .auth-card {
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
-        border-radius: 24px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
         width: 100%;
-        max-width: 680px;
+        max-width: 620px;
         overflow: hidden;
         animation: cardFadeIn 0.25s var(--ease-out);
     }
@@ -99,7 +108,7 @@
     .auth-header {
         background: #FAFAFC;
         border-bottom: 1px solid var(--ux-line);
-        padding: 24px 32px 20px;
+        padding: 14px 24px;
         position: relative;
     }
 
@@ -108,12 +117,12 @@
     }
 
     .form-control, .form-select {
-        border-radius: 12px;
-        padding: 10px 14px;
+        border-radius: 10px;
+        padding: 7px 12px;
         background-color: var(--ux-surface-2);
         border: 1px solid var(--ux-line);
         color: var(--ux-ink);
-        font-size: 13.5px;
+        font-size: 13px;
         transition: all 0.18s var(--ease-out);
     }
 
@@ -125,12 +134,12 @@
     }
 
     .form-section-title {
-        font-size: 11.5px;
+        font-size: 11px;
         text-transform: uppercase;
         font-weight: 800;
         letter-spacing: 0.05em;
         color: var(--ux-accent);
-        margin-bottom: 12px;
+        margin-bottom: 8px;
         display: flex;
         align-items: center;
         gap: 6px;
@@ -176,11 +185,11 @@
                 </div>
             </div>
 
-            <div class="p-4 p-md-5">
+            <div class="p-3 px-md-4 py-md-3">
 
                 <!-- Flash Message Notification -->
                 <?php if (!empty($flash)): ?>
-                <div class="alert <?= $flash['type'] === 'success' ? 'alert-success' : 'alert-danger' ?> py-2.5 px-3 small rounded-3 d-flex align-items-center justify-content-between mb-4" role="alert">
+                <div class="alert <?= $flash['type'] === 'success' ? 'alert-success' : 'alert-danger' ?> py-2 px-3 small rounded-3 d-flex align-items-center justify-content-between mb-2.5" role="alert">
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi <?= $flash['type'] === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill' ?>"></i>
                         <div><?= $flash['message'] ?></div>
@@ -196,62 +205,62 @@
                     <div class="form-section-title">
                         <i class="bi bi-person-badge-fill"></i> 1. Thông Tin Sinh Viên & Tài Khoản
                     </div>
-                    <div class="row g-3 mb-4">
+                    <div class="row g-2 mb-2.5">
                         <div class="col-12 col-md-6">
-                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Họ và Tên Sinh Viên <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold small mb-1" style="color: var(--ux-ink); font-size: 12px;">Họ và Tên Sinh Viên <span class="text-danger">*</span></label>
                             <input type="text" name="full_name" class="form-control" placeholder="Ví dụ: Nguyễn Văn An" value="<?= htmlspecialchars($old['full_name'] ?? '') ?>" required>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mã Sinh Viên (MSSV) <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold small mb-1" style="color: var(--ux-ink); font-size: 12px;">Mã Sinh Viên (MSSV) <span class="text-danger">*</span></label>
                             <input type="text" name="student_code" class="form-control text-uppercase num-tabular" placeholder="Ví dụ: PS20268" value="<?= htmlspecialchars($old['student_code'] ?? '') ?>" required>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Email FPT Polytechnic <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold small mb-1" style="color: var(--ux-ink); font-size: 12px;">Email FPT Polytechnic <span class="text-danger">*</span></label>
                             <input type="email" name="email" class="form-control" placeholder="annvps20268@fpt.edu.vn" value="<?= htmlspecialchars($old['email'] ?? '') ?>" required>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold small mb-1" style="color: var(--ux-ink); font-size: 12px;">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
                             <input type="tel" name="phone" class="form-control num-tabular" placeholder="09xxxxxxxx" value="<?= htmlspecialchars($old['phone'] ?? '') ?>" required>
                         </div>
                     </div>
 
                     <!-- THÔNG BÁO HỒ SƠ QUYẾT TOÁN CẬP NHẬT SAU KHI ĐĂNG NHẬP -->
-                    <div class="alert rounded-3 py-2.5 px-3 mb-4 d-flex align-items-center gap-2" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line); font-size: 12.5px; color: var(--ux-ink-2);">
+                    <div class="alert rounded-3 py-1.5 px-2.5 mb-2.5 d-flex align-items-center gap-2" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line); font-size: 11.5px; color: var(--ux-ink-2);">
                         <i class="bi bi-shield-lock-fill text-warning fs-6 flex-shrink-0"></i>
-                        <span>Thông tin Căn cước công dân (CCCD 12 số), Số tài khoản ngân hàng và thẻ VNeID nhận thù lao sẽ được điền an toàn trong mục <strong>Cài Đặt Tài Khoản Cá Nhân</strong> sau khi đăng nhập.</span>
+                        <span>Số CCCD (12 số), STK ngân hàng và ảnh chụp màn hình VNeID sẽ được cập nhật trong mục <strong>Cài Đặt Tài Khoản Cá Nhân</strong> sau khi đăng nhập.</span>
                     </div>
 
                     <!-- PHẦN 3: KỸ NĂNG & BẢO MẬT -->
                     <div class="form-section-title">
-                        <i class="bi bi-shield-lock-fill"></i> 3. Kỹ Năng Thế Mạnh & Mật Khẩu Đăng Nhập
+                        <i class="bi bi-shield-lock-fill"></i> 2. Kỹ Năng Thế Mạnh & Mật Khẩu Đăng Nhập
                     </div>
-                    <div class="row g-3 mb-4">
+                    <div class="row g-2 mb-2.5">
                         <div class="col-12">
-                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Kỹ Năng / Sở Trường CTV</label>
+                            <label class="form-label fw-bold small mb-1" style="color: var(--ux-ink); font-size: 12px;">Kỹ Năng / Sở Trường CTV</label>
                             <input type="text" name="skills" class="form-control" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện..." value="<?= htmlspecialchars($old['skills'] ?? '') ?>">
                         </div>
                         <div class="col-12 col-md-6">
-                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mật Khẩu <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold small mb-1" style="color: var(--ux-ink); font-size: 12px;">Mật Khẩu <span class="text-danger">*</span></label>
                             <input type="password" name="password" class="form-control" placeholder="Tối thiểu 6 ký tự" required>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Xác Nhận Mật Khẩu <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold small mb-1" style="color: var(--ux-ink); font-size: 12px;">Xác Nhận Mật Khẩu <span class="text-danger">*</span></label>
                             <input type="password" name="confirm_password" class="form-control" placeholder="Nhập lại mật khẩu..." required>
                         </div>
                     </div>
 
-                    <div class="form-check mb-4" style="font-size:12.5px;">
+                    <div class="form-check mb-3" style="font-size:12px;">
                         <input class="form-check-input" type="checkbox" id="termsCheck" required checked>
                         <label class="form-check-label" for="termsCheck" style="color: var(--ux-ink-3);">
                             Tôi cam kết thông tin tài khoản sinh viên FPT Polytechnic chính xác và tuân thủ quy chế CTV.
                         </label>
                     </div>
 
-                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-3 border-top" style="border-color: var(--ux-line) !important;">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-2.5 border-top" style="border-color: var(--ux-line) !important;">
                         <a href="/auth/login" class="text-decoration-none small" style="color: var(--ux-ink-3);">
                             <i class="bi bi-arrow-left me-1"></i> Quay lại Đăng nhập
                         </a>
-                        <button type="submit" class="btn-fpt-primary px-4 py-2.5">
+                        <button type="submit" class="btn-fpt-primary px-3.5 py-2">
                             <i class="bi bi-person-plus-fill me-1.5"></i> Hoàn Tất Đăng Ký CTV
                         </button>
                     </div>
@@ -260,7 +269,7 @@
             </div>
 
             <!-- Card Footer -->
-            <div class="px-4 py-3 border-top text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; font-size: 11.5px; color: var(--ux-ink-3);">
+            <div class="px-4 py-2 border-top text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; font-size: 11px; color: var(--ux-ink-3);">
                 <span>FPT Polytechnic • WEB212 Phát Triển Dự Án Website Với AI</span>
             </div>
 

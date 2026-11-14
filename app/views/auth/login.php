@@ -60,38 +60,49 @@
         --ux-spring: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    html, body {
+        height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
+    }
+
     body {
         font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background-color: var(--ux-page);
+        background-color: #F4F4F6;
         color: var(--ux-ink);
-        min-height: 100vh;
+        height: 100vh;
+        max-height: 100vh;
         margin: 0;
         display: flex;
         flex-direction: column;
-        overflow-x: hidden;
+        overflow: hidden;
     }
 
     .num-tabular {
         font-variant-numeric: tabular-nums;
     }
 
-    /* Split-Screen Layout */
+    /* Split-Screen Layout: Fits Exactly Inside 100vh Without Window Scroll */
     .auth-split-wrapper {
-        min-height: 100vh;
+        height: 100vh;
+        max-height: 100vh;
         display: flex;
         flex: 1;
+        overflow: hidden;
     }
 
+    /* Left Column: Chuẩn Nền Màu Xám Apple & Hệ Thống (#F4F4F6) */
     .auth-hero-pane {
         flex: 1.1;
-        background: radial-gradient(circle at 10% 20%, rgba(234, 88, 12, 0.08) 0%, transparent 45%),
-                    radial-gradient(circle at 90% 80%, rgba(0, 102, 204, 0.06) 0%, transparent 45%),
-                    linear-gradient(180deg, #F5F5F7 0%, #E5E5EA 100%);
-        border-right: 1px solid var(--ux-line);
-        padding: 50px 60px;
+        background: #F4F4F6 !important;
+        border-right: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 36px 44px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
         position: relative;
     }
 
@@ -100,12 +111,20 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px 30px;
-        background: var(--ux-page);
+        padding: 20px 24px;
+        background: #FFFFFF;
+        height: 100vh;
+        max-height: 100vh;
+        overflow-y: auto;
         position: relative;
     }
 
     @media (max-width: 992px) {
+        html, body, .auth-split-wrapper, .auth-form-pane {
+            height: auto;
+            max-height: none;
+            overflow: auto;
+        }
         .auth-hero-pane {
             display: none;
         }
@@ -116,65 +135,107 @@
 
     .login-glass-card {
         width: 100%;
-        max-width: 480px;
-        background: var(--ux-surface);
-        border: 1px solid var(--ux-line);
-        border-radius: 24px;
-        padding: 32px 34px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        max-width: 440px;
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 20px;
+        padding: 24px 26px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         position: relative;
     }
 
-    [data-bs-theme="light"] .login-glass-card {
-        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    [data-bs-theme="dark"] .login-glass-card {
+        background: #2C2C2E;
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     }
 
     .feature-pill {
         display: flex;
         align-items: flex-start;
         gap: 14px;
-        padding: 14px 18px;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.07);
-        backdrop-filter: blur(12px);
+        padding: 12px 16px;
+        border-radius: 14px;
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
         transition: all 0.2s var(--ux-spring);
     }
 
     .feature-pill:hover {
-        background: rgba(255, 255, 255, 0.07);
+        background: #FFFFFF;
         transform: translateY(-2px);
         border-color: rgba(234, 88, 12, 0.3);
+        box-shadow: 0 4px 12px rgba(234, 88, 12, 0.08);
     }
 
     .feature-icon-box {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         border-radius: 10px;
         display: grid;
         place-items: center;
         flex: none;
-        font-size: 16px;
+        font-size: 15px;
+    }
+
+    .demo-account-list {
+        max-height: 195px;
+        overflow-y: auto;
+        padding: 8px 6px;
+        box-sizing: border-box;
+        scroll-padding-top: 8px;
     }
 
     .demo-account-pill {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 9px 12px;
-        border-radius: 14px;
-        background: var(--ux-surface-2);
-        border: 1px solid var(--ux-line);
+        gap: 10px;
+        padding: 7px 10px;
+        border-radius: 12px;
+        background: #F4F4F6;
+        border: 1.5px solid rgba(0, 0, 0, 0.06);
         text-decoration: none;
         color: var(--ux-ink);
+        box-sizing: border-box;
         transition: all 0.18s var(--ux-spring);
+        margin: 1px 0;
     }
 
     .demo-account-pill:hover {
-        background: var(--ux-surface-3);
+        background: #FFFFFF;
         border-color: var(--ux-accent);
-        transform: translateY(-1px);
-        color: #FFFFFF;
+        color: var(--ux-ink) !important;
+        box-shadow: 0 2px 8px rgba(234, 88, 12, 0.12);
+    }
+
+    .demo-account-pill:hover .fw-bold {
+        color: var(--ux-accent) !important;
+    }
+
+    .demo-account-pill:hover small {
+        color: var(--ux-ink-3) !important;
+    }
+
+    .demo-account-pill:hover small strong {
+        color: var(--ux-ink) !important;
+    }
+
+    .demo-account-pill:hover i {
+        color: var(--ux-accent) !important;
+        transform: translateX(2px);
+    }
+
+    [data-bs-theme="dark"] .demo-account-pill {
+        background: #3A3A3C;
+        border-color: rgba(255, 255, 255, 0.08);
+        color: #F5F5F7 !important;
+    }
+
+    [data-bs-theme="dark"] .demo-account-pill:hover {
+        background: #2C2C2E;
+        border-color: var(--ux-accent);
+        color: #FFFFFF !important;
     }
 
     .demo-account-pill:active {
@@ -182,13 +243,13 @@
     }
 
     .avatar-circle {
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
         display: grid;
         place-items: center;
         font-weight: 800;
-        font-size: 11px;
+        font-size: 10.5px;
         line-height: 1;
         flex: none;
     }
@@ -410,7 +471,7 @@
                         <span class="badge num-tabular" style="font-size: 9.5px; background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.25);">Auto Login</span>
                     </div>
 
-                    <div class="d-flex flex-column gap-2" style="max-height: 250px; overflow-y: auto; padding-right: 3px;">
+                    <div class="demo-account-list d-flex flex-column gap-2">
                         <a href="/auth/quickLogin/3" class="demo-account-pill">
                             <div class="avatar-circle bg-primary-subtle text-primary">PA</div>
                             <div class="flex-grow-1">

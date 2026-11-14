@@ -12,6 +12,19 @@ class UserModel extends BaseModel
 {
     protected string $table = 'users';
 
+    public function findById(int $id): ?array
+    {
+        $sql = "SELECT u.*, r.name as role_name 
+                FROM users u 
+                LEFT JOIN roles r ON u.role_id = r.id 
+                WHERE u.id = :id LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
+    }
+
     public function findByEmail(string $email): ?array
     {
         $sql = "SELECT u.*, r.name as role_name 

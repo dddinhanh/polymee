@@ -97,7 +97,7 @@ $endTime = date('H:i', strtotime($event['end_time']));
                         <div class="text-xs space-y-1">
                             <span class="font-bold block text-sm text-orange-900">Quyền Lợi Dành Cho Cộng Tác Viên (CTV):</span>
                             <ul class="list-disc list-inside space-y-0.5 text-orange-900/80">
-                                <li>Cộng từ <strong>10 đến 15 điểm rèn luyện</strong> vào hệ thống học tập FPoly.</li>
+                                <li>Cộng từ <strong>10 đến 15 Điểm Tích Cực (Uy tín)</strong> vào hệ thống quản lý CTV FPoly.</li>
                                 <li>Được cấp giấy chứng nhận tham gia ban tổ chức đối với các sự kiện cấp trường.</li>
                                 <li>Hỗ trợ nước uống, ăn nhẹ và đồng phục CTV theo từng ca trực.</li>
                             </ul>

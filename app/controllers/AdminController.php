@@ -40,28 +40,11 @@ class AdminController extends BaseController
     }
 
     /**
-     * Màn hình chiếu Dynamic QR Code điểm danh trực tiếp tại hội trường
+     * Chuyển hướng về Dashboard (Loại bỏ màn hình chiếu Dynamic QR theo yêu cầu người dùng)
      */
     public function qrProjector(?string $shiftIdParam = null): void
     {
-        $shiftId = (int)($shiftIdParam ?? 1);
-        $shift = $this->shiftModel->findWithEvent($shiftId);
-
-        if (!$shift) {
-            SessionHelper::setFlash('error', 'Không tìm thấy ca trực yêu cầu.');
-            $this->redirect(URL_ROOT . '/admin/dashboard');
-            return;
-        }
-
-        // Sinh mã token hiện tại
-        $token = DynamicQrHelper::generateToken((int)$shift['event_id'], $shiftId);
-
-        $this->render('admin/qr_projector', [
-            'pageTitle' => 'Máy Chiếu Dynamic QR Code Điểm Danh',
-            'shift' => $shift,
-            'token' => $token,
-            'ttl' => QR_TTL_SECONDS
-        ]);
+        $this->redirect(URL_ROOT . '/dashboard');
     }
 
     /**

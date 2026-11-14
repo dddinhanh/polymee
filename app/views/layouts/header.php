@@ -113,10 +113,6 @@ declare(strict_types=1);
                     <a href="/admin/dashboard" class="px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-fpoly-primary hover:bg-orange-50/60 transition-colors">
                         <i class="fa-solid fa-chart-line mr-1.5 text-slate-400"></i>Thẩm Định & Quản Trị
                     </a>
-                    <a href="/admin/qrProjector" target="_blank" class="px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-fpoly-primary hover:bg-orange-50/60 transition-colors">
-                        <i class="fa-solid fa-qrcode mr-1.5 text-slate-400"></i>Máy Chiếu QR
-                        <span class="ml-1 px-1.5 py-0.2 rounded text-[10px] bg-emerald-100 text-emerald-700 font-bold">30s</span>
-                    </a>
                 </nav>
             </div>
 

@@ -13,6 +13,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/BaseController.php';
+require_once __DIR__ . '/../helpers/RolePermissionHelper.php';
 
 class AiAssistantController extends BaseController
 {
@@ -57,11 +58,15 @@ class AiAssistantController extends BaseController
     }
 
     /**
-     * Bộ xử lý ý định tự nhiên (Intent & Function Calling Processor)
+     * Bộ xử lý ý định tự nhiên (Intent & Function Calling Processor có phân quyền Role)
      */
     private function processAiMessage(int $userId, string $msg): array
     {
         $lower = mb_strtolower($msg, 'UTF-8');
+        $user = $this->userModel->findById($userId) ?: $this->currentUser;
+        $perms = RolePermissionHelper::getPermissions($user);
+        $role = $perms['role'];
+        $roleName = $perms['roleNameDisplay'];
 
         // 1. Ý ĐỊNH A: Nộp link Google Drive minh chứng
         if (preg_match('/https:\/\/(?:drive|docs)\.google\.com\/[^\s]+/i', $msg, $matches)) {
@@ -73,10 +78,22 @@ class AiAssistantController extends BaseController
             (str_contains($lower, 'đặt giúp') || str_contains($lower, 'đặt lịch') || str_contains($lower, 'tạo sự kiện') || str_contains($lower, 'lên lịch') || str_contains($lower, 'book lịch')) &&
             (str_contains($lower, 'khách mời') || str_contains($lower, 'sự kiện') || str_contains($lower, 'hội thảo') || str_contains($lower, 'lễ') || str_contains($lower, 'workshop'))
         ) {
+            if (!$perms['canCreateEvent']) {
+                return [
+                    'type' => 'PERMISSION_DENIED',
+                    'text' => "⚠️ **Quyền hạn không cho phép (Access Denied):**\n\nBạn đang đăng nhập với vai trò **{$roleName}**. Quyền hạn này **không được phép tạo hoặc lên lịch sự kiện**. Chức năng đặt lịch qua Trợ lý AI chỉ dành cho **Giảng Viên / Ban Tổ Chức** và **Quản Trị Viên**.\n\nNếu bạn có đề xuất sự kiện mới, vui lòng liên hệ Ban Tổ Chức hoặc Cán bộ phụ trách để được hỗ trợ nhé!"
+                ];
+            }
             return $this->handleAutoBookEvent($lower, $msg, $userId);
         }
 
         if (str_contains($lower, 'khách mời gồm') || str_contains($lower, 'khách mời:') || str_contains($lower, 'diễn giả gồm')) {
+            if (!$perms['canCreateEvent']) {
+                return [
+                    'type' => 'PERMISSION_DENIED',
+                    'text' => "⚠️ **Quyền hạn không cho phép (Access Denied):**\n\nBạn đang đăng nhập với vai trò **{$roleName}**. Chức năng ghi nhận khách mời VIPs và tự động tạo ca trực chỉ dành riêng cho **Giảng Viên** và **Quản Trị Viên**."
+                ];
+            }
             return $this->handleAutoBookEvent($lower, $msg, $userId);
         }
 
@@ -87,6 +104,12 @@ class AiAssistantController extends BaseController
             str_contains($lower, 'email ctv') || str_contains($lower, 'mail ctv') ||
             (str_contains($lower, 'bạn gửi mail') && str_contains($lower, 'ctv'))
         ) {
+            if (!in_array($role, ['HEAD_ADMIN', 'ADMIN', 'LECTURER', 'STAFF'], true)) {
+                return [
+                    'type' => 'PERMISSION_DENIED',
+                    'text' => "⚠️ **Quyền hạn không cho phép (Access Denied):**\n\nBạn đang đăng nhập với vai trò **{$roleName}**. Chỉ **Quản Trị Viên** và **Giảng Viên / Cán Bộ Tổ Chức** mới có thẩm quyền yêu cầu AI gửi email điều phối hàng loạt đến sinh viên CTV FPT Polytechnic."
+                ];
+            }
             return $this->handleSendEmailInvitation($lower, $msg, $userId);
         }
 
@@ -95,14 +118,26 @@ class AiAssistantController extends BaseController
             (str_contains($lower, 'ctv') || str_contains($lower, 'cộng tác viên') || str_contains($lower, 'sinh viên')) &&
             (str_contains($lower, 'trống') || str_contains($lower, 'rảnh') || str_contains($lower, 'chưa có ca') || str_contains($lower, 'nào đang trống') || str_contains($lower, 'tìm ctv'))
         ) {
+            if (in_array($role, ['CTV', 'MEDIA'], true)) {
+                return [
+                    'type' => 'PERMISSION_DENIED',
+                    'text' => "🔒 **Bảo mật thông tin sinh viên:**\n\nBạn đang đăng nhập với vai trò **{$roleName}**. Theo quy định bảo mật thông tin nội bộ của FPT Polytechnic, sinh viên không được phép tra cứu danh bạ hoặc lịch rảnh của các bạn CTV khác.\n\n💡 Bạn có thể hỏi tôi: *'Tôi có ca trực nào sắp tới?'* hoặc *'Điểm tích cực của tôi là bao nhiêu?'*."
+                ];
+            }
             return $this->handleCheckAvailableCtvs($lower, $msg);
         }
 
         if (str_contains($lower, 'ai đang rảnh') || str_contains($lower, 'ctv nào rảnh') || str_contains($lower, 'danh sách ctv rảnh')) {
+            if (in_array($role, ['CTV', 'MEDIA'], true)) {
+                return [
+                    'type' => 'PERMISSION_DENIED',
+                    'text' => "🔒 **Bảo mật thông tin sinh viên:**\n\nBạn đang đăng nhập với vai trò **{$roleName}**. Theo quy chế FPT Polytechnic, bạn chỉ có thể tra cứu lịch trực của chính mình."
+                ];
+            }
             return $this->handleCheckAvailableCtvs($lower, $msg);
         }
 
-        // 5. Ý ĐỊNH E: Tra cứu phòng / hội trường trống
+        // 5. Ý ĐỊNH E: Tra cứu phòng / hội trường trống (Dành cho mọi role)
         if (
             (str_contains($lower, 'phòng') || str_contains($lower, 'hội trường') || str_contains($lower, 'sân khấu') || str_contains($lower, 'lab')) &&
             (str_contains($lower, 'trống') || str_contains($lower, 'rảnh') || str_contains($lower, 'nào trống') || str_contains($lower, 'còn trống') || str_contains($lower, 'tìm phòng') || str_contains($lower, 'check phòng'))
@@ -110,7 +145,44 @@ class AiAssistantController extends BaseController
             return $this->handleCheckAvailableRooms($lower, $msg);
         }
 
-        // 6. Ý ĐỊNH F: Vấn đáp ca trực "Tôi cần làm gì hôm nay?" / "Lịch trực hôm nay"
+        // 6. Ý ĐỊNH F: Vấn đáp Điểm Tích Cực (Thay thế điểm rèn luyện theo quy chế trường)
+        if (
+            str_contains($lower, 'điểm tích cực') ||
+            str_contains($lower, 'điểm rèn luyện') ||
+            str_contains($lower, 'đrl') ||
+            str_contains($lower, 'uy tín') ||
+            str_contains($lower, 'đánh giá ctv') ||
+            str_contains($lower, 'điểm thưởng')
+        ) {
+            return $this->handlePositivePointsQuery($user, $perms);
+        }
+
+        // 7. Ý ĐỊNH G: Vấn đáp Quyết Toán Thù Lao & Định Danh VNeID / CCCD
+        if (
+            str_contains($lower, 'quyết toán') ||
+            str_contains($lower, 'thù lao') ||
+            str_contains($lower, 'vneid') ||
+            str_contains($lower, 'cccd') ||
+            str_contains($lower, 'tiền thù lao') ||
+            str_contains($lower, 'hợp đồng thù lao') ||
+            str_contains($lower, 'giải ngân')
+        ) {
+            return $this->handlePayrollAndVneidQuery($user, $perms);
+        }
+
+        // 8. Ý ĐỊNH H: Vấn đáp Xung Đột Ca Trực & Nhật Ký Audit Trail
+        if (
+            str_contains($lower, 'xung đột') ||
+            str_contains($lower, 'collision') ||
+            str_contains($lower, 'trùng giờ') ||
+            str_contains($lower, 'trùng ca') ||
+            str_contains($lower, 'audit') ||
+            str_contains($lower, 'nhật ký')
+        ) {
+            return $this->handleCollisionAuditQuery($user, $perms);
+        }
+
+        // 9. Ý ĐỊNH I: Vấn đáp ca trực của người dùng hiện tại
         if (
             str_contains($lower, 'cần làm gì') ||
             str_contains($lower, 'hôm nay') ||
@@ -118,43 +190,23 @@ class AiAssistantController extends BaseController
             str_contains($lower, 'nhiệm vụ') ||
             str_contains($lower, 'ca trực')
         ) {
-            return $this->handleStudentShiftsSummary($userId);
+            return $this->handleStudentShiftsSummary($userId, $user, $perms);
         }
 
-        // 7. Ý ĐỊNH G: Hướng dẫn điểm danh Dynamic QR & Minh chứng
-        if (str_contains($lower, 'điểm danh') || str_contains($lower, 'quét qr') || str_contains($lower, 'checkin') || str_contains($lower, 'minh chứng')) {
+        // 10. Ý ĐỊNH J: Hướng dẫn điểm danh & Chụp ảnh minh chứng hiện trường
+        if (str_contains($lower, 'điểm danh') || str_contains($lower, 'quét qr') || str_contains($lower, 'checkin') || str_contains($lower, 'minh chứng') || str_contains($lower, 'chụp ảnh')) {
             return [
                 'type' => 'GENERAL',
-                'text' => "📱 **Quy trình Điểm Danh & Nghiệm Thu Hiện Trường FPT Polytechnic:**\n\n" .
-                          "1. **Có mặt tại sự kiện:** CTV đến địa điểm trực trước giờ 15 phút.\n" .
-                          "2. **Chụp ảnh hiện trường:** Dùng điện thoại chụp ảnh đang thực hiện nhiệm vụ (áo cam FPoly) tại vị trí trực.\n" .
-                          "3. **Gửi minh chứng:** Mở mục 'Ca Trực Của Tôi' và tải ảnh hiện trường lên để Giảng viên/BTC nghiệm thu.\n" .
-                          "4. **Ký hợp đồng thù lao:** Giảng viên phê duyệt sẽ tự động kích hoạt mã Hợp đồng điện tử (HDNT-2026-FPLY-xxx) trình nhà trường ký duyệt chuyển tiền."
+                'text' => "📸 **Quy trình Điểm Danh & Nghiệm Thu Hiện Trường FPT Polytechnic (Zero-Fraud):**\n\n" .
+                          "1. **Có mặt đúng giờ:** CTV đến địa điểm trực trước giờ diễn ra 15 phút, mặc đồng phục áo cam FPoly.\n" .
+                          "2. **Chụp ảnh hiện trường:** Dùng điện thoại chụp ảnh đang thực hiện nhiệm vụ (rõ mặt và bối cảnh sự kiện).\n" .
+                          "3. **Gửi minh chứng:** Vào mục **'Ca Trực Của Tôi'**, bấm nút **'Nộp Minh Chứng'** và tải ảnh lên.\n" .
+                          "4. **Nghiệm thu & Hợp đồng:** Giảng viên/Ban Tổ Chức duyệt nghiệm thu sẽ tự động kích hoạt hợp đồng thù lao điện tử để Kế toán chi trả qua số tài khoản chính chủ đã đối soát VNeID."
             ];
         }
 
-        // 8. Mặc định phản hồi chung kèm các nút gợi ý thông minh
-        $defaultHtml = '<div class="ai-card p-3 rounded-3 bg-light border mb-2">';
-        $defaultHtml .= '<div class="fw-bold text-dark mb-1 d-flex align-items-center gap-1.5"><i class="fa-solid fa-robot text-warning"></i> Chào bạn, tôi là PolyMee AI Assistant!</div>';
-        $defaultHtml .= '<p class="small text-secondary mb-2.5">Trợ lý ảo điều phối sự kiện & quản trị Cộng tác viên FPT Polytechnic. Tôi có thể thực thi ngay các nghiệp vụ sau:</p>';
-        $defaultHtml .= '<div class="d-grid gap-1.5">';
-        $defaultHtml .= '<button class="btn btn-sm btn-outline-success text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Phòng nào đang trống?\')"><i class="bi bi-building-check me-1.5"></i> <strong>Tra cứu phòng trống:</strong> Xem danh sách hội trường, phòng lab khả dụng.</button>';
-        $defaultHtml .= '<button class="btn btn-sm btn-outline-warning text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'CTV nào đang trống?\')"><i class="bi bi-people-fill me-1.5"></i> <strong>Tra cứu CTV rảnh:</strong> Lọc danh sách sinh viên sẵn sàng nhận ca.</button>';
-        $defaultHtml .= '<button class="btn btn-sm btn-outline-primary text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Bạn gửi mail cho CTV đăng ký lịch ca trực sắp tới\')"><i class="bi bi-envelope-fill me-1.5"></i> <strong>Gửi mail tự động:</strong> Phân phát thư mời nhận ca đến hộp thư FPT Edu.</button>';
-        $defaultHtml .= '<button class="btn btn-sm btn-outline-danger text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Đặt giúp lịch sự kiện Hội Thảo AI ngày 22/11, khách mời gồm: Ban Giám Hiệu, Thầy Hiệu Trưởng, Diễn Giả AI Google\')"><i class="bi bi-calendar-plus-fill me-1.5"></i> <strong>Đặt lịch sự kiện:</strong> Tạo sự kiện, ghi nhận khách mời & tự phân rã ca.</button>';
-        $defaultHtml .= '</div>';
-        $defaultHtml .= '</div>';
-
-        return [
-            'type' => 'GENERAL',
-            'text' => "Chào bạn, tôi là **PolyMee AI Assistant** - Trợ lý ảo điều phối sự kiện FPT Polytechnic.\n\n" .
-                      "Tôi có thể hỗ trợ bạn:\n" .
-                      "1. Tra cứu phòng / hội trường trống: Gõ *'Phòng nào đang trống?'*\n" .
-                      "2. Tra cứu CTV rảnh: Gõ *'CTV nào đang trống?'*\n" .
-                      "3. Gửi email mời CTV đăng ký ca: Gõ *'Gửi mail cho CTV đăng ký lịch'*\n" .
-                      "4. Tự động đặt lịch sự kiện kèm khách mời: Gõ *'Đặt giúp lịch sự kiện [Tên], khách mời gồm [Tên khách]...'*",
-            'reply_html' => $defaultHtml
-        ];
+        // 11. Mặc định: Phản hồi chào mừng và gợi ý câu hỏi thông minh THEO PHÂN QUYỀN TỪNG ROLE
+        return $this->buildRoleBasedDefaultResponse($user, $perms);
     }
 
     /**
@@ -342,7 +394,7 @@ class AiAssistantController extends BaseController
         $html .= '<ul class="mb-2 ps-3 text-secondary">';
         $html .= '<li><strong>Thời gian:</strong> ' . $eventTime . '</li>';
         $html .= '<li><strong>Địa điểm:</strong> ' . htmlspecialchars($eventLocation) . '</li>';
-        $html .= '<li><strong>Quyền lợi:</strong> Thù lao từ <strong>150.000 VNĐ - 200.000 VNĐ/ca</strong> + Cộng <strong>10 Điểm Rèn Luyện (ĐRL)</strong> chính thức.</li>';
+        $html .= '<li><strong>Quyền lợi:</strong> Thù lao từ <strong>150.000 VNĐ - 200.000 VNĐ/ca</strong> + Tích lũy <strong>10 Điểm Tích Cực (Đánh giá uy tín CTV)</strong>.</li>';
         $html .= '<li><strong>Nhiệm vụ:</strong> Chụp ảnh hiện trường minh chứng tại sự kiện để ký hợp đồng nghiệm thu điện tử.</li>';
         $html .= '</ul>';
         $html .= '<div class="p-2 bg-warning-subtle text-warning-emphasis rounded-2 small text-center fw-bold">👉 CTV vui lòng truy cập PolyMee Dashboard để bấm nút "Xác Nhận Đăng Ký" trước 24h sự kiện.</div>';
@@ -556,7 +608,7 @@ class AiAssistantController extends BaseController
     }
 
     /**
-     * Tự động nộp link Google Drive minh chứng
+     * Tự động nộp link Google Drive minh chứng nghiệm thu sau sự kiện (Dành cho CTV Media)
      */
     private function handleDriveSubmission(int $userId, string $msg, string $driveUrl): array
     {
@@ -572,21 +624,27 @@ class AiAssistantController extends BaseController
 
         if ($assignment) {
             $assignmentId = (int)$assignment['assignment_id'];
+            $note = "Link Google Drive bộ ảnh sự kiện đã kèm Logo FPT Polytechnic và chỉnh sửa sáng (CTV Media " . $this->currentUser['full_name'] . ")";
             $submissionId = $this->driveModel->createSubmission(
                 $assignmentId,
                 $driveUrl,
-                "Sinh viên " . $this->currentUser['full_name'] . " nộp qua Trợ lý AI PolyMee. Ghi chú: " . htmlspecialchars($msg)
+                $note
             );
+
+            // Đồng bộ sang shift_assignments proof_image_url
+            $upStmt = $db->prepare("UPDATE shift_assignments SET proof_image_url = :url, proof_note = :note, proof_submitted_at = datetime('now', 'localtime') WHERE id = :id");
+            $upStmt->execute([':url' => $driveUrl, ':note' => $note, ':id' => $assignmentId]);
 
             return [
                 'type' => 'DRIVE_SUBMISSION',
                 'text' => sprintf(
-                    "🎉 **Đã tự động nộp minh chứng thành công!**\n\n" .
+                    "🎬 **ĐÃ NỘP LINK GOOGLE DRIVE MINH CHỨNG NGHIỆM THU (CTV MEDIA)!**\n\n" .
                     "• **Sự kiện:** %s\n" .
                     "• **Ca trực:** %s\n" .
-                    "• **Liên kết Drive:** [%s](%s)\n" .
+                    "• **Bộ ảnh Drive:** [%s](%s)\n" .
+                    "• **Tiêu chuẩn kỹ thuật:** Đã kiểm tra gắn **Logo FPT Polytechnic** và **chỉnh sửa sáng** chuẩn nhận diện.\n" .
                     "• **Mã hồ sơ nghiệm thu:** #SUB-%04d\n\n" .
-                    "Hệ thống đã chuyển bài nộp của bạn đến Ban tổ chức để thẩm định và cập nhật điểm rèn luyện.",
+                    "Hồ sơ đã được gửi đến **Giảng Viên phụ trách** để kiểm tra và duyệt đã đầy đủ minh chứng nghiệm thu làm cơ sở xuất hợp đồng thù lao.",
                     $assignment['event_title'],
                     $assignment['shift_name'],
                     $driveUrl,
@@ -601,17 +659,165 @@ class AiAssistantController extends BaseController
         } else {
             return [
                 'type' => 'GENERAL',
-                'text' => "Tôi nhận thấy bạn đã gửi link Google Drive: `{$driveUrl}`, nhưng hiện tại bạn chưa có ca trực nào được duyệt để liên kết minh chứng. Vui lòng đăng ký ca trực trước nhé!"
+                'text' => "Tôi nhận thấy bạn đã gửi link Google Drive: `{$driveUrl}`, nhưng hiện tại bạn chưa có ca trực nào được duyệt để liên kết minh chứng nghiệm thu. Vui lòng đăng ký ca trực trước nhé!"
             ];
         }
     }
 
     /**
-     * Vấn đáp tóm tắt ca trực của sinh viên
+     * Vấn đáp Điểm Tích Cực (Thay cho điểm rèn luyện để đánh giá uy tín & năng lực CTV)
      */
-    private function handleStudentShiftsSummary(int $userId): array
+    private function handlePositivePointsQuery(array $user, array $perms): array
+    {
+        $points = (int)($user['positive_points'] ?? 100);
+        $role = $perms['role'];
+        $name = htmlspecialchars($user['full_name'] ?? 'Bạn');
+
+        if (in_array($role, ['CTV', 'MEDIA'], true)) {
+            $plain = "🌟 **ĐIỂM TÍCH CỰC & ĐÁNH GIÁ UY TÍN CỦA BẠN:**\n\n" .
+                     "• **Sinh viên CTV:** {$name} ({$user['student_code']})\n" .
+                     "• **Điểm Tích Cực hiện tại:** **{$points} Điểm**\n" .
+                     "• **Xếp hạng uy tín:** **Hạng A (Rất Tích Cực & Đáng Tin Cậy)**\n\n" .
+                     "📌 **Quy chế nhà trường:** FPT Polytechnic không áp dụng điểm rèn luyện truyền thống mà tính **Điểm Tích Cực** cho mỗi ca trực hoàn thành tốt (thường từ +5 đến +20 điểm/ca). Điểm này phản ánh uy tín và trách nhiệm của CTV, giúp bạn được AI ưu tiên gợi ý vào các sự kiện lớn và nhận thù lao cao hơn!";
+        } else {
+            $plain = "🌟 **HỆ THỐNG ĐIỂM TÍCH CỰC FPT POLYTECHNIC:**\n\n" .
+                     "Nhà trường không tính điểm rèn luyện mà sử dụng **Điểm Tích Cực** để lượng hóa năng lực và độ tin cậy của CTV:\n" .
+                     "1. **Mục đích:** Đánh giá CTV này có uy tín, chuyên cần và làm tốt hay không.\n" .
+                     "2. **Cộng điểm:** Tự động cộng từ +5 đến +20 điểm sau khi Giảng viên duyệt nghiệm thu minh chứng hoàn thành ca.\n" .
+                     "3. **Phân loại:** Hạng Xuất Sắc (>120 điểm), Hạng Tích Cực (80-120 điểm), Cần Theo Dõi (<80 điểm).";
+        }
+
+        return [
+            'type' => 'POSITIVE_POINTS',
+            'text' => $plain
+        ];
+    }
+
+    /**
+     * Vấn đáp Quyết Toán Thù Lao, Định Danh VNeID & CCCD
+     */
+    private function handlePayrollAndVneidQuery(array $user, array $perms): array
+    {
+        $role = $perms['role'];
+
+        if (in_array($role, ['CTV', 'MEDIA'], true)) {
+            $plain = "💳 **QUY CHẾ HỒ SƠ ĐỊNH DANH & THÙ LAO CTV:**\n\n" .
+                     "• **Hồ sơ định danh:** CTV **chỉ cần cung cấp Số CCCD (12 số)** và **Ảnh chụp màn hình ứng dụng VNeID (Mức 2)** kèm STK ngân hàng chính chủ tại mục *'Cài Đặt Tài Khoản Cá Nhân'*. Không yêu cầu nộp ảnh thẻ cứng CCCD 2 mặt.\n" .
+                     "• **Nhiệm vụ nghiệm thu sau sự kiện:**\n" .
+                     "  - **CTV thường:** Nộp **ảnh hiện trường** có mặt làm nhiệm vụ thực tế (áo cam FPoly).\n" .
+                     "  - **CTV Media:** Nộp **link Google Drive** bộ ảnh sự kiện đã **chỉnh sửa sáng và gắn logo FPT Polytechnic**.\n" .
+                     "• **Quy trình nhận tiền:** Giảng viên duyệt đầy đủ minh chứng nghiệm thu -> Kích hoạt Hợp đồng điện tử -> Kế toán chi trả qua tài khoản ngân hàng đã đối soát.";
+        } elseif ($role === 'ACCOUNTANT') {
+            $plain = "💰 **TỔNG HỢP QUYẾT TOÁN THÙ LAO KẾ TOÁN:**\n\n" .
+                     "• Các hồ sơ đã được Giảng viên phê duyệt nghiệm thu đầy đủ minh chứng sẽ tự động kích hoạt mã hợp đồng điện tử (HDNT-2026-FPLY-xxx).\n" .
+                     "• Kế toán đối soát số CCCD và ảnh chụp màn hình VNeID với số tài khoản ngân hàng trước khi xuất lệnh chuyển khoản.\n" .
+                     "• CTV chỉ cần số CCCD và ảnh chụp màn hình VNeID, không cần kiểm tra thẻ cứng vật lý.";
+        } else {
+            $plain = "📑 **QUY TRÌNH NGHIỆM THU & HỒ SƠ CTV:**\n\n" .
+                     "• **Sau mỗi sự kiện hoàn thành:**\n" .
+                     "  - CTV up ảnh hiện trường có mặt làm nhiệm vụ.\n" .
+                     "  - CTV Media up link Google Drive bộ ảnh đã gắn logo và chỉnh sửa sáng.\n" .
+                     "• **Thẩm quyền Giảng viên:** Kiểm tra đã đầy đủ minh chứng để bấm **Duyệt Nghiệm Thu**, làm cơ sở để xuất hợp đồng trình trường ký và Kế toán thanh toán thù lao.";
+        }
+
+        return [
+            'type' => 'PAYROLL_VNEID',
+            'text' => $plain
+        ];
+    }
+
+    /**
+     * Vấn đáp Xung Đột Ca Trực & Audit Trail
+     */
+    private function handleCollisionAuditQuery(array $user, array $perms): array
+    {
+        $plain = "🛡️ **CÔNG NGHỆ CHỐNG XUNG ĐỘT (INTERVAL COLLISION ENGINE) & AUDIT TRAIL:**\n\n" .
+                 "• **Interval Collision Engine:** PolyMee tự động kiểm tra giao thoa các mốc thời gian [Start, End] khi sinh viên đăng ký ca hoặc Giảng viên đặt lịch. Ngăn chặn 100% tình trạng trùng giờ hoặc nhận 2 ca cùng lúc.\n" .
+                 "• **Nhật Ký Thao Tác Hệ Thống (Audit Trail):** Mọi hành động duyệt nghiệm thu, cấp quyền, xóa lịch sự kiện đều được ghi nhận riêng biệt kèm Timestamp, IP và Role của người thực hiện.";
+
+        return [
+            'type' => 'COLLISION_AUDIT',
+            'text' => $plain
+        ];
+    }
+
+    /**
+     * Phản hồi mặc định có phân quyền theo Role
+     */
+    private function buildRoleBasedDefaultResponse(array $user, array $perms): array
+    {
+        $role = $perms['role'];
+        $name = htmlspecialchars($user['full_name'] ?? 'bạn');
+        $roleName = $perms['roleNameDisplay'];
+
+        $defaultHtml = '<div class="ai-card p-3 rounded-3 bg-light border mb-2">';
+        $defaultHtml .= '<div class="fw-bold text-dark mb-1 d-flex align-items-center gap-1.5"><i class="fa-solid fa-robot text-warning"></i> Chào ' . $name . ' (' . $roleName . ')!</div>';
+        $defaultHtml .= '<p class="small text-secondary mb-2.5">Trợ lý AI PolyMee sẵn sàng phục vụ theo đúng phân quyền của bạn. Bạn có thể chọn nhanh nghiệp vụ bên dưới:</p>';
+        $defaultHtml .= '<div class="d-grid gap-1.5">';
+
+        if (in_array($role, ['HEAD_ADMIN', 'ADMIN'], true)) {
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-success text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Phòng nào đang trống?\')"><i class="bi bi-building-check me-1.5"></i> <strong>Tra cứu phòng trống:</strong> Xem danh sách hội trường, lab khả dụng.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-warning text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'CTV nào đang trống?\')"><i class="bi bi-people-fill me-1.5"></i> <strong>Tra cứu CTV rảnh:</strong> Lọc danh sách sinh viên sẵn sàng nhận ca.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-primary text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Bạn gửi mail cho CTV đăng ký lịch ca trực sắp tới\')"><i class="bi bi-envelope-fill me-1.5"></i> <strong>Gửi mail tự động:</strong> Phân phát thư mời nhận ca đến hộp thư FPT Edu.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-danger text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Đặt giúp lịch sự kiện Hội Thảo AI ngày 22/11, khách mời gồm: Ban Giám Hiệu, Thầy Hiệu Trưởng, Diễn Giả AI Google\')"><i class="bi bi-calendar-plus-fill me-1.5"></i> <strong>Đặt lịch sự kiện VIPs:</strong> Tạo sự kiện, ghi nhận khách mời & tự phân rã ca.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-secondary text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Báo cáo xung đột lịch và Audit Trail\')"><i class="bi bi-shield-check me-1.5"></i> <strong>Audit Trail:</strong> Kiểm tra nhật ký và thuật toán chống xung đột ca.</button>';
+            $plain = "Chào Quản Trị Viên **{$name}**! Tôi là **PolyMee AI Assistant**.\n\n" .
+                     "Bạn có quyền thực hiện các lệnh quản trị cao cấp:\n" .
+                     "1. Tra cứu phòng / hội trường trống: *'Phòng nào đang trống?'*\n" .
+                     "2. Lọc danh sách CTV đang rảnh: *'CTV nào đang trống?'*\n" .
+                     "3. Gửi email hàng loạt cho CTV: *'Gửi mail cho CTV đăng ký lịch'*\n" .
+                     "4. Đặt lịch sự kiện kèm khách mời VIPs: *'Đặt giúp lịch sự kiện [Tên], khách mời gồm [Tên khách]...'*\n" .
+                     "5. Báo cáo xung đột và nhật ký: *'Kiểm tra xung đột lịch và audit trail'*";
+        } elseif (in_array($role, ['LECTURER', 'STAFF'], true)) {
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-success text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Phòng nào đang trống?\')"><i class="bi bi-building-check me-1.5"></i> <strong>Tra cứu phòng trống:</strong> Xem hội trường, phòng học bộ môn.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-warning text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Tìm CTV có kỹ năng Media quay chụp\')"><i class="bi bi-people-fill me-1.5"></i> <strong>Tìm CTV theo kỹ năng:</strong> Lọc CTV Media, Lễ tân hoặc Hậu cần.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-primary text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Đặt giúp lịch sự kiện Workshop Bộ Môn CNTT ngày 22/11, khách mời gồm: Thầy Trưởng Bộ Môn\')"><i class="bi bi-calendar-plus-fill me-1.5"></i> <strong>Đặt lịch Workshop:</strong> AI tạo sự kiện & phân bổ ca trực theo bộ môn.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-info text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Quy trình duyệt nghiệm thu minh chứng và xuất hợp đồng thù lao\')"><i class="bi bi-patch-check-fill me-1.5"></i> <strong>Duyệt nghiệm thu minh chứng:</strong> Kiểm tra ảnh hiện trường & Drive Media.</button>';
+            $plain = "Kính chào Thầy/Cô **{$name}**! Tôi là trợ lý AI PolyMee.\n\n" .
+                     "Thầy/Cô có thể yêu cầu tôi hỗ trợ công tác tổ chức sự kiện:\n" .
+                     "1. Tra cứu phòng / hội trường trống: *'Phòng nào đang trống?'*\n" .
+                     "2. Lọc CTV theo chuyên môn: *'Tìm CTV có kỹ năng Media / Lễ tân'*.\n" .
+                     "3. Đặt lịch Workshop bộ môn: *'Đặt giúp lịch sự kiện [Tên], khách mời gồm...'*.\n" .
+                     "4. Duyệt đầy đủ minh chứng nghiệm thu để xuất hợp đồng thù lao cho CTV.";
+        } elseif ($role === 'ACCOUNTANT') {
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-success text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Tổng hợp quyết toán thù lao đợt này\')"><i class="bi bi-cash-stack me-1.5"></i> <strong>Tổng hợp quyết toán:</strong> Thống kê thù lao các ca trực đã nghiệm thu.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-warning text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Hồ sơ CTV nào chưa có số CCCD hoặc chưa có ảnh chụp màn hình VNeID?\')"><i class="bi bi-person-exclamation me-1.5"></i> <strong>Đối soát định danh:</strong> Rà soát số CCCD & ảnh chụp VNeID.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-info text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Phòng nào đang tổ chức sự kiện hôm nay?\')"><i class="bi bi-building me-1.5"></i> <strong>Sự kiện hôm nay:</strong> Xem lịch tổ chức toàn trường.</button>';
+            $plain = "Kính chào Cán bộ Kế toán **{$name}**! Tôi là trợ lý AI PolyMee.\n\n" .
+                     "Tôi hỗ trợ bạn công tác kế toán & quyết toán thù lao:\n" .
+                     "1. Tổng hợp quyết toán thù lao: *'Tổng hợp quyết toán thù lao đợt này'*.\n" .
+                     "2. Đối soát hồ sơ: *'Hồ sơ CTV nào chưa có số CCCD hoặc thiếu ảnh chụp VNeID?'*.\n" .
+                     "3. Tra cứu lịch sự kiện và phòng trực toàn trường.";
+        } else {
+            // CTV & MEDIA
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-primary text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Tôi có ca trực nào sắp tới không?\')"><i class="bi bi-clock-history me-1.5"></i> <strong>Ca trực của tôi:</strong> Xem lịch trực và nhiệm vụ được phân công.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-warning text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Điểm tích cực và đánh giá uy tín của tôi là bao nhiêu?\')"><i class="bi bi-star-fill me-1.5"></i> <strong>Điểm Tích Cực & Uy tín:</strong> Xem điểm số và năng lực hoàn thành ca.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-success text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Hướng dẫn nộp minh chứng nghiệm thu sau mỗi sự kiện hoàn thành\')"><i class="bi bi-camera-fill me-1.5"></i> <strong>Nộp minh chứng nghiệm thu:</strong> Hướng dẫn up ảnh hiện trường hoặc link Drive.</button>';
+            $defaultHtml .= '<button class="btn btn-sm btn-outline-info text-start rounded-3 py-1.5 px-2.5" onclick="quickAskAi(\'Hồ sơ số CCCD và ảnh chụp màn hình VNeID của tôi đã hợp lệ chưa?\')"><i class="bi bi-shield-check me-1.5"></i> <strong>Kiểm tra định danh:</strong> Xem trạng thái số CCCD & ảnh VNeID.</button>';
+            $plain = "Xin chào **{$name}** ({$roleName})! Tôi là trợ lý AI PolyMee.\n\n" .
+                     "Bạn có thể hỏi tôi:\n" .
+                     "1. Ca trực của tôi: *'Tôi có ca trực nào sắp tới không?'*\n" .
+                     "2. Đánh giá uy tín: *'Điểm tích cực của tôi là bao nhiêu?'*\n" .
+                     "3. Nghiệm thu thù lao: *'Hướng dẫn nộp minh chứng nghiệm thu sau sự kiện'*.\n" .
+                     "4. Kiểm tra hồ sơ nhận tiền: *'Hồ sơ số CCCD và ảnh chụp VNeID của tôi?'*";
+        }
+
+        $defaultHtml .= '</div></div>';
+
+        return [
+            'type' => 'GENERAL',
+            'text' => $plain,
+            'reply_html' => $defaultHtml
+        ];
+    }
+
+    /**
+     * Vấn đáp tóm tắt ca trực của người dùng
+     */
+    private function handleStudentShiftsSummary(int $userId, ?array $user = null, ?array $perms = null): array
     {
         $shifts = $this->userModel->getStudentShiftsToday($userId);
+        $name = $user['full_name'] ?? ($this->currentUser['full_name'] ?? 'bạn');
 
         if (empty($shifts)) {
             $db = Database::getInstance()->getConnection();
@@ -626,10 +832,10 @@ class AiAssistantController extends BaseController
             $upcoming = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if (!empty($upcoming)) {
-                $reply = "👋 Chào **" . $this->currentUser['full_name'] . "**! Hôm nay bạn **không có ca trực nào**. Tuy nhiên, bạn có các ca trực sắp tới:\n\n";
+                $reply = "👋 Chào **" . $name . "**! Hôm nay bạn **không có ca trực nào**. Tuy nhiên, bạn có các ca trực sắp tới:\n\n";
                 foreach ($upcoming as $i => $s) {
                     $reply .= sprintf(
-                        "%d. **%s** (%s)\n   • Sự kiện: *%s*\n   • Địa điểm: %s\n   • Điểm rèn luyện: +%d điểm\n\n",
+                        "%d. **%s** (%s)\n   • Sự kiện: *%s*\n   • Địa điểm: %s\n   • Điểm tích cực: +%d điểm uy tín\n\n",
                         $i + 1,
                         $s['name'],
                         date('H:i d/m/Y', strtotime($s['start_time'])),
@@ -638,13 +844,13 @@ class AiAssistantController extends BaseController
                         $s['points']
                     );
                 }
-                $reply .= "💡 *Nhớ có mặt trước 15 phút và chụp ảnh hiện trường để làm hồ sơ nghiệm thu nhé!*";
+                $reply .= "💡 *Nhớ có mặt trước 15 phút và nộp minh chứng sau sự kiện (Ảnh hiện trường đối với CTV hoặc link Google Drive ảnh đã chỉnh sửa sáng & gắn logo FPT đối với CTV Media) để Giảng viên duyệt nghiệm thu nhé!*";
                 return ['type' => 'TASK_SUMMARY', 'text' => $reply, 'data' => $upcoming];
             }
 
             return [
                 'type' => 'TASK_SUMMARY',
-                'text' => "👋 Chào **" . $this->currentUser['full_name'] . "**! Hôm nay bạn **không có ca trực nào**. Bạn có thể vào mục **Lịch Hoạt Động** để khám phá các sự kiện mới và đăng ký ca trực nhé!"
+                'text' => "👋 Chào **" . $name . "**! Hôm nay bạn **không có ca trực nào**. Bạn có thể vào mục **Lịch Hoạt Động** để khám phá các sự kiện mới và đăng ký ca trực nhé!"
             ];
         }
 
@@ -655,7 +861,7 @@ class AiAssistantController extends BaseController
                 "   • ⏰ Thời gian: %s - %s\n" .
                 "   • 📍 Địa điểm: %s\n" .
                 "   • 🎯 Sự kiện: %s\n" .
-                "   • 🌟 Thù lao: %s VNĐ • +%d ĐRL\n\n",
+                "   • 🌟 Thù lao: %s VNĐ • +%d Điểm Tích Cực\n\n",
                 $i + 1,
                 $s['name'],
                 date('H:i', strtotime($s['start_time'])),
@@ -666,10 +872,10 @@ class AiAssistantController extends BaseController
                 $s['points']
             );
         }
-        $reply .= "📌 **Lưu ý quan trọng cho CTV:**\n" .
-                  "- Vui lòng có mặt trước giờ trực 15 phút, mặc áo cam FPoly đồng phục.\n" .
-                  "- Tại sự kiện, mở mục 'Ca Trực Của Tôi' chụp ảnh hiện trường có mặt trực tiếp để hoàn thành nghiệm thu.\n" .
-                  "- Sau khi Giảng viên duyệt, hợp đồng thù lao điện tử sẽ được tạo tự động.";
+        $reply .= "📌 **Lưu ý nghiệm thu sau mỗi sự kiện hoàn thành:**\n" .
+                  "- CTV: Chụp ảnh hiện trường có mặt làm nhiệm vụ thực tế tại sự kiện.\n" .
+                  "- CTV Media: Nộp link Google Drive chứa bộ ảnh sự kiện đã chỉnh sửa sáng và gắn kèm logo FPT Polytechnic.\n" .
+                  "- Giảng viên sẽ thẩm định để duyệt đã đầy đủ minh chứng nghiệm thu, kích hoạt xuất hợp đồng thù lao.";
 
         return ['type' => 'TASK_SUMMARY', 'text' => $reply, 'data' => $shifts];
     }

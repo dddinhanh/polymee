@@ -49,7 +49,7 @@ foreach ($shifts as $s) {
                     <span class="text-2xl font-extrabold text-slate-900"><?= count($shifts) ?></span>
                 </div>
                 <div class="text-center sm:text-right">
-                    <span class="text-xs text-slate-400 block font-semibold uppercase">Điểm Rèn Luyện</span>
+                    <span class="text-xs text-slate-400 block font-semibold uppercase">Điểm Tích Cực</span>
                     <span class="text-2xl font-extrabold text-amber-500">+<?= $totalPoints ?></span>
                 </div>
             </div>
@@ -75,7 +75,7 @@ foreach ($shifts as $s) {
                     <i class="fa-regular fa-calendar-xmark"></i>
                 </div>
                 <h3 class="text-base font-bold text-slate-800 mb-1">Bạn chưa đăng ký ca trực nào</h3>
-                <p class="text-xs text-slate-500 mb-4 max-w-sm mx-auto">Hãy tham gia ngay các sự kiện của FPT Polytechnic để tích lũy kinh nghiệm thực tế và cộng điểm rèn luyện nhé!</p>
+                <p class="text-xs text-slate-500 mb-4 max-w-sm mx-auto">Hãy tham gia ngay các sự kiện của FPT Polytechnic để tích lũy kinh nghiệm thực tế và cộng điểm tích cực uy tín nhé!</p>
                 <a href="/" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-fpoly-primary text-white text-xs font-bold hover:bg-fpoly-hover transition shadow-sm">
                     <i class="fa-solid fa-calendar-plus"></i>
                     <span>Xem danh sách sự kiện</span>
@@ -125,9 +125,9 @@ foreach ($shifts as $s) {
                                     <i class="fa-brands fa-google-drive"></i>
                                     <span>Nộp Minh Chứng Drive</span>
                                 </button>
-                                <a href="/admin/qrProjector/<?= $s['id'] ?>" target="_blank" class="px-4 py-2 rounded-xl bg-[#1D1D1F] hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-qrcode"></i>
-                                    <span>Xem Mã QR Điểm Danh</span>
+                                <a href="/dashboard" class="px-4 py-2 rounded-xl bg-[#1D1D1F] hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-calendar"></i>
+                                    <span>Xem Trên Lịch</span>
                                 </a>
                             </div>
 

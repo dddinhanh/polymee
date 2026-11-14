@@ -32,10 +32,15 @@ class DashboardController extends BaseController
         $stats = $this->eventModel->getDashboardStats();
         $permissions = RolePermissionHelper::getPermissions($this->currentUser);
 
-        // 2. Lấy toàn bộ ca trực kèm thông tin sự kiện & địa điểm phục vụ hiển thị lên lịch
+        // 2. Lấy toàn bộ ca trực kèm thông tin sự kiện, bộ môn & giảng viên đặt lịch
         $sql = "SELECT s.*, 
                        e.title as event_title, 
                        e.banner_url, 
+                       e.department as event_department,
+                       e.created_by as event_created_by,
+                       COALESCE(u_creator.full_name, 'Giảng viên FPT Poly') as lecturer_name,
+                       u_creator.student_code as lecturer_code,
+                       COALESCE(u_creator.department, e.department, 'Công nghệ Thông tin') as lecturer_department,
                        l.name as location_name, 
                        l.address as location_address,
                        sa.id as my_assignment_id,
@@ -50,6 +55,7 @@ class DashboardController extends BaseController
                        CASE WHEN sa.id IS NOT NULL THEN 1 ELSE 0 END as is_registered_by_me
                 FROM shifts s
                 INNER JOIN events e ON s.event_id = e.id
+                LEFT JOIN users u_creator ON e.created_by = u_creator.id
                 LEFT JOIN locations l ON e.location_id = l.id
                 LEFT JOIN shift_assignments sa ON sa.shift_id = s.id AND sa.user_id = :current_user_id
                 ORDER BY s.start_time ASC";
@@ -86,12 +92,18 @@ class DashboardController extends BaseController
                                  s.id as shift_id, s.name as shift_name, s.start_time, s.end_time,
                                  COALESCE(s.remuneration_amount, 150000) as remuneration_amount,
                                  s.points,
+                                 e.id as event_id,
                                  e.title as event_title,
+                                 e.created_by as event_created_by,
+                                 e.department as event_department,
+                                 COALESCE(u_creator.full_name, 'Giảng viên FPT Poly') as event_lecturer_name,
+                                 COALESCE(u_creator.department, e.department, 'Công nghệ Thông tin') as event_lecturer_department,
                                  l.name as location_name
                           FROM shift_assignments sa
                           INNER JOIN users u ON sa.user_id = u.id
                           INNER JOIN shifts s ON sa.shift_id = s.id
                           INNER JOIN events e ON s.event_id = e.id
+                          LEFT JOIN users u_creator ON e.created_by = u_creator.id
                           LEFT JOIN locations l ON e.location_id = l.id
                           {$whereAccounting}
                           ORDER BY sa.assigned_at DESC";
@@ -424,6 +436,13 @@ class DashboardController extends BaseController
             return;
         }
 
+        // Kiểm tra quyền RBAC: CTV KHÔNG có quyền thêm ghi chú
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (empty($permissions['canCreateNote'])) {
+            $this->json(['success' => false, 'message' => 'Cộng tác viên (CTV) không có quyền thêm ghi chú / lịch hẹn. Chức năng chỉ dành cho Ban tổ chức và Giảng viên.'], 403);
+            return;
+        }
+
         $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
         $title = trim($input['title'] ?? '');
         $date = trim($input['date'] ?? '');
@@ -472,6 +491,12 @@ class DashboardController extends BaseController
      */
     public function deleteNote(int|string $id): void
     {
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (empty($permissions['canCreateNote'])) {
+            $this->json(['success' => false, 'message' => 'Cộng tác viên (CTV) không có quyền xóa ghi chú / lịch hẹn.'], 403);
+            return;
+        }
+
         $noteId = (int)$id;
         if ($noteId <= 0) {
             $this->json(['success' => false, 'message' => 'ID lịch hẹn không hợp lệ'], 400);
@@ -741,6 +766,155 @@ class DashboardController extends BaseController
         } else {
             SessionHelper::flash("info", "Tài khoản của bạn đã được xóa thành công khỏi hệ thống PolyMee.");
             $this->redirect("/auth/login?deleted=1");
+        }
+    }
+
+    /**
+     * API Xóa Sự Kiện & Toàn Bộ Ca Trực Thuộc Sự Kiện
+     * Phân quyền: Cấp bậc từ Giảng viên trở lên (LECTURER, HEAD_ADMIN, ADMIN).
+     * Giảng viên: CHỈ được xóa sự kiện do chính mình tạo (e.created_by == currentUser.id).
+     * Cấp cao hơn (HEAD_ADMIN, ADMIN): Được xóa MỌI sự kiện.
+     */
+    public function deleteEvent(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['success' => false, 'message' => 'Phương thức không được hỗ trợ.'], 405);
+            return;
+        }
+
+        if (!$this->currentUser) {
+            $this->json(['success' => false, 'message' => 'Vui lòng đăng nhập để thực hiện.'], 401);
+            return;
+        }
+
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        $role = $permissions['role'];
+
+        if (!in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true)) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền xóa sự kiện. Chức năng này chỉ dành cho cấp bậc từ Giảng viên trở lên.'], 403);
+            return;
+        }
+
+        $eventId = (int)($_POST['event_id'] ?? 0);
+        if ($eventId <= 0) {
+            $this->json(['success' => false, 'message' => 'Mã sự kiện không hợp lệ.'], 400);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+        $stmtEvent = $db->prepare("SELECT * FROM events WHERE id = :id");
+        $stmtEvent->execute([':id' => $eventId]);
+        $event = $stmtEvent->fetch(PDO::FETCH_ASSOC);
+
+        if (!$event) {
+            $this->json(['success' => false, 'message' => 'Không tìm thấy sự kiện cần xóa.'], 404);
+            return;
+        }
+
+        $currentUserId = (int)($this->currentUser['id'] ?? 0);
+        $eventCreatorId = (int)($event['created_by'] ?? 0);
+
+        // Giảng viên chỉ xóa được lịch mình đặt
+        if ($role === 'LECTURER' && $eventCreatorId !== $currentUserId) {
+            $this->json([
+                'success' => false, 
+                'message' => 'Giảng viên chỉ có quyền xóa lịch sự kiện do chính mình đặt!'
+            ], 403);
+            return;
+        }
+
+        try {
+            // 1. Xóa shift_assignments thuộc các ca của event này
+            $stmtDelAssign = $db->prepare("DELETE FROM shift_assignments WHERE shift_id IN (SELECT id FROM shifts WHERE event_id = :eid)");
+            $stmtDelAssign->execute([':eid' => $eventId]);
+
+            // 2. Xóa các ca trực của event này
+            $stmtDelShifts = $db->prepare("DELETE FROM shifts WHERE event_id = :eid");
+            $stmtDelShifts->execute([':eid' => $eventId]);
+
+            // 3. Xóa chính event
+            $stmtDelEvent = $db->prepare("DELETE FROM events WHERE id = :eid");
+            $stmtDelEvent->execute([':eid' => $eventId]);
+
+            // 4. Ghi Audit Trail
+            $this->logActivity('DELETE_EVENT', 'EVENT', $eventId, "Người dùng [{$this->currentUser['full_name']}] ({$role}) đã xóa sự kiện [{$event['title']}] (ID: {$eventId}) và các ca trực liên quan.");
+
+            $this->json([
+                'success' => true,
+                'message' => "Đã xóa sự kiện '{$event['title']}' thành công khỏi hệ thống!",
+                'event_id' => $eventId
+            ]);
+        } catch (\Throwable $e) {
+            $this->json(['success' => false, 'message' => 'Lỗi khi xóa sự kiện: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * API Xóa Ca Trực Đơn Lẻ
+     */
+    public function deleteShift(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['success' => false, 'message' => 'Phương thức không được hỗ trợ.'], 405);
+            return;
+        }
+
+        if (!$this->currentUser) {
+            $this->json(['success' => false, 'message' => 'Vui lòng đăng nhập để thực hiện.'], 401);
+            return;
+        }
+
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        $role = $permissions['role'];
+
+        if (!in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true)) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền xóa ca trực. Chức năng này chỉ dành cho cấp bậc từ Giảng viên trở lên.'], 403);
+            return;
+        }
+
+        $shiftId = (int)($_POST['shift_id'] ?? 0);
+        if ($shiftId <= 0) {
+            $this->json(['success' => false, 'message' => 'Mã ca trực không hợp lệ.'], 400);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+        $stmtShift = $db->prepare("SELECT s.*, e.created_by as event_creator_id, e.title as event_title FROM shifts s INNER JOIN events e ON s.event_id = e.id WHERE s.id = :id");
+        $stmtShift->execute([':id' => $shiftId]);
+        $shift = $stmtShift->fetch(PDO::FETCH_ASSOC);
+
+        if (!$shift) {
+            $this->json(['success' => false, 'message' => 'Không tìm thấy ca trực cần xóa.'], 404);
+            return;
+        }
+
+        $currentUserId = (int)($this->currentUser['id'] ?? 0);
+        $eventCreatorId = (int)($shift['event_creator_id'] ?? 0);
+
+        if ($role === 'LECTURER' && $eventCreatorId !== $currentUserId) {
+            $this->json([
+                'success' => false, 
+                'message' => 'Giảng viên chỉ có quyền xóa ca trực thuộc lịch sự kiện do chính mình đặt!'
+            ], 403);
+            return;
+        }
+
+        try {
+            $stmtDelAssign = $db->prepare("DELETE FROM shift_assignments WHERE shift_id = :sid");
+            $stmtDelAssign->execute([':sid' => $shiftId]);
+
+            $stmtDelShift = $db->prepare("DELETE FROM shifts WHERE id = :sid");
+            $stmtDelShift->execute([':sid' => $shiftId]);
+
+            $this->logActivity('DELETE_SHIFT', 'SHIFT', $shiftId, "Người dùng [{$this->currentUser['full_name']}] ({$role}) đã xóa ca trực [{$shift['name']}] của sự kiện [{$shift['event_title']}].");
+
+            $this->json([
+                'success' => true,
+                'message' => "Đã xóa ca trực '{$shift['name']}' thành công!",
+                'shift_id' => $shiftId
+            ]);
+        } catch (\Throwable $e) {
+            $this->json(['success' => false, 'message' => 'Lỗi khi xóa ca trực: ' . $e->getMessage()], 500);
         }
     }
 }

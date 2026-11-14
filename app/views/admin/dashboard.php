@@ -17,14 +17,13 @@ declare(strict_types=1);
                     <span class="text-xs text-slate-400">• FPT Polytechnic</span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Bảng Điều Khiển Quản Trị & Nghiệm Thu</h1>
-                <p class="text-xs text-slate-400 mt-1">Quản lý sự kiện, ca trực, xét duyệt minh chứng Google Drive và vận hành máy chiếu Dynamic QR</p>
+                <p class="text-xs text-slate-400 mt-1">Quản lý sự kiện, ca trực và xét duyệt hồ sơ minh chứng Google Drive</p>
             </div>
 
-            <!-- Quick Action: Launch QR Projector -->
             <div class="flex items-center gap-3">
-                <a href="/admin/qrProjector/1" target="_blank" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-900/30 transition hover:scale-105">
-                    <i class="fa-solid fa-qrcode text-sm"></i>
-                    <span>Mở Máy Chiếu Dynamic QR (30s)</span>
+                <a href="/dashboard" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs font-bold shadow-lg shadow-orange-900/30 transition hover:scale-105">
+                    <i class="fa-solid fa-calendar-days text-sm"></i>
+                    <span>Xem Bảng Lịch Trung Tâm</span>
                 </a>
             </div>
         </div>
@@ -158,7 +157,7 @@ declare(strict_types=1);
                                 <td class="py-3.5 px-4 text-right">
                                     <form method="POST" action="/admin/reviewSubmission" class="inline-flex items-center gap-1.5">
                                         <input type="hidden" name="submission_id" value="<?= $sub['id'] ?>">
-                                        <button type="submit" name="status" value="Accepted" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shadow-xs transition" title="Chấp nhận nghiệm thu và cộng điểm rèn luyện">
+                                        <button type="submit" name="status" value="Accepted" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shadow-xs transition" title="Chấp nhận nghiệm thu và cộng điểm tích cực">
                                             <i class="fa-solid fa-check mr-1"></i>Duyệt
                                         </button>
                                         <button type="submit" name="status" value="Rejected" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-[11px] shadow-xs transition" title="Từ chối bài nộp">
@@ -174,12 +173,12 @@ declare(strict_types=1);
         <?php endif; ?>
     </div>
 
-    <!-- Section 2: Quản lý Sự Kiện & Chiếu QR Điểm Danh -->
+    <!-- Section 2: Quản lý Sự Kiện & Phân Rã Ca Trực -->
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
-                <h2 class="text-lg font-bold text-slate-900">Vận Hành Điểm Danh Sự Kiện Trực Tiếp</h2>
-                <p class="text-xs text-slate-500">Mở màn hình chiếu Dynamic QR Code để CTV quét thẻ điểm danh tại cửa hội trường</p>
+                <h2 class="text-lg font-bold text-slate-900">Danh Sách Sự Kiện & Phân Rã Ca Trực</h2>
+                <p class="text-xs text-slate-500">Theo dõi các sự kiện và ca trực đang diễn ra trong khuôn viên trường</p>
             </div>
         </div>
 
@@ -196,9 +195,9 @@ declare(strict_types=1);
 
                     <div class="flex items-center justify-between pt-2 border-t border-slate-200/70 text-xs">
                         <span class="text-slate-600">Ca trực: <strong><?= $evt['shift_count'] ?? 1 ?> ca</strong></span>
-                        <a href="/admin/qrProjector/<?= $evt['id'] ?>" target="_blank" class="px-3 py-1.5 rounded-lg bg-[#1D1D1F] hover:bg-fpoly-primary text-white text-[11px] font-bold transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-desktop"></i>
-                            <span>Chiếu QR</span>
+                        <a href="/event/detail/<?= $evt['id'] ?>" class="px-3 py-1.5 rounded-lg bg-[#1D1D1F] hover:bg-fpoly-primary text-white text-[11px] font-bold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>Xem Chi Tiết</span>
                         </a>
                     </div>
                 </div>
