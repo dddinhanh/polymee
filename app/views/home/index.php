@@ -48,54 +48,54 @@ declare(strict_types=1);
             <!-- Stats Metric Cards -->
             <div class="lg:col-span-5 grid grid-cols-2 gap-4">
                 <div class="p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-xs hover:border-orange-500/40 transition">
-                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
                         <span class="text-xs font-semibold uppercase">Tổng Sự Kiện</span>
-                        <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-500 flex items-center justify-center text-sm">
                             <i class="fa-solid fa-calendar"></i>
                         </div>
                     </div>
-                    <div class="text-3xl font-extrabold text-white"><?= number_format($stats['total_events'] ?? 0) ?></div>
-                    <div class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1 font-medium">
+                    <div class="text-3xl font-extrabold text-[#1D1D1F]"><?= number_format($stats['total_events'] ?? 0) ?></div>
+                    <div class="text-[11px] text-emerald-600 mt-1 flex items-center gap-1 font-medium">
                         <i class="fa-solid fa-arrow-trend-up"></i>
                         <span>Đang diễn ra học kỳ</span>
                     </div>
                 </div>
 
                 <div class="p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-xs hover:border-orange-500/40 transition">
-                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
                         <span class="text-xs font-semibold uppercase">Tổng Ca Trực</span>
-                        <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-500 flex items-center justify-center text-sm">
                             <i class="fa-solid fa-clock"></i>
                         </div>
                     </div>
-                    <div class="text-3xl font-extrabold text-white"><?= number_format($stats['total_shifts'] ?? 0) ?></div>
-                    <div class="text-[11px] text-slate-400 mt-1 font-medium">
+                    <div class="text-3xl font-extrabold text-[#1D1D1F]"><?= number_format($stats['total_shifts'] ?? 0) ?></div>
+                    <div class="text-[11px] text-slate-500 mt-1 font-medium">
                         <span>Đa dạng khung giờ</span>
                     </div>
                 </div>
 
                 <div class="p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-xs hover:border-orange-500/40 transition">
-                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
                         <span class="text-xs font-semibold uppercase">Tỷ Lệ Lấp Đầy</span>
-                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-sm">
                             <i class="fa-solid fa-chart-pie"></i>
                         </div>
                     </div>
-                    <div class="text-3xl font-extrabold text-emerald-400"><?= $stats['fill_rate_percent'] ?? 0 ?>%</div>
-                    <div class="text-[11px] text-slate-400 mt-1 font-medium">
+                    <div class="text-3xl font-extrabold text-emerald-600"><?= $stats['fill_rate_percent'] ?? 0 ?>%</div>
+                    <div class="text-[11px] text-slate-500 mt-1 font-medium">
                         <span>Chỉ tiêu tuyển CTV</span>
                     </div>
                 </div>
 
                 <div class="p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-xs hover:border-orange-500/40 transition">
-                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
                         <span class="text-xs font-semibold uppercase">CTV Tham Gia</span>
-                        <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-500 flex items-center justify-center text-sm">
                             <i class="fa-solid fa-users"></i>
                         </div>
                     </div>
-                    <div class="text-3xl font-extrabold text-white"><?= number_format($stats['active_collaborators'] ?? 0) ?></div>
-                    <div class="text-[11px] text-purple-300 mt-1 font-medium">
+                    <div class="text-3xl font-extrabold text-[#1D1D1F]"><?= number_format($stats['active_collaborators'] ?? 0) ?></div>
+                    <div class="text-[11px] text-purple-600 mt-1 font-medium">
                         <span>Sinh viên FPoly</span>
                     </div>
                 </div>

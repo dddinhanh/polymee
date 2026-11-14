@@ -2533,19 +2533,35 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                 <!-- Danh sách Hợp Đồng Dossier Cards -->
                 <div class="row g-3">
+                    <?php if (empty($accountingList)): ?>
+                    <div class="col-12 text-center py-5 rounded-4 border bg-white shadow-xs">
+                        <i class="bi bi-file-earmark-check text-muted display-4 mb-3 d-block"></i>
+                        <h6 class="fw-bold text-dark">Chưa có hồ sơ hợp đồng nào</h6>
+                        <p class="text-muted small mb-0">Hồ sơ nghiệm thu và hợp đồng sẽ tự động hiển thị sau khi ca trực được sinh viên đăng ký hoàn tất.</p>
+                    </div>
+                    <?php else: ?>
                     <?php foreach ($accountingList as $acc): ?>
+                    <?php
+                    $isVerified = !empty($acc['lecturer_verified']) && (int)$acc['lecturer_verified'] === 1;
+                    $hasProof = !empty($acc['proof_image_url']);
+                    $hasCccd = !empty($acc['id_card_number']);
+                    $hasBank = !empty($acc['bank_account_number']);
+                    $isReadyToExport = $isVerified && $hasProof && $hasCccd && $hasBank;
+                    $proofUrl = $acc['proof_image_url'] ?? '';
+                    $isDriveLink = !empty($proofUrl) && (str_contains($proofUrl, 'drive.google.com') || str_contains($proofUrl, 'docs.google.com') || (!preg_match('/\.(jpg|jpeg|png|webp|gif)/i', $proofUrl) && str_starts_with($proofUrl, 'http')));
+                    ?>
                     <div class="col-12 col-md-6 col-xl-4">
-                        <div class="card h-100 border shadow-xs rounded-4 p-3 bg-white d-flex flex-column justify-content-between">
+                        <div class="card h-100 border rounded-4 p-3.5 bg-white d-flex flex-column justify-content-between shadow-xs" style="border-color: rgba(0,0,0,0.08) !important;">
                             <div>
-                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="d-flex justify-content-between align-items-center mb-2.5">
                                     <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace px-2.5 py-1">
                                         <?= htmlspecialchars($acc['contract_code'] ?? ('HDNT-2026-FPLY-' . str_pad((string)$acc['assignment_id'], 3, '0', STR_PAD_LEFT))) ?>
                                     </span>
                                     <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
                                     <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                        <i class="bi bi-check2-all me-1"></i>Trường Đã Ký & Chi Tiền
+                                        <i class="bi bi-check2-all me-1"></i>Trường Đã Chi Tiền
                                     </span>
-                                    <?php elseif (!empty($acc['lecturer_verified']) && $acc['lecturer_verified'] == 1): ?>
+                                    <?php elseif ($isVerified): ?>
                                     <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
                                         <i class="bi bi-hourglass-split me-1"></i>Chờ Trường Ký
                                     </span>
@@ -2557,48 +2573,54 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 </div>
 
                                 <div class="d-flex align-items-center gap-2.5 mb-3">
-                                    <?php if (!empty($acc['proof_image_url'])): ?>
-                                    <div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; cursor: pointer;" onclick="previewProofModal('<?= htmlspecialchars($acc['full_name']) ?>', '<?= htmlspecialchars($acc['shift_name']) ?>', '<?= htmlspecialchars($acc['proof_image_url']) ?>', '<?= htmlspecialchars($acc['proof_note'] ?? 'Hiện trường trực') ?>')">
-                                        <img src="<?= htmlspecialchars($acc['proof_image_url']) ?>" alt="Ảnh Hiện Trường" style="width: 100%; height: 100%; object-fit: cover;">
-                                    </div>
+                                    <?php if (!empty($proofUrl)): ?>
+                                        <?php if ($isDriveLink): ?>
+                                        <div style="width: 56px; height: 56px; flex-shrink: 0; border-radius: 12px; background: #F0F9FF; border: 1.5px solid #BAE6FD; display: grid; place-items: center; cursor: pointer;" onclick="window.open('<?= htmlspecialchars($proofUrl) ?>', '_blank')" title="Mở Drive bộ ảnh Media">
+                                            <i class="fa-brands fa-google-drive text-primary fs-4"></i>
+                                        </div>
+                                        <?php else: ?>
+                                        <div style="width: 56px; height: 56px; flex-shrink: 0; border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); cursor: pointer;" onclick="previewProofModal('<?= htmlspecialchars(addslashes($acc['full_name'])) ?>', '<?= htmlspecialchars(addslashes($acc['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($proofUrl)) ?>', '<?= htmlspecialchars(addslashes($acc['proof_note'] ?? 'Hiện trường trực')) ?>')">
+                                            <img src="<?= htmlspecialchars($proofUrl) ?>" alt="Ảnh Hiện Trường" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <?php endif; ?>
                                     <?php else: ?>
-                                    <div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 10px; background: #f1f5f9; display: grid; place-items: center; border: 1px dashed #cbd5e1;">
+                                    <div style="width: 56px; height: 56px; flex-shrink: 0; border-radius: 12px; background: #F4F4F6; display: grid; place-items: center; border: 1.5px dashed #CBD5E1;">
                                         <i class="bi bi-camera text-muted fs-4"></i>
                                     </div>
                                     <?php endif; ?>
-                                    <div class="overflow-hidden">
-                                        <h6 class="fw-bold text-dark mb-0 text-truncate"><?= htmlspecialchars($acc['full_name']) ?></h6>
-                                        <small class="text-muted d-block"><?= htmlspecialchars($acc['student_code']) ?> • CCCD: <?= htmlspecialchars($acc['id_card_number'] ?? '079203014589') ?></small>
-                                        <small class="text-primary fw-semibold d-block text-truncate">STK: <?= htmlspecialchars($acc['bank_account_number'] ?? '') ?> (<?= htmlspecialchars($acc['bank_name'] ?? 'NH') ?>)</small>
+                                    <div class="overflow-hidden flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 class="fw-bold text-dark mb-0 text-truncate"><?= htmlspecialchars($acc['full_name']) ?></h6>
+                                            <?php if ($isDriveLink): ?>
+                                            <span class="badge rounded-pill" style="background: rgba(2, 132, 199, 0.12); color: #0284C7; font-size: 10px; font-weight: 600;">Media</span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <small class="text-muted d-block" style="font-size: 11.5px;"><?= htmlspecialchars($acc['student_code']) ?> • CCCD: <?= htmlspecialchars($acc['id_card_number'] ?? '079203014589') ?></small>
+                                        <small class="text-primary fw-semibold d-block text-truncate" style="font-size: 11px;">STK: <?= htmlspecialchars($acc['bank_account_number'] ?? '') ?> (<?= htmlspecialchars($acc['bank_name'] ?? 'NH') ?>)</small>
                                     </div>
                                 </div>
 
-                                <div class="bg-light p-2.5 rounded-3 mb-3 small">
+                                <div class="p-2.5 rounded-3 mb-3 small" style="background: #F8F8FA; border: 1px solid rgba(0,0,0,0.05); font-size: 12px;">
                                     <div class="d-flex justify-content-between mb-1">
                                         <span class="text-muted">Sự kiện:</span>
                                         <strong class="text-dark text-truncate ms-2" style="max-width: 180px;"><?= htmlspecialchars($acc['event_title']) ?></strong>
                                     </div>
                                     <div class="d-flex justify-content-between mb-1">
                                         <span class="text-muted">Ca trực:</span>
-                                        <span class="text-dark"><?= htmlspecialchars($acc['shift_name']) ?></span>
+                                        <span class="text-dark fw-semibold text-truncate ms-2" style="max-width: 180px;"><?= htmlspecialchars($acc['shift_name']) ?></span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-1">
                                         <span class="text-muted">Địa điểm:</span>
-                                        <span class="text-dark"><?= htmlspecialchars($acc['location_name'] ?? 'Hội trường') ?></span>
+                                        <span class="text-dark text-truncate ms-2"><?= htmlspecialchars($acc['location_name'] ?? 'Hội trường') ?></span>
                                     </div>
                                     <div class="d-flex justify-content-between border-top pt-1 mt-1">
                                         <span class="text-muted fw-bold">Thù lao:</span>
                                         <strong class="text-success num-tabular"><?= number_format((int)$acc['remuneration_amount']) ?> đ</strong>
                                     </div>
                                 </div>
-                            <?php
-                            $isVerified = !empty($acc['lecturer_verified']) && (int)$acc['lecturer_verified'] === 1;
-                            $hasProof = !empty($acc['proof_image_url']);
-                            $hasCccd = !empty($acc['id_card_number']);
-                            $hasBank = !empty($acc['bank_account_number']);
-                            $isReadyToExport = $isVerified && $hasProof && $hasCccd && $hasBank;
-                            ?>
-                            <div class="d-flex flex-column gap-2 pt-2 border-top">
+                            </div>
+
+                            <div class="d-flex flex-column gap-2 pt-2 border-top mt-auto" style="border-color: rgba(0,0,0,0.06) !important;">
                                 <!-- Trạng thái điều kiện xuất hợp đồng -->
                                 <div class="d-flex align-items-center justify-content-between" style="font-size: 11px;">
                                     <span class="text-muted">Điều kiện xuất HĐ:</span>
@@ -2613,35 +2635,35 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     <?php endif; ?>
                                 </div>
 
-                                <div class="d-flex flex-wrap gap-2">
-                                    <button type="button" class="btn-fpt-secondary btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
-                                        <i class="bi bi-file-earmark-text me-1"></i> Xem Chi Tiết HĐ
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-sm btn-fpt-secondary flex-fill text-nowrap" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
+                                        <i class="bi bi-file-earmark-text me-1"></i> Xem Hợp Đồng
                                     </button>
                                     
                                     <!-- Nút Nộp / Cập nhật Minh Chứng cho CTV -->
                                     <?php if ((int)$acc['user_id'] === (int)($currentUser['id'] ?? 0) || empty($perms['canVerifyLecturer'])): ?>
-                                    <button type="button" class="btn-fpt-primary btn-fpt-sm flex-fill" onclick="openSubmitProofModal(<?= $acc['assignment_id'] ?>, '<?= htmlspecialchars(addslashes($acc['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($acc['start_time'])) ?>')">
-                                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> <?= $hasProof ? 'Cập Nhật Minh Chứng' : 'Nộp Minh Chứng' ?>
+                                    <button type="button" class="btn btn-sm btn-fpt-primary flex-fill text-nowrap" onclick="openSubmitProofModal(<?= $acc['assignment_id'] ?>, '<?= htmlspecialchars(addslashes($acc['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($acc['start_time'])) ?>')">
+                                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> <?= $hasProof ? 'Đổi Minh Chứng' : 'Nộp Minh Chứng' ?>
                                     </button>
                                     <?php endif; ?>
 
                                     <!-- Nút Duyệt Nghiệm Thu: Dành riêng cho Giảng viên / Quản trị viên -->
                                     <?php if (!$isVerified && !empty($perms['canVerifyLecturer'])): ?>
-                                    <button type="button" class="btn-fpt-emerald btn-fpt-sm flex-fill" <?= $hasProof ? '' : 'disabled title="CTV chưa nộp minh chứng"' ?> onclick="verifyLecturerInCard(<?= $acc['assignment_id'] ?>)">
+                                    <button type="button" class="btn btn-sm btn-fpt-emerald flex-fill text-nowrap" <?= $hasProof ? '' : 'disabled title="CTV chưa nộp minh chứng"' ?> onclick="verifyLecturerInCard(<?= $acc['assignment_id'] ?>)">
                                         <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
                                     </button>
                                     <?php endif; ?>
 
                                     <!-- Nút Trình Trường Ký: CHỈ Cán bộ Hành chính & Quản trị viên (CTV TUYỆT ĐỐI KHÔNG CÓ) -->
                                     <?php if (!empty($perms['canSubmitSchoolSigning']) && ($acc['school_status'] ?? '') !== 'Signed_Paid'): ?>
-                                    <button type="button" class="btn-fpt-primary btn-fpt-sm flex-fill" <?= $isReadyToExport ? '' : 'disabled title="Cần nghiệm thu đầy đủ trước khi trình ký"' ?> onclick="submitToSchool(<?= $acc['assignment_id'] ?>)">
+                                    <button type="button" class="btn btn-sm btn-fpt-primary flex-fill text-nowrap" <?= $isReadyToExport ? '' : 'disabled title="Cần nghiệm thu đầy đủ trước khi trình ký"' ?> onclick="submitToSchool(<?= $acc['assignment_id'] ?>)">
                                         <i class="bi bi-send-check me-1"></i> Trình Trường Ký
                                     </button>
                                     <?php endif; ?>
 
                                     <!-- Nút In Biên Bản: Khi Trường đã ký và chi tiền -->
                                     <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
-                                    <button type="button" class="btn-fpt-secondary btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
+                                    <button type="button" class="btn btn-sm btn-fpt-secondary flex-fill text-nowrap" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
                                         <i class="bi bi-printer me-1"></i> In Biên Bản
                                     </button>
                                     <?php endif; ?>
@@ -2650,16 +2672,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </section>
-
-            
-            
-
-        </div>
-
-    
-
 <!-- =========================================================
                  PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
                  ========================================================= -->
@@ -3067,6 +3082,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             </section>
             <?php endif; ?>
 
+        </div> <!-- #spaBodyContent -->
     </main>
 
 </div>
@@ -3358,17 +3374,17 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             <div class="form-text small text-muted">Dán link Google Drive chia sẻ quyền xem/tải của bộ phận truyền thông.</div>
                         </div>
 
-                        <div class="p-2.5 rounded-3 border bg-light mb-3" style="font-size:12px;">
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox" id="checkLogo" checked>
-                                <label class="form-check-label fw-semibold text-dark" for="checkLogo">
-                                    <i class="bi bi-check-circle-fill text-success me-1"></i> Đã gắn Watermark / Logo FPT Polytechnic
+                        <div class="p-3 rounded-3 border bg-light mb-3" style="font-size:13px;">
+                            <div class="form-check mb-2 d-flex align-items-center">
+                                <input class="form-check-input mt-0 me-2 cursor-pointer flex-shrink-0" type="checkbox" id="checkLogo" checked required style="width: 17px; height: 17px;">
+                                <label class="form-check-label fw-semibold text-dark cursor-pointer user-select-none" for="checkLogo">
+                                    Đã gắn Watermark / Logo FPT Polytechnic
                                 </label>
                             </div>
-                            <div class="form-check mb-0">
-                                <input class="form-check-input" type="checkbox" id="checkBrightness" checked>
-                                <label class="form-check-label fw-semibold text-dark" for="checkBrightness">
-                                    <i class="bi bi-check-circle-fill text-success me-1"></i> Đã hậu kỳ, cân bằng ánh sáng và chỉnh sáng sắc nét
+                            <div class="form-check mb-0 d-flex align-items-center">
+                                <input class="form-check-input mt-0 me-2 cursor-pointer flex-shrink-0" type="checkbox" id="checkBrightness" checked required style="width: 17px; height: 17px;">
+                                <label class="form-check-label fw-semibold text-dark cursor-pointer user-select-none" for="checkBrightness">
+                                    Đã hậu kỳ, cân bằng ánh sáng và chỉnh sáng sắc nét
                                 </label>
                             </div>
                         </div>
