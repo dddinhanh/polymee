@@ -99,7 +99,7 @@ foreach ($shifts as $s) {
                                     </span>
                                     <h3 class="text-base font-bold text-slate-900"><?= htmlspecialchars($s['name']) ?></h3>
                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                                        <i class="fa-solid fa-star text-amber-500 mr-1 text-[10px]"></i>+<?= $s['points'] ?> Điểm RL
+                                        <i class="fa-solid fa-star text-amber-500 mr-1 text-[10px]"></i>+<?= $s['points'] ?> Điểm Tích Cực
                                     </span>
                                 </div>
 

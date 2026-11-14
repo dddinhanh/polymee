@@ -30,7 +30,7 @@ declare(strict_types=1);
         <div class="flex items-center gap-3">
             <div class="relative">
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-fpoly-primary to-orange-400 flex items-center justify-center text-white font-bold shadow-xs">
-                    <i class="fa-solid fa-robot text-base"></i>
+                    <i class="fa-solid fa-wand-magic-sparkles text-base"></i>
                 </div>
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white absolute -bottom-0.5 -right-0.5"></span>
             </div>
@@ -73,7 +73,7 @@ declare(strict_types=1);
         <!-- Welcome Message from Assistant -->
         <div class="flex items-start gap-2.5">
             <div class="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0 font-bold text-xs mt-0.5">
-                <i class="fa-solid fa-robot"></i>
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
             </div>
             <div class="bg-white p-3.5 rounded-2xl rounded-tl-sm border border-slate-200/80 shadow-xs max-w-[85%] text-slate-800 space-y-2">
                 <p>Xin chào <strong><?= htmlspecialchars($currentUser['full_name']) ?></strong>! Tôi là Trợ lý AI PolyMee.</p>
@@ -91,7 +91,7 @@ declare(strict_types=1);
     <!-- Typing Loader Indicator (Hidden by default) -->
     <div id="aiTypingIndicator" class="hidden px-4 py-2 bg-slate-50/50 flex items-center gap-2 text-slate-400 text-xs">
         <div class="w-6 h-6 rounded-lg bg-orange-100 text-orange-500 flex items-center justify-center text-[10px]">
-            <i class="fa-solid fa-robot"></i>
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
         </div>
         <div class="flex items-center gap-1">
             <span class="w-1.5 h-1.5 rounded-full bg-orange-400 animate-bounce"></span>

@@ -39,7 +39,7 @@ declare(strict_types=1);
                         <span>Khám Phá Ca Trực</span>
                     </a>
                     <button type="button" onclick="toggleAiWidget()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#1D1D1F] hover:bg-black text-white text-sm font-semibold border border-[#1D1D1F] transition-all">
-                        <i class="fa-solid fa-robot text-orange-400"></i>
+                        <i class="fa-solid fa-wand-magic-sparkles text-orange-400"></i>
                         <span>Hỏi Trợ Lý AI</span>
                     </button>
                 </div>

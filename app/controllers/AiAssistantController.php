@@ -751,7 +751,7 @@ class AiAssistantController extends BaseController
         $roleName = $perms['roleNameDisplay'];
 
         $defaultHtml = '<div class="ai-card p-3 rounded-3 bg-light border mb-2">';
-        $defaultHtml .= '<div class="fw-bold text-dark mb-1 d-flex align-items-center gap-1.5"><i class="fa-solid fa-robot text-warning"></i> Chào ' . $name . ' (' . $roleName . ')!</div>';
+        $defaultHtml .= '<div class="fw-bold text-dark mb-1 d-flex align-items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-warning"></i> Chào ' . $name . ' (' . $roleName . ')!</div>';
         $defaultHtml .= '<p class="small text-secondary mb-2.5">Trợ lý AI PolyMee sẵn sàng phục vụ theo đúng phân quyền của bạn. Bạn có thể chọn nhanh nghiệp vụ bên dưới:</p>';
         $defaultHtml .= '<div class="d-grid gap-1.5">';
 

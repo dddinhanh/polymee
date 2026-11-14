@@ -140,7 +140,7 @@ $endTime = date('H:i', strtotime($event['end_time']));
                                         
                                         <!-- Points Badge -->
                                         <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                                            <i class="fa-solid fa-star text-amber-500 mr-1 text-[10px]"></i>+<?= $shift['points'] ?> Điểm RL
+                                            <i class="fa-solid fa-star text-amber-500 mr-1 text-[10px]"></i>+<?= $shift['points'] ?> Điểm Tích Cực
                                         </span>
 
                                         <?php if ($isRegistered): ?>
