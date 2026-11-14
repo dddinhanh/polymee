@@ -127,10 +127,8 @@
     <!-- Header / Brand Strip -->
     <header class="py-3 px-4 border-bottom bg-white d-flex justify-content-between align-items-center shadow-xs">
         <a href="/dashboard" class="d-flex align-items-center text-decoration-none">
-            <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 36px; width: auto; object-fit: contain;" class="me-2">
-            <div class="vr mx-2 d-none d-sm-block" style="height: 24px; opacity: 0.25;"></div>
             <span class="fw-bold fs-5 tracking-tight text-dark">Poly<strong style="color:var(--ux-accent);">Mee</strong></span>
-            <span class="badge bg-light text-muted border ms-2">WEB212</span>
+            <span class="badge bg-light text-muted border ms-2">FPT Polytechnic</span>
         </a>
         <a href="/auth/login" class="btn-fpt-secondary btn-fpt-sm">
             <i class="bi bi-box-arrow-in-right me-1"></i> Đã Có Tài Khoản? Đăng Nhập
@@ -143,14 +141,9 @@
             
             <!-- Auth Header -->
             <div class="auth-header d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="d-inline-flex p-1.5 bg-white rounded-3 shadow-sm">
-                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 38px; width: auto; object-fit: contain;">
-                    </div>
-                    <div>
-                        <h4 class="fw-bold mb-1">Đăng Ký Cộng Tác Viên FPT Polytechnic</h4>
-                        <p class="small mb-0 text-white-50">Tạo hồ sơ nhận thù lao quyết toán và đăng ký ca trực sự kiện</p>
-                    </div>
+                <div>
+                    <h4 class="fw-bold mb-1">Đăng Ký Cộng Tác Viên FPT Polytechnic</h4>
+                    <p class="small mb-0 text-white-50">Tạo hồ sơ nhận thù lao quyết toán và đăng ký ca trực sự kiện</p>
                 </div>
                 <div class="d-none d-sm-block text-end">
                     <span class="badge bg-warning text-dark font-monospace fw-bold px-2.5 py-1.5">Role: Student CTV</span>

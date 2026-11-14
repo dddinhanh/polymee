@@ -230,11 +230,9 @@
         <!-- Left Column: Hero Identity Showcase -->
         <div class="auth-hero-pane">
             <div>
-                <!-- Brand Badge -->
+                <!-- Brand Title (Logo Removed) -->
                 <div class="d-flex align-items-center justify-content-between mb-5">
-                    <div class="brand-glass-badge">
-                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 32px; width: auto; object-fit: contain;">
-                    </div>
+                    <span class="fw-bolder fs-4 tracking-tight" style="color: #FFFFFF;">Poly<strong style="color: var(--ux-accent);">Mee</strong></span>
                     <span class="badge rounded-pill num-tabular" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 11px; padding: 6px 12px;">
                         <i class="bi bi-cpu-fill me-1"></i> AI Powered Hub
                     </span>
