@@ -927,43 +927,43 @@
         flex: none;
     }
 
-    /* 1-Screen Viewport Fit on Desktop (No Scrollbars for Calendar) */
+    /* Clean Desktop Layout with Natural Fluid Scrolling */
     @media (min-width: 993px) {
         html, body {
-            height: 100vh !important;
-            max-height: 100vh !important;
-            overflow: hidden !important;
+            min-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto !important;
         }
 
         .app-shell {
-            height: 100vh !important;
-            max-height: 100vh !important;
-            overflow: hidden !important;
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
         }
 
         .main-workspace {
-            height: 100vh !important;
-            max-height: 100vh !important;
-            overflow: hidden !important;
-            padding: 10px 16px 12px 10px !important;
-            display: flex !important;
-            flex-direction: column !important;
+            flex: 1;
+            min-width: 0;
+            padding: 12px 20px 40px 12px;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: visible;
         }
 
         .dashboard-topbar {
-            flex-shrink: 0 !important;
-            padding: 8px 16px !important;
-            margin-bottom: 8px !important;
-            min-height: 48px !important;
-            border-radius: 16px !important;
+            flex-shrink: 0;
+            padding: 8px 16px;
+            margin-bottom: 12px;
+            min-height: 48px;
+            border-radius: 16px;
         }
 
         #spaBodyContent {
-            flex: 1 !important;
-            min-height: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            overflow: hidden !important;
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Panel display overrides: hidden state must always win */
@@ -975,23 +975,21 @@
         }
 
         #panelCalendar:not([style*="display: none"]):not([style*="display:none"]) {
-            flex: 1 !important;
-            min-height: 0 !important;
-            height: 100% !important;
-            display: flex !important;
-            flex-direction: column !important;
-            padding: 10px 16px !important;
-            margin-bottom: 0 !important;
-            border-radius: 18px !important;
-            background: #FFFFFF !important;
-            border: 1px solid rgba(0, 0, 0, 0.08) !important;
-            overflow: hidden !important;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
         }
 
         #panelCalendar > .d-flex.border-bottom {
-            padding-bottom: 6px !important;
-            margin-bottom: 6px !important;
-            flex-shrink: 0 !important;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
         }
 
         /* 3-Tier Views Inside Calendar */
@@ -1005,85 +1003,76 @@
         }
 
         #tierMonthView:not([style*="display: none"]):not([style*="display:none"]) {
-            flex: 1 !important;
-            min-height: 0 !important;
-            height: 100% !important;
-            display: flex !important;
-            flex-direction: column !important;
-            overflow: hidden !important;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         #tierWeekView:not([style*="display: none"]):not([style*="display:none"]) {
-            flex: 1 !important;
-            min-height: 0 !important;
-            height: 100% !important;
-            display: flex !important;
-            flex-direction: column !important;
-            overflow: hidden !important;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         #tierDayView:not([style*="display: none"]):not([style*="display:none"]) {
-            flex: 1 !important;
-            min-height: 0 !important;
-            height: 100% !important;
-            display: flex !important;
-            flex-direction: column !important;
-            overflow-y: auto !important;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .month-header-grid {
-            flex-shrink: 0 !important;
-            margin-bottom: 4px !important;
-            padding-bottom: 2px !important;
+            flex-shrink: 0;
+            margin-bottom: 6px;
+            padding-bottom: 2px;
         }
 
         .month-days-grid {
-            flex: 1 !important;
-            min-height: 0 !important;
-            height: 100% !important;
-            display: grid !important;
-            grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
-            grid-template-rows: repeat(var(--month-rows, 5), minmax(0, 1fr)) !important;
-            gap: 4px !important;
-            overflow: hidden !important;
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 6px;
+            width: 100%;
         }
 
         .month-day-cell {
-            min-height: 0 !important;
-            height: 100% !important;
-            padding: 3px 5px !important;
-            border-radius: 9px !important;
-            display: flex !important;
-            flex-direction: column !important;
-            overflow: hidden !important;
-            box-sizing: border-box !important;
+            min-height: 98px;
+            padding: 6px 8px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            transition: all 0.15s ease;
+        }
+
+        .month-day-cell:hover {
+            background: #F4F4F6;
+            border-color: var(--ux-accent);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
         }
 
         .day-number-pill {
-            width: 18px !important;
-            height: 18px !important;
-            font-size: 10.5px !important;
-            border-radius: 6px !important;
+            width: 22px;
+            height: 22px;
+            font-size: 11.5px;
+            border-radius: 6px;
         }
 
         .shift-chip, .memo-chip {
-            font-size: 9.5px !important;
-            padding: 1px 4px !important;
-            height: 17px !important;
-            line-height: 15px !important;
-            border-radius: 4px !important;
-            margin-bottom: 1.5px !important;
-            text-overflow: ellipsis !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
+            font-size: 10px;
+            padding: 2px 6px;
+            min-height: 19px;
+            line-height: 16px;
+            border-radius: 5px;
+            margin-bottom: 2px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .spa-panel:not(#panelCalendar):not([style*="display: none"]):not([style*="display:none"]) {
-            flex: 1 !important;
-            min-height: 0 !important;
-            max-height: 100% !important;
-            overflow-y: auto !important;
-            padding: 16px 20px !important;
+            width: 100%;
+            padding: 20px 24px;
             display: block !important;
         }
     }
