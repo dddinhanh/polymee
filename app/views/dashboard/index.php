@@ -402,6 +402,8 @@
     }
 
     .dashboard-topbar {
+        position: relative;
+        z-index: 1050;
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
         border-radius: 20px;
@@ -413,6 +415,22 @@
         justify-content: space-between;
         gap: 14px;
         box-shadow: 0 4px 18px rgba(10, 25, 47, 0.04);
+    }
+
+    .dashboard-topbar .dropdown {
+        position: relative;
+        z-index: 1055;
+    }
+
+    .dashboard-topbar .dropdown-menu {
+        z-index: 1060 !important;
+    }
+
+    .place-items-center {
+        display: grid !important;
+        place-items: center !important;
+        justify-items: center !important;
+        align-items: center !important;
     }
 
     /* Central Hub Mode Switcher (Bento 2.0 Liquid Glass Bar) */
@@ -655,7 +673,6 @@
         border-radius: 7px;
         white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis;
         background: rgba(241, 245, 249, 0.9);
         color: #0F172A;
         border: 1px solid rgba(226, 232, 240, 0.9);
@@ -669,8 +686,23 @@
         box-sizing: border-box;
     }
 
-    .shift-chip span {
+    .shift-chip .status-dot {
+        flex: none;
+        flex-shrink: 0;
+    }
+
+    .shift-chip .num-tabular {
+        flex: none !important;
+        flex-shrink: 0 !important;
+        white-space: nowrap;
+    }
+
+    .shift-chip .text-truncate {
+        flex: 1 1 auto;
         min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .status-dot {
@@ -709,7 +741,6 @@
         border-radius: 7px;
         white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis;
         background: rgba(255, 247, 237, 0.95);
         color: #C2410C;
         border: 1px solid rgba(254, 215, 170, 0.9);
@@ -722,8 +753,17 @@
         box-sizing: border-box;
     }
 
-    .memo-chip span {
+    .memo-chip i {
+        flex: none;
+        flex-shrink: 0;
+    }
+
+    .memo-chip .text-truncate {
+        flex: 1 1 auto;
         min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     /* iPadOS Split View Day Timeline Card */
@@ -1264,7 +1304,7 @@
                 <!-- Bento 2.0 AI Accounting Auditor Widget -->
                 <div class="ai-audit-banner mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-circle d-grid place-items-center" style="width:40px; height:40px; background:linear-gradient(135deg, #EA580C, #F97316); color:#fff; flex:none; box-shadow:0 4px 12px rgba(234,88,12,0.3);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px; background:linear-gradient(135deg, #EA580C, #F97316); color:#fff; flex:none; box-shadow:0 4px 12px rgba(234,88,12,0.3);">
                             <i class="bi bi-robot fs-5"></i>
                         </div>
                         <div>
@@ -2223,7 +2263,7 @@
             <div class="modal-body p-4" style="background:var(--ux-surface-2);">
                 <div id="aiChatHistory" class="d-flex flex-column gap-3 mb-3" style="max-height: 320px; overflow-y: auto; padding-right: 6px;">
                     <div class="d-flex gap-2">
-                        <div class="rounded-circle bg-warning text-dark d-grid place-items-center fw-bold" style="width:34px; height:34px; flex:none;">AI</div>
+                        <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold" style="width:34px; height:34px; flex:none;">AI</div>
                         <div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%;">
                             Xin chào <strong><?= htmlspecialchars($currentUser['full_name'] ?? 'bạn') ?></strong>! Tôi là trợ lý ảo PolyMee. Bạn có thể hỏi tôi về lịch trực, tìm kiếm ca theo kỹ năng, hoặc nộp link Google Drive minh chứng nghiệm thu nhé!
                         </div>
@@ -2533,8 +2573,8 @@ function renderMonthGrid(year, month) {
                 const timePrefix = s.start_time.substring(11, 16);
                 previewHtml += `<div class="shift-chip ${chipClass}" title="${s.name} (${s.location_name || 'Hội trường'})">
                     <span class="status-dot ${dotClass}"></span>
-                    <span class="num-tabular">${timePrefix}</span>
-                    <span class="text-truncate">${s.name}</span>
+                    <span class="num-tabular flex-shrink-0">${timePrefix}</span>
+                    <span class="text-truncate flex-grow-1">${s.name}</span>
                 </div>`;
             });
             const remaining = dayShifts.length - maxShifts;
@@ -2659,8 +2699,8 @@ function renderDayView(dateStr) {
         const reminderCard = document.createElement('div');
         reminderCard.className = 'apple-reminder-banner mb-3';
         reminderCard.innerHTML = `
-            <div class="rounded-circle d-grid place-items-center" style="width:36px; height:36px; background:#EA580C; color:#fff; flex:none; box-shadow:0 2px 6px rgba(234, 88, 12, 0.35);">
-                <i class="fa-solid fa-bell" style="font-size:14px;"></i>
+            <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:36px; height:36px; background:#EA580C; color:#fff; flex:none; box-shadow:0 2px 6px rgba(234, 88, 12, 0.35);">
+                <i class="fa-solid fa-bell" style="font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center;"></i>
             </div>
             <div class="flex-grow-1">
                 <div class="d-flex justify-content-between align-items-center mb-1">
@@ -3572,7 +3612,7 @@ async function sendPromptToAi(message) {
     const loadingMsg = document.createElement('div');
     loadingMsg.className = 'd-flex gap-2';
     loadingMsg.id = 'aiLoadingBubble';
-    loadingMsg.innerHTML = `<div class="rounded-circle bg-warning text-dark d-grid place-items-center fw-bold" style="width:34px; height:34px; flex:none;">AI</div><div class="bg-white p-3 rounded-4 shadow-xs border text-muted" style="font-size:13px;"><i class="fa-solid fa-spinner fa-spin me-1"></i> Trợ lý AI đang phân tích dữ liệu...</div>`;
+    loadingMsg.innerHTML = `<div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold" style="width:34px; height:34px; flex:none;">AI</div><div class="bg-white p-3 rounded-4 shadow-xs border text-muted" style="font-size:13px;"><i class="fa-solid fa-spinner fa-spin me-1"></i> Trợ lý AI đang phân tích dữ liệu...</div>`;
     history.appendChild(loadingMsg);
     history.scrollTop = history.scrollHeight;
 
@@ -3589,7 +3629,7 @@ async function sendPromptToAi(message) {
         const replyText = data.reply || 'PolyMee AI đã xử lý yêu cầu của bạn.';
         const aiReply = document.createElement('div');
         aiReply.className = 'd-flex gap-2';
-        aiReply.innerHTML = `<div class="rounded-circle bg-warning text-dark d-grid place-items-center fw-bold" style="width:34px; height:34px; flex:none;">AI</div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%; white-space:pre-line;">${replyText}</div>`;
+        aiReply.innerHTML = `<div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold" style="width:34px; height:34px; flex:none;">AI</div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%; white-space:pre-line;">${replyText}</div>`;
         history.appendChild(aiReply);
         history.scrollTop = history.scrollHeight;
     } catch (err) {
