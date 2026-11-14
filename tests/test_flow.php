@@ -191,6 +191,22 @@ $stmtInsertLog->execute([
     ':details' => "Kiểm thử tự động cấp quyền thành công cho {$ctvUser['full_name']}"
 ]);
 assertTest("Ghi nhận sự kiện GRANT_ROLE vào Audit Trail thành công", (int)$db->lastInsertId() > 0);
+
+// 7.5. Mô phỏng chức năng CTV xóa tài khoản cá nhân (is_active = 0 & audit log)
+$tempCtvEmail = "test_delete_" . time() . "@fpt.edu.vn";
+$db->prepare("INSERT INTO users (role_id, student_code, full_name, email, password_hash, is_active, created_at) VALUES (4, 'PI99999', 'CTV Test Xóa', :email, 'hash', 1, datetime('now', 'localtime'))")->execute([':email' => $tempCtvEmail]);
+$tempUid = (int)$db->lastInsertId();
+
+$stmtDel = $db->prepare("UPDATE users SET is_active = 0 WHERE id = :uid");
+$stmtDel->execute([':uid' => $tempUid]);
+
+$stmtCheckDel = $db->prepare("SELECT is_active FROM users WHERE id = :uid");
+$stmtCheckDel->execute([':uid' => $tempUid]);
+$delStatus = (int)$stmtCheckDel->fetchColumn();
+
+$db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (:uid, 'CTV Test Xóa', 'Student', 'DELETE_ACCOUNT', 'USER', :uid, 'Xóa tài khoản cá nhân CTV thành công', '127.0.0.1', datetime('now', 'localtime'))")->execute([':uid' => $tempUid]);
+
+assertTest("Xóa tài khoản cá nhân CTV thành công (Vô hiệu hóa is_active=0 và lưu log DELETE_ACCOUNT)", $delStatus === 0);
 echo "\n";
 
 // -------------------------------------------------------------

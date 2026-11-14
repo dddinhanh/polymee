@@ -86,7 +86,7 @@ declare(strict_types=1);
             <!-- Logo & Brand -->
             <div class="flex items-center gap-6">
                 <a href="/" class="flex items-center gap-3 group">
-                    <div class="h-10 px-2.5 py-1 bg-white rounded-xl flex items-center justify-center shadow-sm border border-slate-200 group-hover:shadow transition-all">
+                    <div class="h-10 px-2.5 py-1 flex items-center justify-center transition-all" style="border: none !important; box-shadow: none !important;">
                         <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic Logo" class="h-7 w-auto object-contain">
                     </div>
                     <div class="hidden sm:block">

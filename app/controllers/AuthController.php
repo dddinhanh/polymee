@@ -226,5 +226,13 @@ class AuthController extends BaseController
             throw new RuntimeException("Không tìm thấy view Auth: {$viewFile}");
         }
     }
-}
 
+    /**
+     * Endpoint xóa tài khoản cá nhân
+     */
+    public function deleteAccount(): void
+    {
+        $dashboardCtrl = new DashboardController();
+        $dashboardCtrl->deleteAccount();
+    }
+}

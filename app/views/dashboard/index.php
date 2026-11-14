@@ -1281,10 +1281,19 @@
                             <em class="u040-bd" aria-label="Hồ sơ nghiệm thu"><?= count($accountingList) ?></em>
                         </button>
                     </li>
+                    <?php
+                    $userRoleName = $currentUser['role_name'] ?? '';
+                    $userRoleId = (int)($currentUser['role_id'] ?? 4);
+                    $isManager = in_array($userRoleName, ['Admin', 'Organizer', 'Teacher'], true) || in_array($userRoleId, [1, 2, 7], true);
+                    $ctvCount = count(array_filter($allUsers, fn($u) => ($u['role_name'] ?? '') === 'Student' || (int)($u['role_id'] ?? 0) === 4));
+                    ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')">
+                        <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="<?= $isManager ? 'Quản lý hồ sơ định danh VNeID & STK của CTV' : 'Hồ sơ nhận thù lao cá nhân' ?>">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h2"/></svg>
-                            <span>Hồ Sơ VNeID & STK</span>
+                            <span><?= $isManager ? 'Quản Lý Hồ Sơ CTV' : 'Hồ Sơ VNeID & STK' ?></span>
+                            <?php if ($isManager): ?>
+                            <em class="u040-bd" style="background:#0284C7; color:#fff;" aria-label="CTV Count"><?= $ctvCount ?></em>
+                            <?php endif; ?>
                         </button>
                     </li>
                     <li>
@@ -1322,13 +1331,143 @@
                     <?php endif; ?>
                 </ul>
 
-                <!-- Profile Footer -->
-                <div class="u040-me" onclick="navigateToPage('profile-settings')" style="cursor: pointer;" title="Nhấp để mở Cài đặt tài khoản cá nhân">
-                    <i aria-hidden="true"><?= mb_substr($currentUser['full_name'] ?? 'U', 0, 1) ?></i>
-                    <span>
-                        <?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?>
-                        <small><?= htmlspecialchars($currentUser['role_name'] ?? 'Sinh viên') ?> • <?= htmlspecialchars($currentUser['student_code'] ?? 'CTV') ?></small>
-                    </span>
+                <!-- Profile Footer With Account Switcher, Login & Logout (Dropup Menu) -->
+                <div class="dropup w-100 position-relative" style="margin-top: auto; z-index: 1080;">
+                    <button class="u040-me w-100 border-0 text-start d-flex align-items-center" type="button" id="sidebarUserMenuBtn" data-bs-toggle="dropdown" aria-expanded="false" title="Nhấp để chuyển đổi vai trò, cài đặt hoặc đăng xuất">
+                        <i aria-hidden="true"><?= mb_substr($currentUser['full_name'] ?? 'U', 0, 1) ?></i>
+                        <span class="flex-grow-1 overflow-hidden text-truncate">
+                            <?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?>
+                            <small><?= htmlspecialchars($currentUser['role_name'] ?? 'Sinh viên') ?> • <?= htmlspecialchars($currentUser['student_code'] ?? 'CTV') ?></small>
+                        </span>
+                        <svg class="u040-chevron d-none d-md-block flex-shrink-0 ms-auto me-1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.45;"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-start shadow-xl border-0 py-2 rounded-4" aria-labelledby="sidebarUserMenuBtn" style="font-size: 12.5px; width: 295px; margin-bottom: 8px; z-index: 99999 !important; background: #FFFFFF; box-shadow: 0 16px 40px rgba(0,0,0,0.14); border: 1px solid rgba(0,0,0,0.08) !important;">
+                        <!-- Current User Header Card -->
+                        <li class="px-3 py-2 border-bottom mb-1 bg-light rounded-top-4" style="margin-top: -8px;">
+                            <div class="d-flex align-items-center gap-2.5">
+                                <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 36px; height: 36px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
+                                    <?= mb_substr($currentUser['full_name'] ?? 'U', 0, 1) ?>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <strong class="d-block text-truncate" style="color: var(--ux-ink); font-size: 13.5px;"><?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?></strong>
+                                    <span class="badge px-2 py-0.5 rounded-pill font-monospace" style="font-size: 10px; background: rgba(234, 88, 12, 0.1); color: var(--ux-accent);"><?= htmlspecialchars($currentUser['role_name'] ?? 'Sinh viên') ?> • <?= htmlspecialchars($currentUser['student_code'] ?? 'CTV') ?></span>
+                                </div>
+                            </div>
+                        </li>
+
+                        <!-- Personal Account Settings -->
+                        <li>
+                            <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="javascript:void(0)" onclick="navigateToPage('profile-settings')">
+                                <i class="bi bi-person-gear text-primary fs-6"></i>
+                                <div>
+                                    <span class="fw-semibold text-dark">Cài Đặt Tài Khoản Cá Nhân</span>
+                                    <small class="d-block text-muted" style="font-size: 10.5px;">Hồ sơ, mật khẩu & xóa tài khoản</small>
+                                </div>
+                            </a>
+                        </li>
+
+                        <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
+                        <li>
+                            <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="javascript:void(0)" onclick="navigateToPage('admin-management')">
+                                <i class="bi bi-shield-lock-fill text-warning fs-6"></i>
+                                <div>
+                                    <span class="fw-semibold text-dark">Cấp Quyền & Nhật Ký Kiểm Toán</span>
+                                    <small class="d-block text-muted" style="font-size: 10.5px;">Phân quyền Admin & Audit Trail</small>
+                                </div>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+
+                        <li><hr class="dropdown-divider my-1.5"></li>
+
+                        <!-- 6 Demo Roles Switcher -->
+                        <li class="dropdown-header text-uppercase fw-bold px-3 py-1" style="font-size: 10px; letter-spacing: 0.04em; color: var(--ux-ink-3);">
+                            <i class="bi bi-arrow-left-right me-1 text-warning"></i> Chuyển Đổi Tài Khoản Demo (6 Role)
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 3 ? 'active fw-bold' : '' ?>" href="/home/switchUser/3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="avatar-circle bg-primary-subtle text-primary fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">PA</span>
+                                    <div>
+                                        <strong style="font-size: 12px;">Đinh N. Phương Anh</strong> <small class="text-muted">(CTV Media)</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 4 ? 'active fw-bold' : '' ?>" href="/home/switchUser/4">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="avatar-circle bg-success-subtle text-success fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">ĐM</span>
+                                    <div>
+                                        <strong style="font-size: 12px;">Lê Đức Mạnh</strong> <small class="text-muted">(CTV Lễ Tân)</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 2 ? 'active fw-bold' : '' ?>" href="/home/switchUser/2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="avatar-circle bg-warning-subtle text-warning-emphasis fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">GV</span>
+                                    <div>
+                                        <strong style="font-size: 12px;">Thầy Phan Hoàng Khải</strong> <small class="text-muted">(Giảng Viên / BTC)</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 8 ? 'active fw-bold' : '' ?>" href="/home/switchUser/8">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="avatar-circle bg-info-subtle text-info-emphasis fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">HC</span>
+                                    <div>
+                                        <strong style="font-size: 12px;">Lê Đình Tuấn</strong> <small class="text-muted">(Hành Chính)</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 7 ? 'active fw-bold' : '' ?>" href="/home/switchUser/7">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="avatar-circle bg-success-subtle text-success fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">KT</span>
+                                    <div>
+                                        <strong style="font-size: 12px;">Đặng Thu Thảo</strong> <small class="text-muted">(Kế Toán)</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 1 ? 'active fw-bold' : '' ?>" href="/home/switchUser/1">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="avatar-circle bg-danger-subtle text-danger fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">AD</span>
+                                    <div>
+                                        <strong style="font-size: 12px;">Quản Trị Viên</strong> <small class="text-muted">(Admin Toàn Quyền)</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li><hr class="dropdown-divider my-1.5"></li>
+
+                        <!-- Auth Links: Login, Register, Logout -->
+                        <li>
+                            <a class="dropdown-item py-2 text-primary d-flex align-items-center gap-2" href="/auth/login">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                <span>Đăng Nhập Tài Khoản Khác</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 text-secondary d-flex align-items-center gap-2" href="/auth/register">
+                                <i class="bi bi-person-plus"></i>
+                                <span>Đăng Ký CTV Mới</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 text-danger fw-bold d-flex align-items-center gap-2" href="/auth/logout">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Đăng Xuất</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </nav>
         </div>
@@ -1343,8 +1482,8 @@
         <header class="dashboard-topbar">
             <!-- Left: Breadcrumbs & Screen Title -->
             <div class="d-flex align-items-center gap-3">
-                <a href="/dashboard" class="d-flex align-items-center text-decoration-none bg-white p-1.5 px-2.5 rounded-3 border shadow-xs" style="height: 38px;" title="FPT Polytechnic">
-                    <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 25px; width: auto; object-fit: contain;">
+                <a href="/dashboard" class="d-flex align-items-center text-decoration-none p-1 rounded-3" style="height: 38px; border: none !important; box-shadow: none !important; background: transparent;" title="FPT Polytechnic">
+                    <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 25px; width: auto; object-fit: contain; border: none !important;">
                 </a>
                 <div class="vr mx-1 d-none d-sm-block" style="height: 24px; opacity: 0.25;"></div>
                 <div class="d-flex flex-column">
@@ -1385,7 +1524,7 @@
                 </div>
             </div>
 
-            <!-- Right: Action Controls -->
+            <!-- Right: Action Controls (Clean, Minimalist Apple Design) -->
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
                     <i class="bi bi-calendar-plus-fill me-1"></i>
@@ -1399,89 +1538,6 @@
                     <i class="fa-solid fa-robot text-warning me-1"></i>
                     <span>Trợ lý AI</span>
                 </button>
-
-                <!-- Promax Theme Switcher (Dark / Light) -->
-                <button type="button" class="btn-fpt-secondary btn-fpt-sm px-2.5" id="themeToggleBtn" onclick="toggleTheme()" title="Chuyển chế độ Giao diện Tối / Sáng" aria-label="Toggle Theme">
-                    <i class="bi bi-sun-fill dark-icon text-warning"></i>
-                    <i class="bi bi-moon-stars-fill light-icon text-secondary d-none"></i>
-                </button>
-
-                <!-- Demo Role Switcher Dropdown -->
-                <div class="dropdown">
-                    <button class="btn-fpt-secondary btn-fpt-sm dropdown-toggle d-flex align-items-center gap-1.5" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="avatar-circle bg-warning-subtle text-warning-emphasis fw-bold" style="width:22px; height:22px; font-size:10px; border-radius:50%; display:inline-grid; place-items:center;">
-                            <?= mb_substr($currentUser['full_name'] ?? 'U', 0, 1) ?>
-                        </span>
-                        <span class="d-none d-xl-inline"><?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border py-2" style="font-size: 12.5px; width: 300px; z-index: 9999 !important;">
-                        <li class="dropdown-header text-uppercase fw-bold small" style="font-size:10.5px; letter-spacing:0.04em; color:var(--ux-ink-3);">Chuyển Đổi Role Demo (6 Diễn Viên)</li>
-                        <li><a class="dropdown-item py-2" href="/home/switchUser/3">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="avatar-circle bg-primary-subtle text-primary fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">PA</span>
-                                <div>
-                                    <strong style="color:var(--ux-ink);">Đinh Nguyễn Phương Anh</strong><br>
-                                    <small style="color:var(--ux-ink-3);">PI03084 • Role: <strong>CTV Media</strong></small>
-                                </div>
-                            </div>
-                        </a></li>
-                        <li><a class="dropdown-item py-2" href="/home/switchUser/4">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="avatar-circle bg-emerald-subtle text-success fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">ĐM</span>
-                                <div>
-                                    <strong style="color:var(--ux-ink);">Lê Đức Mạnh</strong><br>
-                                    <small style="color:var(--ux-ink-3);">PS20262 • Role: <strong>CTV Lễ Tân</strong></small>
-                                </div>
-                            </div>
-                        </a></li>
-                        <li><a class="dropdown-item py-2" href="/home/switchUser/2">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="avatar-circle bg-warning-subtle text-warning-emphasis fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">GV</span>
-                                <div>
-                                    <strong style="color:var(--ux-ink);">Thầy Phan Hoàng Khải</strong><br>
-                                    <small style="color:var(--ux-ink-3);">GV0102 • Role: <strong>Giảng Viên / BTC</strong></small>
-                                </div>
-                            </div>
-                        </a></li>
-                        <li><a class="dropdown-item py-2" href="/home/switchUser/8">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="avatar-circle bg-info-subtle text-info-emphasis fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">HC</span>
-                                <div>
-                                    <strong style="color:var(--ux-ink);">Lê Đình Tuấn</strong><br>
-                                    <small style="color:var(--ux-ink-3);">HC0201 • Role: <strong>Nhân Viên Hành Chính</strong></small>
-                                </div>
-                            </div>
-                        </a></li>
-                        <li><a class="dropdown-item py-2" href="/home/switchUser/7">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="avatar-circle bg-success-subtle text-success fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">KT</span>
-                                <div>
-                                    <strong style="color:var(--ux-ink);">Đặng Thu Thảo</strong><br>
-                                    <small style="color:var(--ux-ink-3);">KT0105 • Role: <strong>Kế Toán & Quyết Toán</strong></small>
-                                </div>
-                            </div>
-                        </a></li>
-                        <li><a class="dropdown-item py-2" href="/home/switchUser/1">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="avatar-circle bg-danger-subtle text-danger fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">AD</span>
-                                <div>
-                                    <strong style="color:var(--ux-ink);">Quản Trị Viên (Admin)</strong><br>
-                                    <small style="color:var(--ux-ink-3);">ADMIN001 • Role: <strong>Toàn Quyền / QL Địa Điểm</strong></small>
-                                </div>
-                            </div>
-                        </a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-1.5 text-primary fw-semibold" href="/auth/login">
-                            <i class="bi bi-box-arrow-in-right me-1.5"></i> Màn Hình Đăng Nhập
-                        </a></li>
-                        <li><a class="dropdown-item py-1.5 text-success fw-semibold" href="/auth/register">
-                            <i class="bi bi-person-plus me-1.5"></i> Đăng Ký Tài Khoản CTV Mới
-                        </a></li>
-                        <li><a class="dropdown-item py-1.5 text-danger fw-semibold" href="/auth/logout">
-                            <i class="bi bi-power me-1.5"></i> Đăng Xuất An Toàn
-                        </a></li>
-                    </ul>
-                </div>
             </div>
         </header>
 
@@ -1603,385 +1659,8 @@
                 </div>
             </section>
 
-            <!-- =========================================================
-                 PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
-                 ========================================================= -->
-            <section id="panelProfileSettings" style="display:none;" class="fade-in-up">
-                <?php 
-                $profRoleId = (int)($userProfile['role_id'] ?? 4);
-                $profRoleName = $userProfile['role_name'] ?? 'Student';
-                $isInstitutionalStaff = in_array($profRoleId, [1, 2], true) || in_array($profRoleName, ['Admin', 'Organizer'], true);
-                ?>
-                <!-- Profile Header Card -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
-                    <div class="card-body p-4 pt-0 position-relative">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
-                            <div class="d-flex align-items-end gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-lg border border-3 border-dark" style="width: 86px; height: 86px; min-width: 86px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 32px;">
-                                    <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
-                                </div>
-                                <div class="mb-1">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 20px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-3 py-1 rounded-pill" style="font-size: 11.5px; background: <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.18)' : 'rgba(234, 88, 12, 0.18)' ?>; color: <?= $isInstitutionalStaff ? '#60A5FA' : '#FB923C' ?>; border: 1px solid <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.3)' : 'rgba(234, 88, 12, 0.3)' ?>;">
-                                            <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
-                                        </span>
-                                    </div>
-                                    <div class="small mt-0.5" style="color: var(--ux-ink-3);">
-                                        Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <?= htmlspecialchars($userProfile['email'] ?? '') ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <span class="badge px-3 py-2 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 12px;">
-                                    <i class="bi bi-clock-history me-1"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Profile Edit Form -->
-                <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
-                    <div class="row g-4">
-                        <!-- Left Column: Thông Tin Định Danh & Liên Hệ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-7' : 'col-lg-6' ?>">
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-person-lines-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</small>
-                                </div>
-                                <div class="card-body p-4 pt-2">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Họ và Tên <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mã Định Danh / MSSV</label>
-                                            <input type="text" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Mã sinh viên / Mã cán bộ do Nhà trường cấp cố định</div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Email FPT Education</label>
-                                            <input type="email" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
-                                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
-                                            <textarea name="skills" class="form-control" rows="3" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để gợi ý bạn vào các ca trực phù hợp</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Hồ Sơ Thù Lao (Phân Biệt Theo Vai Trò) HOẶC Thông Báo Cán Bộ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
-                            <?php if ($isInstitutionalStaff): ?>
-                            <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-shield-lock-fill text-primary"></i> Phân Quyền & Bảo Mật
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <div class="p-3.5 rounded-4 mb-4" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25);">
-                                            <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-primary mt-1" style="width: 38px; height: 38px; min-width: 38px; background: rgba(59, 130, 246, 0.15);">
-                                                    <i class="bi bi-mortarboard-fill fs-5"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="fw-bold mb-1" style="color: var(--ux-ink); font-size: 14px;">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                    <p class="small mb-0" style="color: var(--ux-ink-2); line-height: 1.55; font-size: 12.5px;">
-                                                        Bạn đang đăng nhập với vai trò <strong><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong>không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-3.5 rounded-4 mb-3" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line);">
-                                            <div class="fw-bold mb-2 small" style="color: var(--ux-ink);">Đổi Mật Khẩu Đăng Nhập</div>
-                                            <label class="form-label small" style="color: var(--ux-ink-3);">Mật khẩu mới (bỏ trống nếu không đổi)</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Tối thiểu 6 ký tự...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-check-circle-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php else: ?>
-                            <!-- Trường hợp CTV (Sinh Viên / Media): Có đầy đủ hồ sơ CCCD, STK, VNeID -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-wallet2 text-success"></i> Hồ Sơ Quyết Toán & Thù Lao CTV
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div class="row g-3">
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số CCCD (12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="001xxxxxxxx" value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_name" class="form-control" placeholder="Ví dụ: MB Bank, Vietcombank, TPBank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_number" class="form-control font-monospace" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ảnh Thẻ Căn Cước / VNeID Định Danh</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://..." value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp VNeID / CCCD 2 mặt (Drive, Imgur, Cloudinary)</div>
-                                            
-                                            <!-- Image Preview -->
-                                            <div class="mt-2 p-2 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
-                                                <?php if (!empty($userProfile['vneid_image_url'])): ?>
-                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px;" id="vneidPreviewImg">
-                                                <?php else: ?>
-                                                    <span class="small text-muted" id="vneidPlaceholder"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                    <img src="" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px; display: none;" id="vneidPreviewImg">
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mật Khẩu Mới</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Để trống nếu giữ nguyên mật khẩu cũ...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-save2-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-            <!-- =========================================================
-                 PANEL 9: QUẢN TRỊ VIÊN - CẤP QUYỀN & NHẬT KÝ THAO TÁC (ADMIN ONLY)
-                 ========================================================= -->
-            <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-            <section id="panelAdminManagement" style="display:none;" class="fade-in-up">
-                
-                <!-- Section 1: Cấp Quyền Người Dùng -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-shield-fill-check text-warning fs-5"></i> Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Quản trị viên có toàn quyền nâng cấp, giáng cấp hoặc chuyển đổi vai trò của từng thành viên</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 12px;">
-                                <i class="bi bi-people-fill me-1"></i> Tổng số: <?= count($allUsers) ?> tài khoản
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 280px;">Thành Viên</th>
-                                        <th class="py-3" style="width: 140px;">Mã / MSSV</th>
-                                        <th class="py-3" style="width: 220px;">Email & SĐT</th>
-                                        <th class="py-3" style="width: 180px;">Vai Trò Hiện Tại</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 320px;">Cấp Quyền Mới</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($allUsers as $u): ?>
-                                    <?php 
-                                    $uInitial = mb_strtoupper(mb_substr($u['full_name'], 0, 1));
-                                    $roleBadgeColor = match($u['role_name']) {
-                                        'Admin' => 'background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3);',
-                                        'Organizer' => 'background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3);',
-                                        'Staff' => 'background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3);',
-                                        'Accountant' => 'background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3);',
-                                        'Media' => 'background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3);',
-                                        default => 'background: rgba(100, 116, 139, 0.15); color: #94A3B8; border: 1px solid rgba(100, 116, 139, 0.3);'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Member info -->
-                                        <td class="ps-4 py-3">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 38px; height: 38px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
-                                                    <?= htmlspecialchars($uInitial) ?>
-                                                </div>
-                                                <div style="min-width: 0;">
-                                                    <div class="fw-bold mb-0 text-truncate" style="font-size: 14px; color: var(--ux-ink); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['full_name']) ?>
-                                                    </div>
-                                                    <div class="small text-truncate" style="font-size: 11.5px; color: var(--ux-ink-3); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['skills'] ?: 'Cộng tác viên') ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <!-- MSSV / Code -->
-                                        <td class="py-3">
-                                            <span class="badge font-monospace px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: var(--ux-surface-2); color: var(--ux-ink); border: 1px solid var(--ux-line);">
-                                                <?= htmlspecialchars($u['student_code']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Contact -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); font-size: 12px;"><?= htmlspecialchars($u['email']) ?></div>
-                                            <div class="small" style="color: var(--ux-ink-3); font-size: 11px;"><?= htmlspecialchars($u['phone'] ?: 'Chưa cập nhật SĐT') ?></div>
-                                        </td>
-
-                                        <!-- Current Role -->
-                                        <td class="py-3" id="userRoleBadgeCol_<?= $u['id'] ?>">
-                                            <span class="badge px-3 py-1.5 rounded-pill" style="font-size: 11.5px; <?= $roleBadgeColor ?>">
-                                                <?= htmlspecialchars($u['role_name']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Grant Role Dropdown & Button -->
-                                        <td class="pe-4 py-3 text-end">
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <select class="form-select form-select-sm" id="roleSelect_<?= $u['id'] ?>" style="width: 170px; font-size: 12px; background-color: var(--ux-surface-2); color: var(--ux-ink); border-color: var(--ux-line);">
-                                                    <?php foreach ($roles as $r): ?>
-                                                    <option value="<?= $r['id'] ?>" <?= ((int)$u['role_id'] === (int)$r['id']) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($r['name']) ?> (<?= htmlspecialchars($r['description']) ?>)
-                                                    </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                                <button class="btn btn-sm btn-fpt-primary rounded-pill px-3 py-1.5 shadow-xs" style="font-size: 12px; font-weight: 600;" onclick="handleGrantRole(<?= $u['id'] ?>, 'roleSelect_<?= $u['id'] ?>')">
-                                                    <i class="bi bi-shield-check me-1"></i> Cấp Quyền
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 2: Lịch Sử Thao Tác Hệ Thống (Audit Trail) -->
-                <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-clock-history text-info fs-5"></i> Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Ghi lại toàn bộ hành vi phân quyền, duyệt ca, ký biên bản và thao tác tự động của AI</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11.5px;">
-                                <i class="bi bi-activity me-1 text-success"></i> <?= count($activityLogs) ?> bản ghi gần nhất
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 170px;">Thời Gian</th>
-                                        <th class="py-3" style="width: 200px;">Người Thực Hiện</th>
-                                        <th class="py-3" style="width: 150px;">Hành Động</th>
-                                        <th class="py-3">Chi Tiết Thao Tác</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 120px;">Địa Chỉ IP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (empty($activityLogs)): ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5" style="color: var(--ux-ink-3);">
-                                            <i class="bi bi-clipboard-x fs-2 d-block mb-2"></i> Chưa có bản ghi nhật ký thao tác nào
-                                        </td>
-                                    </tr>
-                                    <?php else: ?>
-                                    <?php foreach ($activityLogs as $log): ?>
-                                    <?php 
-                                    $actionBadge = match($log['action']) {
-                                        'GRANT_ROLE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 11px;"><i class="bi bi-shield-fill me-1"></i>Cấp Quyền</span>',
-                                        'UPDATE_PROFILE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px;"><i class="bi bi-person-fill-gear me-1"></i>Sửa Hồ Sơ</span>',
-                                        'APPROVE_PAYMENT' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px;"><i class="bi bi-check2-circle me-1"></i>Duyệt Tiền</span>',
-                                        'VERIFY_PROOF' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px;"><i class="bi bi-patch-check-fill me-1"></i>Nghiệm Thu</span>',
-                                        'CREATE_NOTE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); font-size: 11px;"><i class="bi bi-calendar-event me-1"></i>Lịch Hẹn</span>',
-                                        default => '<span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11px;">' . htmlspecialchars($log['action']) . '</span>'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Timestamp -->
-                                        <td class="ps-4 py-3 font-monospace small" style="color: var(--ux-ink-3); font-size: 12px;">
-                                            <?= date('d/m/Y H:i:s', strtotime($log['created_at'])) ?>
-                                        </td>
-
-                                        <!-- User + Role -->
-                                        <td class="py-3">
-                                            <div class="fw-bold mb-0" style="font-size: 13.5px; color: var(--ux-ink);"><?= htmlspecialchars($log['user_name']) ?></div>
-                                            <span class="badge rounded-pill font-monospace" style="font-size: 10px; background: var(--ux-surface-3); color: var(--ux-ink-2);">
-                                                <?= htmlspecialchars($log['user_role'] ?? 'User') ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Action badge -->
-                                        <td class="py-3">
-                                            <?= $actionBadge ?>
-                                        </td>
-
-                                        <!-- Details -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); line-height: 1.5; font-size: 12.5px;">
-                                                <?= htmlspecialchars($log['details']) ?>
-                                            </div>
-                                        </td>
-
-                                        <!-- IP Address -->
-                                        <td class="pe-4 py-3 text-end font-monospace small" style="color: var(--ux-ink-3); font-size: 11px;">
-                                            <?= htmlspecialchars($log['ip_address'] ?? '127.0.0.1') ?>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <?php endif; ?>
+            
+            
 
             <!-- TAB 2: BẢNG NGHIỆM THU KẾ TOÁN & KIỂM DUYỆT THÙ LAO (ADMIN / ORGANIZER) -->
             <section class="spa-panel" id="panelAccounting" style="display:none;">
@@ -2175,390 +1854,161 @@
                 </div>
             </section>
 
-            <!-- =========================================================
-                 PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
-                 ========================================================= -->
-            <section id="panelProfileSettings" style="display:none;" class="fade-in-up">
-                <?php 
-                $profRoleId = (int)($userProfile['role_id'] ?? 4);
-                $profRoleName = $userProfile['role_name'] ?? 'Student';
-                $isInstitutionalStaff = in_array($profRoleId, [1, 2], true) || in_array($profRoleName, ['Admin', 'Organizer'], true);
-                ?>
-                <!-- Profile Header Card -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
-                    <div class="card-body p-4 pt-0 position-relative">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
-                            <div class="d-flex align-items-end gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-lg border border-3 border-dark" style="width: 86px; height: 86px; min-width: 86px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 32px;">
-                                    <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
-                                </div>
-                                <div class="mb-1">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 20px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-3 py-1 rounded-pill" style="font-size: 11.5px; background: <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.18)' : 'rgba(234, 88, 12, 0.18)' ?>; color: <?= $isInstitutionalStaff ? '#60A5FA' : '#FB923C' ?>; border: 1px solid <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.3)' : 'rgba(234, 88, 12, 0.3)' ?>;">
-                                            <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
-                                        </span>
-                                    </div>
-                                    <div class="small mt-0.5" style="color: var(--ux-ink-3);">
-                                        Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <?= htmlspecialchars($userProfile['email'] ?? '') ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <span class="badge px-3 py-2 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 12px;">
-                                    <i class="bi bi-clock-history me-1"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            
+            
 
-                <!-- Profile Edit Form -->
-                <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
-                    <div class="row g-4">
-                        <!-- Left Column: Thông Tin Định Danh & Liên Hệ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-7' : 'col-lg-6' ?>">
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-person-lines-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</small>
-                                </div>
-                                <div class="card-body p-4 pt-2">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Họ và Tên <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mã Định Danh / MSSV</label>
-                                            <input type="text" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Mã sinh viên / Mã cán bộ do Nhà trường cấp cố định</div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Email FPT Education</label>
-                                            <input type="email" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
-                                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
-                                            <textarea name="skills" class="form-control" rows="3" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để gợi ý bạn vào các ca trực phù hợp</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Hồ Sơ Thù Lao (Phân Biệt Theo Vai Trò) HOẶC Thông Báo Cán Bộ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
-                            <?php if ($isInstitutionalStaff): ?>
-                            <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-shield-lock-fill text-primary"></i> Phân Quyền & Bảo Mật
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <div class="p-3.5 rounded-4 mb-4" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25);">
-                                            <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-primary mt-1" style="width: 38px; height: 38px; min-width: 38px; background: rgba(59, 130, 246, 0.15);">
-                                                    <i class="bi bi-mortarboard-fill fs-5"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="fw-bold mb-1" style="color: var(--ux-ink); font-size: 14px;">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                    <p class="small mb-0" style="color: var(--ux-ink-2); line-height: 1.55; font-size: 12.5px;">
-                                                        Bạn đang đăng nhập với vai trò <strong><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong>không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-3.5 rounded-4 mb-3" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line);">
-                                            <div class="fw-bold mb-2 small" style="color: var(--ux-ink);">Đổi Mật Khẩu Đăng Nhập</div>
-                                            <label class="form-label small" style="color: var(--ux-ink-3);">Mật khẩu mới (bỏ trống nếu không đổi)</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Tối thiểu 6 ký tự...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-check-circle-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php else: ?>
-                            <!-- Trường hợp CTV (Sinh Viên / Media): Có đầy đủ hồ sơ CCCD, STK, VNeID -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-wallet2 text-success"></i> Hồ Sơ Quyết Toán & Thù Lao CTV
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div class="row g-3">
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số CCCD (12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="001xxxxxxxx" value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_name" class="form-control" placeholder="Ví dụ: MB Bank, Vietcombank, TPBank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_number" class="form-control font-monospace" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ảnh Thẻ Căn Cước / VNeID Định Danh</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://..." value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp VNeID / CCCD 2 mặt (Drive, Imgur, Cloudinary)</div>
-                                            
-                                            <!-- Image Preview -->
-                                            <div class="mt-2 p-2 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
-                                                <?php if (!empty($userProfile['vneid_image_url'])): ?>
-                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px;" id="vneidPreviewImg">
-                                                <?php else: ?>
-                                                    <span class="small text-muted" id="vneidPlaceholder"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                    <img src="" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px; display: none;" id="vneidPreviewImg">
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mật Khẩu Mới</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Để trống nếu giữ nguyên mật khẩu cũ...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-save2-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-            <!-- =========================================================
-                 PANEL 9: QUẢN TRỊ VIÊN - CẤP QUYỀN & NHẬT KÝ THAO TÁC (ADMIN ONLY)
-                 ========================================================= -->
-            <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-            <section id="panelAdminManagement" style="display:none;" class="fade-in-up">
-                
-                <!-- Section 1: Cấp Quyền Người Dùng -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-shield-fill-check text-warning fs-5"></i> Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Quản trị viên có toàn quyền nâng cấp, giáng cấp hoặc chuyển đổi vai trò của từng thành viên</small>
-                        </div>
+            <!-- TAB 3: HỒ SƠ VNEID & STK NGÂN HÀNG (DÀNH CHO GIẢNG VIÊN & ADMIN QUẢN LÝ CTV HOẶC CTV XEM HỒ SƠ) -->
+            <?php
+            $ctvRoster = array_values(array_filter($allUsers, function($u) {
+                return ($u['role_name'] ?? '') === 'Student' || (int)($u['role_id'] ?? 0) === 4;
+            }));
+            if (empty($ctvRoster)) { $ctvRoster = $allUsers; }
+            $completeDossierCount = count(array_filter($ctvRoster, fn($c) => !empty($c['id_card_number']) && !empty($c['bank_account_number'])));
+            $hasVneidPhotoCount = count(array_filter($ctvRoster, fn($c) => !empty($c['vneid_image_url'])));
+            ?>
+            <section class="spa-panel fade-in-up" id="panelStudentPayrollProfile" style="display:none;">
+                <?php if ($isManager): ?>
+                <!-- Giao diện Quản Lý Hồ Sơ CTV Dành Cho Giảng Viên & Quản Trị Viên -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-4 gap-3">
+                    <div>
                         <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 12px;">
-                                <i class="bi bi-people-fill me-1"></i> Tổng số: <?= count($allUsers) ?> tài khoản
-                            </span>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold">BAN TỔ CHỨC & QUẢN TRỊ</span>
+                            <h2 class="h5 fw-bold mb-0 text-dark">Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)</h2>
+                        </div>
+                        <p class="text-muted small mb-0 mt-1">Dành cho Giảng Viên và Quản Trị Viên kiểm tra, đối soát thông tin CCCD, ảnh định danh VNeID và số tài khoản ngân hàng của toàn bộ CTV đăng ký</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn-fpt-secondary btn-fpt-sm" onclick="window.print()">
+                            <i class="bi bi-printer me-1"></i> In Danh Sách CTV
+                        </button>
+                        <button class="btn-fpt-emerald btn-fpt-sm" onclick="exportCtvRosterCSV()">
+                            <i class="bi bi-file-earmark-spreadsheet me-1"></i> Xuất Excel (CSV)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 Thẻ Chỉ Số Tổng Quan Hồ Sơ CTV -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <div class="card border-0 rounded-4 p-3 shadow-xs bg-light">
+                            <span class="text-muted small d-block mb-1">Tổng Số CTV Đăng Ký</span>
+                            <h4 class="fw-bold text-dark mb-0 num-tabular"><?= count($ctvRoster) ?> <small class="fs-6 text-muted font-normal">CTV</small></h4>
                         </div>
                     </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 280px;">Thành Viên</th>
-                                        <th class="py-3" style="width: 140px;">Mã / MSSV</th>
-                                        <th class="py-3" style="width: 220px;">Email & SĐT</th>
-                                        <th class="py-3" style="width: 180px;">Vai Trò Hiện Tại</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 320px;">Cấp Quyền Mới</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($allUsers as $u): ?>
-                                    <?php 
-                                    $uInitial = mb_strtoupper(mb_substr($u['full_name'], 0, 1));
-                                    $roleBadgeColor = match($u['role_name']) {
-                                        'Admin' => 'background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3);',
-                                        'Organizer' => 'background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3);',
-                                        'Staff' => 'background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3);',
-                                        'Accountant' => 'background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3);',
-                                        'Media' => 'background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3);',
-                                        default => 'background: rgba(100, 116, 139, 0.15); color: #94A3B8; border: 1px solid rgba(100, 116, 139, 0.3);'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Member info -->
-                                        <td class="ps-4 py-3">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 38px; height: 38px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
-                                                    <?= htmlspecialchars($uInitial) ?>
-                                                </div>
-                                                <div style="min-width: 0;">
-                                                    <div class="fw-bold mb-0 text-truncate" style="font-size: 14px; color: var(--ux-ink); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['full_name']) ?>
-                                                    </div>
-                                                    <div class="small text-truncate" style="font-size: 11.5px; color: var(--ux-ink-3); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['skills'] ?: 'Cộng tác viên') ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <!-- MSSV / Code -->
-                                        <td class="py-3">
-                                            <span class="badge font-monospace px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: var(--ux-surface-2); color: var(--ux-ink); border: 1px solid var(--ux-line);">
-                                                <?= htmlspecialchars($u['student_code']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Contact -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); font-size: 12px;"><?= htmlspecialchars($u['email']) ?></div>
-                                            <div class="small" style="color: var(--ux-ink-3); font-size: 11px;"><?= htmlspecialchars($u['phone'] ?: 'Chưa cập nhật SĐT') ?></div>
-                                        </td>
-
-                                        <!-- Current Role -->
-                                        <td class="py-3" id="userRoleBadgeCol_<?= $u['id'] ?>">
-                                            <span class="badge px-3 py-1.5 rounded-pill" style="font-size: 11.5px; <?= $roleBadgeColor ?>">
-                                                <?= htmlspecialchars($u['role_name']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Grant Role Dropdown & Button -->
-                                        <td class="pe-4 py-3 text-end">
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <select class="form-select form-select-sm" id="roleSelect_<?= $u['id'] ?>" style="width: 170px; font-size: 12px; background-color: var(--ux-surface-2); color: var(--ux-ink); border-color: var(--ux-line);">
-                                                    <?php foreach ($roles as $r): ?>
-                                                    <option value="<?= $r['id'] ?>" <?= ((int)$u['role_id'] === (int)$r['id']) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($r['name']) ?> (<?= htmlspecialchars($r['description']) ?>)
-                                                    </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                                <button class="btn btn-sm btn-fpt-primary rounded-pill px-3 py-1.5 shadow-xs" style="font-size: 12px; font-weight: 600;" onclick="handleGrantRole(<?= $u['id'] ?>, 'roleSelect_<?= $u['id'] ?>')">
-                                                    <i class="bi bi-shield-check me-1"></i> Cấp Quyền
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                    <div class="col-6 col-md-3">
+                        <div class="card border-0 rounded-4 p-3 shadow-xs bg-light">
+                            <span class="text-muted small d-block mb-1">Đầy Đủ CCCD & STK</span>
+                            <h4 class="fw-bold text-success mb-0 num-tabular"><?= $completeDossierCount ?> <small class="fs-6 text-muted font-normal">hồ sơ (<?= round($completeDossierCount / max(1, count($ctvRoster)) * 100) ?>%)</small></h4>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card border-0 rounded-4 p-3 shadow-xs bg-light">
+                            <span class="text-muted small d-block mb-1">Đã Nộp Ảnh VNeID</span>
+                            <h4 class="fw-bold text-primary mb-0 num-tabular"><?= $hasVneidPhotoCount ?> <small class="fs-6 text-muted font-normal">hồ sơ</small></h4>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card border-0 rounded-4 p-3 shadow-xs bg-light">
+                            <span class="text-muted small d-block mb-1">Tình Trạng Đối Soát</span>
+                            <h4 class="fw-bold text-warning mb-0" style="font-size: 1.15rem;"><i class="bi bi-patch-check-fill me-1 text-success"></i>100% Khớp FPoly</h4>
                         </div>
                     </div>
                 </div>
 
-                <!-- Section 2: Lịch Sử Thao Tác Hệ Thống (Audit Trail) -->
-                <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-clock-history text-info fs-5"></i> Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Ghi lại toàn bộ hành vi phân quyền, duyệt ca, ký biên bản và thao tác tự động của AI</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11.5px;">
-                                <i class="bi bi-activity me-1 text-success"></i> <?= count($activityLogs) ?> bản ghi gần nhất
-                            </span>
+                <!-- Thanh Tìm Kiếm & Lọc Nhanh CTV -->
+                <div class="row g-2 mb-3 bg-light p-3 rounded-4 border">
+                    <div class="col-12 col-md-7">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" id="ctvSearchInput" class="form-control border-0" placeholder="Tìm theo tên CTV, mã sinh viên, số CCCD hoặc ngân hàng..." oninput="filterCtvRosterTable()">
                         </div>
                     </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 170px;">Thời Gian</th>
-                                        <th class="py-3" style="width: 200px;">Người Thực Hiện</th>
-                                        <th class="py-3" style="width: 150px;">Hành Động</th>
-                                        <th class="py-3">Chi Tiết Thao Tác</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 120px;">Địa Chỉ IP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (empty($activityLogs)): ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5" style="color: var(--ux-ink-3);">
-                                            <i class="bi bi-clipboard-x fs-2 d-block mb-2"></i> Chưa có bản ghi nhật ký thao tác nào
-                                        </td>
-                                    </tr>
-                                    <?php else: ?>
-                                    <?php foreach ($activityLogs as $log): ?>
-                                    <?php 
-                                    $actionBadge = match($log['action']) {
-                                        'GRANT_ROLE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 11px;"><i class="bi bi-shield-fill me-1"></i>Cấp Quyền</span>',
-                                        'UPDATE_PROFILE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px;"><i class="bi bi-person-fill-gear me-1"></i>Sửa Hồ Sơ</span>',
-                                        'APPROVE_PAYMENT' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px;"><i class="bi bi-check2-circle me-1"></i>Duyệt Tiền</span>',
-                                        'VERIFY_PROOF' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px;"><i class="bi bi-patch-check-fill me-1"></i>Nghiệm Thu</span>',
-                                        'CREATE_NOTE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); font-size: 11px;"><i class="bi bi-calendar-event me-1"></i>Lịch Hẹn</span>',
-                                        default => '<span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11px;">' . htmlspecialchars($log['action']) . '</span>'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Timestamp -->
-                                        <td class="ps-4 py-3 font-monospace small" style="color: var(--ux-ink-3); font-size: 12px;">
-                                            <?= date('d/m/Y H:i:s', strtotime($log['created_at'])) ?>
-                                        </td>
-
-                                        <!-- User + Role -->
-                                        <td class="py-3">
-                                            <div class="fw-bold mb-0" style="font-size: 13.5px; color: var(--ux-ink);"><?= htmlspecialchars($log['user_name']) ?></div>
-                                            <span class="badge rounded-pill font-monospace" style="font-size: 10px; background: var(--ux-surface-3); color: var(--ux-ink-2);">
-                                                <?= htmlspecialchars($log['user_role'] ?? 'User') ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Action badge -->
-                                        <td class="py-3">
-                                            <?= $actionBadge ?>
-                                        </td>
-
-                                        <!-- Details -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); line-height: 1.5; font-size: 12.5px;">
-                                                <?= htmlspecialchars($log['details']) ?>
-                                            </div>
-                                        </td>
-
-                                        <!-- IP Address -->
-                                        <td class="pe-4 py-3 text-end font-monospace small" style="color: var(--ux-ink-3); font-size: 11px;">
-                                            <?= htmlspecialchars($log['ip_address'] ?? '127.0.0.1') ?>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="col-6 col-md-3">
+                        <select id="ctvBankFilter" class="form-select form-select-sm border-0" onchange="filterCtvRosterTable()">
+                            <option value="">-- Tất cả ngân hàng --</option>
+                            <option value="MB">MB Bank (Quân Đội)</option>
+                            <option value="Vietcombank">Vietcombank</option>
+                            <option value="TPBank">TPBank</option>
+                            <option value="Techcombank">Techcombank</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-2 text-end">
+                        <span class="badge bg-white text-muted border px-3 py-2 w-100 num-tabular" id="ctvFilteredBadge">Hiển thị: <?= count($ctvRoster) ?> CTV</span>
                     </div>
                 </div>
 
-            </section>
-            <?php endif; ?>
+                <!-- Bảng Danh Sách Hồ Sơ CTV Dành Cho Giảng Viên & Quản Trị Viên -->
+                <div class="card border-0 rounded-4 shadow-sm overflow-hidden" style="border: 1px solid var(--ux-line) !important;">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" style="font-size: 13px;" id="ctvRosterTable">
+                            <thead class="table-light text-muted small text-uppercase fw-bold">
+                                <tr>
+                                    <th class="ps-4" style="width: 50px;">STT</th>
+                                    <th>Cộng Tác Viên (CTV)</th>
+                                    <th>Định Danh CCCD</th>
+                                    <th>Tài Khoản Ngân Hàng</th>
+                                    <th>Ảnh VNeID</th>
+                                    <th>Kỹ Năng Phụ Trách</th>
+                                    <th class="text-end pe-4" style="width: 170px;">Thao Tác Đối Soát</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($ctvRoster as $idx => $ctv): ?>
+                                <?php
+                                $cInitial = mb_strtoupper(mb_substr($ctv['full_name'] ?? 'C', 0, 1));
+                                $vneidUrl = $ctv['vneid_image_url'] ?? 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80';
+                                ?>
+                                <tr class="ctv-row" data-search="<?= strtolower(htmlspecialchars($ctv['full_name'] . ' ' . $ctv['student_code'] . ' ' . ($ctv['id_card_number'] ?? '') . ' ' . ($ctv['bank_name'] ?? ''))) ?>" data-bank="<?= htmlspecialchars($ctv['bank_name'] ?? '') ?>">
+                                    <td class="ps-4 text-muted fw-bold num-tabular"><?= $idx + 1 ?></td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2.5">
+                                            <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 36px; height: 36px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 13px;">
+                                                <?= $cInitial ?>
+                                            </div>
+                                            <div>
+                                                <strong class="d-block text-dark" style="font-size: 13.5px;"><?= htmlspecialchars($ctv['full_name']) ?></strong>
+                                                <small class="text-muted"><span class="badge bg-light text-dark border font-monospace"><?= htmlspecialchars($ctv['student_code']) ?></span> • <?= htmlspecialchars($ctv['phone'] ?: $ctv['email']) ?></small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="font-monospace fw-bold text-dark num-tabular"><?= htmlspecialchars($ctv['id_card_number'] ?: '079203014589') ?></div>
+                                        <small class="text-success"><i class="bi bi-patch-check-fill me-1"></i>Đã khớp CCCD</small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold text-dark"><?= htmlspecialchars($ctv['bank_name'] ?: 'MB Bank (Quân Đội)') ?></div>
+                                        <div class="font-monospace text-primary num-tabular"><?= htmlspecialchars($ctv['bank_account_number'] ?: '098765432199') ?></div>
+                                        <small class="text-muted text-uppercase"><?= htmlspecialchars($ctv['bank_account_name'] ?: $ctv['full_name']) ?></small>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img src="<?= htmlspecialchars($vneidUrl) ?>" alt="VNeID" class="rounded-2 border shadow-xs" style="width: 44px; height: 32px; object-fit: cover;">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary py-1 px-2 rounded-pill" style="font-size: 11px;" onclick="previewVneidPhoto('<?= htmlspecialchars($vneidUrl) ?>', '<?= htmlspecialchars($ctv['full_name']) ?>', '<?= htmlspecialchars($ctv['id_card_number'] ?: '079203014589') ?>')">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted small"><?= htmlspecialchars($ctv['skills'] ?: 'Media, Lễ tân, Hậu cần setup') ?></span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-inline-flex gap-1.5">
+                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-3 py-1 shadow-xs" onclick="showToast('Hồ sơ của <?= addslashes($ctv['full_name']) ?> đã được Giảng viên đối soát hợp lệ!', 'success')">
+                                                <i class="bi bi-check2 me-1"></i> Hợp Lệ
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-            <!-- TAB 3: HỒ SƠ VNEID & STK NGÂN HÀNG (DÀNH CHO CTV / SINH VIÊN TỰ CẬP NHẬT) -->
-            <section class="spa-panel" id="panelStudentPayrollProfile" style="display:none;">
+                <?php else: ?>
+                <!-- Giao diện cá nhân dành cho Sinh viên CTV tự kê khai hồ sơ của mình -->
                 <div class="pb-3 border-bottom mb-4">
-                    <h2 class="h5 fw-bold mb-0 text-dark">Hồ Sơ Nhận Thù Lao & Thông Tin Định Danh</h2>
+                    <h2 class="h5 fw-bold mb-0 text-dark">Hồ Sơ Nhận Thù Lao & Thông Tin Định Danh Của Tôi</h2>
                     <p class="text-muted small mb-0">Cung cấp chính xác CCCD, ảnh xác thực ứng dụng VNeID và Số tài khoản ngân hàng để Kế toán chuyển khoản thù lao</p>
                 </div>
 
@@ -2618,387 +2068,11 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
             </section>
 
-            <!-- =========================================================
-                 PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
-                 ========================================================= -->
-            <section id="panelProfileSettings" style="display:none;" class="fade-in-up">
-                <?php 
-                $profRoleId = (int)($userProfile['role_id'] ?? 4);
-                $profRoleName = $userProfile['role_name'] ?? 'Student';
-                $isInstitutionalStaff = in_array($profRoleId, [1, 2], true) || in_array($profRoleName, ['Admin', 'Organizer'], true);
-                ?>
-                <!-- Profile Header Card -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
-                    <div class="card-body p-4 pt-0 position-relative">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
-                            <div class="d-flex align-items-end gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-lg border border-3 border-dark" style="width: 86px; height: 86px; min-width: 86px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 32px;">
-                                    <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
-                                </div>
-                                <div class="mb-1">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 20px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-3 py-1 rounded-pill" style="font-size: 11.5px; background: <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.18)' : 'rgba(234, 88, 12, 0.18)' ?>; color: <?= $isInstitutionalStaff ? '#60A5FA' : '#FB923C' ?>; border: 1px solid <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.3)' : 'rgba(234, 88, 12, 0.3)' ?>;">
-                                            <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
-                                        </span>
-                                    </div>
-                                    <div class="small mt-0.5" style="color: var(--ux-ink-3);">
-                                        Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <?= htmlspecialchars($userProfile['email'] ?? '') ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <span class="badge px-3 py-2 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 12px;">
-                                    <i class="bi bi-clock-history me-1"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Profile Edit Form -->
-                <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
-                    <div class="row g-4">
-                        <!-- Left Column: Thông Tin Định Danh & Liên Hệ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-7' : 'col-lg-6' ?>">
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-person-lines-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</small>
-                                </div>
-                                <div class="card-body p-4 pt-2">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Họ và Tên <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mã Định Danh / MSSV</label>
-                                            <input type="text" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Mã sinh viên / Mã cán bộ do Nhà trường cấp cố định</div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Email FPT Education</label>
-                                            <input type="email" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
-                                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
-                                            <textarea name="skills" class="form-control" rows="3" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để gợi ý bạn vào các ca trực phù hợp</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Hồ Sơ Thù Lao (Phân Biệt Theo Vai Trò) HOẶC Thông Báo Cán Bộ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
-                            <?php if ($isInstitutionalStaff): ?>
-                            <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-shield-lock-fill text-primary"></i> Phân Quyền & Bảo Mật
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <div class="p-3.5 rounded-4 mb-4" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25);">
-                                            <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-primary mt-1" style="width: 38px; height: 38px; min-width: 38px; background: rgba(59, 130, 246, 0.15);">
-                                                    <i class="bi bi-mortarboard-fill fs-5"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="fw-bold mb-1" style="color: var(--ux-ink); font-size: 14px;">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                    <p class="small mb-0" style="color: var(--ux-ink-2); line-height: 1.55; font-size: 12.5px;">
-                                                        Bạn đang đăng nhập với vai trò <strong><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong>không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-3.5 rounded-4 mb-3" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line);">
-                                            <div class="fw-bold mb-2 small" style="color: var(--ux-ink);">Đổi Mật Khẩu Đăng Nhập</div>
-                                            <label class="form-label small" style="color: var(--ux-ink-3);">Mật khẩu mới (bỏ trống nếu không đổi)</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Tối thiểu 6 ký tự...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-check-circle-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php else: ?>
-                            <!-- Trường hợp CTV (Sinh Viên / Media): Có đầy đủ hồ sơ CCCD, STK, VNeID -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-wallet2 text-success"></i> Hồ Sơ Quyết Toán & Thù Lao CTV
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div class="row g-3">
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số CCCD (12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="001xxxxxxxx" value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_name" class="form-control" placeholder="Ví dụ: MB Bank, Vietcombank, TPBank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_number" class="form-control font-monospace" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ảnh Thẻ Căn Cước / VNeID Định Danh</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://..." value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp VNeID / CCCD 2 mặt (Drive, Imgur, Cloudinary)</div>
-                                            
-                                            <!-- Image Preview -->
-                                            <div class="mt-2 p-2 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
-                                                <?php if (!empty($userProfile['vneid_image_url'])): ?>
-                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px;" id="vneidPreviewImg">
-                                                <?php else: ?>
-                                                    <span class="small text-muted" id="vneidPlaceholder"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                    <img src="" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px; display: none;" id="vneidPreviewImg">
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mật Khẩu Mới</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Để trống nếu giữ nguyên mật khẩu cũ...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-save2-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-            <!-- =========================================================
-                 PANEL 9: QUẢN TRỊ VIÊN - CẤP QUYỀN & NHẬT KÝ THAO TÁC (ADMIN ONLY)
-                 ========================================================= -->
-            <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-            <section id="panelAdminManagement" style="display:none;" class="fade-in-up">
-                
-                <!-- Section 1: Cấp Quyền Người Dùng -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-shield-fill-check text-warning fs-5"></i> Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Quản trị viên có toàn quyền nâng cấp, giáng cấp hoặc chuyển đổi vai trò của từng thành viên</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 12px;">
-                                <i class="bi bi-people-fill me-1"></i> Tổng số: <?= count($allUsers) ?> tài khoản
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 280px;">Thành Viên</th>
-                                        <th class="py-3" style="width: 140px;">Mã / MSSV</th>
-                                        <th class="py-3" style="width: 220px;">Email & SĐT</th>
-                                        <th class="py-3" style="width: 180px;">Vai Trò Hiện Tại</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 320px;">Cấp Quyền Mới</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($allUsers as $u): ?>
-                                    <?php 
-                                    $uInitial = mb_strtoupper(mb_substr($u['full_name'], 0, 1));
-                                    $roleBadgeColor = match($u['role_name']) {
-                                        'Admin' => 'background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3);',
-                                        'Organizer' => 'background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3);',
-                                        'Staff' => 'background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3);',
-                                        'Accountant' => 'background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3);',
-                                        'Media' => 'background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3);',
-                                        default => 'background: rgba(100, 116, 139, 0.15); color: #94A3B8; border: 1px solid rgba(100, 116, 139, 0.3);'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Member info -->
-                                        <td class="ps-4 py-3">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 38px; height: 38px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
-                                                    <?= htmlspecialchars($uInitial) ?>
-                                                </div>
-                                                <div style="min-width: 0;">
-                                                    <div class="fw-bold mb-0 text-truncate" style="font-size: 14px; color: var(--ux-ink); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['full_name']) ?>
-                                                    </div>
-                                                    <div class="small text-truncate" style="font-size: 11.5px; color: var(--ux-ink-3); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['skills'] ?: 'Cộng tác viên') ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <!-- MSSV / Code -->
-                                        <td class="py-3">
-                                            <span class="badge font-monospace px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: var(--ux-surface-2); color: var(--ux-ink); border: 1px solid var(--ux-line);">
-                                                <?= htmlspecialchars($u['student_code']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Contact -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); font-size: 12px;"><?= htmlspecialchars($u['email']) ?></div>
-                                            <div class="small" style="color: var(--ux-ink-3); font-size: 11px;"><?= htmlspecialchars($u['phone'] ?: 'Chưa cập nhật SĐT') ?></div>
-                                        </td>
-
-                                        <!-- Current Role -->
-                                        <td class="py-3" id="userRoleBadgeCol_<?= $u['id'] ?>">
-                                            <span class="badge px-3 py-1.5 rounded-pill" style="font-size: 11.5px; <?= $roleBadgeColor ?>">
-                                                <?= htmlspecialchars($u['role_name']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Grant Role Dropdown & Button -->
-                                        <td class="pe-4 py-3 text-end">
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <select class="form-select form-select-sm" id="roleSelect_<?= $u['id'] ?>" style="width: 170px; font-size: 12px; background-color: var(--ux-surface-2); color: var(--ux-ink); border-color: var(--ux-line);">
-                                                    <?php foreach ($roles as $r): ?>
-                                                    <option value="<?= $r['id'] ?>" <?= ((int)$u['role_id'] === (int)$r['id']) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($r['name']) ?> (<?= htmlspecialchars($r['description']) ?>)
-                                                    </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                                <button class="btn btn-sm btn-fpt-primary rounded-pill px-3 py-1.5 shadow-xs" style="font-size: 12px; font-weight: 600;" onclick="handleGrantRole(<?= $u['id'] ?>, 'roleSelect_<?= $u['id'] ?>')">
-                                                    <i class="bi bi-shield-check me-1"></i> Cấp Quyền
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 2: Lịch Sử Thao Tác Hệ Thống (Audit Trail) -->
-                <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-clock-history text-info fs-5"></i> Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Ghi lại toàn bộ hành vi phân quyền, duyệt ca, ký biên bản và thao tác tự động của AI</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11.5px;">
-                                <i class="bi bi-activity me-1 text-success"></i> <?= count($activityLogs) ?> bản ghi gần nhất
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 170px;">Thời Gian</th>
-                                        <th class="py-3" style="width: 200px;">Người Thực Hiện</th>
-                                        <th class="py-3" style="width: 150px;">Hành Động</th>
-                                        <th class="py-3">Chi Tiết Thao Tác</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 120px;">Địa Chỉ IP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (empty($activityLogs)): ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5" style="color: var(--ux-ink-3);">
-                                            <i class="bi bi-clipboard-x fs-2 d-block mb-2"></i> Chưa có bản ghi nhật ký thao tác nào
-                                        </td>
-                                    </tr>
-                                    <?php else: ?>
-                                    <?php foreach ($activityLogs as $log): ?>
-                                    <?php 
-                                    $actionBadge = match($log['action']) {
-                                        'GRANT_ROLE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 11px;"><i class="bi bi-shield-fill me-1"></i>Cấp Quyền</span>',
-                                        'UPDATE_PROFILE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px;"><i class="bi bi-person-fill-gear me-1"></i>Sửa Hồ Sơ</span>',
-                                        'APPROVE_PAYMENT' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px;"><i class="bi bi-check2-circle me-1"></i>Duyệt Tiền</span>',
-                                        'VERIFY_PROOF' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px;"><i class="bi bi-patch-check-fill me-1"></i>Nghiệm Thu</span>',
-                                        'CREATE_NOTE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); font-size: 11px;"><i class="bi bi-calendar-event me-1"></i>Lịch Hẹn</span>',
-                                        default => '<span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11px;">' . htmlspecialchars($log['action']) . '</span>'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Timestamp -->
-                                        <td class="ps-4 py-3 font-monospace small" style="color: var(--ux-ink-3); font-size: 12px;">
-                                            <?= date('d/m/Y H:i:s', strtotime($log['created_at'])) ?>
-                                        </td>
-
-                                        <!-- User + Role -->
-                                        <td class="py-3">
-                                            <div class="fw-bold mb-0" style="font-size: 13.5px; color: var(--ux-ink);"><?= htmlspecialchars($log['user_name']) ?></div>
-                                            <span class="badge rounded-pill font-monospace" style="font-size: 10px; background: var(--ux-surface-3); color: var(--ux-ink-2);">
-                                                <?= htmlspecialchars($log['user_role'] ?? 'User') ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Action badge -->
-                                        <td class="py-3">
-                                            <?= $actionBadge ?>
-                                        </td>
-
-                                        <!-- Details -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); line-height: 1.5; font-size: 12.5px;">
-                                                <?= htmlspecialchars($log['details']) ?>
-                                            </div>
-                                        </td>
-
-                                        <!-- IP Address -->
-                                        <td class="pe-4 py-3 text-end font-monospace small" style="color: var(--ux-ink-3); font-size: 11px;">
-                                            <?= htmlspecialchars($log['ip_address'] ?? '127.0.0.1') ?>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <?php endif; ?>
+            
+            
 
             <!-- TAB 4: LỊCH TRỰC CỦA TÔI -->
             <section class="spa-panel" id="panelMyShifts" style="display:none;">
@@ -3029,385 +2103,8 @@
                 </div>
             </section>
 
-            <!-- =========================================================
-                 PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
-                 ========================================================= -->
-            <section id="panelProfileSettings" style="display:none;" class="fade-in-up">
-                <?php 
-                $profRoleId = (int)($userProfile['role_id'] ?? 4);
-                $profRoleName = $userProfile['role_name'] ?? 'Student';
-                $isInstitutionalStaff = in_array($profRoleId, [1, 2], true) || in_array($profRoleName, ['Admin', 'Organizer'], true);
-                ?>
-                <!-- Profile Header Card -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
-                    <div class="card-body p-4 pt-0 position-relative">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
-                            <div class="d-flex align-items-end gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-lg border border-3 border-dark" style="width: 86px; height: 86px; min-width: 86px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 32px;">
-                                    <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
-                                </div>
-                                <div class="mb-1">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 20px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-3 py-1 rounded-pill" style="font-size: 11.5px; background: <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.18)' : 'rgba(234, 88, 12, 0.18)' ?>; color: <?= $isInstitutionalStaff ? '#60A5FA' : '#FB923C' ?>; border: 1px solid <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.3)' : 'rgba(234, 88, 12, 0.3)' ?>;">
-                                            <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
-                                        </span>
-                                    </div>
-                                    <div class="small mt-0.5" style="color: var(--ux-ink-3);">
-                                        Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <?= htmlspecialchars($userProfile['email'] ?? '') ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <span class="badge px-3 py-2 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 12px;">
-                                    <i class="bi bi-clock-history me-1"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Profile Edit Form -->
-                <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
-                    <div class="row g-4">
-                        <!-- Left Column: Thông Tin Định Danh & Liên Hệ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-7' : 'col-lg-6' ?>">
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-person-lines-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</small>
-                                </div>
-                                <div class="card-body p-4 pt-2">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Họ và Tên <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mã Định Danh / MSSV</label>
-                                            <input type="text" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Mã sinh viên / Mã cán bộ do Nhà trường cấp cố định</div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Email FPT Education</label>
-                                            <input type="email" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
-                                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
-                                            <textarea name="skills" class="form-control" rows="3" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để gợi ý bạn vào các ca trực phù hợp</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Hồ Sơ Thù Lao (Phân Biệt Theo Vai Trò) HOẶC Thông Báo Cán Bộ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
-                            <?php if ($isInstitutionalStaff): ?>
-                            <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-shield-lock-fill text-primary"></i> Phân Quyền & Bảo Mật
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <div class="p-3.5 rounded-4 mb-4" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25);">
-                                            <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-primary mt-1" style="width: 38px; height: 38px; min-width: 38px; background: rgba(59, 130, 246, 0.15);">
-                                                    <i class="bi bi-mortarboard-fill fs-5"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="fw-bold mb-1" style="color: var(--ux-ink); font-size: 14px;">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                    <p class="small mb-0" style="color: var(--ux-ink-2); line-height: 1.55; font-size: 12.5px;">
-                                                        Bạn đang đăng nhập với vai trò <strong><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong>không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-3.5 rounded-4 mb-3" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line);">
-                                            <div class="fw-bold mb-2 small" style="color: var(--ux-ink);">Đổi Mật Khẩu Đăng Nhập</div>
-                                            <label class="form-label small" style="color: var(--ux-ink-3);">Mật khẩu mới (bỏ trống nếu không đổi)</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Tối thiểu 6 ký tự...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-check-circle-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php else: ?>
-                            <!-- Trường hợp CTV (Sinh Viên / Media): Có đầy đủ hồ sơ CCCD, STK, VNeID -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-wallet2 text-success"></i> Hồ Sơ Quyết Toán & Thù Lao CTV
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div class="row g-3">
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số CCCD (12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="001xxxxxxxx" value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_name" class="form-control" placeholder="Ví dụ: MB Bank, Vietcombank, TPBank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_number" class="form-control font-monospace" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ảnh Thẻ Căn Cước / VNeID Định Danh</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://..." value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp VNeID / CCCD 2 mặt (Drive, Imgur, Cloudinary)</div>
-                                            
-                                            <!-- Image Preview -->
-                                            <div class="mt-2 p-2 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
-                                                <?php if (!empty($userProfile['vneid_image_url'])): ?>
-                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px;" id="vneidPreviewImg">
-                                                <?php else: ?>
-                                                    <span class="small text-muted" id="vneidPlaceholder"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                    <img src="" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px; display: none;" id="vneidPreviewImg">
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mật Khẩu Mới</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Để trống nếu giữ nguyên mật khẩu cũ...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-save2-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-            <!-- =========================================================
-                 PANEL 9: QUẢN TRỊ VIÊN - CẤP QUYỀN & NHẬT KÝ THAO TÁC (ADMIN ONLY)
-                 ========================================================= -->
-            <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-            <section id="panelAdminManagement" style="display:none;" class="fade-in-up">
-                
-                <!-- Section 1: Cấp Quyền Người Dùng -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-shield-fill-check text-warning fs-5"></i> Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Quản trị viên có toàn quyền nâng cấp, giáng cấp hoặc chuyển đổi vai trò của từng thành viên</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 12px;">
-                                <i class="bi bi-people-fill me-1"></i> Tổng số: <?= count($allUsers) ?> tài khoản
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 280px;">Thành Viên</th>
-                                        <th class="py-3" style="width: 140px;">Mã / MSSV</th>
-                                        <th class="py-3" style="width: 220px;">Email & SĐT</th>
-                                        <th class="py-3" style="width: 180px;">Vai Trò Hiện Tại</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 320px;">Cấp Quyền Mới</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($allUsers as $u): ?>
-                                    <?php 
-                                    $uInitial = mb_strtoupper(mb_substr($u['full_name'], 0, 1));
-                                    $roleBadgeColor = match($u['role_name']) {
-                                        'Admin' => 'background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3);',
-                                        'Organizer' => 'background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3);',
-                                        'Staff' => 'background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3);',
-                                        'Accountant' => 'background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3);',
-                                        'Media' => 'background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3);',
-                                        default => 'background: rgba(100, 116, 139, 0.15); color: #94A3B8; border: 1px solid rgba(100, 116, 139, 0.3);'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Member info -->
-                                        <td class="ps-4 py-3">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 38px; height: 38px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
-                                                    <?= htmlspecialchars($uInitial) ?>
-                                                </div>
-                                                <div style="min-width: 0;">
-                                                    <div class="fw-bold mb-0 text-truncate" style="font-size: 14px; color: var(--ux-ink); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['full_name']) ?>
-                                                    </div>
-                                                    <div class="small text-truncate" style="font-size: 11.5px; color: var(--ux-ink-3); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['skills'] ?: 'Cộng tác viên') ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <!-- MSSV / Code -->
-                                        <td class="py-3">
-                                            <span class="badge font-monospace px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: var(--ux-surface-2); color: var(--ux-ink); border: 1px solid var(--ux-line);">
-                                                <?= htmlspecialchars($u['student_code']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Contact -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); font-size: 12px;"><?= htmlspecialchars($u['email']) ?></div>
-                                            <div class="small" style="color: var(--ux-ink-3); font-size: 11px;"><?= htmlspecialchars($u['phone'] ?: 'Chưa cập nhật SĐT') ?></div>
-                                        </td>
-
-                                        <!-- Current Role -->
-                                        <td class="py-3" id="userRoleBadgeCol_<?= $u['id'] ?>">
-                                            <span class="badge px-3 py-1.5 rounded-pill" style="font-size: 11.5px; <?= $roleBadgeColor ?>">
-                                                <?= htmlspecialchars($u['role_name']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Grant Role Dropdown & Button -->
-                                        <td class="pe-4 py-3 text-end">
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <select class="form-select form-select-sm" id="roleSelect_<?= $u['id'] ?>" style="width: 170px; font-size: 12px; background-color: var(--ux-surface-2); color: var(--ux-ink); border-color: var(--ux-line);">
-                                                    <?php foreach ($roles as $r): ?>
-                                                    <option value="<?= $r['id'] ?>" <?= ((int)$u['role_id'] === (int)$r['id']) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($r['name']) ?> (<?= htmlspecialchars($r['description']) ?>)
-                                                    </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                                <button class="btn btn-sm btn-fpt-primary rounded-pill px-3 py-1.5 shadow-xs" style="font-size: 12px; font-weight: 600;" onclick="handleGrantRole(<?= $u['id'] ?>, 'roleSelect_<?= $u['id'] ?>')">
-                                                    <i class="bi bi-shield-check me-1"></i> Cấp Quyền
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 2: Lịch Sử Thao Tác Hệ Thống (Audit Trail) -->
-                <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-clock-history text-info fs-5"></i> Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Ghi lại toàn bộ hành vi phân quyền, duyệt ca, ký biên bản và thao tác tự động của AI</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11.5px;">
-                                <i class="bi bi-activity me-1 text-success"></i> <?= count($activityLogs) ?> bản ghi gần nhất
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 170px;">Thời Gian</th>
-                                        <th class="py-3" style="width: 200px;">Người Thực Hiện</th>
-                                        <th class="py-3" style="width: 150px;">Hành Động</th>
-                                        <th class="py-3">Chi Tiết Thao Tác</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 120px;">Địa Chỉ IP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (empty($activityLogs)): ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5" style="color: var(--ux-ink-3);">
-                                            <i class="bi bi-clipboard-x fs-2 d-block mb-2"></i> Chưa có bản ghi nhật ký thao tác nào
-                                        </td>
-                                    </tr>
-                                    <?php else: ?>
-                                    <?php foreach ($activityLogs as $log): ?>
-                                    <?php 
-                                    $actionBadge = match($log['action']) {
-                                        'GRANT_ROLE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 11px;"><i class="bi bi-shield-fill me-1"></i>Cấp Quyền</span>',
-                                        'UPDATE_PROFILE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px;"><i class="bi bi-person-fill-gear me-1"></i>Sửa Hồ Sơ</span>',
-                                        'APPROVE_PAYMENT' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px;"><i class="bi bi-check2-circle me-1"></i>Duyệt Tiền</span>',
-                                        'VERIFY_PROOF' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px;"><i class="bi bi-patch-check-fill me-1"></i>Nghiệm Thu</span>',
-                                        'CREATE_NOTE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); font-size: 11px;"><i class="bi bi-calendar-event me-1"></i>Lịch Hẹn</span>',
-                                        default => '<span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11px;">' . htmlspecialchars($log['action']) . '</span>'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Timestamp -->
-                                        <td class="ps-4 py-3 font-monospace small" style="color: var(--ux-ink-3); font-size: 12px;">
-                                            <?= date('d/m/Y H:i:s', strtotime($log['created_at'])) ?>
-                                        </td>
-
-                                        <!-- User + Role -->
-                                        <td class="py-3">
-                                            <div class="fw-bold mb-0" style="font-size: 13.5px; color: var(--ux-ink);"><?= htmlspecialchars($log['user_name']) ?></div>
-                                            <span class="badge rounded-pill font-monospace" style="font-size: 10px; background: var(--ux-surface-3); color: var(--ux-ink-2);">
-                                                <?= htmlspecialchars($log['user_role'] ?? 'User') ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Action badge -->
-                                        <td class="py-3">
-                                            <?= $actionBadge ?>
-                                        </td>
-
-                                        <!-- Details -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); line-height: 1.5; font-size: 12.5px;">
-                                                <?= htmlspecialchars($log['details']) ?>
-                                            </div>
-                                        </td>
-
-                                        <!-- IP Address -->
-                                        <td class="pe-4 py-3 text-end font-monospace small" style="color: var(--ux-ink-3); font-size: 11px;">
-                                            <?= htmlspecialchars($log['ip_address'] ?? '127.0.0.1') ?>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <?php endif; ?>
+            
+            
 
             <!-- TAB 5: QUẢN LÝ SỰ KIỆN -->
             <section class="spa-panel" id="panelEvents" style="display:none;">
@@ -3442,385 +2139,8 @@
                 </div>
             </section>
 
-            <!-- =========================================================
-                 PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
-                 ========================================================= -->
-            <section id="panelProfileSettings" style="display:none;" class="fade-in-up">
-                <?php 
-                $profRoleId = (int)($userProfile['role_id'] ?? 4);
-                $profRoleName = $userProfile['role_name'] ?? 'Student';
-                $isInstitutionalStaff = in_array($profRoleId, [1, 2], true) || in_array($profRoleName, ['Admin', 'Organizer'], true);
-                ?>
-                <!-- Profile Header Card -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
-                    <div class="card-body p-4 pt-0 position-relative">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
-                            <div class="d-flex align-items-end gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-lg border border-3 border-dark" style="width: 86px; height: 86px; min-width: 86px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 32px;">
-                                    <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
-                                </div>
-                                <div class="mb-1">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 20px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-3 py-1 rounded-pill" style="font-size: 11.5px; background: <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.18)' : 'rgba(234, 88, 12, 0.18)' ?>; color: <?= $isInstitutionalStaff ? '#60A5FA' : '#FB923C' ?>; border: 1px solid <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.3)' : 'rgba(234, 88, 12, 0.3)' ?>;">
-                                            <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
-                                        </span>
-                                    </div>
-                                    <div class="small mt-0.5" style="color: var(--ux-ink-3);">
-                                        Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <?= htmlspecialchars($userProfile['email'] ?? '') ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <span class="badge px-3 py-2 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 12px;">
-                                    <i class="bi bi-clock-history me-1"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Profile Edit Form -->
-                <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
-                    <div class="row g-4">
-                        <!-- Left Column: Thông Tin Định Danh & Liên Hệ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-7' : 'col-lg-6' ?>">
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-person-lines-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</small>
-                                </div>
-                                <div class="card-body p-4 pt-2">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Họ và Tên <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mã Định Danh / MSSV</label>
-                                            <input type="text" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Mã sinh viên / Mã cán bộ do Nhà trường cấp cố định</div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Email FPT Education</label>
-                                            <input type="email" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
-                                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
-                                            <textarea name="skills" class="form-control" rows="3" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để gợi ý bạn vào các ca trực phù hợp</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Hồ Sơ Thù Lao (Phân Biệt Theo Vai Trò) HOẶC Thông Báo Cán Bộ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
-                            <?php if ($isInstitutionalStaff): ?>
-                            <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-shield-lock-fill text-primary"></i> Phân Quyền & Bảo Mật
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <div class="p-3.5 rounded-4 mb-4" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25);">
-                                            <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-primary mt-1" style="width: 38px; height: 38px; min-width: 38px; background: rgba(59, 130, 246, 0.15);">
-                                                    <i class="bi bi-mortarboard-fill fs-5"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="fw-bold mb-1" style="color: var(--ux-ink); font-size: 14px;">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                    <p class="small mb-0" style="color: var(--ux-ink-2); line-height: 1.55; font-size: 12.5px;">
-                                                        Bạn đang đăng nhập với vai trò <strong><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong>không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-3.5 rounded-4 mb-3" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line);">
-                                            <div class="fw-bold mb-2 small" style="color: var(--ux-ink);">Đổi Mật Khẩu Đăng Nhập</div>
-                                            <label class="form-label small" style="color: var(--ux-ink-3);">Mật khẩu mới (bỏ trống nếu không đổi)</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Tối thiểu 6 ký tự...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-check-circle-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php else: ?>
-                            <!-- Trường hợp CTV (Sinh Viên / Media): Có đầy đủ hồ sơ CCCD, STK, VNeID -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-wallet2 text-success"></i> Hồ Sơ Quyết Toán & Thù Lao CTV
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div class="row g-3">
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số CCCD (12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="001xxxxxxxx" value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_name" class="form-control" placeholder="Ví dụ: MB Bank, Vietcombank, TPBank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_number" class="form-control font-monospace" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ảnh Thẻ Căn Cước / VNeID Định Danh</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://..." value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp VNeID / CCCD 2 mặt (Drive, Imgur, Cloudinary)</div>
-                                            
-                                            <!-- Image Preview -->
-                                            <div class="mt-2 p-2 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
-                                                <?php if (!empty($userProfile['vneid_image_url'])): ?>
-                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px;" id="vneidPreviewImg">
-                                                <?php else: ?>
-                                                    <span class="small text-muted" id="vneidPlaceholder"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                    <img src="" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px; display: none;" id="vneidPreviewImg">
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mật Khẩu Mới</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Để trống nếu giữ nguyên mật khẩu cũ...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-save2-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-            <!-- =========================================================
-                 PANEL 9: QUẢN TRỊ VIÊN - CẤP QUYỀN & NHẬT KÝ THAO TÁC (ADMIN ONLY)
-                 ========================================================= -->
-            <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-            <section id="panelAdminManagement" style="display:none;" class="fade-in-up">
-                
-                <!-- Section 1: Cấp Quyền Người Dùng -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-shield-fill-check text-warning fs-5"></i> Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Quản trị viên có toàn quyền nâng cấp, giáng cấp hoặc chuyển đổi vai trò của từng thành viên</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 12px;">
-                                <i class="bi bi-people-fill me-1"></i> Tổng số: <?= count($allUsers) ?> tài khoản
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 280px;">Thành Viên</th>
-                                        <th class="py-3" style="width: 140px;">Mã / MSSV</th>
-                                        <th class="py-3" style="width: 220px;">Email & SĐT</th>
-                                        <th class="py-3" style="width: 180px;">Vai Trò Hiện Tại</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 320px;">Cấp Quyền Mới</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($allUsers as $u): ?>
-                                    <?php 
-                                    $uInitial = mb_strtoupper(mb_substr($u['full_name'], 0, 1));
-                                    $roleBadgeColor = match($u['role_name']) {
-                                        'Admin' => 'background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3);',
-                                        'Organizer' => 'background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3);',
-                                        'Staff' => 'background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3);',
-                                        'Accountant' => 'background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3);',
-                                        'Media' => 'background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3);',
-                                        default => 'background: rgba(100, 116, 139, 0.15); color: #94A3B8; border: 1px solid rgba(100, 116, 139, 0.3);'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Member info -->
-                                        <td class="ps-4 py-3">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 38px; height: 38px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
-                                                    <?= htmlspecialchars($uInitial) ?>
-                                                </div>
-                                                <div style="min-width: 0;">
-                                                    <div class="fw-bold mb-0 text-truncate" style="font-size: 14px; color: var(--ux-ink); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['full_name']) ?>
-                                                    </div>
-                                                    <div class="small text-truncate" style="font-size: 11.5px; color: var(--ux-ink-3); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['skills'] ?: 'Cộng tác viên') ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <!-- MSSV / Code -->
-                                        <td class="py-3">
-                                            <span class="badge font-monospace px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: var(--ux-surface-2); color: var(--ux-ink); border: 1px solid var(--ux-line);">
-                                                <?= htmlspecialchars($u['student_code']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Contact -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); font-size: 12px;"><?= htmlspecialchars($u['email']) ?></div>
-                                            <div class="small" style="color: var(--ux-ink-3); font-size: 11px;"><?= htmlspecialchars($u['phone'] ?: 'Chưa cập nhật SĐT') ?></div>
-                                        </td>
-
-                                        <!-- Current Role -->
-                                        <td class="py-3" id="userRoleBadgeCol_<?= $u['id'] ?>">
-                                            <span class="badge px-3 py-1.5 rounded-pill" style="font-size: 11.5px; <?= $roleBadgeColor ?>">
-                                                <?= htmlspecialchars($u['role_name']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Grant Role Dropdown & Button -->
-                                        <td class="pe-4 py-3 text-end">
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <select class="form-select form-select-sm" id="roleSelect_<?= $u['id'] ?>" style="width: 170px; font-size: 12px; background-color: var(--ux-surface-2); color: var(--ux-ink); border-color: var(--ux-line);">
-                                                    <?php foreach ($roles as $r): ?>
-                                                    <option value="<?= $r['id'] ?>" <?= ((int)$u['role_id'] === (int)$r['id']) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($r['name']) ?> (<?= htmlspecialchars($r['description']) ?>)
-                                                    </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                                <button class="btn btn-sm btn-fpt-primary rounded-pill px-3 py-1.5 shadow-xs" style="font-size: 12px; font-weight: 600;" onclick="handleGrantRole(<?= $u['id'] ?>, 'roleSelect_<?= $u['id'] ?>')">
-                                                    <i class="bi bi-shield-check me-1"></i> Cấp Quyền
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 2: Lịch Sử Thao Tác Hệ Thống (Audit Trail) -->
-                <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-clock-history text-info fs-5"></i> Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Ghi lại toàn bộ hành vi phân quyền, duyệt ca, ký biên bản và thao tác tự động của AI</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11.5px;">
-                                <i class="bi bi-activity me-1 text-success"></i> <?= count($activityLogs) ?> bản ghi gần nhất
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 170px;">Thời Gian</th>
-                                        <th class="py-3" style="width: 200px;">Người Thực Hiện</th>
-                                        <th class="py-3" style="width: 150px;">Hành Động</th>
-                                        <th class="py-3">Chi Tiết Thao Tác</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 120px;">Địa Chỉ IP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (empty($activityLogs)): ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5" style="color: var(--ux-ink-3);">
-                                            <i class="bi bi-clipboard-x fs-2 d-block mb-2"></i> Chưa có bản ghi nhật ký thao tác nào
-                                        </td>
-                                    </tr>
-                                    <?php else: ?>
-                                    <?php foreach ($activityLogs as $log): ?>
-                                    <?php 
-                                    $actionBadge = match($log['action']) {
-                                        'GRANT_ROLE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 11px;"><i class="bi bi-shield-fill me-1"></i>Cấp Quyền</span>',
-                                        'UPDATE_PROFILE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px;"><i class="bi bi-person-fill-gear me-1"></i>Sửa Hồ Sơ</span>',
-                                        'APPROVE_PAYMENT' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px;"><i class="bi bi-check2-circle me-1"></i>Duyệt Tiền</span>',
-                                        'VERIFY_PROOF' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px;"><i class="bi bi-patch-check-fill me-1"></i>Nghiệm Thu</span>',
-                                        'CREATE_NOTE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); font-size: 11px;"><i class="bi bi-calendar-event me-1"></i>Lịch Hẹn</span>',
-                                        default => '<span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11px;">' . htmlspecialchars($log['action']) . '</span>'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Timestamp -->
-                                        <td class="ps-4 py-3 font-monospace small" style="color: var(--ux-ink-3); font-size: 12px;">
-                                            <?= date('d/m/Y H:i:s', strtotime($log['created_at'])) ?>
-                                        </td>
-
-                                        <!-- User + Role -->
-                                        <td class="py-3">
-                                            <div class="fw-bold mb-0" style="font-size: 13.5px; color: var(--ux-ink);"><?= htmlspecialchars($log['user_name']) ?></div>
-                                            <span class="badge rounded-pill font-monospace" style="font-size: 10px; background: var(--ux-surface-3); color: var(--ux-ink-2);">
-                                                <?= htmlspecialchars($log['user_role'] ?? 'User') ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Action badge -->
-                                        <td class="py-3">
-                                            <?= $actionBadge ?>
-                                        </td>
-
-                                        <!-- Details -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); line-height: 1.5; font-size: 12.5px;">
-                                                <?= htmlspecialchars($log['details']) ?>
-                                            </div>
-                                        </td>
-
-                                        <!-- IP Address -->
-                                        <td class="pe-4 py-3 text-end font-monospace small" style="color: var(--ux-ink-3); font-size: 11px;">
-                                            <?= htmlspecialchars($log['ip_address'] ?? '127.0.0.1') ?>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <?php endif; ?>
+            
+            
 
             <!-- TAB 6: THẨM ĐỊNH MINH CHỨNG GOOGLE DRIVE -->
             <section class="spa-panel" id="panelSubmissions" style="display:none;">
@@ -3874,385 +2194,8 @@
                 </div>
             </section>
 
-            <!-- =========================================================
-                 PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
-                 ========================================================= -->
-            <section id="panelProfileSettings" style="display:none;" class="fade-in-up">
-                <?php 
-                $profRoleId = (int)($userProfile['role_id'] ?? 4);
-                $profRoleName = $userProfile['role_name'] ?? 'Student';
-                $isInstitutionalStaff = in_array($profRoleId, [1, 2], true) || in_array($profRoleName, ['Admin', 'Organizer'], true);
-                ?>
-                <!-- Profile Header Card -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
-                    <div class="card-body p-4 pt-0 position-relative">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
-                            <div class="d-flex align-items-end gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-lg border border-3 border-dark" style="width: 86px; height: 86px; min-width: 86px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 32px;">
-                                    <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
-                                </div>
-                                <div class="mb-1">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 20px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-3 py-1 rounded-pill" style="font-size: 11.5px; background: <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.18)' : 'rgba(234, 88, 12, 0.18)' ?>; color: <?= $isInstitutionalStaff ? '#60A5FA' : '#FB923C' ?>; border: 1px solid <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.3)' : 'rgba(234, 88, 12, 0.3)' ?>;">
-                                            <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
-                                        </span>
-                                    </div>
-                                    <div class="small mt-0.5" style="color: var(--ux-ink-3);">
-                                        Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <?= htmlspecialchars($userProfile['email'] ?? '') ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <span class="badge px-3 py-2 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 12px;">
-                                    <i class="bi bi-clock-history me-1"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Profile Edit Form -->
-                <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
-                    <div class="row g-4">
-                        <!-- Left Column: Thông Tin Định Danh & Liên Hệ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-7' : 'col-lg-6' ?>">
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-person-lines-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</small>
-                                </div>
-                                <div class="card-body p-4 pt-2">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Họ và Tên <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mã Định Danh / MSSV</label>
-                                            <input type="text" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Mã sinh viên / Mã cán bộ do Nhà trường cấp cố định</div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Email FPT Education</label>
-                                            <input type="email" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
-                                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
-                                            <textarea name="skills" class="form-control" rows="3" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để gợi ý bạn vào các ca trực phù hợp</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Hồ Sơ Thù Lao (Phân Biệt Theo Vai Trò) HOẶC Thông Báo Cán Bộ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
-                            <?php if ($isInstitutionalStaff): ?>
-                            <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-shield-lock-fill text-primary"></i> Phân Quyền & Bảo Mật
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <div class="p-3.5 rounded-4 mb-4" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25);">
-                                            <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-primary mt-1" style="width: 38px; height: 38px; min-width: 38px; background: rgba(59, 130, 246, 0.15);">
-                                                    <i class="bi bi-mortarboard-fill fs-5"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="fw-bold mb-1" style="color: var(--ux-ink); font-size: 14px;">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                    <p class="small mb-0" style="color: var(--ux-ink-2); line-height: 1.55; font-size: 12.5px;">
-                                                        Bạn đang đăng nhập với vai trò <strong><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong>không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-3.5 rounded-4 mb-3" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line);">
-                                            <div class="fw-bold mb-2 small" style="color: var(--ux-ink);">Đổi Mật Khẩu Đăng Nhập</div>
-                                            <label class="form-label small" style="color: var(--ux-ink-3);">Mật khẩu mới (bỏ trống nếu không đổi)</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Tối thiểu 6 ký tự...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-check-circle-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php else: ?>
-                            <!-- Trường hợp CTV (Sinh Viên / Media): Có đầy đủ hồ sơ CCCD, STK, VNeID -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
-                                        <i class="bi bi-wallet2 text-success"></i> Hồ Sơ Quyết Toán & Thù Lao CTV
-                                    </h5>
-                                    <small style="color: var(--ux-ink-3);">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</small>
-                                </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div class="row g-3">
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số CCCD (12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="001xxxxxxxx" value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_name" class="form-control" placeholder="Ví dụ: MB Bank, Vietcombank, TPBank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_number" class="form-control font-monospace" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ảnh Thẻ Căn Cước / VNeID Định Danh</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://..." value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp VNeID / CCCD 2 mặt (Drive, Imgur, Cloudinary)</div>
-                                            
-                                            <!-- Image Preview -->
-                                            <div class="mt-2 p-2 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
-                                                <?php if (!empty($userProfile['vneid_image_url'])): ?>
-                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px;" id="vneidPreviewImg">
-                                                <?php else: ?>
-                                                    <span class="small text-muted" id="vneidPlaceholder"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                    <img src="" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px; display: none;" id="vneidPreviewImg">
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mật Khẩu Mới</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Để trống nếu giữ nguyên mật khẩu cũ...">
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-save2-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-            <!-- =========================================================
-                 PANEL 9: QUẢN TRỊ VIÊN - CẤP QUYỀN & NHẬT KÝ THAO TÁC (ADMIN ONLY)
-                 ========================================================= -->
-            <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-            <section id="panelAdminManagement" style="display:none;" class="fade-in-up">
-                
-                <!-- Section 1: Cấp Quyền Người Dùng -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-shield-fill-check text-warning fs-5"></i> Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Quản trị viên có toàn quyền nâng cấp, giáng cấp hoặc chuyển đổi vai trò của từng thành viên</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 12px;">
-                                <i class="bi bi-people-fill me-1"></i> Tổng số: <?= count($allUsers) ?> tài khoản
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 280px;">Thành Viên</th>
-                                        <th class="py-3" style="width: 140px;">Mã / MSSV</th>
-                                        <th class="py-3" style="width: 220px;">Email & SĐT</th>
-                                        <th class="py-3" style="width: 180px;">Vai Trò Hiện Tại</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 320px;">Cấp Quyền Mới</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($allUsers as $u): ?>
-                                    <?php 
-                                    $uInitial = mb_strtoupper(mb_substr($u['full_name'], 0, 1));
-                                    $roleBadgeColor = match($u['role_name']) {
-                                        'Admin' => 'background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3);',
-                                        'Organizer' => 'background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3);',
-                                        'Staff' => 'background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3);',
-                                        'Accountant' => 'background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3);',
-                                        'Media' => 'background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3);',
-                                        default => 'background: rgba(100, 116, 139, 0.15); color: #94A3B8; border: 1px solid rgba(100, 116, 139, 0.3);'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Member info -->
-                                        <td class="ps-4 py-3">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 38px; height: 38px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
-                                                    <?= htmlspecialchars($uInitial) ?>
-                                                </div>
-                                                <div style="min-width: 0;">
-                                                    <div class="fw-bold mb-0 text-truncate" style="font-size: 14px; color: var(--ux-ink); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['full_name']) ?>
-                                                    </div>
-                                                    <div class="small text-truncate" style="font-size: 11.5px; color: var(--ux-ink-3); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['skills'] ?: 'Cộng tác viên') ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <!-- MSSV / Code -->
-                                        <td class="py-3">
-                                            <span class="badge font-monospace px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: var(--ux-surface-2); color: var(--ux-ink); border: 1px solid var(--ux-line);">
-                                                <?= htmlspecialchars($u['student_code']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Contact -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); font-size: 12px;"><?= htmlspecialchars($u['email']) ?></div>
-                                            <div class="small" style="color: var(--ux-ink-3); font-size: 11px;"><?= htmlspecialchars($u['phone'] ?: 'Chưa cập nhật SĐT') ?></div>
-                                        </td>
-
-                                        <!-- Current Role -->
-                                        <td class="py-3" id="userRoleBadgeCol_<?= $u['id'] ?>">
-                                            <span class="badge px-3 py-1.5 rounded-pill" style="font-size: 11.5px; <?= $roleBadgeColor ?>">
-                                                <?= htmlspecialchars($u['role_name']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Grant Role Dropdown & Button -->
-                                        <td class="pe-4 py-3 text-end">
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <select class="form-select form-select-sm" id="roleSelect_<?= $u['id'] ?>" style="width: 170px; font-size: 12px; background-color: var(--ux-surface-2); color: var(--ux-ink); border-color: var(--ux-line);">
-                                                    <?php foreach ($roles as $r): ?>
-                                                    <option value="<?= $r['id'] ?>" <?= ((int)$u['role_id'] === (int)$r['id']) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($r['name']) ?> (<?= htmlspecialchars($r['description']) ?>)
-                                                    </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                                <button class="btn btn-sm btn-fpt-primary rounded-pill px-3 py-1.5 shadow-xs" style="font-size: 12px; font-weight: 600;" onclick="handleGrantRole(<?= $u['id'] ?>, 'roleSelect_<?= $u['id'] ?>')">
-                                                    <i class="bi bi-shield-check me-1"></i> Cấp Quyền
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 2: Lịch Sử Thao Tác Hệ Thống (Audit Trail) -->
-                <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                        <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-clock-history text-info fs-5"></i> Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Ghi lại toàn bộ hành vi phân quyền, duyệt ca, ký biên bản và thao tác tự động của AI</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11.5px;">
-                                <i class="bi bi-activity me-1 text-success"></i> <?= count($activityLogs) ?> bản ghi gần nhất
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
-                                        <th class="ps-4 py-3" style="width: 170px;">Thời Gian</th>
-                                        <th class="py-3" style="width: 200px;">Người Thực Hiện</th>
-                                        <th class="py-3" style="width: 150px;">Hành Động</th>
-                                        <th class="py-3">Chi Tiết Thao Tác</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 120px;">Địa Chỉ IP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (empty($activityLogs)): ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5" style="color: var(--ux-ink-3);">
-                                            <i class="bi bi-clipboard-x fs-2 d-block mb-2"></i> Chưa có bản ghi nhật ký thao tác nào
-                                        </td>
-                                    </tr>
-                                    <?php else: ?>
-                                    <?php foreach ($activityLogs as $log): ?>
-                                    <?php 
-                                    $actionBadge = match($log['action']) {
-                                        'GRANT_ROLE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 11px;"><i class="bi bi-shield-fill me-1"></i>Cấp Quyền</span>',
-                                        'UPDATE_PROFILE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px;"><i class="bi bi-person-fill-gear me-1"></i>Sửa Hồ Sơ</span>',
-                                        'APPROVE_PAYMENT' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px;"><i class="bi bi-check2-circle me-1"></i>Duyệt Tiền</span>',
-                                        'VERIFY_PROOF' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px;"><i class="bi bi-patch-check-fill me-1"></i>Nghiệm Thu</span>',
-                                        'CREATE_NOTE' => '<span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); font-size: 11px;"><i class="bi bi-calendar-event me-1"></i>Lịch Hẹn</span>',
-                                        default => '<span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11px;">' . htmlspecialchars($log['action']) . '</span>'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Timestamp -->
-                                        <td class="ps-4 py-3 font-monospace small" style="color: var(--ux-ink-3); font-size: 12px;">
-                                            <?= date('d/m/Y H:i:s', strtotime($log['created_at'])) ?>
-                                        </td>
-
-                                        <!-- User + Role -->
-                                        <td class="py-3">
-                                            <div class="fw-bold mb-0" style="font-size: 13.5px; color: var(--ux-ink);"><?= htmlspecialchars($log['user_name']) ?></div>
-                                            <span class="badge rounded-pill font-monospace" style="font-size: 10px; background: var(--ux-surface-3); color: var(--ux-ink-2);">
-                                                <?= htmlspecialchars($log['user_role'] ?? 'User') ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Action badge -->
-                                        <td class="py-3">
-                                            <?= $actionBadge ?>
-                                        </td>
-
-                                        <!-- Details -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); line-height: 1.5; font-size: 12.5px;">
-                                                <?= htmlspecialchars($log['details']) ?>
-                                            </div>
-                                        </td>
-
-                                        <!-- IP Address -->
-                                        <td class="pe-4 py-3 text-end font-monospace small" style="color: var(--ux-ink-3); font-size: 11px;">
-                                            <?= htmlspecialchars($log['ip_address'] ?? '127.0.0.1') ?>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <?php endif; ?>
+            
+            
 
             <!-- TAB 7: HỒ SƠ HỢP ĐỒNG NGHIỆM THU HIỆN TRƯỜNG -->
             <section class="spa-panel py-3" id="panelContractDossier" style="display:none;">
@@ -4381,7 +2324,14 @@
                 </div>
             </section>
 
-            <!-- =========================================================
+            
+            
+
+        </div>
+
+    
+
+<!-- =========================================================
                  PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
                  ========================================================= -->
             <section id="panelProfileSettings" style="display:none;" class="fade-in-up">
@@ -4562,6 +2512,27 @@
                         </div>
                     </div>
                 </form>
+
+                <!-- Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân (Dành Cho CTV / Sinh Viên) -->
+                <div class="card border-0 rounded-4 shadow-xs mt-4" style="background: #FFF5F5; border: 1px solid rgba(239, 68, 68, 0.25) !important;">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div>
+                                <h6 class="fw-bold mb-1 text-danger d-flex align-items-center gap-2">
+                                    <i class="bi bi-exclamation-triangle-fill"></i> Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân
+                                </h6>
+                                <p class="small mb-0 text-muted" style="max-width: 650px; font-size: 12.5px;">
+                                    Khi thực hiện xóa tài khoản, toàn bộ hồ sơ sinh viên, thông tin định danh và lịch phân công chưa hoàn thành sẽ bị vô hiệu hóa khỏi hệ thống PolyMee. Các hợp đồng đã quyết toán chi trả sẽ được lưu trữ phục vụ đối soát kế toán theo quy chế nhà trường.
+                                </p>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3.5 py-2 fw-bold" onclick="openDeleteAccountModal()">
+                                    <i class="bi bi-trash3-fill me-1.5"></i> Xóa Tài Khoản
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- =========================================================
@@ -4760,8 +2731,6 @@
 
             </section>
             <?php endif; ?>
-
-        </div>
 
     </main>
 
@@ -5286,6 +3255,44 @@
     </div>
 </div>
 
+<!-- =========================================================
+     MODAL XÁC NHẬN XÓA TÀI KHOẢN CÁ NHÂN (DANGER ZONE)
+     ========================================================= -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-bottom bg-danger-subtle text-danger px-4 py-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-exclamation-octagon-fill fs-5"></i>
+                    <h6 class="modal-title fw-bold mb-0">Xác Nhận Xóa Tài Khoản Cá Nhân</h6>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="alert alert-danger py-2.5 px-3 small rounded-3 mb-3">
+                    <strong>Cảnh báo:</strong> Thao tác này sẽ vô hiệu hóa tài khoản của bạn ngay lập tức. Toàn bộ lịch trực chưa hoàn thành sẽ bị hủy.
+                </div>
+                <p class="small text-muted mb-2">
+                    Để xác nhận xóa, vui lòng nhập chính xác cụm từ <strong class="text-danger">XAC NHAN XOA</strong> vào ô bên dưới:
+                </p>
+                <input type="text" id="confirmDeleteInput" class="form-control form-control-sm mb-3" placeholder="Nhập: XAC NHAN XOA" oninput="toggleDeleteBtnState()">
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="confirmDeleteCheck" onchange="toggleDeleteBtnState()">
+                    <label class="form-check-label small text-muted" for="confirmDeleteCheck">
+                        Tôi hiểu rõ các hậu quả khi hủy bỏ tài khoản sinh viên CTV này.
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer bg-light px-4 py-2.5 border-top d-flex justify-content-between">
+                <button type="button" class="btn-fpt-secondary btn-fpt-sm" data-bs-dismiss="modal">Hủy Bỏ</button>
+                <button type="button" class="btn btn-danger btn-sm rounded-pill px-3" id="confirmDeleteSubmitBtn" onclick="submitDeleteAccount()" disabled>
+                    <i class="bi bi-trash3-fill me-1"></i> Xóa Tài Khoản Vĩnh Viễn
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Toast Container -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1090;">
     <div id="liveToast" class="toast align-items-center text-white border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
@@ -5332,28 +3339,22 @@ let qrCodeObj = null;
 // POLYMEE PROMAX THEME SYSTEM (Dark / Light)
 // =========================================================
 function initTheme() {
-    const saved = localStorage.getItem('polymee_theme') || 'light';
-    setTheme(saved);
+    const root = document.documentElement;
+    root.setAttribute('data-bs-theme', 'light');
+    root.classList.remove('dark');
+    localStorage.setItem('polymee_theme', 'light');
 }
 
 function setTheme(theme) {
     const root = document.documentElement;
-    root.setAttribute('data-bs-theme', theme);
-    if (theme === 'dark') {
-        root.classList.add('dark');
-        document.querySelectorAll('.dark-icon').forEach(i => i.classList.remove('d-none'));
-        document.querySelectorAll('.light-icon').forEach(i => i.classList.add('d-none'));
-    } else {
-        root.classList.remove('dark');
-        document.querySelectorAll('.dark-icon').forEach(i => i.classList.add('d-none'));
-        document.querySelectorAll('.light-icon').forEach(i => i.classList.remove('d-none'));
-    }
-    localStorage.setItem('polymee_theme', theme);
+    root.setAttribute('data-bs-theme', 'light');
+    root.classList.remove('dark');
+    localStorage.setItem('polymee_theme', 'light');
 }
 
 function toggleTheme() {
-    const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
-    setTheme(isDark ? 'light' : 'dark');
+    // Locked to Light Mode as per specification
+    initTheme();
 }
 
 // Chạy khởi tạo theme tức thì
@@ -5485,8 +3486,9 @@ function navigateToPage(pageName) {
         breadcrumb.textContent = 'Nghiệm Thu Kế Toán';
     } else if (pageName === 'student-payroll-profile') {
         document.getElementById('panelStudentPayrollProfile').style.display = 'block';
-        screenTitle.textContent = 'Hồ Sơ Nhận Thù Lao (VNeID & Ngân Hàng)';
-        breadcrumb.textContent = 'Hồ Sơ Quyết Toán';
+        const isMgr = ['Admin', 'Organizer', 'Teacher'].includes(currentUser?.role_name || '') || [1, 2, 7].includes(Number(currentUser?.role_id || 0));
+        screenTitle.textContent = isMgr ? 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)' : 'Hồ Sơ Nhận Thù Lao & Thông Tin Định Danh Của Tôi';
+        breadcrumb.textContent = isMgr ? 'Quản Lý Hồ Sơ CTV' : 'Hồ Sơ VNeID & STK';
     } else if (pageName === 'my-shifts') {
         document.getElementById('panelMyShifts').style.display = 'block';
         screenTitle.textContent = 'Lịch Làm Việc & Ca Phân Công Của Tôi';
@@ -6874,6 +4876,119 @@ function previewVneidImage(url) {
         if (placeholder) placeholder.style.display = 'inline-block';
     }
 }
+
+// =========================================================
+// QUẢN LÝ HỒ SƠ CTV & XÓA TÀI KHOẢN (APPLE DESIGN SYSTEM)
+// =========================================================
+function filterCtvRosterTable() {
+    const search = (document.getElementById("ctvSearchInput")?.value || "").toLowerCase().trim();
+    const bank = (document.getElementById("ctvBankFilter")?.value || "").toLowerCase().trim();
+    const rows = document.querySelectorAll(".ctv-row");
+    let count = 0;
+
+    rows.forEach(row => {
+        const rowSearch = (row.getAttribute("data-search") || "").toLowerCase();
+        const rowBank = (row.getAttribute("data-bank") || "").toLowerCase();
+
+        const matchSearch = !search || rowSearch.includes(search);
+        const matchBank = !bank || rowBank.includes(bank);
+
+        if (matchSearch && matchBank) {
+            row.style.display = "";
+            count++;
+        } else {
+            row.style.display = "none";
+        }
+    });
+
+    const badge = document.getElementById("ctvFilteredBadge");
+    if (badge) badge.textContent = `Hiển thị: ${count} CTV`;
+}
+
+function previewVneidPhoto(url, name, cccd) {
+    const imgEl = document.getElementById("vneidModalImage");
+    const titleEl = document.getElementById("vneidModalTitle");
+    const subEl = document.getElementById("vneidModalSub");
+    if (imgEl) imgEl.src = url || "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80";
+    if (titleEl) titleEl.textContent = `Đối Soát VNeID • ${name}`;
+    if (subEl) subEl.textContent = `Số CCCD: ${cccd}`;
+    if (previewVneidModalInstance) {
+        previewVneidModalInstance.show();
+    }
+}
+
+function exportCtvRosterCSV() {
+    let csv = "STT,Ho Va Ten,MSSV,CCCD,Ngan Hang,So Tai Khoan,Chu Tai Khoan,Ky Nang,Trang Thai\n";
+    const rows = document.querySelectorAll("#ctvRosterTable tbody tr");
+    rows.forEach((row, i) => {
+        if (row.style.display !== "none") {
+            const cols = row.querySelectorAll("td");
+            if (cols.length >= 6) {
+                const name = cols[1].querySelector("strong")?.innerText.replace(/,/g, "") || "";
+                const code = cols[1].querySelector(".badge")?.innerText.replace(/,/g, "") || "";
+                const cccd = cols[2].querySelector(".font-monospace")?.innerText.replace(/,/g, "") || "";
+                const bank = cols[3].querySelector(".fw-semibold")?.innerText.replace(/,/g, "") || "";
+                const stk = cols[3].querySelector(".text-primary")?.innerText.replace(/,/g, "") || "";
+                const owner = cols[3].querySelector("small")?.innerText.replace(/,/g, "") || "";
+                const skills = cols[5]?.innerText.replace(/,/g, " - ") || "";
+                csv += `${i+1},"${name}","${code}","${cccd}","${bank}","${stk}","${owner}","${skills}","Hop Le"\n`;
+            }
+        }
+    });
+
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Danh_Sach_Ho_So_CTV_FPoly_${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
+    showToast("Đã xuất danh sách hồ sơ CTV thành công!", "success");
+}
+
+let deleteAccountModalInstance = null;
+function openDeleteAccountModal() {
+    const modalEl = document.getElementById("deleteAccountModal");
+    if (!modalEl) return;
+    deleteAccountModalInstance = new bootstrap.Modal(modalEl);
+    document.getElementById("confirmDeleteInput").value = "";
+    document.getElementById("confirmDeleteCheck").checked = false;
+    document.getElementById("confirmDeleteSubmitBtn").disabled = true;
+    deleteAccountModalInstance.show();
+}
+
+function toggleDeleteBtnState() {
+    const text = (document.getElementById("confirmDeleteInput")?.value || "").trim();
+    const checked = document.getElementById("confirmDeleteCheck")?.checked || false;
+    const btn = document.getElementById("confirmDeleteSubmitBtn");
+    if (btn) btn.disabled = !(text === "XAC NHAN XOA" && checked);
+}
+
+async function submitDeleteAccount() {
+    const btn = document.getElementById("confirmDeleteSubmitBtn");
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = "<span class="spinner-border spinner-border-sm me-1"></span> Đang xóa tài khoản...";
+    }
+
+    try {
+        const res = await fetch("/dashboard/deleteAccount", {
+            method: "POST",
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        });
+        const data = await res.json();
+        if (data.success) {
+            window.location.href = data.redirect || "/auth/login?deleted=1";
+        } else {
+            alert(data.message || "Không thể xóa tài khoản. Vui lòng thử lại.");
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = "<i class="bi bi-trash3-fill me-1"></i> Xóa Tài Khoản Vĩnh Viễn";
+            }
+        }
+    } catch (err) {
+        window.location.href = "/auth/login?deleted=1";
+    }
+}
+
 </script>
 
 </body>

@@ -142,17 +142,14 @@
     <!-- Header / Brand Strip (No Image Logo) -->
     <header class="py-2.5 px-4 border-bottom d-flex justify-content-between align-items-center" style="background: var(--ux-surface); border-color: var(--ux-line) !important;">
         <a href="/dashboard" class="d-flex align-items-center gap-3 text-decoration-none">
-            <div class="bg-white p-1.5 px-2.5 rounded-3 border shadow-xs" style="height: 38px; display: inline-flex; align-items: center;">
+            <div class="d-inline-flex align-items-center justify-content-center p-1 rounded-3" style="height: 38px; border: none !important; box-shadow: none !important; background: transparent;">
                 <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 24px; width: auto; object-fit: contain;">
             </div>
             <div class="vr mx-1" style="height: 22px; opacity: 0.25;"></div>
             <span class="fw-bolder fs-5 tracking-tight" style="color: var(--ux-ink);">Poly<strong style="color:var(--ux-accent);">Mee</strong></span>
         </a>
         <div class="d-flex align-items-center gap-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary border-0 px-2 py-1 rounded-circle" onclick="toggleRegisterTheme()" title="Chuyển chế độ Sáng / Tối">
-                <i class="bi bi-sun-fill dark-icon text-warning"></i>
-                <i class="bi bi-moon-stars-fill light-icon text-secondary d-none"></i>
-            </button>
+
             <a href="/auth/login" class="btn-fpt-secondary btn-fpt-sm">
                 <i class="bi bi-box-arrow-in-right me-1"></i> Đã Có Tài Khoản? Đăng Nhập
             </a>
@@ -166,7 +163,7 @@
             <!-- Auth Header (With Official School Logo & Apple Clean Aesthetic) -->
             <div class="auth-header d-flex flex-wrap align-items-center justify-content-between gap-3">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="bg-white p-1.5 px-2.5 rounded-3 border shadow-xs d-inline-flex align-items-center justify-content-center flex-shrink-0" style="height: 38px;">
+                    <div class="d-inline-flex align-items-center justify-content-center p-1 rounded-3 flex-shrink-0" style="height: 38px; border: none !important; box-shadow: none !important; background: transparent;">
                         <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 22px; width: auto; object-fit: contain;">
                     </div>
                     <div>

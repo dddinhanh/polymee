@@ -238,7 +238,7 @@
                 <!-- School Brand & Identity -->
                 <div class="d-flex align-items-center justify-content-between mb-5">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-white p-2 rounded-3 shadow-xs border" style="height: 44px; display: inline-flex; align-items: center;">
+                        <div class="d-inline-flex align-items-center justify-content-center p-1 rounded-3" style="height: 44px; border: none !important; box-shadow: none !important; background: transparent;">
                             <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 28px; width: auto; object-fit: contain;">
                         </div>
                         <div class="vr" style="height: 26px; opacity: 0.3; background-color: var(--ux-line-2);"></div>
@@ -318,14 +318,19 @@
                             <p class="small mb-0" style="color: var(--ux-ink-3); font-size: 11.5px;">Cổng điều phối sự kiện FPT Polytechnic</p>
                         </div>
                     </div>
-                    <!-- Theme Switcher Button -->
-                    <button type="button" class="btn btn-sm btn-outline-secondary border-0 px-2 py-1 rounded-circle" onclick="toggleAuthTheme()" title="Chuyển chế độ Sáng / Tối">
-                        <i class="bi bi-sun-fill dark-icon text-warning"></i>
-                        <i class="bi bi-moon-stars-fill light-icon text-secondary d-none"></i>
-                    </button>
+
                 </div>
 
                 <!-- Flash Notification -->
+                <?php if (isset($_GET['deleted'])): ?>
+                <div class="alert alert-info py-2.5 px-3 small rounded-3 d-flex align-items-center justify-content-between mb-3" role="alert">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-info-circle-fill"></i>
+                        <span>Tài khoản của bạn đã được xóa thành công khỏi hệ thống PolyMee.</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-sm" onclick="this.parentElement.remove()"></button>
+                </div>
+                <?php endif; ?>
                 <?php if (!empty($flash)): ?>
                 <div class="alert <?= $flash['type'] === 'success' ? 'alert-success' : ($flash['type'] === 'info' ? 'alert-info' : 'alert-danger') ?> py-2.5 px-3 small rounded-3 d-flex align-items-center justify-content-between mb-3" role="alert">
                     <div class="d-flex align-items-center gap-2">

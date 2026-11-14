@@ -644,4 +644,66 @@ class DashboardController extends BaseController
             throw new RuntimeException("Không tìm thấy view: {$viewFile}");
         }
     }
+
+    /**
+     * API / Action Xóa tài khoản cá nhân (Dành cho CTV / Sinh viên theo yêu cầu)
+     */
+    public function deleteAccount(): void
+    {
+        $isAjax = !empty($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"]) === "xmlhttprequest";
+        
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            if ($isAjax) {
+                $this->json(["success" => false, "message" => "Phương thức không hợp lệ."], 405);
+            } else {
+                $this->redirect("/dashboard");
+            }
+            return;
+        }
+
+        $userId = (int)($this->currentUser["id"] ?? 0);
+        if ($userId <= 0) {
+            if ($isAjax) {
+                $this->json(["success" => false, "message" => "Vui lòng đăng nhập để thực hiện."], 401);
+            } else {
+                $this->redirect("/auth/login");
+            }
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+
+        // 1. Ghi nhật ký kiểm toán hệ thống
+        try {
+            $stmtLog = $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (:uid, :uname, :urole, 'DELETE_ACCOUNT', 'USER', :tid, :details, :ip, datetime('now', 'localtime'))");
+            $stmtLog->execute([
+                ":uid" => $userId,
+                ":uname" => $this->currentUser["full_name"] ?? "User",
+                ":urole" => $this->currentUser["role_name"] ?? "Student",
+                ":tid" => $userId,
+                ":details" => "Người dùng tự hủy/xóa tài khoản cá nhân khỏi hệ thống PolyMee",
+                ":ip" => $_SERVER["REMOTE_ADDR"] ?? "127.0.0.1"
+            ]);
+        } catch (Exception $e) {
+            // Không chặn tiến trình xóa nếu ghi log lỗi
+        }
+
+        // 2. Vô hiệu hóa tài khoản (Soft delete bảo toàn dữ liệu đối soát kế toán)
+        $stmtDel = $db->prepare("UPDATE users SET is_active = 0, updated_at = datetime('now', 'localtime') WHERE id = :uid");
+        $stmtDel->execute([":uid" => $userId]);
+
+        // 3. Xóa session
+        SessionHelper::destroy();
+
+        if ($isAjax) {
+            $this->json([
+                "success" => true,
+                "message" => "Tài khoản của bạn đã được xóa thành công.",
+                "redirect" => "/auth/login?deleted=1"
+            ]);
+        } else {
+            SessionHelper::flash("info", "Tài khoản của bạn đã được xóa thành công khỏi hệ thống PolyMee.");
+            $this->redirect("/auth/login?deleted=1");
+        }
+    }
 }
