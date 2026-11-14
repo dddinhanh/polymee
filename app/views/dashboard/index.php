@@ -746,8 +746,9 @@
     .kpi-metric-strip {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        margin-bottom: 20px;
+        gap: 8px;
+        margin-bottom: 8px;
+        flex-shrink: 0;
     }
 
     @media (max-width: 992px) {
@@ -757,53 +758,50 @@
     }
 
     .kpi-mini-card {
-        background: var(--ux-surface);
-        border: 1px solid var(--ux-line);
-        border-radius: 16px;
-        padding: 12px 18px;
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        padding: 6px 14px;
+        height: 42px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        gap: 8px;
         transition: all 0.2s var(--ux-spring);
-        box-shadow: var(--ux-shadow-sm);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
     }
 
     .kpi-mini-card:hover {
-        transform: translateY(-2px);
-        border-color: var(--ux-line-2);
-        box-shadow: var(--ux-shadow);
-    }
-
-    [data-bs-theme="dark"] .kpi-mini-card {
-        background: var(--ux-surface-2);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-color: rgba(0, 0, 0, 0.15);
     }
 
     .kpi-mini-label {
-        font-size: 11px;
-        font-weight: 700;
+        font-size: 10px;
+        font-weight: 650;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.04em;
         color: var(--ux-ink-3);
-        margin-bottom: 2px;
+        margin-bottom: 0;
+        line-height: 1.1;
     }
 
     .kpi-mini-val {
-        font-size: 22px;
+        font-size: 16px;
         font-weight: 800;
         line-height: 1.1;
         color: var(--ux-ink);
     }
 
     .kpi-mini-icon {
-        width: 38px;
-        height: 38px;
-        border-radius: 12px;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
         display: grid;
         place-items: center;
         flex: none;
-        font-size: 17px;
+        font-size: 13px;
+        background: #F4F4F6 !important;
+        color: #48484A !important;
     }
 
     /* Fallback .kpi-card for any other section */
@@ -867,20 +865,20 @@
     .month-days-grid {
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
-        gap: 8px;
+        gap: 5px;
         width: 100%;
         box-sizing: border-box;
     }
 
     .month-day-cell {
-        min-height: 116px;
+        min-height: 80px;
         min-width: 0;
         width: 100%;
         box-sizing: border-box;
-        border-radius: 16px;
-        background: var(--ux-surface-2);
-        border: 1px solid var(--ux-line);
-        padding: 8px 10px;
+        border-radius: 12px;
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 5px 6px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -890,21 +888,10 @@
         overflow: hidden;
     }
 
-    [data-bs-theme="dark"] .month-day-cell {
-        background: #141C2B;
-        border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
     .month-day-cell:hover {
-        background: var(--ux-surface);
+        background: #F4F4F6;
         border-color: var(--ux-accent);
-        box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.25);
-        transform: translateY(-2px);
-    }
-
-    [data-bs-theme="dark"] .month-day-cell:hover {
-        background: #1A2436;
-        border-color: var(--ux-accent);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
 
     .month-day-cell:active {
@@ -912,8 +899,8 @@
     }
 
     .month-day-cell.is-today {
-        background: rgba(234, 88, 12, 0.08);
-        border-color: rgba(234, 88, 12, 0.4);
+        background: #F4F4F6;
+        border-color: var(--ux-accent);
     }
 
     .month-day-cell.is-today .day-number-pill {
@@ -923,21 +910,145 @@
     }
 
     .month-day-cell.is-other-month {
-        opacity: 0.3;
-        background: transparent;
+        opacity: 0.35;
+        background: #FAFAFC;
     }
 
     .day-number-pill {
-        font-size: 12px;
-        font-weight: 750;
+        font-size: 11px;
+        font-weight: 700;
         color: var(--ux-ink);
-        width: 24px;
-        height: 24px;
-        border-radius: 8px;
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
         display: grid;
         place-items: center;
         transition: all 0.15s ease;
         flex: none;
+    }
+
+    /* 1-Screen Viewport Fit on Desktop (No Scrollbars for Calendar) */
+    @media (min-width: 993px) {
+        html, body {
+            height: 100vh !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
+        }
+
+        .app-shell {
+            height: 100vh !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
+        }
+
+        .main-workspace {
+            height: 100vh !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
+            padding: 10px 16px 12px 10px !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .dashboard-topbar {
+            flex-shrink: 0 !important;
+            padding: 8px 16px !important;
+            margin-bottom: 8px !important;
+            min-height: 48px !important;
+            border-radius: 16px !important;
+        }
+
+        #spaBodyContent {
+            flex: 1 !important;
+            min-height: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+
+        #panelCalendar {
+            flex: 1 !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 10px 16px !important;
+            margin-bottom: 0 !important;
+            border-radius: 18px !important;
+            background: #FFFFFF !important;
+            border: 1px solid rgba(0, 0, 0, 0.08) !important;
+            overflow: hidden !important;
+        }
+
+        #panelCalendar > .d-flex.border-bottom {
+            padding-bottom: 6px !important;
+            margin-bottom: 6px !important;
+            flex-shrink: 0 !important;
+        }
+
+        #tierMonthView {
+            flex: 1 !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+
+        .month-header-grid {
+            flex-shrink: 0 !important;
+            margin-bottom: 4px !important;
+            padding-bottom: 2px !important;
+        }
+
+        .month-days-grid {
+            flex: 1 !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            display: grid !important;
+            grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+            grid-template-rows: repeat(var(--month-rows, 5), minmax(0, 1fr)) !important;
+            gap: 4px !important;
+            overflow: hidden !important;
+        }
+
+        .month-day-cell {
+            min-height: 0 !important;
+            height: 100% !important;
+            padding: 3px 5px !important;
+            border-radius: 9px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+        }
+
+        .day-number-pill {
+            width: 18px !important;
+            height: 18px !important;
+            font-size: 10.5px !important;
+            border-radius: 6px !important;
+        }
+
+        .shift-chip, .memo-chip {
+            font-size: 9.5px !important;
+            padding: 1px 4px !important;
+            height: 17px !important;
+            line-height: 15px !important;
+            border-radius: 4px !important;
+            margin-bottom: 1.5px !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+        }
+
+        .spa-panel:not(#panelCalendar) {
+            flex: 1 !important;
+            min-height: 0 !important;
+            max-height: 100% !important;
+            overflow-y: auto !important;
+            padding: 20px !important;
+        }
     }
 
     /* Shift Chips Promax Clean */
@@ -1248,13 +1359,11 @@
     }
 
     .ai-audit-banner {
-        background: linear-gradient(135deg, rgba(255, 247, 237, 0.95) 0%, rgba(240, 249, 255, 0.95) 100%);
-        border: 1px solid rgba(254, 215, 170, 0.8);
+        background: #F4F4F6;
+        border: 1px solid rgba(0, 0, 0, 0.08);
         border-radius: 18px;
         padding: 14px 20px;
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        box-shadow: 0 4px 14px rgba(234, 88, 12, 0.04);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
 
     @media (max-width: 992px) {
@@ -1403,8 +1512,12 @@
                 </ul>
 
                 <!-- Profile Footer With Side Account Flyout (Never Covers Navigation) -->
+                <?php
+                $isLoggedIn = !empty($currentUser['id']) && (int)$currentUser['id'] > 0 && ($currentUser['role_name'] ?? '') !== 'Guest';
+                ?>
                 <div class="u040-user-menu-wrapper w-100 position-relative" style="margin-top: auto; z-index: 1080;">
-                    <button class="u040-me w-100 border-0 text-start d-flex align-items-center" type="button" id="sidebarUserMenuBtn" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" title="Nhấp để chuyển đổi vai trò, cài đặt hoặc đăng xuất">
+                    <?php if ($isLoggedIn): ?>
+                    <button class="u040-me w-100 border-0 text-start d-flex align-items-center" type="button" id="sidebarUserMenuBtn" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" title="Tài khoản cá nhân & Đăng xuất">
                         <i aria-hidden="true"><?= mb_substr($currentUser['full_name'] ?? 'U', 0, 1) ?></i>
                         <span class="flex-grow-1 overflow-hidden text-truncate">
                             <?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?>
@@ -1422,7 +1535,7 @@
                                 </div>
                                 <div class="overflow-hidden">
                                     <strong class="d-block text-truncate" style="color: #1D1D1F; font-size: 13.5px;"><?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?></strong>
-                                    <span class="badge px-2 py-0.5 rounded-pill font-monospace" style="font-size: 10px; background: rgba(234, 88, 12, 0.1); color: var(--ux-accent);"><?= htmlspecialchars($currentUser['role_name'] ?? 'Sinh viên') ?> • <?= htmlspecialchars($currentUser['student_code'] ?? 'CTV') ?></span>
+                                    <span class="badge px-2 py-0.5 rounded-pill font-monospace" style="font-size: 10px; background: #F4F4F6; color: #1D1D1F; border: 1px solid rgba(0,0,0,0.08);"><?= htmlspecialchars($currentUser['role_name'] ?? 'Sinh viên') ?> • <?= htmlspecialchars($currentUser['student_code'] ?? 'CTV') ?></span>
                                 </div>
                             </div>
                         </div>
@@ -1430,7 +1543,7 @@
                         <!-- Quick Navigation Actions -->
                         <div class="p-2 border-bottom" style="border-color: rgba(0,0,0,0.06) !important;">
                             <a class="dropdown-item py-2 px-2.5 rounded-3 d-flex align-items-center gap-2.5" href="javascript:void(0)" onclick="navigateToPage('profile-settings'); closeSidebarUserMenu();">
-                                <div class="d-grid place-items-center rounded-2 bg-primary-subtle text-primary flex-shrink-0" style="width: 28px; height: 28px; font-size: 14px;">
+                                <div class="d-grid place-items-center rounded-2 bg-light text-dark flex-shrink-0" style="width: 28px; height: 28px; font-size: 14px; border: 1px solid rgba(0,0,0,0.06);">
                                     <i class="bi bi-person-gear"></i>
                                 </div>
                                 <div>
@@ -1441,7 +1554,7 @@
 
                             <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
                             <a class="dropdown-item py-2 px-2.5 rounded-3 d-flex align-items-center gap-2.5 mt-1" href="javascript:void(0)" onclick="navigateToPage('admin-management'); closeSidebarUserMenu();">
-                                <div class="d-grid place-items-center rounded-2 bg-warning-subtle text-warning-emphasis flex-shrink-0" style="width: 28px; height: 28px; font-size: 14px;">
+                                <div class="d-grid place-items-center rounded-2 bg-light text-dark flex-shrink-0" style="width: 28px; height: 28px; font-size: 14px; border: 1px solid rgba(0,0,0,0.06);">
                                     <i class="bi bi-shield-lock-fill"></i>
                                 </div>
                                 <div>
@@ -1452,58 +1565,51 @@
                             <?php endif; ?>
                         </div>
 
-                        <!-- 6 Demo Roles Switcher (Compact 2-Column Grid) -->
-                        <div class="p-2.5 border-bottom" style="border-color: rgba(0,0,0,0.06) !important;">
-                            <div class="d-flex align-items-center justify-content-between mb-2 px-1">
-                                <span class="text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 0.05em; color: #86868B;">
-                                    <i class="bi bi-arrow-left-right me-1 text-warning"></i> Chuyển Đổi Role Demo
-                                </span>
-                                <span class="badge rounded-pill bg-light text-secondary border" style="font-size: 9.5px;">6 Roles</span>
-                            </div>
-                            <div class="d-grid gap-1.5" style="grid-template-columns: 1fr 1fr;">
-                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 3 ? 'active fw-bold' : '' ?>" href="/home/switchUser/3" title="CTV Media">
-                                    <span class="badge rounded-circle bg-primary-subtle text-primary flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">PA</span>
-                                    <span class="text-truncate" style="font-size: 11px;">Phương Anh</span>
-                                </a>
-                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 4 ? 'active fw-bold' : '' ?>" href="/home/switchUser/4" title="CTV Lễ Tân">
-                                    <span class="badge rounded-circle bg-success-subtle text-success flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">ĐM</span>
-                                    <span class="text-truncate" style="font-size: 11px;">Đức Mạnh</span>
-                                </a>
-                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 2 ? 'active fw-bold' : '' ?>" href="/home/switchUser/2" title="Giảng Viên / BTC">
-                                    <span class="badge rounded-circle bg-warning-subtle text-warning-emphasis flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">GV</span>
-                                    <span class="text-truncate" style="font-size: 11px;">Thầy Khải</span>
-                                </a>
-                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 8 ? 'active fw-bold' : '' ?>" href="/home/switchUser/8" title="Hành Chính">
-                                    <span class="badge rounded-circle bg-info-subtle text-info-emphasis flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">HC</span>
-                                    <span class="text-truncate" style="font-size: 11px;">Đình Tuấn</span>
-                                </a>
-                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 7 ? 'active fw-bold' : '' ?>" href="/home/switchUser/7" title="Kế Toán">
-                                    <span class="badge rounded-circle bg-success-subtle text-success flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">KT</span>
-                                    <span class="text-truncate" style="font-size: 11px;">Thu Thảo</span>
-                                </a>
-                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 1 ? 'active fw-bold' : '' ?>" href="/home/switchUser/1" title="Admin Toàn Quyền">
-                                    <span class="badge rounded-circle bg-danger-subtle text-danger flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">AD</span>
-                                    <span class="text-truncate" style="font-size: 11px;">Quản Trị</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Auth Actions: Login, Register, Logout -->
+                        <!-- Logout Action Only -->
                         <div class="p-2">
-                            <a class="dropdown-item py-1.5 px-2.5 rounded-2 text-primary d-flex align-items-center gap-2" href="/auth/login" style="font-size: 12px;">
-                                <i class="bi bi-box-arrow-in-right"></i>
-                                <span>Đăng Nhập Tài Khoản Khác</span>
-                            </a>
-                            <a class="dropdown-item py-1.5 px-2.5 rounded-2 text-secondary d-flex align-items-center gap-2" href="/auth/register" style="font-size: 12px;">
-                                <i class="bi bi-person-plus"></i>
-                                <span>Đăng Ký CTV Mới</span>
-                            </a>
-                            <a class="dropdown-item py-1.5 px-2.5 rounded-2 text-danger fw-bold d-flex align-items-center gap-2 mt-0.5" href="/auth/logout" style="font-size: 12px;">
-                                <i class="bi bi-box-arrow-right"></i>
+                            <a class="dropdown-item py-2 px-2.5 rounded-2 text-danger fw-bold d-flex align-items-center gap-2" href="/auth/logout" style="font-size: 12px;">
+                                <i class="bi bi-box-arrow-right fs-6"></i>
                                 <span>Đăng Xuất</span>
                             </a>
                         </div>
                     </div>
+                    <?php else: ?>
+                    <button class="u040-me w-100 border-0 text-start d-flex align-items-center" type="button" id="sidebarUserMenuBtn" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" title="Đăng nhập / Đăng ký">
+                        <i aria-hidden="true" style="background:#E5E5EA; color:#48484A;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></i>
+                        <span class="flex-grow-1 overflow-hidden text-truncate">
+                            Khách Vãng Lai
+                            <small>Chưa đăng nhập • Nhấp để vào</small>
+                        </span>
+                        <svg class="u040-chevron d-none d-md-block flex-shrink-0 ms-auto me-1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.45; transition: transform 0.2s;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+
+                    <div class="dropdown-menu sidebar-account-flyout p-0 border-0" id="sidebarUserFlyoutMenu" aria-labelledby="sidebarUserMenuBtn">
+                        <!-- Guest Header Card -->
+                        <div class="p-3 border-bottom" style="background: #FAFAFC; border-color: rgba(0,0,0,0.06) !important; border-top-left-radius: 20px; border-top-right-radius: 20px;">
+                            <div class="d-flex align-items-center gap-2.5">
+                                <div class="rounded-circle d-grid place-items-center text-secondary fw-bold flex-shrink-0" style="width: 38px; height: 38px; background: #E5E5EA; font-size: 16px;">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <strong class="d-block text-truncate" style="color: #1D1D1F; font-size: 13.5px;">Khách Vãng Lai</strong>
+                                    <span class="badge px-2 py-0.5 rounded-pill font-monospace" style="font-size: 10px; background: #F4F4F6; color: #86868B; border: 1px solid rgba(0,0,0,0.08);">Chưa Đăng Nhập</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Guest Auth Actions: Login & Register -->
+                        <div class="p-2">
+                            <a class="dropdown-item py-2 px-2.5 rounded-2 text-dark fw-bold d-flex align-items-center gap-2" href="/auth/login" style="font-size: 12.5px;">
+                                <i class="bi bi-box-arrow-in-right fs-6 text-primary"></i>
+                                <span>Đăng Nhập Hệ Thống</span>
+                            </a>
+                            <a class="dropdown-item py-2 px-2.5 rounded-2 text-secondary d-flex align-items-center gap-2 mt-0.5" href="/auth/register" style="font-size: 12.5px;">
+                                <i class="bi bi-person-plus fs-6 text-secondary"></i>
+                                <span>Đăng Ký Tài Khoản CTV</span>
+                            </a>
+                        </div>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </nav>
         </div>
@@ -1584,7 +1690,7 @@
                     <div class="kpi-mini-label">Tổng Sự Kiện</div>
                     <div class="kpi-mini-val num-tabular"><?= number_format($stats['total_events'] ?? 0) ?></div>
                 </div>
-                <div class="kpi-mini-icon text-warning" style="background: rgba(245, 158, 11, 0.1);">
+                <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
                     <i class="bi bi-calendar2-event"></i>
                 </div>
             </div>
@@ -1593,25 +1699,25 @@
                     <div class="kpi-mini-label">Tổng Ca Trực</div>
                     <div class="kpi-mini-val num-tabular"><?= number_format($stats['total_shifts'] ?? 0) ?></div>
                 </div>
-                <div class="kpi-mini-icon text-info" style="background: rgba(2, 132, 199, 0.1);">
+                <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
                     <i class="bi bi-clock-history"></i>
                 </div>
             </div>
             <div class="kpi-mini-card">
                 <div>
                     <div class="kpi-mini-label">Tỷ Lệ Lấp Đầy</div>
-                    <div class="kpi-mini-val num-tabular text-success"><?= $stats['fill_rate_percent'] ?? 0 ?>%</div>
+                    <div class="kpi-mini-val num-tabular text-dark"><?= $stats['fill_rate_percent'] ?? 0 ?>%</div>
                 </div>
-                <div class="kpi-mini-icon text-success" style="background: rgba(16, 185, 129, 0.1);">
+                <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
                     <i class="bi bi-pie-chart"></i>
                 </div>
             </div>
             <div class="kpi-mini-card">
                 <div>
                     <div class="kpi-mini-label">Quy Hoạch Nghiệm Thu</div>
-                    <div class="kpi-mini-val num-tabular" style="color: var(--ux-accent);"><?= count($accountingList) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">Hồ sơ</small></div>
+                    <div class="kpi-mini-val num-tabular text-dark"><?= count($accountingList) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">Hồ sơ</small></div>
                 </div>
-                <div class="kpi-mini-icon" style="color: var(--ux-accent); background: var(--ux-accent-soft);">
+                <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
                     <i class="bi bi-cash-coin"></i>
                 </div>
             </div>
@@ -1721,14 +1827,14 @@
                 <!-- Bento 2.0 AI Accounting Auditor Widget -->
                 <div class="ai-audit-banner mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px; background:linear-gradient(135deg, #EA580C, #F97316); color:#fff; flex:none; box-shadow:0 4px 12px rgba(234,88,12,0.3);">
-                            <i class="bi bi-robot fs-5"></i>
+                        <div class="rounded-circle d-flex align-items-center justify-content-center text-dark" style="width:38px; height:38px; background:#FFFFFF; flex:none; border:1px solid rgba(0,0,0,0.08); box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                            <i class="bi bi-robot fs-5 text-dark"></i>
                         </div>
                         <div>
                             <div class="d-flex align-items-center gap-2">
                                 <strong class="text-dark" style="font-size:13.5px;">AI Thẩm Định & Quyết Toán Thù Lao Tự Động</strong>
-                                <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle num-tabular" style="font-size:10.5px;">
-                                    <i class="bi bi-shield-check me-1"></i>100% Khớp VNeID
+                                <span class="badge rounded-pill bg-white text-dark border num-tabular" style="font-size:10.5px; border-color:rgba(0,0,0,0.08) !important;">
+                                    <i class="bi bi-shield-check me-1 text-success"></i>100% Khớp VNeID
                                 </span>
                             </div>
                             <small class="text-muted d-block mt-0.5">
@@ -2377,18 +2483,18 @@
                 $isInstitutionalStaff = in_array($profRoleId, [1, 2], true) || in_array($profRoleName, ['Admin', 'Organizer'], true);
                 ?>
                 <!-- Profile Header Card -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
+                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: #FFFFFF; border: 1px solid rgba(0,0,0,0.08) !important; overflow: hidden;">
+                    <div style="height: 70px; background: #F4F4F6; border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
                     <div class="card-body p-4 pt-0 position-relative">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
+                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -42px;">
                             <div class="d-flex align-items-end gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-lg border border-3 border-dark" style="width: 86px; height: 86px; min-width: 86px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 32px;">
+                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-sm border border-4 border-white" style="width: 84px; height: 84px; min-width: 84px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 32px;">
                                     <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
                                 </div>
                                 <div class="mb-1">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 20px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-3 py-1 rounded-pill" style="font-size: 11.5px; background: <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.18)' : 'rgba(234, 88, 12, 0.18)' ?>; color: <?= $isInstitutionalStaff ? '#60A5FA' : '#FB923C' ?>; border: 1px solid <?= $isInstitutionalStaff ? 'rgba(59, 130, 246, 0.3)' : 'rgba(234, 88, 12, 0.3)' ?>;">
+                                        <span class="badge px-3 py-1 rounded-pill" style="font-size: 11.5px; background: #F4F4F6; color: var(--ux-ink); border: 1px solid rgba(0,0,0,0.08);">
                                             <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
                                         </span>
                                     </div>
@@ -2398,7 +2504,7 @@
                                 </div>
                             </div>
                             <div class="d-flex gap-2">
-                                <span class="badge px-3 py-2 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 12px;">
+                                <span class="badge px-3 py-2 rounded-pill font-monospace" style="background: #F4F4F6; color: var(--ux-ink-2); border: 1px solid rgba(0,0,0,0.08); font-size: 12px;">
                                     <i class="bi bi-clock-history me-1"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
                                 </span>
                             </div>
@@ -2461,9 +2567,9 @@
                                 </div>
                                 <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
                                     <div>
-                                        <div class="p-3.5 rounded-4 mb-4" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25);">
+                                        <div class="p-3.5 rounded-4 mb-4" style="background: #F4F4F6; border: 1px solid rgba(0, 0, 0, 0.08);">
                                             <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-primary mt-1" style="width: 38px; height: 38px; min-width: 38px; background: rgba(59, 130, 246, 0.15);">
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-dark mt-1" style="width: 38px; height: 38px; min-width: 38px; background: #FFFFFF; border: 1px solid rgba(0, 0, 0, 0.08);">
                                                     <i class="bi bi-mortarboard-fill fs-5"></i>
                                                 </div>
                                                 <div>
@@ -3621,6 +3727,10 @@ function renderMonthGrid(year, month) {
     const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
     const prevMonthDays = new Date(year, month, 0).getDate();
 
+    const totalCells = adjustedFirstDay + totalDaysInMonth;
+    const rowCount = Math.ceil(totalCells / 7);
+    container.style.setProperty('--month-rows', rowCount);
+
     for (let i = adjustedFirstDay - 1; i >= 0; i--) {
         const dayNum = prevMonthDays - i;
         const cell = document.createElement('div');
@@ -3647,7 +3757,7 @@ function renderMonthGrid(year, month) {
                 const noteTitle = n.title || n.content || 'Ghi chú';
                 previewHtml += `<div class="memo-chip d-flex justify-content-between align-items-center" title="Lưu ý: ${noteTitle}">
                     <div class="d-flex align-items-center gap-1 overflow-hidden">
-                        <i class="fa-solid fa-bookmark" style="font-size:9px; color:#EA580C; flex:none;"></i>
+                        <i class="fa-solid fa-bookmark" style="font-size:8px; color:#EA580C; flex:none;"></i>
                         <span class="text-truncate">${noteTitle}</span>
                     </div>
                     <button type="button" class="btn p-0 text-danger border-0 flex-shrink-0 ms-1 opacity-75 hover-opacity-100" style="font-size:10px; line-height:1;" onclick="event.stopPropagation(); deleteCalendarNote(${n.id});" title="Xóa lịch hẹn này">
@@ -3667,25 +3777,25 @@ function renderMonthGrid(year, month) {
                 const timePrefix = s.start_time.substring(11, 16);
                 previewHtml += `<div class="shift-chip ${chipClass}" title="${s.name} (${s.location_name || 'Hội trường'})">
                     <span class="status-dot ${dotClass}"></span>
-                    <span class="num-tabular flex-shrink-0 me-1" style="font-size:10px; opacity:0.85;">${timePrefix}</span>
+                    <span class="num-tabular flex-shrink-0 me-1" style="font-size:9.5px; opacity:0.85;">${timePrefix}</span>
                     <span class="text-truncate flex-grow-1">${s.name}</span>
                 </div>`;
             });
             const remaining = dayShifts.length - maxShifts;
             if (remaining > 0) {
-                previewHtml += `<div class="num-tabular ps-1" style="font-size:9.5px; font-weight:700; color:var(--ux-ink-3);">+${remaining} ca nữa</div>`;
+                previewHtml += `<div class="num-tabular ps-1" style="font-size:9px; font-weight:700; color:var(--ux-ink-3); line-height:1.2;">+${remaining} ca nữa</div>`;
             }
         }
 
         cell.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-1">
+            <div class="d-flex justify-content-between align-items-center mb-0.5">
                 <span class="day-number-pill num-tabular">${day}</span>
                 <div class="d-flex align-items-center gap-1">
-                    ${dayNotes.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:rgba(234,88,12,0.14); color:#FB923C; border:1px solid rgba(234,88,12,0.25); font-size:9px; font-weight:700; padding:2px 5px;" title="${dayNotes.length} Ghi chú"><i class="fa-solid fa-bookmark me-1" style="font-size:8px;"></i>${dayNotes.length}</span>` : ''}
-                    ${dayShifts.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:var(--ux-surface-3); color:var(--ux-ink-2); border:1px solid var(--ux-line); font-size:9.5px; font-weight:650; padding:2px 6px;">${dayShifts.length} ca</span>` : ''}
+                    ${dayNotes.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:#F4F4F6; color:#EA580C; border:1px solid rgba(0,0,0,0.08); font-size:8.5px; font-weight:700; padding:1px 4px;" title="${dayNotes.length} Ghi chú"><i class="fa-solid fa-bookmark me-0.5" style="font-size:7.5px;"></i>${dayNotes.length}</span>` : ''}
+                    ${dayShifts.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:#F4F4F6; color:var(--ux-ink-2); border:1px solid rgba(0,0,0,0.08); font-size:8.5px; font-weight:650; padding:1px 4px;">${dayShifts.length} ca</span>` : ''}
                 </div>
             </div>
-            <div class="d-flex flex-column gap-1">${previewHtml}</div>
+            <div class="d-flex flex-column gap-0.5" style="min-height:0; overflow:hidden;">${previewHtml}</div>
         `;
 
         cell.addEventListener('click', () => {
@@ -3693,6 +3803,14 @@ function renderMonthGrid(year, month) {
             changeCalendarView('day');
         });
 
+        container.appendChild(cell);
+    }
+
+    const trailingCells = (rowCount * 7) - totalCells;
+    for (let nextDay = 1; nextDay <= trailingCells; nextDay++) {
+        const cell = document.createElement('div');
+        cell.className = 'month-day-cell is-other-month';
+        cell.innerHTML = `<span class="day-number-pill text-muted num-tabular">${nextDay}</span>`;
         container.appendChild(cell);
     }
 }
