@@ -6,7 +6,7 @@
  */
 
 :root {
-    color-scheme: light;
+    color-scheme: light dark;
     --fpt-primary: #EA580C;
     --fpt-primary-hover: #C2410C;
     --fpt-primary-active: #9A3412;
@@ -33,6 +33,20 @@
     --fpt-sky-soft: #F0F9FF;
 
     --fpt-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-bs-theme="dark"], html.dark {
+    --fpt-slate-bg: #0B0F17;
+    --fpt-slate-card: #111827;
+    --fpt-slate-border: rgba(255, 255, 255, 0.08);
+    --fpt-slate-border-focus: rgba(255, 255, 255, 0.16);
+    --fpt-text-main: #F8FAFC;
+    --fpt-text-muted: #CBD5E1;
+    --fpt-text-caption: #94A3B8;
+    --fpt-primary-soft: rgba(234, 88, 12, 0.14);
+    --fpt-primary-border: rgba(234, 88, 12, 0.3);
+    --fpt-emerald-soft: rgba(16, 185, 129, 0.14);
+    --fpt-sky-soft: rgba(2, 132, 199, 0.14);
 }
 
 @layer utilities {
@@ -106,7 +120,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: #FFFFFF;
+    background: var(--fpt-slate-card);
     color: var(--fpt-text-main) !important;
     font-weight: 600;
     font-size: 13.5px;
@@ -130,7 +144,7 @@ body {
 
 .btn-fpt-secondary:active {
     transform: scale(0.97) translateY(0);
-    background: #F1F5F9;
+    background: var(--fpt-slate-bg);
     box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
 }
 
@@ -246,7 +260,7 @@ body {
 }
 
 .btn-fpt-ghost:hover {
-    background: #F1F5F9;
+    background: var(--fpt-slate-bg);
     color: var(--fpt-text-main);
 }
 

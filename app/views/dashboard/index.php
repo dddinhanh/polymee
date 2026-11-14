@@ -1,9 +1,10 @@
 <!-- Lucian UX/UI Prompt #040 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#040 -->
 <!DOCTYPE html>
-<html lang="vi" data-bs-theme="light">
+<html lang="vi" data-bs-theme="dark" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
     <title><?= htmlspecialchars($pageTitle ?? 'PolyMee Operations & Accounting Hub - FPT Polytechnic') ?></title>
 
     <!-- Google Fonts: Plus Jakarta Sans -->
@@ -25,40 +26,70 @@
 
     <style>
     /* =========================================================
-       POLYMEE ENTERPRISE DESIGN SYSTEM (design-taste-frontend-v1)
-       Brand: Calibrated FPT Orange (#EA580C) & Deep Navy (#0F172A)
-       Single Accent (<80% sat), Zero AI Lila Glow, Strict Tabular Nums
+       POLYMEE ENTERPRISE UI/UX PROMAX (Tailwind Slate/Obsidian Theme)
+       Màu sắc hiệu chuẩn: Slate 950/900/800 + Cam FPT Signature (#EA580C)
+       Phân tầng thị giác tinh tế, giảm tải thông tin, chống rối mắt
        ========================================================= */
-    :root {
-        color-scheme: light;
-        --ux-page: #F8FAFC;              /* Clean Slate Canvas (Slate 50) */
-        --ux-surface: #FFFFFF;           /* Pure White Surface */
-        --ux-surface-2: #F1F5F9;         /* Light Neutral Card (Slate 100) */
-        --ux-surface-3: #E2E8F0;         /* Slate 200 Divider */
-        --ux-ink: #0F172A;               /* Deep Slate 900 Typography */
-        --ux-ink-2: #334155;             /* Slate 700 Secondary Body */
-        --ux-ink-3: #64748B;             /* Slate 500 Muted Details */
-        --ux-line: #E2E8F0;              /* 1px Soft Border */
-        --ux-line-2: #CBD5E1;            /* 1px Focus Border */
+    :root, [data-bs-theme="dark"] {
+        color-scheme: dark;
+        --ux-page: #0B0F17;              /* Deep Obsidian Canvas */
+        --ux-surface: #111827;           /* Slate 900 Glass Surface */
+        --ux-surface-2: #162032;         /* Slate 850 Card Surface */
+        --ux-surface-3: #1E293B;         /* Slate 800 Highlight Surface */
+        --ux-ink: #F8FAFC;               /* High-contrast Slate 50 Typography */
+        --ux-ink-2: #CBD5E1;             /* Slate 300 Secondary Text */
+        --ux-ink-3: #94A3B8;             /* Slate 400 Muted Captions */
+        --ux-line: rgba(255, 255, 255, 0.08); /* 1px Hairline White Border */
+        --ux-line-2: rgba(255, 255, 255, 0.16); /* Hover/Focus Border */
         --ux-accent: #EA580C;            /* Calibrated FPT Orange (#EA580C) */
-        --ux-accent-hover: #C2410C;      /* Rich Orange Hover */
-        --ux-accent-active: #9A3412;     /* Active state */
-        --ux-accent-soft: #FFF7ED;       /* Soft Tint */
-        --ux-accent-gradient: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
-        --ux-navy-gradient: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
-        --ux-mint: #059669;              /* Emerald 600 Success / Approved */
-        --ux-mint-soft: #ECFDF5;
-        --ux-warn: #D97706;              /* Amber 600 Warning / Pending */
-        --ux-warn-soft: #FFFBEB;
-        --ux-danger: #DC2626;            /* Red 600 Collision / Rejected */
-        --ux-danger-soft: #FEF2F2;
-        --ux-info: #0284C7;              /* Sky 600 Info / Ongoing */
-        --ux-info-soft: #F0F9FF;
-        --ux-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
-        --ux-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
-        --ux-shadow-lg: 0 20px 40px -15px rgba(15, 23, 42, 0.07);
+        --ux-accent-hover: #F97316;      /* Rich Orange Hover */
+        --ux-accent-active: #C2410C;     /* Active state */
+        --ux-accent-soft: rgba(234, 88, 12, 0.12); /* Subtle Soft Glow */
+        --ux-accent-gradient: linear-gradient(135deg, #EA580C 0%, #C2410C 100%);
+        --ux-navy-gradient: linear-gradient(180deg, #0B0F17 0%, #111827 100%);
+        --ux-mint: #10B981;              /* Emerald 500 Success */
+        --ux-mint-soft: rgba(16, 185, 129, 0.12);
+        --ux-warn: #F59E0B;              /* Amber 500 Warning */
+        --ux-warn-soft: rgba(245, 158, 11, 0.12);
+        --ux-danger: #EF4444;            /* Red 500 Conflict / Full */
+        --ux-danger-soft: rgba(239, 68, 68, 0.12);
+        --ux-info: #0284C7;              /* Sky 600 Info */
+        --ux-info-soft: rgba(2, 132, 199, 0.12);
+        --ux-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --ux-shadow: 0 6px 20px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
+        --ux-shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
         --ux-spring: cubic-bezier(0.16, 1, 0.3, 1);
         --ux-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-bs-theme="light"] {
+        color-scheme: light;
+        --ux-page: #F8FAFC;
+        --ux-surface: #FFFFFF;
+        --ux-surface-2: #F1F5F9;
+        --ux-surface-3: #E2E8F0;
+        --ux-ink: #0F172A;
+        --ux-ink-2: #334155;
+        --ux-ink-3: #64748B;
+        --ux-line: #E2E8F0;
+        --ux-line-2: #CBD5E1;
+        --ux-accent: #EA580C;
+        --ux-accent-hover: #C2410C;
+        --ux-accent-active: #9A3412;
+        --ux-accent-soft: #FFF7ED;
+        --ux-accent-gradient: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+        --ux-navy-gradient: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+        --ux-mint: #059669;
+        --ux-mint-soft: #ECFDF5;
+        --ux-warn: #D97706;
+        --ux-warn-soft: #FFFBEB;
+        --ux-danger: #DC2626;
+        --ux-danger-soft: #FEF2F2;
+        --ux-info: #0284C7;
+        --ux-info-soft: #F0F9FF;
+        --ux-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
+        --ux-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
+        --ux-shadow-lg: 0 20px 40px -15px rgba(15, 23, 42, 0.07);
     }
 
     body {
@@ -408,7 +439,7 @@
 
     .dashboard-topbar {
         position: relative;
-        z-index: 1050;
+        z-index: 1080 !important;
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
         border-radius: 20px;
@@ -419,16 +450,34 @@
         align-items: center;
         justify-content: space-between;
         gap: 14px;
-        box-shadow: 0 4px 18px rgba(10, 25, 47, 0.04);
+        box-shadow: var(--ux-shadow-sm);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+
+    [data-bs-theme="dark"] .dashboard-topbar {
+        background: rgba(17, 24, 39, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
     }
 
     .dashboard-topbar .dropdown {
         position: relative;
-        z-index: 1055;
+        z-index: 1085;
     }
 
     .dashboard-topbar .dropdown-menu {
-        z-index: 1060 !important;
+        z-index: 9999 !important;
+        background-color: var(--ux-surface) !important;
+        border: 1px solid var(--ux-line-2) !important;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35) !important;
+        border-radius: 16px;
+    }
+
+    [data-bs-theme="dark"] .dropdown-menu {
+        background-color: #111827 !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7) !important;
     }
 
     .place-items-center {
@@ -438,27 +487,32 @@
         align-items: center !important;
     }
 
-    /* Central Hub Mode Switcher (Bento 2.0 Liquid Glass Bar) */
+    /* Central Hub Mode Switcher (Bento Promax Tactile Bar) */
     .central-mode-bar {
-        background: #FFFFFF;
+        background: var(--ux-surface);
         border: 1px solid var(--ux-line);
         border-radius: 16px;
         padding: 5px;
-        margin-bottom: 20px;
+        margin-bottom: 18px;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 6px;
-        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+        box-shadow: var(--ux-shadow-sm);
+    }
+
+    [data-bs-theme="dark"] .central-mode-bar {
+        background: #111827;
+        border-color: rgba(255, 255, 255, 0.08);
     }
 
     .central-mode-bar .hub-tab-btn {
         border: 0;
         background: transparent;
         color: var(--ux-ink-2);
-        font-size: 13.5px;
+        font-size: 13px;
         font-weight: 650;
-        padding: 9px 18px;
+        padding: 8px 16px;
         border-radius: 12px;
         transition: all 0.18s var(--ux-ease);
         display: inline-flex;
@@ -482,7 +536,7 @@
     .central-mode-bar .hub-tab-btn.active {
         background: var(--ux-accent);
         color: #FFFFFF !important;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 14px rgba(234, 88, 12, 0.28);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 3px 12px rgba(234, 88, 12, 0.3);
     }
 
     .central-mode-bar .hub-tab-btn.active .badge {
@@ -495,19 +549,24 @@
     .view-switcher-group {
         display: inline-flex;
         align-items: center;
-        background: #F1F5F9;
-        padding: 4px;
-        border-radius: 14px;
+        background: var(--ux-surface-2);
+        padding: 3px;
+        border-radius: 12px;
         border: 1px solid var(--ux-line);
         gap: 2px;
     }
 
+    [data-bs-theme="dark"] .view-switcher-group {
+        background: #162032;
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
     .view-switcher-group .btn {
         border: none;
-        border-radius: 10px;
-        font-size: 13px;
+        border-radius: 9px;
+        font-size: 12.5px;
         font-weight: 650;
-        padding: 6px 15px;
+        padding: 5px 14px;
         color: var(--ux-ink-3);
         background: transparent;
         transition: all 0.18s var(--ux-ease);
@@ -516,7 +575,7 @@
 
     .view-switcher-group .btn:hover {
         color: var(--ux-ink);
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.08);
     }
 
     .view-switcher-group .btn:active {
@@ -524,33 +583,114 @@
     }
 
     .view-switcher-group .btn.active {
-        background-color: #FFFFFF;
+        background-color: var(--ux-surface);
         color: var(--ux-ink);
-        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
-        border: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        border: 1px solid var(--ux-line);
     }
 
+    [data-bs-theme="dark"] .view-switcher-group .btn.active {
+        background-color: #1E293B;
+        color: #F8FAFC;
+        border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    /* KPI Metrics Promax High-Density Strip */
+    .kpi-metric-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 992px) {
+        .kpi-metric-strip {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    .kpi-mini-card {
+        background: var(--ux-surface);
+        border: 1px solid var(--ux-line);
+        border-radius: 16px;
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        transition: all 0.2s var(--ux-spring);
+        box-shadow: var(--ux-shadow-sm);
+    }
+
+    .kpi-mini-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--ux-line-2);
+        box-shadow: var(--ux-shadow);
+    }
+
+    [data-bs-theme="dark"] .kpi-mini-card {
+        background: #111827;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .kpi-mini-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--ux-ink-3);
+        margin-bottom: 2px;
+    }
+
+    .kpi-mini-val {
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.1;
+        color: var(--ux-ink);
+    }
+
+    .kpi-mini-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        flex: none;
+        font-size: 17px;
+    }
+
+    /* Fallback .kpi-card for any other section */
     .kpi-card {
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
-        border-radius: 20px;
-        padding: 20px 24px;
-        box-shadow: 0 4px 14px rgba(10, 25, 47, 0.04);
-        transition: transform .25s var(--ux-spring), box-shadow .25s;
+        border-radius: 18px;
+        padding: 16px 20px;
+        box-shadow: var(--ux-shadow-sm);
+        transition: transform .2s var(--ux-spring), box-shadow .2s;
     }
     .kpi-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 24px rgba(10, 25, 47, 0.08);
+        transform: translateY(-2px);
+        box-shadow: var(--ux-shadow);
         border-color: var(--ux-line-2);
+    }
+    [data-bs-theme="dark"] .kpi-card {
+        background: #111827;
+        border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .calendar-container, .spa-panel {
         background: var(--ux-surface);
-        border: 1.5px solid var(--ux-line);
-        border-radius: 24px;
-        padding: 28px;
-        box-shadow: 0 6px 20px rgba(10, 25, 47, 0.04);
-        animation: fadeInPanel 0.2s ease-in-out;
+        border: 1px solid var(--ux-line);
+        border-radius: 22px;
+        padding: 24px;
+        box-shadow: var(--ux-shadow);
+        animation: fadeInPanel 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-bs-theme="dark"] .calendar-container,
+    [data-bs-theme="dark"] .spa-panel {
+        background: #111827;
+        border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     @keyframes fadeInPanel {
@@ -558,111 +698,94 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* =========================================================
-       APPLE macOS SONOMA / iPadOS CALENDAR & MATERIALS SYSTEM
-       ========================================================= */
-    .dashboard-topbar, .central-mode-bar {
-        background: rgba(255, 255, 255, 0.78);
-        backdrop-filter: blur(24px) saturate(190%);
-        -webkit-backdrop-filter: blur(24px) saturate(190%);
-        border: 1px solid rgba(226, 232, 240, 0.8);
-        border-top: 1px solid rgba(255, 255, 255, 0.95);
-        box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.02);
-        border-radius: 20px;
-    }
-
-    .calendar-container, .spa-panel {
-        background: #FFFFFF;
-        border: 1px solid rgba(226, 232, 240, 0.85);
-        border-radius: 24px;
-        padding: 28px;
-        box-shadow: 0 12px 36px -8px rgba(15, 23, 42, 0.04);
-        animation: fadeInPanel 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes fadeInPanel {
-        from { opacity: 0; transform: translateY(6px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
     .month-header-grid {
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
         text-align: center;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         padding-bottom: 6px;
-        border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+        border-bottom: 1px solid var(--ux-line);
     }
 
     .month-header-grid .day-label {
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 750;
         text-transform: uppercase;
         letter-spacing: .06em;
-        color: #64748B;
-        padding: 6px 0;
+        color: var(--ux-ink-3);
+        padding: 5px 0;
         min-width: 0;
     }
 
     .month-days-grid {
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
-        gap: 10px;
+        gap: 8px;
         width: 100%;
         box-sizing: border-box;
     }
 
     .month-day-cell {
-        min-height: 124px;
+        min-height: 116px;
         min-width: 0;
         width: 100%;
         box-sizing: border-box;
-        border-radius: 18px;
-        background: #FFFFFF;
-        border: 1px solid rgba(226, 232, 240, 0.85);
-        padding: 10px 10px;
+        border-radius: 16px;
+        background: var(--ux-surface-2);
+        border: 1px solid var(--ux-line);
+        padding: 8px 10px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         overflow: hidden;
     }
 
+    [data-bs-theme="dark"] .month-day-cell {
+        background: #141C2B;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
     .month-day-cell:hover {
-        background: #FFFFFF;
-        border-color: #FDBA74;
-        box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.08);
+        background: var(--ux-surface);
+        border-color: var(--ux-accent);
+        box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.25);
         transform: translateY(-2px);
     }
 
+    [data-bs-theme="dark"] .month-day-cell:hover {
+        background: #1A2436;
+        border-color: var(--ux-accent);
+    }
+
     .month-day-cell:active {
-        transform: scale(0.98) translateY(0);
+        transform: scale(0.98);
     }
 
     .month-day-cell.is-today {
-        background: #FFF7ED;
-        border-color: #FDBA74;
+        background: rgba(234, 88, 12, 0.08);
+        border-color: rgba(234, 88, 12, 0.4);
     }
 
     .month-day-cell.is-today .day-number-pill {
-        background: #EA580C;
+        background: var(--ux-accent);
         color: #FFFFFF !important;
         box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35);
     }
 
     .month-day-cell.is-other-month {
-        opacity: 0.35;
-        background: #F8FAFC;
+        opacity: 0.3;
+        background: transparent;
     }
 
     .day-number-pill {
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 750;
-        color: #0F172A;
-        width: 26px;
-        height: 26px;
+        color: var(--ux-ink);
+        width: 24px;
+        height: 24px;
         border-radius: 8px;
         display: grid;
         place-items: center;
@@ -670,25 +793,59 @@
         flex: none;
     }
 
-    /* Apple Lozenge Chips */
+    /* Shift Chips Promax Clean */
     .shift-chip {
         font-size: 11px;
-        font-weight: 650;
+        font-weight: 600;
         padding: 3px 6px;
-        border-radius: 7px;
+        border-radius: 6px;
         white-space: nowrap;
         overflow: hidden;
-        background: rgba(241, 245, 249, 0.9);
-        color: #0F172A;
-        border: 1px solid rgba(226, 232, 240, 0.9);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--ux-ink);
+        border: 1px solid var(--ux-line);
         display: flex;
         align-items: center;
         gap: 5px;
-        margin-bottom: 3px;
+        margin-bottom: 2px;
         transition: transform 0.15s ease;
         min-width: 0;
         max-width: 100%;
         box-sizing: border-box;
+    }
+
+    [data-bs-theme="light"] .shift-chip {
+        background: #F1F5F9;
+        color: #0F172A;
+        border-color: #E2E8F0;
+    }
+
+    .shift-chip:hover {
+        transform: translateX(2px);
+    }
+
+    .shift-chip.urgent {
+        background: rgba(239, 68, 68, 0.12);
+        color: #F87171;
+        border-color: rgba(239, 68, 68, 0.25);
+    }
+
+    [data-bs-theme="light"] .shift-chip.urgent {
+        background: #FEF2F2;
+        color: #B91C1C;
+        border-color: #FECACA;
+    }
+
+    .shift-chip.mine {
+        background: rgba(16, 185, 129, 0.12);
+        color: #34D399;
+        border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    [data-bs-theme="light"] .shift-chip.mine {
+        background: #ECFDF5;
+        color: #047857;
+        border-color: #A7F3D0;
     }
 
     .shift-chip .status-dot {
@@ -700,6 +857,8 @@
         flex: none !important;
         flex-shrink: 0 !important;
         white-space: nowrap;
+        font-size: 10px;
+        opacity: 0.85;
     }
 
     .shift-chip .text-truncate {
@@ -722,40 +881,30 @@
     .status-dot-orange { background: #F97316; }
     .status-dot-sky { background: #0284C7; }
 
-    .shift-chip:hover {
-        transform: translateX(2px);
-    }
-
-    .shift-chip.urgent {
-        background: rgba(254, 242, 242, 0.9);
-        color: #991B1B;
-        border-color: rgba(254, 202, 202, 0.9);
-    }
-
-    .shift-chip.mine {
-        background: rgba(236, 253, 245, 0.9);
-        color: #065F46;
-        border-color: rgba(167, 243, 208, 0.9);
-    }
-
-    /* Apple Calendar Note / Memo Lozenge */
+    /* Memo Lozenge */
     .memo-chip {
-        font-size: 11px;
-        font-weight: 650;
-        padding: 3px 6px;
-        border-radius: 7px;
+        font-size: 10.5px;
+        font-weight: 600;
+        padding: 2.5px 6px;
+        border-radius: 6px;
         white-space: nowrap;
         overflow: hidden;
-        background: rgba(255, 247, 237, 0.95);
-        color: #C2410C;
-        border: 1px solid rgba(254, 215, 170, 0.9);
+        background: rgba(234, 88, 12, 0.12);
+        color: #FB923C;
+        border: 1px solid rgba(234, 88, 12, 0.25);
         display: flex;
         align-items: center;
         gap: 5px;
-        margin-bottom: 3px;
+        margin-bottom: 2px;
         min-width: 0;
         max-width: 100%;
         box-sizing: border-box;
+    }
+
+    [data-bs-theme="light"] .memo-chip {
+        background: #FFF7ED;
+        color: #C2410C;
+        border-color: #FED7AA;
     }
 
     .memo-chip i {
@@ -773,91 +922,159 @@
 
     /* iPadOS Split View Day Timeline Card */
     .timeline-card {
-        background: #FFFFFF;
-        border: 1px solid rgba(226, 232, 240, 0.85);
-        border-radius: 20px;
-        padding: 18px 22px;
+        background: var(--ux-surface);
+        border: 1px solid var(--ux-line);
+        border-radius: 18px;
+        padding: 16px 20px;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        border-left: 5px solid #EA580C;
-        box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+        gap: 14px;
+        border-left: 4px solid #EA580C;
+        box-shadow: var(--ux-shadow-sm);
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    [data-bs-theme="dark"] .timeline-card {
+        background: #111827;
+        border-color: rgba(255, 255, 255, 0.08);
+        border-left-color: #EA580C;
+    }
+
     .timeline-card:hover {
-        box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.08);
+        box-shadow: var(--ux-shadow);
         transform: translateY(-1px);
     }
 
-    /* Apple Reminders Day Callout Widget */
+    /* Reminders Day Callout Widget */
     .apple-reminder-banner {
-        background: rgba(255, 247, 237, 0.9);
-        border: 1.5px solid rgba(254, 215, 170, 0.85);
-        border-radius: 18px;
-        padding: 14px 18px;
+        background: rgba(234, 88, 12, 0.08);
+        border: 1px solid rgba(234, 88, 12, 0.25);
+        border-radius: 16px;
+        padding: 12px 16px;
         display: flex;
         align-items: flex-start;
         gap: 12px;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
     }
 
     .week-columns-grid {
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
-        gap: 12px;
+        gap: 10px;
         margin-top: 15px;
         width: 100%;
         box-sizing: border-box;
     }
 
     .week-column {
-        background: #F8FAFC;
-        border-radius: 18px;
-        padding: 12px;
+        background: var(--ux-surface-2);
+        border-radius: 16px;
+        padding: 10px;
         min-height: 480px;
         min-width: 0;
         width: 100%;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        border: 1px solid rgba(226, 232, 240, 0.8);
+        border: 1px solid var(--ux-line);
+    }
+
+    [data-bs-theme="dark"] .week-column {
+        background: #111827;
+        border-color: rgba(255, 255, 255, 0.08);
     }
 
     .week-col-header {
         text-align: center;
-        padding-bottom: 10px;
-        border-bottom: 1px dashed rgba(226, 232, 240, 0.9);
-        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px dashed var(--ux-line);
+        margin-bottom: 10px;
         cursor: pointer;
     }
 
     .week-card-shift {
-        background: #fff;
-        border: 1px solid rgba(226, 232, 240, 0.85);
-        border-radius: 14px;
-        padding: 12px;
-        margin-bottom: 10px;
-        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+        background: var(--ux-surface);
+        border: 1px solid var(--ux-line);
+        border-radius: 12px;
+        padding: 10px;
+        margin-bottom: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         cursor: pointer;
-        transition: all .2s;
-        border-left: 4px solid #EA580C;
+        transition: all .18s;
+        border-left: 3.5px solid #EA580C;
     }
 
-    /* macOS Floating Modal Sheets */
+    [data-bs-theme="dark"] .week-card-shift {
+        background: #162032;
+        border-color: rgba(255, 255, 255, 0.08);
+        color: #F8FAFC;
+    }
+
+    /* Promax Modals & Forms */
     .modal-content {
-        border-radius: 24px !important;
+        background: var(--ux-surface) !important;
+        color: var(--ux-ink) !important;
+        border-radius: 20px !important;
         overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.7) !important;
-        box-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.2) !important;
+        border: 1px solid var(--ux-line) !important;
+        box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    [data-bs-theme="dark"] .modal-content {
+        background: #111827 !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
     }
 
     .modal-header {
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-bottom: 1px solid var(--ux-line) !important;
+        padding: 16px 22px;
+    }
+
+    .modal-footer {
+        border-top: 1px solid var(--ux-line) !important;
+        padding: 14px 22px;
+    }
+
+    [data-bs-theme="dark"] .form-control,
+    [data-bs-theme="dark"] .form-select {
+        background-color: #162032 !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        color: #F8FAFC !important;
+    }
+
+    [data-bs-theme="dark"] .form-control:focus,
+    [data-bs-theme="dark"] .form-select:focus {
+        background-color: #1A2436 !important;
+        border-color: #EA580C !important;
+        color: #FFFFFF !important;
+        box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.25) !important;
+    }
+
+    [data-bs-theme="dark"] .form-control::placeholder {
+        color: #64748B !important;
+    }
+
+    /* Legibility overrides for dark mode */
+    [data-bs-theme="dark"] .text-dark {
+        color: #F8FAFC !important;
+    }
+    [data-bs-theme="dark"] .text-muted {
+        color: #94A3B8 !important;
+    }
+    [data-bs-theme="dark"] .bg-white {
+        background-color: #162032 !important;
+        color: #F8FAFC !important;
+    }
+    [data-bs-theme="dark"] .bg-light {
+        background-color: #162032 !important;
+        color: #F8FAFC !important;
+    }
+    [data-bs-theme="dark"] .table {
+        --bs-table-bg: transparent;
+        --bs-table-color: #F8FAFC;
+        --bs-table-border-color: rgba(255, 255, 255, 0.08);
     }
 
     /* Accounting specific styling (design-taste-frontend-v1) */
@@ -1089,6 +1306,12 @@
                     <span>Trợ lý AI</span>
                 </button>
 
+                <!-- Promax Theme Switcher (Dark / Light) -->
+                <button type="button" class="btn-fpt-secondary btn-fpt-sm px-2.5" id="themeToggleBtn" onclick="toggleTheme()" title="Chuyển chế độ Giao diện Tối / Sáng" aria-label="Toggle Theme">
+                    <i class="bi bi-sun-fill dark-icon text-warning"></i>
+                    <i class="bi bi-moon-stars-fill light-icon text-secondary d-none"></i>
+                </button>
+
                 <!-- Demo Role Switcher Dropdown -->
                 <div class="dropdown">
                     <button class="btn-fpt-secondary btn-fpt-sm dropdown-toggle d-flex align-items-center gap-1.5" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -1097,14 +1320,14 @@
                         </span>
                         <span class="d-none d-xl-inline"><?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?></span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2" style="font-size: 12.5px; width: 290px;">
-                        <li class="dropdown-header text-uppercase fw-bold text-muted small" style="font-size:10.5px; letter-spacing:0.04em;">Chuyển Đổi Role Demo (6 Diễn Viên)</li>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border py-2" style="font-size: 12.5px; width: 300px; z-index: 9999 !important;">
+                        <li class="dropdown-header text-uppercase fw-bold small" style="font-size:10.5px; letter-spacing:0.04em; color:var(--ux-ink-3);">Chuyển Đổi Role Demo (6 Diễn Viên)</li>
                         <li><a class="dropdown-item py-2" href="/home/switchUser/3">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="avatar-circle bg-primary-subtle text-primary fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">PA</span>
                                 <div>
-                                    <strong class="text-dark">Đinh Nguyễn Phương Anh</strong><br>
-                                    <small class="text-muted">PI03084 • Role: <strong>CTV Media</strong></small>
+                                    <strong style="color:var(--ux-ink);">Đinh Nguyễn Phương Anh</strong><br>
+                                    <small style="color:var(--ux-ink-3);">PI03084 • Role: <strong>CTV Media</strong></small>
                                 </div>
                             </div>
                         </a></li>
@@ -1112,8 +1335,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <span class="avatar-circle bg-emerald-subtle text-success fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">ĐM</span>
                                 <div>
-                                    <strong class="text-dark">Lê Đức Mạnh</strong><br>
-                                    <small class="text-muted">PS20262 • Role: <strong>CTV Lễ Tân</strong></small>
+                                    <strong style="color:var(--ux-ink);">Lê Đức Mạnh</strong><br>
+                                    <small style="color:var(--ux-ink-3);">PS20262 • Role: <strong>CTV Lễ Tân</strong></small>
                                 </div>
                             </div>
                         </a></li>
@@ -1121,8 +1344,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <span class="avatar-circle bg-warning-subtle text-warning-emphasis fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">GV</span>
                                 <div>
-                                    <strong class="text-dark">Thầy Phan Hoàng Khải</strong><br>
-                                    <small class="text-muted">GV0102 • Role: <strong>Giảng Viên / BTC</strong></small>
+                                    <strong style="color:var(--ux-ink);">Thầy Phan Hoàng Khải</strong><br>
+                                    <small style="color:var(--ux-ink-3);">GV0102 • Role: <strong>Giảng Viên / BTC</strong></small>
                                 </div>
                             </div>
                         </a></li>
@@ -1130,8 +1353,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <span class="avatar-circle bg-info-subtle text-info-emphasis fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">HC</span>
                                 <div>
-                                    <strong class="text-dark">Lê Đình Tuấn</strong><br>
-                                    <small class="text-muted">HC0201 • Role: <strong>Nhân Viên Hành Chính</strong></small>
+                                    <strong style="color:var(--ux-ink);">Lê Đình Tuấn</strong><br>
+                                    <small style="color:var(--ux-ink-3);">HC0201 • Role: <strong>Nhân Viên Hành Chính</strong></small>
                                 </div>
                             </div>
                         </a></li>
@@ -1139,8 +1362,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <span class="avatar-circle bg-success-subtle text-success fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">KT</span>
                                 <div>
-                                    <strong class="text-dark">Đặng Thu Thảo</strong><br>
-                                    <small class="text-muted">KT0105 • Role: <strong>Kế Toán & Quyết Toán</strong></small>
+                                    <strong style="color:var(--ux-ink);">Đặng Thu Thảo</strong><br>
+                                    <small style="color:var(--ux-ink-3);">KT0105 • Role: <strong>Kế Toán & Quyết Toán</strong></small>
                                 </div>
                             </div>
                         </a></li>
@@ -1148,8 +1371,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <span class="avatar-circle bg-danger-subtle text-danger fw-bold" style="width:28px;height:28px;font-size:11px;border-radius:50%;display:grid;place-items:center;">AD</span>
                                 <div>
-                                    <strong class="text-dark">Quản Trị Viên (Admin)</strong><br>
-                                    <small class="text-muted">ADMIN001 • Role: <strong>Toàn Quyền / QL Địa Điểm</strong></small>
+                                    <strong style="color:var(--ux-ink);">Quản Trị Viên (Admin)</strong><br>
+                                    <small style="color:var(--ux-ink-3);">ADMIN001 • Role: <strong>Toàn Quyền / QL Địa Điểm</strong></small>
                                 </div>
                             </div>
                         </a></li>
@@ -1168,46 +1391,42 @@
             </div>
         </header>
 
-        <!-- KPI Metrics Strip -->
-        <section class="row g-3 mb-4">
-            <div class="col-6 col-lg-3">
-                <div class="kpi-card">
-                    <div class="d-flex justify-content-between align-items-center text-muted mb-1" style="font-size: 11.5px; font-weight: 700;">
-                        <span>TỔNG SỰ KIỆN</span>
-                        <i class="bi bi-calendar2-event text-warning fs-5"></i>
-                    </div>
-                    <div class="h3 fw-bolder mb-0 num-tabular"><?= number_format($stats['total_events'] ?? 0) ?></div>
-                    <small class="text-success fw-semibold"><i class="bi bi-arrow-up-right me-1"></i>Học kỳ Fall 2026</small>
+        <!-- KPI Metrics Strip (Promax Compact High-Density Metric Bar) -->
+        <section class="kpi-metric-strip" id="kpiMetricsStrip">
+            <div class="kpi-mini-card">
+                <div>
+                    <div class="kpi-mini-label">Tổng Sự Kiện</div>
+                    <div class="kpi-mini-val num-tabular"><?= number_format($stats['total_events'] ?? 0) ?></div>
+                </div>
+                <div class="kpi-mini-icon text-warning" style="background: rgba(245, 158, 11, 0.1);">
+                    <i class="bi bi-calendar2-event"></i>
                 </div>
             </div>
-            <div class="col-6 col-lg-3">
-                <div class="kpi-card">
-                    <div class="d-flex justify-content-between align-items-center text-muted mb-1" style="font-size: 11.5px; font-weight: 700;">
-                        <span>TỔNG CA TRỰC</span>
-                        <i class="bi bi-clock-history text-info fs-5"></i>
-                    </div>
-                    <div class="h3 fw-bolder mb-0 num-tabular"><?= number_format($stats['total_shifts'] ?? 0) ?></div>
-                    <small class="text-muted">Đa dạng khung giờ</small>
+            <div class="kpi-mini-card">
+                <div>
+                    <div class="kpi-mini-label">Tổng Ca Trực</div>
+                    <div class="kpi-mini-val num-tabular"><?= number_format($stats['total_shifts'] ?? 0) ?></div>
+                </div>
+                <div class="kpi-mini-icon text-info" style="background: rgba(2, 132, 199, 0.1);">
+                    <i class="bi bi-clock-history"></i>
                 </div>
             </div>
-            <div class="col-6 col-lg-3">
-                <div class="kpi-card">
-                    <div class="d-flex justify-content-between align-items-center text-muted mb-1" style="font-size: 11.5px; font-weight: 700;">
-                        <span>TỶ LỆ LẤP ĐẦY</span>
-                        <i class="bi bi-pie-chart text-success fs-5"></i>
-                    </div>
-                    <div class="h3 fw-bolder mb-0 text-success num-tabular"><?= $stats['fill_rate_percent'] ?? 0 ?>%</div>
-                    <small class="text-muted">Chỉ tiêu nhân sự tuyển</small>
+            <div class="kpi-mini-card">
+                <div>
+                    <div class="kpi-mini-label">Tỷ Lệ Lấp Đầy</div>
+                    <div class="kpi-mini-val num-tabular text-success"><?= $stats['fill_rate_percent'] ?? 0 ?>%</div>
+                </div>
+                <div class="kpi-mini-icon text-success" style="background: rgba(16, 185, 129, 0.1);">
+                    <i class="bi bi-pie-chart"></i>
                 </div>
             </div>
-            <div class="col-6 col-lg-3">
-                <div class="kpi-card">
-                    <div class="d-flex justify-content-between align-items-center text-muted mb-1" style="font-size: 11.5px; font-weight: 700;">
-                        <span>QUY HOẠCH NGHIỆM THU</span>
-                        <i class="bi bi-cash-coin text-primary fs-5"></i>
-                    </div>
-                    <div class="h3 fw-bolder mb-0 text-primary num-tabular"><?= count($accountingList) ?> <small class="fs-6 fw-normal text-muted">Hồ sơ</small></div>
-                    <small class="text-muted">Chờ Kế toán duyệt chi</small>
+            <div class="kpi-mini-card">
+                <div>
+                    <div class="kpi-mini-label">Quy Hoạch Nghiệm Thu</div>
+                    <div class="kpi-mini-val num-tabular" style="color: var(--ux-accent);"><?= count($accountingList) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">Hồ sơ</small></div>
+                </div>
+                <div class="kpi-mini-icon" style="color: var(--ux-accent); background: var(--ux-accent-soft);">
+                    <i class="bi bi-cash-coin"></i>
                 </div>
             </div>
         </section>
@@ -2355,7 +2574,39 @@ let contractModalInstance = null;
 let currentViewingAssignmentId = null;
 let qrCodeObj = null;
 
+// =========================================================
+// POLYMEE PROMAX THEME SYSTEM (Dark / Light)
+// =========================================================
+function initTheme() {
+    const saved = localStorage.getItem('polymee_theme') || 'dark';
+    setTheme(saved);
+}
+
+function setTheme(theme) {
+    const root = document.documentElement;
+    root.setAttribute('data-bs-theme', theme);
+    if (theme === 'dark') {
+        root.classList.add('dark');
+        document.querySelectorAll('.dark-icon').forEach(i => i.classList.remove('d-none'));
+        document.querySelectorAll('.light-icon').forEach(i => i.classList.add('d-none'));
+    } else {
+        root.classList.remove('dark');
+        document.querySelectorAll('.dark-icon').forEach(i => i.classList.add('d-none'));
+        document.querySelectorAll('.light-icon').forEach(i => i.classList.remove('d-none'));
+    }
+    localStorage.setItem('polymee_theme', theme);
+}
+
+function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+    setTheme(isDark ? 'light' : 'dark');
+}
+
+// Chạy khởi tạo theme tức thì
+initTheme();
+
 document.addEventListener('DOMContentLoaded', function() {
+    initTheme();
     shiftModalInstance = new bootstrap.Modal(document.getElementById('shiftModal'));
     aiModalInstance = new bootstrap.Modal(document.getElementById('aiModal'));
     createShiftModalInstance = new bootstrap.Modal(document.getElementById('createShiftModal'));
@@ -2593,13 +2844,13 @@ function renderMonthGrid(year, month) {
                 const timePrefix = s.start_time.substring(11, 16);
                 previewHtml += `<div class="shift-chip ${chipClass}" title="${s.name} (${s.location_name || 'Hội trường'})">
                     <span class="status-dot ${dotClass}"></span>
-                    <span class="num-tabular flex-shrink-0">${timePrefix}</span>
+                    <span class="num-tabular flex-shrink-0 me-1" style="font-size:10px; opacity:0.85;">${timePrefix}</span>
                     <span class="text-truncate flex-grow-1">${s.name}</span>
                 </div>`;
             });
             const remaining = dayShifts.length - maxShifts;
             if (remaining > 0) {
-                previewHtml += `<div class="text-muted num-tabular ps-1" style="font-size:9.5px; font-weight:700;">+${remaining} ca nữa</div>`;
+                previewHtml += `<div class="num-tabular ps-1" style="font-size:9.5px; font-weight:700; color:var(--ux-ink-3);">+${remaining} ca nữa</div>`;
             }
         }
 
@@ -2607,8 +2858,8 @@ function renderMonthGrid(year, month) {
             <div class="d-flex justify-content-between align-items-center mb-1">
                 <span class="day-number-pill num-tabular">${day}</span>
                 <div class="d-flex align-items-center gap-1">
-                    ${dayNotes.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:#FFEDD5; color:#9A3412; font-size:9px; font-weight:700; padding:2px 5px;" title="${dayNotes.length} Ghi chú"><i class="fa-solid fa-bookmark me-1" style="font-size:8px;"></i>${dayNotes.length}</span>` : ''}
-                    ${dayShifts.length > 0 ? `<span class="badge rounded-pill bg-light text-secondary border num-tabular" style="font-size:9.5px; font-weight:650; padding:2px 6px;">${dayShifts.length} ca</span>` : ''}
+                    ${dayNotes.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:rgba(234,88,12,0.14); color:#FB923C; border:1px solid rgba(234,88,12,0.25); font-size:9px; font-weight:700; padding:2px 5px;" title="${dayNotes.length} Ghi chú"><i class="fa-solid fa-bookmark me-1" style="font-size:8px;"></i>${dayNotes.length}</span>` : ''}
+                    ${dayShifts.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:var(--ux-surface-3); color:var(--ux-ink-2); border:1px solid var(--ux-line); font-size:9.5px; font-weight:650; padding:2px 6px;">${dayShifts.length} ca</span>` : ''}
                 </div>
             </div>
             <div class="d-flex flex-column gap-1">${previewHtml}</div>
@@ -2719,16 +2970,16 @@ function renderDayView(dateStr) {
         const reminderCard = document.createElement('div');
         reminderCard.className = 'apple-reminder-banner mb-3';
         reminderCard.innerHTML = `
-            <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:36px; height:36px; background:#EA580C; color:#fff; flex:none; box-shadow:0 2px 6px rgba(234, 88, 12, 0.35);">
-                <i class="fa-solid fa-bell" style="font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center;"></i>
+            <div style="width:36px; height:36px; border-radius:50%; background:#EA580C; color:#fff; flex:none; display:grid; place-items:center; box-shadow:0 2px 6px rgba(234, 88, 12, 0.35); overflow:hidden;">
+                <i class="fa-solid fa-bell" style="font-size:14px; line-height:1; margin:0; padding:0;"></i>
             </div>
             <div class="flex-grow-1">
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h6 class="fw-bold mb-0" style="color:#9A3412; font-size:13.5px;">
+                    <h6 class="fw-bold mb-0" style="color:var(--ux-accent); font-size:13.5px;">
                         <i class="fa-solid fa-clipboard-list me-1.5"></i> Ghi Chú & Lưu Ý Ngày Này (Apple Reminders)
                     </h6>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge rounded-pill bg-warning text-dark num-tabular" style="font-size:10px; font-weight:700;">${dayNotes.length} nhắc nhở</span>
+                        <span class="badge rounded-pill num-tabular" style="background:rgba(234,88,12,0.15); color:#FB923C; border:1px solid rgba(234,88,12,0.3); font-size:10px; font-weight:700;">${dayNotes.length} nhắc nhở</span>
                         <button class="btn-fpt-ghost btn-fpt-sm py-0 px-2" style="font-size:11px;" onclick="openAddNoteModal()">
                             <i class="fa-solid fa-plus me-1"></i>Thêm
                         </button>
@@ -2741,11 +2992,11 @@ function renderDayView(dateStr) {
                         const noteContent = n.content || n.title || '';
                         const authorName = n.author || n.creator_name || 'BTC';
                         return `
-                        <div class="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-warning-subtle shadow-xs" style="font-size:12.5px;">
+                        <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 border shadow-xs" style="background:var(--ux-surface); border-color:var(--ux-line) !important; font-size:12.5px;">
                             <i class="fa-regular fa-circle-check text-warning" style="font-size:13px; flex:none;"></i>
-                            <span class="badge bg-light text-secondary border num-tabular" style="font-size:10px; flex:none;">${noteType}</span>
-                            <span class="text-dark">${noteTitle}${noteContent}</span>
-                            <span class="ms-auto text-muted small num-tabular" style="flex:none;"><i class="bi bi-person me-1"></i>${authorName}</span>
+                            <span class="badge num-tabular" style="background:var(--ux-surface-2); color:var(--ux-ink-2); border:1px solid var(--ux-line); font-size:10px; flex:none;">${noteType}</span>
+                            <span style="color:var(--ux-ink);">${noteTitle}${noteContent}</span>
+                            <span class="ms-auto small num-tabular" style="color:var(--ux-ink-3); flex:none;"><i class="bi bi-person me-1"></i>${authorName}</span>
                         </div>
                     `;}).join('')}
                 </div>
@@ -2756,9 +3007,10 @@ function renderDayView(dateStr) {
 
     if (dayShifts.length === 0) {
         const emptyDiv = document.createElement('div');
-        emptyDiv.className = 'text-center py-5 bg-light rounded-4 border';
+        emptyDiv.className = 'text-center py-5 rounded-4 border';
+        emptyDiv.style = 'background:var(--ux-surface-2); border-color:var(--ux-line) !important;';
         emptyDiv.innerHTML = `
-            <i class="bi bi-calendar-x display-4 text-muted"></i>
+            <i class="bi bi-calendar-x display-4" style="color:var(--ux-ink-3);"></i>
             <h6 class="fw-bold text-dark mt-3">Không có ca trực nào trong ngày này</h6>
             <p class="text-muted small">Bạn có thể tạo ca trực mới hoặc thêm ghi chú/lịch hẹn dặn dò cho ngày này.</p>
             <div class="d-flex justify-content-center gap-2 mt-2">
@@ -2785,14 +3037,14 @@ function renderDayView(dateStr) {
         card.className = 'timeline-card';
         card.innerHTML = `
             <div class="d-flex align-items-center gap-3">
-                <div class="text-center px-3 py-2 bg-light rounded-3 border" style="min-width:90px;">
-                    <span class="text-primary fw-bolder fs-5 d-block num-tabular">${startTime}</span>
-                    <small class="text-muted fw-bold num-tabular">${endTime}</small>
+                <div class="text-center px-3 py-2 rounded-3 border" style="background:var(--ux-surface-2); border-color:var(--ux-line) !important; min-width:90px;">
+                    <span class="fw-bolder fs-5 d-block num-tabular" style="color:var(--ux-accent);">${startTime}</span>
+                    <small class="fw-bold num-tabular" style="color:var(--ux-ink-3);">${endTime}</small>
                 </div>
                 <div>
-                    <span class="badge bg-secondary mb-1" style="font-size:11px;">${s.event_title}</span>
-                    <h5 class="fw-bold text-dark mb-1">${s.name}</h5>
-                    <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
+                    <span class="badge mb-1 num-tabular" style="background:var(--ux-surface-3); color:var(--ux-ink-2); border:1px solid var(--ux-line); font-size:11px;">${s.event_title}</span>
+                    <h5 class="fw-bold mb-1" style="color:var(--ux-ink);">${s.name}</h5>
+                    <div class="d-flex flex-wrap align-items-center gap-3 small" style="color:var(--ux-ink-3);">
                         <span><i class="bi bi-geo-alt-fill text-danger me-1"></i>${s.location_name || 'Hội trường'}</span>
                         <span class="num-tabular"><i class="bi bi-people-fill text-info me-1"></i>Đã tuyển: <strong>${s.approved_qty}/${s.target_qty} CTV</strong></span>
                         <span class="text-success fw-bold num-tabular"><i class="bi bi-cash me-1"></i>Thù lao: ${allowance}</span>
