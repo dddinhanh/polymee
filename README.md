@@ -206,7 +206,22 @@ Dự án được xây dựng dựa trên sự kết hợp hoàn hảo giữa **
 ---
 
 ### 3.3. Thanh Điều Hướng Co Giãn Động Lucian UX #040
-Tích hợp thanh Side-rail co giãn mượt mà theo bản quyền mã nguồn mở Lucian UX #040 (MIT License) với hiệu ứng trượt vạch sáng (indicator highlight) theo tọa độ Y bằng CSS Spring Physics (`--ux-spring`).
+Tích hợp thanh Side-rail co giãn mượt mà theo bản quyền mã nguồn mở Lucian UX #040 (MIT License) với hiệu ứng trượt vạch sáng (indicator highlight) theo tọa độ Y bằng CSS Spring Physics (`--ux-spring`). Tông màu thanh lịch chuẩn Apple: Thân sidebar xám nhạt (`#F4F4F6`), canvas làm việc trắng tinh khiết (`#FFFFFF`), logo FPT Polytechnic tự nhiên không viền đen.
+
+---
+
+### 3.4. Menu Tài Khoản & Chuyển Vai Trò Nổi Bên Cạnh (Apple Side Flyout)
+Giải quyết triệt để lỗi va chạm giao diện ("bị đè navigation"):
+- **Vị trí thông minh:** Menu tài khoản không bung thẳng lên trên (`dropup`) che khuất thanh điều hướng, mà mở sang phải dạng **Side Flyout** tại `left: calc(var(--rw) + 24px)` và `bottom: 16px` ngay trên canvas chính.
+- **Lưới Chuyển Đổi 6 Role Demo (2-Column Grid):** Tinh gọn danh sách 6 tài khoản mẫu (`PA`, `ĐM`, `GV`, `HC`, `KT`, `AD`) thành dạng lưới 2 cột siêu trực quan, chuyển đổi tức thì chỉ với 1 click.
+- **Tích Hợp Tác Vụ Cá Nhân:** Truy cập nhanh Trang Cài Đặt Tài Khoản Cá Nhân, Phân Quyền & Nhật Ký Kiểm Toán (Admin), Đăng nhập/Đăng ký và Đăng xuất.
+
+---
+
+### 3.5. Trang Cài Đặt Tài Khoản Cá Nhân & Quản Lý Hồ Sơ Thù Lao CTV
+- **Dành cho CTV Sinh viên:** Trang cài đặt hồ sơ định danh (CCCD, Ngân hàng, ảnh VNeID), đổi mật khẩu an toàn và khu vực nguy hiểm (Danger Zone - Xóa tài khoản cá nhân có xác nhận bảo mật).
+- **Dành cho Giảng viên & Admin:** Bảng Quản Lý Hồ Sơ Thù Lao CTV toàn diện (`panelStudentPayrollProfile`) với bộ lọc tìm kiếm tức thời, xem trước ảnh VNeID đối soát và theo dõi tình trạng hoàn thiện hồ sơ.
+- **Nhật Ký Kiểm Toán Hệ Thống (Audit Trail):** Ghi nhận chi tiết mọi thao tác quan trọng (Cấp quyền, Đổi vai trò, Xóa tài khoản, Nghiệm thu thù lao) lưu vào bảng `activity_logs` cho Quản trị viên tra cứu.
 
 ---
 

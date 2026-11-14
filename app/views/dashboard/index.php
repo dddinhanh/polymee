@@ -4997,7 +4997,7 @@ async function submitDeleteAccount() {
     const btn = document.getElementById("confirmDeleteSubmitBtn");
     if (btn) {
         btn.disabled = true;
-        btn.innerHTML = "<span class="spinner-border spinner-border-sm me-1"></span> Đang xóa tài khoản...";
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang xóa tài khoản...';
     }
 
     try {
@@ -5012,7 +5012,7 @@ async function submitDeleteAccount() {
             alert(data.message || "Không thể xóa tài khoản. Vui lòng thử lại.");
             if (btn) {
                 btn.disabled = false;
-                btn.innerHTML = "<i class="bi bi-trash3-fill me-1"></i> Xóa Tài Khoản Vĩnh Viễn";
+                btn.innerHTML = '<i class="bi bi-trash3-fill me-1"></i> Xóa Tài Khoản Vĩnh Viễn';
             }
         }
     } catch (err) {
