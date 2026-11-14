@@ -362,18 +362,26 @@ Mã nguồn nộp bài đi kèm tệp DDL chuẩn được tối ưu hóa cho My
 
 ## 6. ỨNG DỤNG TRÍ TUỆ NHÂN TẠO (AI) TRONG DỰ ÁN (ĐẶC THÙ MÔN WEB212)
 
-Dự án không dừng lại ở mức website tĩnh mà ứng dụng AI sâu sắc vào 3 khía cạnh:
+Dự án không dừng lại ở mức website tĩnh mà ứng dụng AI sâu sắc vào 5 năng lực tự động hóa chuyên biệt:
 
-1. **Trợ Lý Ảo PolyMee (AI Assistant with Function Calling):**
-   - Hộp chat trợ lý AI được tích hợp tại góc màn hình và modal thông minh.
-   - Áp dụng kỹ thuật **Function Calling & Intent Parsing**: Khi người dùng hỏi *"Tôi có ca trực nào sắp tới?"*, AI tự động phân tích ý định và gọi hàm `UserModel::getStudentShiftsToday()` để trả lời lịch trực, địa điểm và đồng phục.
-   - Khi hỏi *"Tìm ca trực Media hoặc Lễ tân"*, AI quét cơ sở dữ liệu ca trực mở và hiển thị danh sách phù hợp với kỹ năng của sinh viên.
+1. **Trợ Lý AI Function Calling Điều Phối Tự Động (Admin & Ban Tổ Chức Automation):**
+   - **Tra cứu phòng trống:** Admin hỏi *"Phòng nào đang trống?"* $\rightarrow$ AI quét toàn bộ danh mục hội trường, phòng lab, kiểm tra lịch sự kiện trùng lặp và phản hồi danh sách phòng khả dụng kèm sức chứa và nút 1-click đặt chỗ.
+   - **Tra cứu CTV đang trống:** Admin hỏi *"CTV nào đang trống?"* $\rightarrow$ AI truy vấn danh sách sinh viên CTV rảnh, hiển thị kỹ năng (Media, Lễ tân, Âm thanh ánh sáng), email, SĐT và nút gửi thư mời ngay.
+   - **Tự động gửi email mời đăng ký ca:** Admin yêu cầu *"Bạn gửi mail cho CTV đăng ký lịch ca trực"* $\rightarrow$ AI tự động phân tích sự kiện, tạo mã gửi `DISPATCH-xxxx`, soạn nội dung chuẩn FPT Polytechnic và mô phỏng phát tán email đến toàn bộ CTV rảnh với tỷ lệ 100% Delivered.
+   - **Tự động đặt lịch sự kiện kèm khách mời VIPs:** Admin yêu cầu *"Đặt giúp lịch sự kiện Hội Thảo AI ngày 22/11, khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu, Đại Diện FPT Telecom"* $\rightarrow$ AI trích xuất thực thể (Tên, ngày, khách mời), lưu vào CSDL `events`, tự động giữ chỗ phòng và **phân rã ngay 2 ca trực chuẩn** (Đón tiếp VIPs & Kỹ thuật/Media) với chỉ tiêu 10 CTV.
 
-2. **Tự Động Bóc Tách & Nhận Diện Minh Chứng Google Drive Bằng AI:**
-   - Khi sinh viên dán một đường link Google Drive kèm lời nhắn trong khung chat, AI sử dụng biểu thức chính quy (Regex) và xử lý ngôn ngữ tự nhiên để xác định loại tệp (Ảnh hay Video), liên kết mã hồ sơ với ca trực gần nhất và tự động tạo bản ghi `#SUB-XXXX` chuyển đến Ban tổ chức thẩm định.
+2. **Trợ Lý Cá Nhân Sinh Viên (Student Assistant):**
+   - Hỏi *"Tôi có ca trực nào sắp tới?"* $\rightarrow$ AI tự động truy xuất ca trực, địa điểm, thời gian và hướng dẫn đồng phục áo cam FPoly.
+   - Hỏi *"Tìm ca trực Media hoặc Lễ tân"* $\rightarrow$ AI quét CSDL ca trực mở phù hợp với kỹ năng sinh viên.
 
-3. **Phân Tích Cảnh Báo Trùng Lịch & Dự Đoán Tải Sự Kiện:**
-   - Trợ lý AI có khả năng đọc trước lịch học và lịch các ca trực trong tuần, cảnh báo sinh viên nếu thời gian di chuyển giữa 2 cơ sở (ví dụ: Tòa T sang Tòa F) quá ngắn (< 30 phút).
+3. **Tự Động Bóc Tách & Nhận Diện Minh Chứng Google Drive Bằng AI:**
+   - Khi sinh viên dán link Google Drive kèm lời nhắn, AI dùng biểu thức chính quy (Regex) và phân tích ý định để liên kết mã hồ sơ ca trực gần nhất, tự động sinh bản ghi `#SUB-XXXX` chuyển đến Ban tổ chức thẩm định.
+
+4. **Phân Tích Cảnh Báo Trùng Lịch & Dự Đoán Tải Sự Kiện:**
+   - Trợ lý AI có khả năng đọc trước lịch học và lịch ca trực, cảnh báo sinh viên nếu thời gian di chuyển giữa 2 cơ sở quá ngắn (< 30 phút).
+
+5. **Bộ Thẻ Giao Diện Tương Tác AI (Rich Interactive Cards):**
+   - Từng phản hồi của AI được đóng gói thành các thẻ tương tác bắt mắt (Event Confirmation Card, Dispatch Email Card, Room Availability Card, CTV Roster Card) kèm các nút bấm tắt thao tác nhanh không cần tải lại trang.
 
 ---
 
@@ -475,13 +483,14 @@ Khi giảng viên yêu cầu mở demo sản phẩm trực tiếp, nhóm sinh vi
 
 ---
 
-### 🔹 Bước 6: Trợ Lý AI PolyMee Function Calling
+### 🔹 Bước 6: Trợ Lý AI PolyMee Function Calling & Tự Động Hóa Quản Trị
 1. Bấm vào nút Robot AI tại thanh điều hướng hoặc góc màn hình.
-2. Thử nghiệm các câu hỏi mẫu gợi ý:
-   - *"Tôi có ca trực nào sắp tới không?"*
-   - *"Tìm cho tôi các ca trực Media hoặc Lễ tân"*
-   - *"Kiểm tra trùng lịch thứ 7 ngày 15/11"*
-3. Quan sát câu trả lời nhanh chóng, chính xác và có ngữ cảnh của Trợ lý AI.
+2. Thử nghiệm ngay 4 năng lực tự động hóa nghiệp vụ qua hội thoại tự nhiên:
+   - **Tra cứu phòng trống:** Bấm nút *"Phòng trống?"* hoặc gõ *"Hôm nay có phòng nào trống không?"* $\rightarrow$ AI hiển thị danh mục hội trường, sức chứa và khung giờ khả dụng.
+   - **Tra cứu CTV rảnh:** Bấm nút *"CTV nào đang trống?"* $\rightarrow$ AI trả về danh sách CTV kèm kỹ năng chuyên môn và liên hệ.
+   - **Gửi mail tự động:** Bấm nút *"Gửi mail mời CTV"* $\rightarrow$ AI tạo mã lệnh phát tán, sinh thư mời chuẩn form FPT Edu và báo cáo trạng thái gửi 100% Delivered.
+   - **Đặt lịch sự kiện & phân rã ca:** Bấm nút *"Đặt lịch sự kiện & khách mời"* $\rightarrow$ AI ghi nhận sự kiện vào CSDL, lưu danh sách khách mời VIPs, tự động giữ phòng và phân rã ngay 2 ca trực (Đón tiếp & Media) lên bảng lịch.
+3. Quan sát giao diện thẻ phản hồi thông minh (Rich Interactive Cards) của AI và các nút hành động trực tiếp.
 
 ---
 

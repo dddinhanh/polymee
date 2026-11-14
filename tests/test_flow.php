@@ -130,6 +130,36 @@ assertTest("Cập nhật trạng thái nghiệm thu 'Accepted' thành công", $u
 echo "\n";
 
 // -------------------------------------------------------------
+// TEST SUITE 6: TRỢ LÝ AI FUNCTION CALLING CHO ADMIN & BTC
+// -------------------------------------------------------------
+echo "6. KIỂM THỬ TRỢ LÝ AI FUNCTION CALLING (ADMIN/BTC AUTOMATION):\n";
+require_once __DIR__ . '/../core/Controller.php';
+require_once __DIR__ . '/../app/helpers/SessionHelper.php';
+require_once __DIR__ . '/../app/controllers/BaseController.php';
+require_once __DIR__ . '/../app/controllers/AiAssistantController.php';
+
+$ai = new AiAssistantController();
+$ref = new ReflectionClass($ai);
+$methodProcess = $ref->getMethod('processAiMessage');
+
+// 6.1. Tra cứu phòng trống
+$resRooms = $methodProcess->invoke($ai, 1, 'hôm nay có phòng nào đang trống không?');
+assertTest("AI tra cứu phòng trống & hội trường khả dụng", $resRooms['type'] === 'AVAILABLE_ROOMS' && !empty($resRooms['reply_html']));
+
+// 6.2. Tra cứu CTV rảnh
+$resCtvs = $methodProcess->invoke($ai, 1, 'ctv nào đang trống vậy bạn?');
+assertTest("AI lọc danh sách CTV rảnh sẵn sàng nhận ca", $resCtvs['type'] === 'AVAILABLE_CTVS' && !empty($resCtvs['reply_html']));
+
+// 6.3. Tự động gửi email mời CTV
+$resEmail = $methodProcess->invoke($ai, 1, 'bạn gửi mail cho ctv dki lịch nhé');
+assertTest("AI tự động soạn & phát tán email mời đăng ký ca", $resEmail['type'] === 'SEND_EMAIL_INVITATION' && !empty($resEmail['data']['dispatch_code']));
+
+// 6.4. Tự động đặt lịch sự kiện kèm khách mời VIPs
+$resEvent = $methodProcess->invoke($ai, 1, 'đặt giúp lịch sự kiện Hội Thảo AI 2026 ngày 25/11, khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu, Đại Diện FPT Telecom');
+assertTest("AI tự động tạo sự kiện, lưu khách mời & phân rã ca trực", $resEvent['type'] === 'AUTO_EVENT_CREATED' && !empty($resEvent['data']['event_id']));
+echo "\n";
+
+// -------------------------------------------------------------
 // TỔNG KẾT
 // -------------------------------------------------------------
 echo "========================================================\n";

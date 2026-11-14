@@ -2284,15 +2284,21 @@
                     </div>
                 </div>
 
-                <div class="d-flex flex-wrap gap-1 mb-3">
+                <div class="d-flex flex-wrap gap-1.5 mb-3">
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Phòng nào đang trống?')">
+                        <i class="bi bi-building-check me-1 text-success"></i> Phòng trống?
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('CTV nào đang trống?')">
+                        <i class="bi bi-people-fill me-1 text-warning"></i> CTV nào đang trống?
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Bạn gửi mail cho CTV đăng ký lịch ca trực')">
+                        <i class="bi bi-envelope-fill me-1 text-primary"></i> Gửi mail mời CTV
+                    </button>
+                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Đặt giúp lịch sự kiện Hội Thảo AI ngày 22/11, khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu, Đại Diện FPT Telecom')">
+                        <i class="bi bi-calendar-plus-fill me-1 text-danger"></i> Đặt lịch sự kiện & khách mời
+                    </button>
                     <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Tôi có ca trực nào sắp tới không?')">
-                        <i class="bi bi-clock me-1 text-primary"></i> Ca trực sắp tới của tôi?
-                    </button>
-                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Tìm cho tôi các ca trực Media hoặc Lễ tân')">
-                        <i class="bi bi-camera me-1 text-warning"></i> Ca Media / Lễ tân?
-                    </button>
-                    <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Kiểm tra trùng lịch thứ 7 ngày 15/11')">
-                        <i class="bi bi-shield-exclamation me-1 text-danger"></i> Kiểm tra trùng lịch?
+                        <i class="bi bi-clock me-1 text-secondary"></i> Ca trực của tôi?
                     </button>
                 </div>
 
@@ -3640,12 +3646,21 @@ async function sendPromptToAi(message) {
         const loader = document.getElementById('aiLoadingBubble');
         if (loader) loader.remove();
 
-        const replyText = data.reply || 'PolyMee AI đã xử lý yêu cầu của bạn.';
+        const replyHtml = data.reply_html || (data.reply ? data.reply.replace(/\n/g, '<br>') : 'PolyMee AI đã xử lý yêu cầu của bạn.');
         const aiReply = document.createElement('div');
         aiReply.className = 'd-flex gap-2';
-        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#0F172A; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%; white-space:pre-line;">${replyText}</div>`;
+        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#0F172A; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%; line-height:1.5;">${replyHtml}</div>`;
         history.appendChild(aiReply);
         history.scrollTop = history.scrollHeight;
+
+        if (data.action_type === 'AUTO_EVENT_CREATED') {
+            showToast('Đã tự động tạo sự kiện và lên lịch ca trực thành công!', 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 2500);
+        } else if (data.action_type === 'SEND_EMAIL_INVITATION') {
+            showToast('Đã gửi email mời đăng ký ca trực đến CTV FPT Edu!', 'success');
+        }
     } catch (err) {
         const loader = document.getElementById('aiLoadingBubble');
         if (loader) loader.remove();
