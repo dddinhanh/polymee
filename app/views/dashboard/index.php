@@ -775,9 +775,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .kpi-mini-card {
         background: #FFFFFF;
         border: 1px solid rgba(0, 0, 0, 0.08);
-        border-radius: 9px;
-        padding: 4px 10px;
-        height: 34px;
+        border-radius: 10px;
+        padding: 4px 12px;
+        height: clamp(32px, 3.8vh, 40px);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -791,7 +791,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     .kpi-mini-label {
-        font-size: 8.5px;
+        font-size: clamp(8.5px, 0.75vw, 10px);
         font-weight: 650;
         text-transform: uppercase;
         letter-spacing: 0.03em;
@@ -801,20 +801,20 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     .kpi-mini-val {
-        font-size: 13px;
+        font-size: clamp(13px, 1.1vw, 16px);
         font-weight: 800;
         line-height: 1;
         color: var(--ux-ink);
     }
 
     .kpi-mini-icon {
-        width: 22px;
-        height: 22px;
+        width: clamp(22px, 2vh, 28px);
+        height: clamp(22px, 2vh, 28px);
         border-radius: 6px;
         display: grid;
         place-items: center;
         flex: none;
-        font-size: 11px;
+        font-size: clamp(11px, 1vh, 13px);
         background: #F4F4F6 !important;
         color: #48484A !important;
     }
@@ -838,7 +838,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .calendar-container, .spa-panel {
+    .calendar-container {
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
         border-radius: 16px;
@@ -848,6 +848,26 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+
+    .spa-panel:not(#panelCalendar) {
+        background: var(--ux-surface);
+        border: 1px solid var(--ux-line);
+        border-radius: 16px;
+        padding: 14px 18px;
+        box-shadow: var(--ux-shadow-sm);
+        animation: fadeInPanel 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+        max-height: 100% !important;
     }
 
     [data-bs-theme="dark"] .calendar-container,
@@ -869,11 +889,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         padding-bottom: 3px !important;
         border-bottom: 1px solid var(--ux-line);
         width: 100% !important;
+        flex-shrink: 0 !important;
         box-sizing: border-box !important;
     }
 
     .month-header-grid .day-label {
-        font-size: 9.5px !important;
+        font-size: clamp(9.5px, 0.8vw, 11px) !important;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: .03em;
@@ -885,22 +906,27 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .month-days-grid {
         display: grid !important;
         grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
-        gap: 3.5px !important;
+        grid-template-rows: repeat(var(--month-rows, 5), minmax(0, 1fr)) !important;
+        gap: clamp(3px, 0.4vw, 6px) !important;
         width: 100% !important;
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        height: 100% !important;
         box-sizing: border-box !important;
     }
 
-    /* iOS Calendar Clean Native Style */
+    /* iOS Calendar Clean Native Style: Fluid viewport height scaling */
     .month-day-cell {
-        min-height: 48px !important;
-        max-height: 62px !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: none !important;
         min-width: 0 !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         background: #FFFFFF;
         border: 0.5px solid rgba(0, 0, 0, 0.08);
-        padding: 2.5px 4px !important;
+        padding: clamp(3px, 0.5vh, 6px) clamp(4px, 0.5vw, 8px) !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-start !important;
@@ -941,11 +967,11 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     .day-number-pill {
-        font-size: 10px !important;
+        font-size: clamp(10.5px, 0.85vw, 13px) !important;
         font-weight: 700;
         color: #1C1C1E;
-        width: 18px !important;
-        height: 18px !important;
+        width: clamp(20px, 1.8vw, 26px) !important;
+        height: clamp(20px, 1.8vw, 26px) !important;
         border-radius: 50%;
         display: grid;
         place-items: center;
@@ -1026,18 +1052,23 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             width: 100% !important;
             display: flex !important;
             flex-direction: column !important;
-            padding: 10px 14px !important;
-            margin-bottom: 10px !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            padding: clamp(8px, 1.2vh, 16px) clamp(10px, 1.2vw, 18px) !important;
+            margin-bottom: 0 !important;
             border-radius: 16px;
             background: #FFFFFF;
             border: 1px solid rgba(0, 0, 0, 0.08);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            overflow: hidden !important;
+            box-sizing: border-box !important;
         }
 
         #panelCalendar > .d-flex.border-bottom {
-            padding-bottom: 6px !important;
-            margin-bottom: 6px !important;
-            flex-shrink: 0;
+            padding-bottom: clamp(4px, 0.6vh, 8px) !important;
+            margin-bottom: clamp(4px, 0.6vh, 8px) !important;
+            flex-shrink: 0 !important;
         }
 
         /* 3-Tier Views Inside Calendar */
@@ -1054,22 +1085,34 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             width: 100% !important;
             display: flex !important;
             flex-direction: column !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            overflow: hidden !important;
         }
 
         #tierWeekView:not([style*="display: none"]):not([style*="display:none"]) {
             width: 100% !important;
             display: flex !important;
             flex-direction: column !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            overflow-y: auto !important;
         }
 
         #tierDayView:not([style*="display: none"]):not([style*="display:none"]) {
             width: 100% !important;
             display: flex !important;
             flex-direction: column !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            overflow-y: auto !important;
         }
 
         .month-header-grid {
-            flex-shrink: 0;
+            flex-shrink: 0 !important;
             margin-bottom: 3px !important;
             padding-bottom: 2px !important;
         }
@@ -1077,15 +1120,21 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         .month-days-grid {
             display: grid !important;
             grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
-            gap: 3.5px !important;
+            grid-template-rows: repeat(var(--month-rows, 5), minmax(0, 1fr)) !important;
+            gap: clamp(3px, 0.4vw, 6px) !important;
             width: 100% !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            box-sizing: border-box !important;
         }
 
         .month-day-cell {
-            min-height: 48px !important;
-            max-height: 62px !important;
-            padding: 2.5px 4px !important;
-            border-radius: 8px !important;
+            height: 100% !important;
+            min-height: 0 !important;
+            max-height: none !important;
+            padding: clamp(3px, 0.5vh, 6px) clamp(4px, 0.5vw, 8px) !important;
+            border-radius: 10px !important;
             display: flex !important;
             flex-direction: column !important;
             box-sizing: border-box !important;
@@ -1093,6 +1142,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             border: 0.5px solid rgba(0, 0, 0, 0.08);
             transition: all 0.15s ease;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+            overflow: hidden !important;
         }
 
         .month-day-cell:hover {
@@ -1102,23 +1152,25 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         }
 
         .day-number-pill {
-            width: 18px !important;
-            height: 18px !important;
-            font-size: 10px !important;
-            font-weight: 700;
+            width: clamp(20px, 1.8vw, 26px) !important;
+            height: clamp(20px, 1.8vw, 26px) !important;
+            font-size: clamp(10.5px, 0.85vw, 13px) !important;
+            font-weight: 700 !important;
             border-radius: 50%;
         }
 
         .shift-chip, .memo-chip {
-            font-size: 8.5px !important;
-            padding: 1px 4px !important;
-            min-height: 15px !important;
-            line-height: 13px !important;
-            border-radius: 4px !important;
-            margin-bottom: 1px !important;
+            font-size: clamp(9px, 0.75vw, 10.5px) !important;
+            font-weight: 600;
+            padding: clamp(1.5px, 0.25vh, 3px) clamp(4px, 0.4vw, 6px) !important;
+            min-height: clamp(16px, 2vh, 22px) !important;
+            line-height: 1.25 !important;
+            border-radius: 5px !important;
+            margin-bottom: 2px !important;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+            box-sizing: border-box;
         }
 
         .spa-panel:not(#panelCalendar):not([style*="display: none"]):not([style*="display:none"]) {
@@ -4384,31 +4436,33 @@ function renderMonthGrid(year, month) {
                 previewHtml += `<div class="num-tabular ps-0.5" style="font-size:8px; font-weight:700; color:var(--ux-ink-3); line-height:1.1;">+${dayShifts.length} ca trực</div>`;
             }
         } else if (dayShifts.length > 0) {
-            const s = dayShifts[0];
-            const isMine = parseInt(s.is_registered_by_me) > 0;
-            const isFull = parseInt(s.approved_qty) >= parseInt(s.target_qty);
-            const chipClass = isMine ? 'mine' : (isFull ? 'urgent' : '');
-            const dotClass = isMine ? 'status-dot-emerald' : (isFull ? 'status-dot-red' : 'status-dot-orange');
-            const timePrefix = s.start_time.substring(11, 16);
-            previewHtml += `<div class="shift-chip ${chipClass}" title="${s.name} (${s.location_name || 'Hội trường'})">
-                <span class="status-dot ${dotClass}"></span>
-                <span class="num-tabular flex-shrink-0 me-0.5" style="font-size:8.5px; opacity:0.85;">${timePrefix}</span>
-                <span class="text-truncate flex-grow-1">${s.name}</span>
-            </div>`;
-            if (dayShifts.length > 1) {
-                previewHtml += `<div class="num-tabular ps-0.5" style="font-size:8px; font-weight:700; color:var(--ux-ink-3); line-height:1.1;">+${dayShifts.length - 1} ca nữa</div>`;
+            dayShifts.slice(0, 2).forEach(s => {
+                const isMine = parseInt(s.is_registered_by_me) > 0;
+                const isFull = parseInt(s.approved_qty) >= parseInt(s.target_qty);
+                const chipClass = isMine ? 'mine' : (isFull ? 'urgent' : '');
+                const dotClass = isMine ? 'status-dot-emerald' : (isFull ? 'status-dot-red' : 'status-dot-orange');
+                const timePrefix = s.start_time.substring(11, 16);
+                previewHtml += `<div class="shift-chip ${chipClass}" title="${s.name} (${s.location_name || 'Hội trường'})">
+                    <span class="status-dot ${dotClass}"></span>
+                    <span class="num-tabular flex-shrink-0 me-0.5" style="font-size:clamp(8px, 0.75vw, 9.5px); opacity:0.85;">${timePrefix}</span>
+                    <span class="text-truncate flex-grow-1">${s.name}</span>
+                </div>`;
+            });
+            const remaining = dayShifts.length - 2;
+            if (remaining > 0) {
+                previewHtml += `<div class="num-tabular ps-0.5" style="font-size:clamp(8px, 0.7vw, 9px); font-weight:700; color:var(--ux-ink-3); line-height:1.1;">+${remaining} ca nữa</div>`;
             }
         }
 
         cell.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-0.5">
+            <div class="d-flex justify-content-between align-items-center mb-1 flex-shrink-0">
                 <span class="day-number-pill num-tabular">${day}</span>
-                <div class="d-flex align-items-center gap-0.5">
-                    ${dayNotes.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:#F4F4F6; color:#EA580C; border:1px solid rgba(0,0,0,0.08); font-size:8px; font-weight:700; padding:1px 3px;" title="${dayNotes.length} Ghi chú"><i class="fa-solid fa-bookmark me-0.5" style="font-size:7px;"></i>${dayNotes.length}</span>` : ''}
-                    ${dayShifts.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:#F4F4F6; color:var(--ux-ink-2); border:1px solid rgba(0,0,0,0.08); font-size:8px; font-weight:650; padding:1px 3px;">${dayShifts.length} ca</span>` : ''}
+                <div class="d-flex align-items-center gap-1">
+                    ${dayNotes.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:#F4F4F6; color:#EA580C; border:1px solid rgba(0,0,0,0.08); font-size:clamp(8px, 0.7vw, 9.5px); font-weight:700; padding:1px 4px;" title="${dayNotes.length} Ghi chú"><i class="fa-solid fa-bookmark me-0.5" style="font-size:7px;"></i>${dayNotes.length}</span>` : ''}
+                    ${dayShifts.length > 0 ? `<span class="badge rounded-pill num-tabular" style="background:#F4F4F6; color:var(--ux-ink-2); border:1px solid rgba(0,0,0,0.08); font-size:clamp(8px, 0.7vw, 9.5px); font-weight:650; padding:1px 4px;">${dayShifts.length} ca</span>` : ''}
                 </div>
             </div>
-            <div class="d-flex flex-column gap-0.5" style="min-height:0; overflow:hidden;">${previewHtml}</div>
+            <div class="day-cell-content d-flex flex-column gap-0.5" style="flex: 1 1 0%; min-height: 0; overflow: hidden;">${previewHtml}</div>
         `;
 
         cell.addEventListener('click', () => {
