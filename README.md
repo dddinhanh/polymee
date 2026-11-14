@@ -62,9 +62,9 @@ graph TD
 1. **Sinh viên / CTV Sự kiện (`Student` - Demo: Đinh Nguyễn Phương Anh, Lê Đức Mạnh):**
    - Xem tổng quan lịch sự kiện và các ca trực theo định dạng Tháng / Tuần / Ngày.
    - Đăng ký ca trực theo nguyện vọng (tự động kiểm tra trùng giờ).
-   - Điểm danh thông qua quét máy chiếu Dynamic QR Code thời gian thực.
+   - Chụp & nộp ảnh hiện trường chứng minh có mặt trực tiếp tại sự kiện để Giảng viên nghiệm thu.
+   - Tra cứu Hợp đồng nghiệm thu điện tử và thù lao được quyết toán.
    - Quản lý hồ sơ nhận thù lao (Cập nhật số CCCD, ngân hàng, ảnh VNeID).
-   - Tra cứu điểm rèn luyện và thù lao tích lũy.
 
 2. **CTV Media & Truyền thông (`Media` - Demo: PI03084):**
    - Toàn bộ quyền của CTV sinh viên.
@@ -73,6 +73,7 @@ graph TD
 3. **Giảng viên / Ban Tổ Chức (`Organizer` - Demo: Thầy Phan Hoàng Khải):**
    - Đăng tải sự kiện, phân rã sự kiện thành các ca trực nhỏ (Setup, Lễ tân, Media, Hậu cần).
    - Thiết lập chỉ tiêu tuyển (`target_qty`), kỹ năng yêu cầu và định mức thù lao/điểm rèn luyện.
+   - Thẩm định ảnh chụp hiện trường có mặt của CTV, xác nhận nghiệm thu và lập Hợp đồng (`HDNT-2026-FPLY-xxx`).
    - Thẩm định và phê duyệt minh chứng Google Drive của CTV.
    - Thêm ghi chú/dặn dò lịch toàn trường (Apple Calendar Notes).
 
@@ -83,12 +84,13 @@ graph TD
 5. **Phòng Kế toán & Quyết toán (`Accountant` - Demo: Đặng Thu Thảo):**
    - Bảng điều phối nghiệm thu thù lao tập trung (`panelAccounting`).
    - Thẩm định hồ sơ định danh: So sánh số CCCD và ảnh chụp VNeID đã tải lên.
-   - 1-Click Duyệt hồ sơ (`Approved`) và Xác nhận chi trả (`Paid`).
+   - Thẩm định ảnh hiện trường do CTV chụp tại địa điểm trực.
+   - Trình Hợp đồng nghiệm thu lên Ban Giám Hiệu ký duyệt và chuyển khoản thù lao (`Signed_Paid`).
    - Xuất bảng quyết toán tài chính ra file CSV (chuẩn UTF-8 with BOM mở được trực tiếp trên Excel).
 
 6. **Quản trị viên Hệ thống (`Admin` - Demo: ADMIN001):**
    - Toàn quyền cấu hình hệ thống, quản trị tài khoản, địa điểm, phân quyền.
-   - Kích hoạt máy chiếu Dynamic QR Code phục vụ sự kiện.
+   - Giám sát toàn bộ hồ sơ hợp đồng nghiệm thu toàn trường.
 
 ---
 
@@ -150,10 +152,12 @@ Hệ thống loại bỏ hoàn toàn khả năng CTV đăng ký 2 ca trực trù
 $$\text{Collision} = (\text{Start}_{\text{New}} < \text{End}_{\text{Existing}}) \land (\text{End}_{\text{New}} > \text{Start}_{\text{Existing}})$$
 Khi phát hiện trùng lịch, hệ thống lập tức chặn giao dịch tại Controller, trả về mã HTTP `409 Conflict` và hiển thị cảnh báo chi tiết tên ca và khung giờ bị trùng.
 
-#### B. Thuật toán Điểm danh Dynamic QR Code xoay vòng 30 giây (HMAC-SHA256)
-Mỗi mã QR chiếu trên màn hình hội trường chỉ có hiệu lực tối đa 30 giây, được sinh bằng chữ ký mã hóa một chiều:
-$$\text{Token} = \text{HMAC-SHA256}\left(\text{EventID} + \text{ShiftID} + \left\lfloor\frac{\text{Timestamp}}{30}\right\rfloor, \text{SecretKey}\right)$$
-Trình chiếu tự động vẽ lại QR Code mới bằng Ajax mà **không cần tải lại trang**, ngăn chặn 100% việc chụp ảnh màn hình gửi điểm danh hộ.
+#### B. Quy trình Nghiệm thu Minh chứng Hiện trường & Hợp đồng Điện tử Trình Ký Nhà trường
+Nhằm khắc phục triệt để nhược điểm gian lận điểm danh từ xa, PolyMee chuyển đổi toàn diện sang quy trình nghiệm thu bằng ảnh chụp hiện trường thực tế theo chu trình 4 bước:
+1. **CTV nộp ảnh hiện trường có mặt:** Tại vị trí trực thực tế (Sảnh đón khách, Sân khấu, Bàn lễ tân), CTV chụp ảnh hiện trường chứng minh sự hiện diện và gửi kèm ghi chú công việc lên hệ thống.
+2. **Giảng viên giám sát xác nhận nghiệm thu:** Giảng viên kiểm tra đối soát ảnh hiện trường. Khi bấm *"Xác nhận nghiệm thu"*, hệ thống tự động sinh Mã Hợp đồng: `HDNT-2026-FPLY-xxx`.
+3. **Lập Hợp đồng & Biên bản Nghiệm thu Thông tin CTV:** Hệ thống tự động tổng hợp thông tin định danh (CCCD, đối chiếu ứng dụng VNeID), số tài khoản ngân hàng thụ hưởng, chi tiết ca trực, thù lao thỏa thuận và nhúng trực tiếp **Ảnh Hiện Trường Minh Chứng** vào văn bản chuẩn hành chính của Trường Cao đẳng FPT Polytechnic.
+4. **Trình Nhà trường Ký Duyệt & Chuyển Tiền:** Giảng viên và Kế toán trình hồ sơ lên Ban Giám Hiệu ký duyệt chi, chuyển trạng thái sang `Signed_Paid` (Đã Ký & Đã Chi Tiền), đồng thời hỗ trợ xuất bản in A4 hoặc PDF tức thì (`window.print()`).
 
 #### C. Thẩm định minh chứng Google Drive tự động
 Khi CTV Media gửi link bài nộp, hệ thống sử dụng Regex trích xuất thư mục Google Drive, gán với ca trực tương ứng, chuyển sang trạng thái chờ duyệt và thông báo cho Ban tổ chức thẩm định.

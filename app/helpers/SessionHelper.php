@@ -48,7 +48,9 @@ class SessionHelper
     {
         unset($_SESSION['is_logged_out']);
         $_SESSION['user'] = $user;
-        session_regenerate_id(true); // Phòng chống Session Fixation
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            @session_regenerate_id(true); // Phòng chống Session Fixation
+        }
     }
 
     public static function logout(): void

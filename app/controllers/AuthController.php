@@ -194,10 +194,16 @@ class AuthController extends BaseController
     /**
      * Chức năng chuyển đổi nhanh tài khoản mẫu (Dành cho Giảng viên / Hội đồng chấm thi)
      */
-    public function quickLogin(int $userId): void
+    public function quickLogin($userId = 3): void
     {
-        SessionHelper::switchUser($userId);
-        SessionHelper::setFlash('success', 'Đã chuyển đổi sang tài khoản ID #' . $userId . ' thành công.');
+        $id = (int)$userId;
+        if ($id <= 0) {
+            $id = 3;
+        }
+        SessionHelper::switchUser($id);
+        $user = SessionHelper::getCurrentUser();
+        $name = $user['full_name'] ?? ('Tài khoản #' . $id);
+        SessionHelper::setFlash('success', 'Đã chuyển đổi sang tài khoản: ' . $name . ' thành công.');
         $this->redirect('/dashboard');
     }
 

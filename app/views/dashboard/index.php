@@ -2263,7 +2263,9 @@
             <div class="modal-body p-4" style="background:var(--ux-surface-2);">
                 <div id="aiChatHistory" class="d-flex flex-column gap-3 mb-3" style="max-height: 320px; overflow-y: auto; padding-right: 6px;">
                     <div class="d-flex gap-2">
-                        <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold" style="width:34px; height:34px; flex:none;">AI</div>
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#0F172A; box-shadow:0 2px 6px rgba(245,158,11,0.3);">
+                            <i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i>
+                        </div>
                         <div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%;">
                             Xin chào <strong><?= htmlspecialchars($currentUser['full_name'] ?? 'bạn') ?></strong>! Tôi là trợ lý ảo PolyMee. Bạn có thể hỏi tôi về lịch trực, tìm kiếm ca theo kỹ năng, hoặc nộp link Google Drive minh chứng nghiệm thu nhé!
                         </div>
@@ -3612,7 +3614,7 @@ async function sendPromptToAi(message) {
     const loadingMsg = document.createElement('div');
     loadingMsg.className = 'd-flex gap-2';
     loadingMsg.id = 'aiLoadingBubble';
-    loadingMsg.innerHTML = `<div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold" style="width:34px; height:34px; flex:none;">AI</div><div class="bg-white p-3 rounded-4 shadow-xs border text-muted" style="font-size:13px;"><i class="fa-solid fa-spinner fa-spin me-1"></i> Trợ lý AI đang phân tích dữ liệu...</div>`;
+    loadingMsg.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#0F172A; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border text-muted" style="font-size:13px;"><i class="fa-solid fa-spinner fa-spin me-1"></i> Trợ lý AI đang phân tích dữ liệu...</div>`;
     history.appendChild(loadingMsg);
     history.scrollTop = history.scrollHeight;
 
@@ -3629,7 +3631,7 @@ async function sendPromptToAi(message) {
         const replyText = data.reply || 'PolyMee AI đã xử lý yêu cầu của bạn.';
         const aiReply = document.createElement('div');
         aiReply.className = 'd-flex gap-2';
-        aiReply.innerHTML = `<div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold" style="width:34px; height:34px; flex:none;">AI</div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%; white-space:pre-line;">${replyText}</div>`;
+        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#0F172A; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%; white-space:pre-line;">${replyText}</div>`;
         history.appendChild(aiReply);
         history.scrollTop = history.scrollHeight;
     } catch (err) {

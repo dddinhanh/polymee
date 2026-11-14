@@ -152,10 +152,12 @@
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        display: grid;
-        place-items: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-weight: 800;
-        font-size: 12px;
+        font-size: 11.5px;
+        line-height: 1;
         flex: none;
     }
     </style>
@@ -269,21 +271,48 @@
                         <span class="badge bg-warning-subtle text-warning border border-warning-subtle" style="font-size:10px;">Không cần gõ pass</span>
                     </div>
 
-                    <div class="d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2" style="max-height: 280px; overflow-y: auto; padding-right: 2px;">
                         <a href="/auth/quickLogin/3" class="demo-account-pill">
                             <div class="avatar-circle bg-primary-subtle text-primary">PA</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Đinh Nguyễn Phương Anh</div>
-                                <small class="text-muted" style="font-size:11px;">Mã SV: PI03084 • Role: <strong>Sinh Viên CTV Media</strong></small>
+                                <small class="text-muted" style="font-size:11px;">PI03084 • Role: <strong>Sinh Viên CTV Media</strong></small>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </a>
+
+                        <a href="/auth/quickLogin/4" class="demo-account-pill">
+                            <div class="avatar-circle bg-emerald-subtle text-success">ĐM</div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold small lh-1">Lê Đức Mạnh</div>
+                                <small class="text-muted" style="font-size:11px;">PS20262 • Role: <strong>Sinh Viên CTV Lễ Tân</strong></small>
                             </div>
                             <i class="bi bi-chevron-right text-muted small"></i>
                         </a>
 
                         <a href="/auth/quickLogin/2" class="demo-account-pill">
-                            <div class="avatar-circle bg-warning-subtle text-warning">GV</div>
+                            <div class="avatar-circle bg-warning-subtle text-warning-emphasis">GV</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Thầy Phan Hoàng Khải</div>
-                                <small class="text-muted" style="font-size:11px;">Mã GV: GV0102 • Role: <strong>Ban Tổ Chức (Organizer)</strong></small>
+                                <small class="text-muted" style="font-size:11px;">GV0102 • Role: <strong>Giảng Viên / Ban Tổ Chức</strong></small>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </a>
+
+                        <a href="/auth/quickLogin/7" class="demo-account-pill">
+                            <div class="avatar-circle bg-success-subtle text-success">KT</div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold small lh-1">Đặng Thu Thảo</div>
+                                <small class="text-muted" style="font-size:11px;">KT0105 • Role: <strong>Kế Toán & Quyết Toán</strong></small>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </a>
+
+                        <a href="/auth/quickLogin/8" class="demo-account-pill">
+                            <div class="avatar-circle bg-info-subtle text-info-emphasis">HC</div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold small lh-1">Lê Đình Tuấn</div>
+                                <small class="text-muted" style="font-size:11px;">HC0201 • Role: <strong>Nhân Viên Hành Chính CSVC</strong></small>
                             </div>
                             <i class="bi bi-chevron-right text-muted small"></i>
                         </a>
@@ -292,7 +321,7 @@
                             <div class="avatar-circle bg-danger-subtle text-danger">AD</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Quản Trị Viên (Admin)</div>
-                                <small class="text-muted" style="font-size:11px;">Mã: ADMIN001 • Role: <strong>Kế Toán / Toàn Quyền</strong></small>
+                                <small class="text-muted" style="font-size:11px;">ADMIN001 • Role: <strong>Toàn Quyền Hệ Thống</strong></small>
                             </div>
                             <i class="bi bi-chevron-right text-muted small"></i>
                         </a>
