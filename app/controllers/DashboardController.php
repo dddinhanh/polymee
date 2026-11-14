@@ -87,9 +87,21 @@ class DashboardController extends BaseController
         $calendarNotes = $db->query("SELECT * FROM calendar_notes ORDER BY date ASC")->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
         // 6. Lấy thông tin tài khoản CTV hiện tại (cho form cập nhật hồ sơ ngân hàng / VNeID)
-        $stmtUser = $db->prepare("SELECT * FROM users WHERE id = :uid");
+        $stmtUser = $db->prepare("SELECT u.*, r.name as role_name, r.description as role_desc FROM users u INNER JOIN roles r ON u.role_id = r.id WHERE u.id = :uid");
         $stmtUser->execute([':uid' => $this->currentUser['id'] ?? 0]);
         $userProfile = $stmtUser->fetch(PDO::FETCH_ASSOC) ?: $this->currentUser;
+
+        // 7. Lấy danh sách toàn bộ người dùng & vai trò (phục vụ Quản Trị Cấp Quyền)
+        $stmtAllUsers = $db->query("SELECT u.*, r.name as role_name, r.description as role_desc FROM users u INNER JOIN roles r ON u.role_id = r.id ORDER BY u.id ASC");
+        $allUsers = $stmtAllUsers->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        // 8. Lấy danh mục tất cả vai trò hệ thống
+        $stmtRoles = $db->query("SELECT * FROM roles ORDER BY id ASC");
+        $roles = $stmtRoles->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        // 9. Lấy nhật ký lịch sử thao tác hệ thống (Audit Trail)
+        $stmtLogs = $db->query("SELECT * FROM activity_logs ORDER BY created_at DESC LIMIT 60");
+        $activityLogs = $stmtLogs->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
         // Render view chuyên biệt Bootstrap 5 & Apple macOS Sonoma / iPadOS
         $this->renderBootstrapDashboard('dashboard/index', [
@@ -101,6 +113,9 @@ class DashboardController extends BaseController
             'accountingList' => $accountingList,
             'calendarNotes' => $calendarNotes,
             'userProfile' => $userProfile,
+            'allUsers' => $allUsers,
+            'roles' => $roles,
+            'activityLogs' => $activityLogs,
             'currentUser' => $this->currentUser,
             'flash' => SessionHelper::getFlash(),
             'csrfToken' => SessionHelper::getCsrfToken()
@@ -433,6 +448,186 @@ class DashboardController extends BaseController
             'success' => true,
             'message' => 'Đã xóa lịch hẹn thành công khỏi hệ thống!'
         ]);
+    }
+
+    /**
+     * Cập nhật thông tin tài khoản cá nhân theo từng vai trò
+     */
+    public function updateProfile(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['success' => false, 'message' => 'Phương thức không hợp lệ'], 405);
+            return;
+        }
+
+        if (!$this->currentUser) {
+            $this->json(['success' => false, 'message' => 'Vui lòng đăng nhập để cập nhật hồ sơ'], 401);
+            return;
+        }
+
+        $userId = (int)($this->currentUser['id'] ?? 0);
+        $roleName = $this->currentUser['role_name'] ?? '';
+        $roleId = (int)($this->currentUser['role_id'] ?? 0);
+        
+        // Quản trị viên hệ thống (1) và Giảng viên (2) không có hồ sơ định danh nhận thù lao
+        $isStaffOrAdmin = in_array($roleId, [1, 2], true) || in_array($roleName, ['Admin', 'Organizer'], true);
+
+        $fullName = trim($_POST['full_name'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+        $skills = trim($_POST['skills'] ?? '');
+        $newPassword = $_POST['new_password'] ?? '';
+
+        if (empty($fullName)) {
+            $this->json(['success' => false, 'message' => 'Họ và tên không được để trống'], 422);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+
+        $params = [
+            ':id' => $userId,
+            ':full_name' => $fullName,
+            ':phone' => $phone,
+            ':skills' => $skills
+        ];
+
+        $setSql = "full_name = :full_name, phone = :phone, skills = :skills";
+
+        // Với CTV (Student / Media / v.v.) thì cập nhật CCCD, ngân hàng, STK, VNeID
+        if (!$isStaffOrAdmin) {
+            $idCardNumber = trim($_POST['id_card_number'] ?? '');
+            $bankName = trim($_POST['bank_name'] ?? '');
+            $bankAccountNumber = trim($_POST['bank_account_number'] ?? '');
+            $bankAccountName = trim($_POST['bank_account_name'] ?? '');
+            $vneidImageUrl = trim($_POST['vneid_image_url'] ?? '');
+
+            $setSql .= ", id_card_number = :id_card_number, bank_name = :bank_name, bank_account_number = :bank_account_number, bank_account_name = :bank_account_name, vneid_image_url = :vneid_image_url";
+            $params[':id_card_number'] = $idCardNumber;
+            $params[':bank_name'] = $bankName;
+            $params[':bank_account_number'] = $bankAccountNumber;
+            $params[':bank_account_name'] = $bankAccountName;
+            $params[':vneid_image_url'] = $vneidImageUrl;
+        }
+
+        if (!empty($newPassword)) {
+            if (strlen($newPassword) < 6) {
+                $this->json(['success' => false, 'message' => 'Mật khẩu mới phải từ 6 ký tự trở lên'], 422);
+                return;
+            }
+            $setSql .= ", password_hash = :password_hash";
+            $params[':password_hash'] = password_hash($newPassword, PASSWORD_DEFAULT);
+        }
+
+        $sql = "UPDATE users SET {$setSql} WHERE id = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
+
+        // Làm mới thông tin session
+        $stmtRefresh = $db->prepare("SELECT u.*, r.name as role_name, r.description as role_desc FROM users u INNER JOIN roles r ON u.role_id = r.id WHERE u.id = :id");
+        $stmtRefresh->execute([':id' => $userId]);
+        $refreshed = $stmtRefresh->fetch(PDO::FETCH_ASSOC);
+        if ($refreshed) {
+            unset($refreshed['password_hash']);
+            $_SESSION['current_user'] = $refreshed;
+            $this->currentUser = $refreshed;
+        }
+
+        $this->logActivity('UPDATE_PROFILE', 'USER', $userId, "Người dùng [{$fullName}] đã cập nhật thông tin hồ sơ tài khoản cá nhân.");
+
+        $this->json([
+            'success' => true,
+            'message' => 'Cập nhật thông tin tài khoản cá nhân thành công!',
+            'user' => $refreshed
+        ]);
+    }
+
+    /**
+     * Cấp quyền người dùng (Dành riêng cho Quản trị viên hệ thống)
+     */
+    public function updateUserRole(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['success' => false, 'message' => 'Phương thức không hợp lệ'], 405);
+            return;
+        }
+
+        $roleId = (int)($this->currentUser['role_id'] ?? 0);
+        $roleName = $this->currentUser['role_name'] ?? '';
+
+        if ($roleId !== 1 && $roleName !== 'Admin') {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền thực hiện chức năng này. Chỉ Quản trị viên mới được cấp quyền!'], 403);
+            return;
+        }
+
+        $targetUserId = (int)($_POST['user_id'] ?? 0);
+        $newRoleId = (int)($_POST['role_id'] ?? 0);
+
+        if ($targetUserId <= 0 || $newRoleId <= 0) {
+            $this->json(['success' => false, 'message' => 'Dữ liệu phân quyền không hợp lệ'], 422);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+
+        // Kiểm tra vai trò đích
+        $stmtRole = $db->prepare("SELECT * FROM roles WHERE id = :id");
+        $stmtRole->execute([':id' => $newRoleId]);
+        $targetRole = $stmtRole->fetch(PDO::FETCH_ASSOC);
+        if (!$targetRole) {
+            $this->json(['success' => false, 'message' => 'Vai trò được chọn không tồn tại trên hệ thống'], 404);
+            return;
+        }
+
+        // Kiểm tra người dùng đích
+        $stmtUser = $db->prepare("SELECT * FROM users WHERE id = :id");
+        $stmtUser->execute([':id' => $targetUserId]);
+        $targetUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
+        if (!$targetUser) {
+            $this->json(['success' => false, 'message' => 'Người dùng không tồn tại'], 404);
+            return;
+        }
+
+        // Cập nhật vai trò
+        $stmtUpdate = $db->prepare("UPDATE users SET role_id = :role_id WHERE id = :id");
+        $stmtUpdate->execute([
+            ':role_id' => $newRoleId,
+            ':id' => $targetUserId
+        ]);
+
+        $adminName = $this->currentUser['full_name'] ?? 'Admin';
+        $details = "Quản trị viên [{$adminName}] đã cấp quyền mới [{$targetRole['name']} - {$targetRole['description']}] cho tài khoản [{$targetUser['full_name']}] (MSSV/Mã: {$targetUser['student_code']}).";
+        
+        $this->logActivity('GRANT_ROLE', 'USER', $targetUserId, $details);
+
+        $this->json([
+            'success' => true,
+            'message' => "Đã cấp quyền '{$targetRole['name']}' thành công cho người dùng {$targetUser['full_name']}!",
+            'role_name' => $targetRole['name'],
+            'role_desc' => $targetRole['description']
+        ]);
+    }
+
+    /**
+     * Ghi nhận lịch sử thao tác hệ thống (Audit Trail)
+     */
+    private function logActivity(string $action, string $targetType, int|string $targetId, string $details): void
+    {
+        try {
+            $db = Database::getInstance()->getConnection();
+            $stmt = $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (:user_id, :user_name, :user_role, :action, :target_type, :target_id, :details, :ip_address, datetime('now', 'localtime'))");
+            $stmt->execute([
+                ':user_id' => $this->currentUser['id'] ?? null,
+                ':user_name' => $this->currentUser['full_name'] ?? 'Hệ thống',
+                ':user_role' => $this->currentUser['role_name'] ?? 'Guest',
+                ':action' => $action,
+                ':target_type' => $targetType,
+                ':target_id' => (string)$targetId,
+                ':details' => $details,
+                ':ip_address' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'
+            ]);
+        } catch (\Throwable $e) {
+            error_log("Failed to log activity: " . $e->getMessage());
+        }
     }
 
     /**

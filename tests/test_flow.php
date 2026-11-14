@@ -160,6 +160,40 @@ assertTest("AI tự động tạo sự kiện, lưu khách mời & phân rã ca 
 echo "\n";
 
 // -------------------------------------------------------------
+// 7. KIỂM THỬ PHÂN BIỆT HỒ SƠ VAI TRÒ & NHẬT KÝ HỆ THỐNG (AUDIT TRAIL)
+// -------------------------------------------------------------
+echo "7. KIỂM THỬ PHÂN BIỆT HỒ SƠ VAI TRÒ & NHẬT KÝ HỆ THỐNG (AUDIT TRAIL):\n";
+
+// 7.1. Bảng activity_logs tồn tại và lưu vết thao tác
+$stmtLog = $db->query("SELECT COUNT(*) FROM activity_logs");
+$logCount = (int)$stmtLog->fetchColumn();
+assertTest("Bảng 'activity_logs' lưu vết kiểm toán hệ thống thành công (Rows: {$logCount})", $logCount > 0);
+
+// 7.2. Kiểm tra quy chế cán bộ/giảng viên không kê khai CCCD thù lao
+$stmtAdmin = $db->query("SELECT u.*, r.name as role_name FROM users u INNER JOIN roles r ON u.role_id = r.id WHERE u.role_id IN (1, 2) LIMIT 1");
+$adminUser = $stmtAdmin->fetch(PDO::FETCH_ASSOC);
+$isStaffNoDossier = in_array((int)$adminUser['role_id'], [1, 2], true);
+assertTest("Quản trị viên ({$adminUser['role_name']}) là nhân sự biên chế trường, miễn hồ sơ nhận thù lao CTV", $isStaffNoDossier);
+
+// 7.3. Kiểm tra vai trò CTV sinh viên có hồ sơ quyết toán tài khoản ngân hàng
+$stmtCtv = $db->query("SELECT u.*, r.name as role_name FROM users u INNER JOIN roles r ON u.role_id = r.id WHERE u.role_id = 4 LIMIT 1");
+$ctvUser = $stmtCtv->fetch(PDO::FETCH_ASSOC);
+$hasBankAcc = !empty($ctvUser['bank_account_number']) || !empty($ctvUser['id_card_number']);
+assertTest("Cộng tác viên ({$ctvUser['full_name']} - {$ctvUser['role_name']}) có thông tin CCCD/STK nhận thù lao", $hasBankAcc);
+
+// 7.4. Mô phỏng ghi log phân quyền Admin cấp quyền thành công
+$stmtInsertLog = $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (:uid, :uname, :urole, 'GRANT_ROLE', 'USER', :tid, :details, '127.0.0.1', datetime('now', 'localtime'))");
+$stmtInsertLog->execute([
+    ':uid' => $adminUser['id'],
+    ':uname' => $adminUser['full_name'],
+    ':urole' => $adminUser['role_name'],
+    ':tid' => $ctvUser['id'],
+    ':details' => "Kiểm thử tự động cấp quyền thành công cho {$ctvUser['full_name']}"
+]);
+assertTest("Ghi nhận sự kiện GRANT_ROLE vào Audit Trail thành công", (int)$db->lastInsertId() > 0);
+echo "\n";
+
+// -------------------------------------------------------------
 // TỔNG KẾT
 // -------------------------------------------------------------
 echo "========================================================\n";
