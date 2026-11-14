@@ -72,9 +72,9 @@ graph TD
 
 3. **Giảng viên / Ban Tổ Chức (`Organizer` - Demo: Thầy Phan Hoàng Khải):**
    - Đăng tải sự kiện, phân rã sự kiện thành các ca trực nhỏ (Setup, Lễ tân, Media, Hậu cần).
-   - Thiết lập chỉ tiêu tuyển (`target_qty`), kỹ năng yêu cầu và định mức thù lao/điểm rèn luyện.
-   - Thẩm định ảnh chụp hiện trường có mặt của CTV, xác nhận nghiệm thu và lập Hợp đồng (`HDNT-2026-FPLY-xxx`).
-   - Thẩm định và phê duyệt minh chứng Google Drive của CTV.
+   - Thiết lập chỉ tiêu tuyển (`target_qty`), kỹ năng yêu cầu và định mức thù lao/Điểm Tích Cực (đánh giá uy tín & năng lực CTV).
+   - Thẩm định minh chứng hiện trường của CTV (ảnh hiện trường đối với CTV thường; link Google Drive ảnh đã chỉnh sửa sáng & gắn kèm logo FPT đối với CTV Media), xác nhận duyệt đã đầy đủ minh chứng để nghiệm thu và lập Hợp đồng (`HDNT-2026-FPLY-xxx`).
+   - Thẩm định và phê duyệt minh chứng sau sự kiện hoàn thành.
    - Thêm ghi chú/dặn dò lịch toàn trường (Apple Calendar Notes).
 
 4. **Nhân viên CSVC & Hành chính (`Staff` - Demo: Lê Đình Tuấn):**
@@ -109,14 +109,14 @@ flowchart LR
     subgraph "Hệ Thống PolyMee (WEB212)"
         UC1["Xem Bảng Lịch Trung Tâm (Tháng/Tuần/Ngày)"]
         UC2["Đăng Ký Ca Trực (Collision Detection)"]
-        UC3["Nộp Ảnh Hiện Trường Minh Chứng"]
-        UC4["Hồ Sơ Nhận Thù Lao & VNeID"]
-        UC5["Nộp Minh Chứng Google Drive"]
-        UC6["Thẩm Định Drive & Duyệt Điểm Rèn Luyện"]
+        UC3["Nộp Ảnh Hiện Trường Minh Chứng (CTV Thường)"]
+        UC4["Hồ Sơ Nhận Thù Lao (Chỉ cần Số CCCD & Ảnh VNeID)"]
+        UC5["Nộp Link Google Drive Đã Chỉnh Sáng & Gắn Logo (CTV Media)"]
+        UC6["GV Duyệt Đầy Đủ Minh Chứng Nghiệm Thu & Điểm Tích Cực"]
         UC7["Tạo Sự Kiện & Phân Rã Ca Trực"]
         UC8["Thêm Ghi Chú Lịch (Apple Memos)"]
         UC9["GV Nghiệm Thu & Khởi Tạo Hợp Đồng"]
-        UC10["Trợ Lý AI Tư Vấn & Function Calling"]
+        UC10["Trợ Lý AI Phân Quyền Theo Role & Function Calling"]
         UC11["Hồ Sơ Hợp Đồng & Trình Trường Ký Duyệt"]
     end
 
@@ -294,7 +294,7 @@ erDiagram
         int target_qty "Chỉ tiêu CTV cần tuyển"
         int approved_qty "Số lượng đã duyệt"
         varchar skill_required "Yêu cầu kỹ năng"
-        int points "Điểm rèn luyện cộng thưởng"
+        int points "Điểm Tích Cực cộng thưởng (đánh giá uy tín CTV)"
         decimal remuneration_amount "Mức thù lao chi trả (VNĐ)"
     }
 

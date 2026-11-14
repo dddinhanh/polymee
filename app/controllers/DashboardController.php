@@ -448,6 +448,10 @@ class DashboardController extends BaseController
         $date = trim($input['date'] ?? '');
         $content = trim($input['content'] ?? '') ?: $title;
         $type = trim($input['type'] ?? 'EVENT_REMINDER');
+        $color = trim($input['color'] ?? '#EA580C');
+        if (!preg_match('/^#[0-9a-fA-F]{6}$/', $color)) {
+            $color = '#EA580C';
+        }
         $author = $this->currentUser['full_name'] ?? 'BTC';
 
         if (!$title || !$date) {
@@ -463,7 +467,7 @@ class DashboardController extends BaseController
             ':content' => $content,
             ':type' => $type,
             ':author' => $author,
-            ':color' => '#EA580C'
+            ':color' => $color
         ]);
 
         $newId = (int)$db->lastInsertId();
@@ -481,7 +485,7 @@ class DashboardController extends BaseController
                 'note_type' => $type,
                 'author' => $author,
                 'creator_name' => $author,
-                'color' => '#EA580C'
+                'color' => $color
             ]
         ]);
     }

@@ -102,7 +102,7 @@ declare(strict_types=1);
             </div>
             <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/60">
                 <strong class="text-white block mb-0.5">Bước 3: Ghi Nhận Công</strong>
-                Tự động lưu lịch sử Check-in và tích lũy điểm rèn luyện.
+                Tự động lưu lịch sử Check-in và tích lũy điểm tích cực (uy tín CTV).
             </div>
         </div>
     </div>

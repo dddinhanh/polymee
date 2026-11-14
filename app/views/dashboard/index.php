@@ -587,19 +587,20 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     .dashboard-topbar {
-        position: relative;
-        z-index: 100;
-        background: var(--ux-surface);
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1020 !important;
+        background: rgba(255, 255, 255, 0.94) !important;
         border: 1px solid var(--ux-line);
         border-radius: 20px;
-        padding: 14px 22px;
+        padding: 12px 20px;
         margin-bottom: 16px;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         gap: 14px;
-        box-shadow: var(--ux-shadow-sm);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
     }
@@ -864,73 +865,78 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
     .month-header-grid .day-label {
         font-size: 11px;
-        font-weight: 750;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: .06em;
-        color: var(--ux-ink-3);
-        padding: 5px 0;
+        letter-spacing: .05em;
+        color: #8E8E93;
+        padding: 6px 0;
         min-width: 0;
     }
 
     .month-days-grid {
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
-        gap: 5px;
+        gap: 6px;
         width: 100%;
         box-sizing: border-box;
     }
 
+    /* iOS Calendar Clean Native Style */
     .month-day-cell {
-        min-height: 80px;
+        min-height: 84px;
         min-width: 0;
         width: 100%;
         box-sizing: border-box;
         border-radius: 12px;
         background: #FFFFFF;
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        padding: 5px 6px;
+        border: 0.5px solid rgba(0, 0, 0, 0.08);
+        padding: 6px 7px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         cursor: pointer;
-        transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
     }
 
     .month-day-cell:hover {
-        background: #F4F4F6;
-        border-color: var(--ux-accent);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        background: #F8F8FA;
+        border-color: rgba(0, 0, 0, 0.16);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
     }
 
     .month-day-cell:active {
-        transform: scale(0.98);
+        transform: scale(0.985);
     }
 
     .month-day-cell.is-today {
-        background: #F4F4F6;
-        border-color: var(--ux-accent);
+        background: #FFFFFF !important;
+        border: 1.5px solid #EA580C !important;
+        box-shadow: 0 2px 8px rgba(234, 88, 12, 0.15) !important;
     }
 
     .month-day-cell.is-today .day-number-pill {
-        background: var(--ux-accent);
+        background: #EA580C !important;
         color: #FFFFFF !important;
-        box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35);
+        font-weight: 700 !important;
+        box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35) !important;
     }
 
     .month-day-cell.is-other-month {
-        opacity: 0.35;
+        opacity: 0.38;
         background: #FAFAFC;
+        border-color: rgba(0, 0, 0, 0.04);
     }
 
     .day-number-pill {
-        font-size: 11px;
-        font-weight: 700;
-        color: var(--ux-ink);
-        width: 20px;
-        height: 20px;
-        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #1C1C1E;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
         display: grid;
         place-items: center;
         transition: all 0.15s ease;
@@ -977,11 +983,18 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         }
 
         .dashboard-topbar {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1020 !important;
+            background: rgba(255, 255, 255, 0.94) !important;
             flex-shrink: 0;
             padding: 8px 16px;
             margin-bottom: 12px;
             min-height: 48px;
             border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
         }
 
         #spaBodyContent {
@@ -1066,21 +1079,23 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             flex-direction: column;
             box-sizing: border-box;
             background: #FFFFFF;
-            border: 1px solid rgba(0, 0, 0, 0.08);
+            border: 0.5px solid rgba(0, 0, 0, 0.08);
             transition: all 0.15s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
         .month-day-cell:hover {
-            background: #F4F4F6;
-            border-color: var(--ux-accent);
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            background: #F8F8FA;
+            border-color: rgba(0, 0, 0, 0.16);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
         }
 
         .day-number-pill {
-            width: 22px;
-            height: 22px;
-            font-size: 11.5px;
-            border-radius: 6px;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 50%;
         }
 
         .shift-chip, .memo-chip {
@@ -1088,7 +1103,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             padding: 2px 6px;
             min-height: 19px;
             line-height: 16px;
-            border-radius: 5px;
+            border-radius: 6px;
             margin-bottom: 2px;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -1102,20 +1117,21 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         }
     }
 
-    /* Shift Chips Promax Clean */
+    /* iOS Calendar Event Chips & Reminder Pills */
     .shift-chip {
-        font-size: 11px;
+        font-size: 10.5px;
         font-weight: 600;
-        padding: 3px 6px;
+        padding: 2.5px 6px;
         border-radius: 6px;
         white-space: nowrap;
         overflow: hidden;
-        background: rgba(255, 255, 255, 0.06);
-        color: var(--ux-ink);
-        border: 1px solid var(--ux-line);
+        background: rgba(234, 88, 12, 0.10) !important;
+        color: #C2410C !important;
+        border: none !important;
+        border-left: 2.5px solid #EA580C !important;
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
         margin-bottom: 2px;
         transition: transform 0.15s ease;
         min-width: 0;
@@ -1124,9 +1140,10 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     [data-bs-theme="light"] .shift-chip {
-        background: #F1F5F9;
-        color: var(--ux-ink);
-        border-color: #E2E8F0;
+        background: rgba(234, 88, 12, 0.10) !important;
+        color: #C2410C !important;
+        border: none !important;
+        border-left: 2.5px solid #EA580C !important;
     }
 
     .shift-chip:hover {
@@ -1134,27 +1151,49 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     .shift-chip.urgent {
-        background: rgba(239, 68, 68, 0.12);
-        color: #F87171;
-        border-color: rgba(239, 68, 68, 0.25);
+        background: rgba(239, 68, 68, 0.10) !important;
+        color: #B91C1C !important;
+        border-left: 2.5px solid #EF4444 !important;
     }
 
     [data-bs-theme="light"] .shift-chip.urgent {
-        background: #FEF2F2;
-        color: #B91C1C;
-        border-color: #FECACA;
+        background: rgba(239, 68, 68, 0.10) !important;
+        color: #B91C1C !important;
+        border-left: 2.5px solid #EF4444 !important;
     }
 
     .shift-chip.mine {
-        background: rgba(16, 185, 129, 0.12);
-        color: #34D399;
-        border-color: rgba(16, 185, 129, 0.25);
+        background: rgba(16, 185, 129, 0.12) !important;
+        color: #047857 !important;
+        border-left: 2.5px solid #10B981 !important;
     }
 
     [data-bs-theme="light"] .shift-chip.mine {
-        background: #ECFDF5;
-        color: #047857;
-        border-color: #A7F3D0;
+        background: rgba(16, 185, 129, 0.12) !important;
+        color: #047857 !important;
+        border-left: 2.5px solid #10B981 !important;
+    }
+
+    .memo-chip {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 2px 6px;
+        border-radius: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        border: none !important;
+        border-left: 2.5px solid #EA580C;
+        background: rgba(234, 88, 12, 0.10);
+        color: #C2410C;
+        margin-bottom: 2px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: transform 0.15s ease;
+    }
+
+    .memo-chip:hover {
+        transform: translateX(2px);
     }
 
     .shift-chip .status-dot {
@@ -1819,46 +1858,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </div>
                 </div>
 
-                <!-- Thước Đo Chú Thích Màu Bộ Môn / Chuyên Ngành Của Giảng Viên & Bộ Lọc Nhanh -->
-                <div class="dept-legend-bar d-flex flex-wrap align-items-center justify-content-between p-2.5 px-3 rounded-4 mb-3" style="background: var(--ux-surface); border: 1px solid var(--ux-line); gap: 8px;">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge rounded-pill text-dark fw-bold" style="background: #F4F4F6; font-size: 11px;">
-                            <i class="bi bi-palette2 me-1 text-primary"></i> MÀU BỘ MÔN
-                        </span>
-                        <span class="text-muted small d-none d-lg-inline" style="font-size: 11.5px;">Phân biệt sự kiện do từng bộ môn / giảng viên đặt lịch:</span>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-center gap-2" style="font-size: 11px; font-weight: 600;">
-                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(2, 132, 199, 0.1); color: #0284C7; border: 1px solid rgba(2, 132, 199, 0.25);">
-                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #0284C7;"></span> CNTT & Phần Mềm
-                        </span>
-                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(124, 58, 237, 0.1); color: #7C3AED; border: 1px solid rgba(124, 58, 237, 0.25);">
-                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #7C3AED;"></span> Thiết Kế Đồ Họa
-                        </span>
-                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(234, 88, 12, 0.1); color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.25);">
-                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #EA580C;"></span> QTKD & Marketing
-                        </span>
-                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(5, 150, 105, 0.1); color: #059669; border: 1px solid rgba(5, 150, 105, 0.25);">
-                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #059669;"></span> Du Lịch - Khách Sạn
-                        </span>
-                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(220, 38, 38, 0.1); color: #DC2626; border: 1px solid rgba(220, 38, 38, 0.25);">
-                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #DC2626;"></span> Kỹ Thuật
-                        </span>
-                        <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: rgba(75, 85, 99, 0.1); color: #4B5563; border: 1px solid rgba(75, 85, 99, 0.25);">
-                            <span class="rounded-circle flex-shrink-0" style="width: 8px; height: 8px; background: #4B5563;"></span> CTSV & Toàn Trường
-                        </span>
-                    </div>
-                    <div>
-                        <select id="departmentFilterSelect" class="form-select form-select-sm rounded-pill border-0 shadow-xs" style="font-size: 11.5px; background-color: #F4F4F6; width: auto; font-weight: 600;" onchange="handleDepartmentFilterChange(this.value)">
-                            <option value="">-- Tất cả bộ môn --</option>
-                            <option value="Công nghệ Thông tin">CNTT & Phần Mềm</option>
-                            <option value="Thiết kế Đồ họa">Thiết Kế Đồ Họa</option>
-                            <option value="Quản trị Kinh doanh">QTKD & Marketing</option>
-                            <option value="Du lịch - Khách sạn">Du Lịch - Khách Sạn</option>
-                            <option value="Kỹ thuật Công nghệ">Kỹ Thuật Công Nghệ</option>
-                            <option value="Công tác Sinh viên">Công Tác Sinh Viên</option>
-                        </select>
-                    </div>
-                </div>
+
 
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-3 gap-2">
                     <div>
@@ -2387,7 +2387,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <th>Minh Chứng Đã Nộp</th>
                                 <th>Ghi Chú Nghiệm Thu</th>
                                 <th>Trạng Thái</th>
-                                <th class="text-end pe-4">Thao Tác Giảng Viên</th>
+                                <th class="text-end pe-4">Thao Tác Nghiệm Thu</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -2456,19 +2456,25 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-end pe-4">
-                                    <?php if ($perms['canVerifyLecturer']): ?>
-                                        <?php if ($isVerified): ?>
-                                        <button class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-3 disabled" disabled>
-                                            <i class="bi bi-patch-check-fill text-success me-1"></i> Đã Duyệt Nghiệm Thu
-                                        </button>
-                                        <?php else: ?>
-                                        <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill py-1 px-3 shadow-xs" onclick="verifyLecturerAcceptance(<?= $subAssId ?>)">
-                                            <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
+                                    <div class="d-flex align-items-center justify-content-end gap-2">
+                                        <?php if ((int)$subItem['user_id'] === (int)($currentUser['id'] ?? 0) || empty($perms['canVerifyLecturer'])): ?>
+                                        <button type="button" class="btn btn-sm btn-fpt-primary rounded-pill py-1 px-3 shadow-xs" onclick="openSubmitProofModal(<?= $subAssId ?>, '<?= htmlspecialchars(addslashes($subItem['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($subItem['start_time'])) ?>')">
+                                            <i class="bi bi-cloud-arrow-up-fill me-1"></i> <?= $hasProof ? 'Cập Nhật Minh Chứng' : 'Nộp Minh Chứng' ?>
                                         </button>
                                         <?php endif; ?>
-                                    <?php else: ?>
-                                        <span class="text-muted small"><i class="bi bi-lock-fill me-1"></i>Chỉ Giảng Viên</span>
-                                    <?php endif; ?>
+
+                                        <?php if (!empty($perms['canVerifyLecturer'])): ?>
+                                            <?php if ($isVerified): ?>
+                                            <button class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-3 disabled" disabled>
+                                                <i class="bi bi-patch-check-fill text-success me-1"></i> Đã Duyệt Nghiệm Thu
+                                            </button>
+                                            <?php else: ?>
+                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill py-1 px-3 shadow-xs" <?= $hasProof ? '' : 'disabled title="CTV chưa nộp minh chứng"' ?> onclick="verifyLecturerAcceptance(<?= $subAssId ?>)">
+                                                <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
+                                            </button>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -2607,14 +2613,21 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     <?php endif; ?>
                                 </div>
 
-                                <div class="d-flex gap-2">
+                                <div class="d-flex flex-wrap gap-2">
                                     <button type="button" class="btn-fpt-secondary btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
-                                        <i class="bi bi-file-earmark-text me-1"></i> Xem Chi Tiết
+                                        <i class="bi bi-file-earmark-text me-1"></i> Xem Chi Tiết HĐ
                                     </button>
                                     
+                                    <!-- Nút Nộp / Cập nhật Minh Chứng cho CTV -->
+                                    <?php if ((int)$acc['user_id'] === (int)($currentUser['id'] ?? 0) || empty($perms['canVerifyLecturer'])): ?>
+                                    <button type="button" class="btn-fpt-primary btn-fpt-sm flex-fill" onclick="openSubmitProofModal(<?= $acc['assignment_id'] ?>, '<?= htmlspecialchars(addslashes($acc['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($acc['start_time'])) ?>')">
+                                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> <?= $hasProof ? 'Cập Nhật Minh Chứng' : 'Nộp Minh Chứng' ?>
+                                    </button>
+                                    <?php endif; ?>
+
                                     <!-- Nút Duyệt Nghiệm Thu: Dành riêng cho Giảng viên / Quản trị viên -->
                                     <?php if (!$isVerified && !empty($perms['canVerifyLecturer'])): ?>
-                                    <button type="button" class="btn-fpt-primary btn-fpt-sm flex-fill" onclick="verifyLecturerInCard(<?= $acc['assignment_id'] ?>)">
+                                    <button type="button" class="btn-fpt-emerald btn-fpt-sm flex-fill" <?= $hasProof ? '' : 'disabled title="CTV chưa nộp minh chứng"' ?> onclick="verifyLecturerInCard(<?= $acc['assignment_id'] ?>)">
                                         <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
                                     </button>
                                     <?php endif; ?>
@@ -2628,7 +2641,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                                     <!-- Nút In Biên Bản: Khi Trường đã ký và chi tiền -->
                                     <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
-                                    <button type="button" class="btn-fpt-emerald btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
+                                    <button type="button" class="btn-fpt-secondary btn-fpt-sm flex-fill" onclick="openContractModal(<?= $acc['assignment_id'] ?>)">
                                         <i class="bi bi-printer me-1"></i> In Biên Bản
                                     </button>
                                     <?php endif; ?>
@@ -2781,8 +2794,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
                                     <div class="row g-3">
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số CCCD (12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="001xxxxxxxx" value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
+                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số CCCD (Chỉ cần 12 số) <span class="text-danger">*</span></label>
+                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="12 chữ số CCCD chính chủ..." value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
+                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Nhập chính xác 12 chữ số CCCD hiển thị trên VNeID</div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
@@ -2797,9 +2811,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                             <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ảnh Thẻ Căn Cước / VNeID Định Danh</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://..." value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp VNeID / CCCD 2 mặt (Drive, Imgur, Cloudinary)</div>
+                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ảnh Chụp Màn Hình Ứng Dụng VNeID (Mức 2)</label>
+                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://... (URL ảnh chụp màn hình app VNeID)" value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
+                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp màn hình app VNeID đã kích hoạt định danh Mức 2 (không cần chụp thẻ CCCD vật lý)</div>
                                             
                                             <!-- Image Preview -->
                                             <div class="mt-2 p-2 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
@@ -3169,6 +3183,41 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label fw-bold text-dark small d-block mb-1.5">Màu Sắc Đánh Dấu Trên Lịch</label>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
+                                <input type="radio" name="color" value="#EA580C" checked class="form-check-input mt-0 me-1">
+                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#EA580C;"></span>
+                                <span class="small fw-semibold text-dark" style="font-size:12px;">Cam FPT</span>
+                            </label>
+                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
+                                <input type="radio" name="color" value="#0284C7" class="form-check-input mt-0 me-1">
+                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#0284C7;"></span>
+                                <span class="small fw-semibold text-dark" style="font-size:12px;">Xanh Dương</span>
+                            </label>
+                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
+                                <input type="radio" name="color" value="#7C3AED" class="form-check-input mt-0 me-1">
+                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#7C3AED;"></span>
+                                <span class="small fw-semibold text-dark" style="font-size:12px;">Tím</span>
+                            </label>
+                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
+                                <input type="radio" name="color" value="#059669" class="form-check-input mt-0 me-1">
+                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#059669;"></span>
+                                <span class="small fw-semibold text-dark" style="font-size:12px;">Xanh Lá</span>
+                            </label>
+                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
+                                <input type="radio" name="color" value="#DC2626" class="form-check-input mt-0 me-1">
+                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#DC2626;"></span>
+                                <span class="small fw-semibold text-dark" style="font-size:12px;">Đỏ</span>
+                            </label>
+                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
+                                <input type="radio" name="color" value="#D97706" class="form-check-input mt-0 me-1">
+                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#D97706;"></span>
+                                <span class="small fw-semibold text-dark" style="font-size:12px;">Hổ Phách</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label fw-bold text-dark small">Nội Dung Chi Tiết</label>
                         <textarea name="content" class="form-control" rows="3" placeholder="Chi tiết dặn dò, địa điểm tập trung hoặc yêu cầu thiết bị..."></textarea>
                     </div>
@@ -3192,15 +3241,15 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden;">
             <div class="modal-header border-bottom" style="background:#FAFAFC; padding:16px 20px; color:#1D1D1F;">
                 <div>
-                    <h6 class="modal-title fw-bold mb-0" id="vneidModalTitle" style="color:#1D1D1F;">Đối Soát Định Danh VNeID</h6>
+                    <h6 class="modal-title fw-bold mb-0" id="vneidModalTitle" style="color:#1D1D1F;">Đối Soát Ảnh Chụp Màn Hình VNeID</h6>
                     <small class="text-muted" id="vneidModalSub">Số CCCD: 079203014589</small>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-3 text-center bg-light">
-                <img id="vneidModalImage" src="" alt="VNeID Identity Card" class="img-fluid rounded-3 shadow-xs" style="max-height: 380px;">
+                <img id="vneidModalImage" src="" alt="VNeID Screenshot" class="img-fluid rounded-3 shadow-xs" style="max-height: 380px;">
                 <div class="alert alert-success mt-3 py-2 small mb-0">
-                    <i class="bi bi-patch-check-fill me-1"></i> Thông tin CCCD đã khớp với hồ sơ đăng ký tài khoản sinh viên FPT Polytechnic.
+                    <i class="bi bi-patch-check-fill me-1"></i> Thông tin số CCCD đã khớp với ảnh chụp màn hình ứng dụng VNeID định danh điện tử Mức 2.
                 </div>
             </div>
         </div>
@@ -3589,23 +3638,35 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </table>
                 </div>
 
-                <!-- Minh Chứng Hiện Trường -->
+                <!-- Minh Chứng Nghiệm Thu -->
                 <div class="mb-4">
-                    <strong class="d-block mb-1">ĐIỀU 2: ẢNH HIỆN TRƯỜNG MINH CHỨNG CÓ MẶT NGHIỆM THU</strong>
+                    <strong class="d-block mb-1" id="contractProofTitle">ĐIỀU 2: MINH CHỨNG CÔNG VIỆC ĐỂ NGHIỆM THU</strong>
                     <div class="p-3 bg-light rounded-3 border">
                         <div class="row g-3 align-items-center">
-                            <div class="col-12 col-md-5 text-center">
-                                <div style="max-height: 200px; overflow: hidden; border-radius: 12px; border: 2px solid #e2e8f0; display: inline-block;">
+                            <div class="col-12 col-md-5 text-center" id="contractProofContainer">
+                                <div id="contractProofPhotoBox" style="max-height: 200px; overflow: hidden; border-radius: 12px; border: 2px solid #e2e8f0; display: inline-block;">
                                     <img id="contractProofImg" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80" alt="Ảnh Hiện Trường Nghiệm Thu" style="max-height: 200px; max-width: 100%; object-fit: cover; display: block;">
+                                </div>
+                                <div id="contractProofDriveBox" style="display: none; padding: 18px; border-radius: 12px; border: 1.5px dashed #0284C7; background: #F0F9FF;">
+                                    <i class="fa-brands fa-google-drive text-primary" style="font-size: 38px;"></i>
+                                    <h6 class="fw-bold text-dark mt-2 mb-1" style="font-size: 13px;">Bộ Ảnh Media Sự Kiện</h6>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle mb-2" style="font-size: 10px;">
+                                        <i class="bi bi-patch-check-fill me-1"></i>Đã kèm Logo & Chỉnh Sáng
+                                    </span>
+                                    <div>
+                                        <a id="contractProofDriveLink" href="#" target="_blank" class="btn btn-sm btn-fpt-primary rounded-pill py-1 px-3" style="font-size: 11.5px;">
+                                            <i class="bi bi-box-arrow-up-right me-1"></i> Mở Thư Mục Drive
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-7" style="font-size: 13px;">
-                                <div class="badge bg-success mb-2 px-2.5 py-1">
-                                    <i class="bi bi-shield-fill-check me-1"></i> ẢNH HIỆN TRƯỜNG ĐÃ ĐƯỢC GIẢNG VIÊN THẨM ĐỊNH
+                                <div class="badge bg-success mb-2 px-2.5 py-1" id="contractProofStatusBadge">
+                                    <i class="bi bi-shield-fill-check me-1"></i> MINH CHỨNG ĐÃ ĐƯỢC GIẢNG VIÊN THẨM ĐỊNH
                                 </div>
                                 <p class="mb-1"><strong>Ghi chú CTV:</strong> <span id="contractProofNoteDisplay" class="fst-italic text-dark">Có mặt đúng giờ, hỗ trợ đón khách tại sảnh</span></p>
-                                <p class="mb-1"><strong>Kết luận Giảng viên:</strong> <span class="text-success fw-bold">CTV có mặt đúng vị trí phân công, hoàn thành đầy đủ nhiệm vụ được giao, đủ điều kiện nghiệm thu thanh toán.</span></p>
-                                <p class="mb-0 text-muted small">Ảnh chụp có xác thực vị trí và nhận diện sinh viên.</p>
+                                <p class="mb-1"><strong>Kết luận Giảng viên:</strong> <span class="text-success fw-bold" id="contractProofConclusion">CTV có mặt đúng vị trí phân công, hoàn thành đầy đủ nhiệm vụ được giao, đủ điều kiện nghiệm thu thanh toán.</span></p>
+                                <p class="mb-0 text-muted small" id="contractProofSubtext">Ảnh chụp có xác thực vị trí và nhận diện sinh viên.</p>
                             </div>
                         </div>
                     </div>
@@ -3674,11 +3735,20 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             </div>
             <div class="modal-body p-4">
                 <div class="mb-3">
-                    <p class="text-muted small mb-1 fw-bold text-uppercase">Thuộc Sự Kiện:</p>
-                    <h6 class="fw-bold text-dark" id="modalEventTitle">FPoly TechDay 2026</h6>
+                    <p class="text-muted small mb-1 fw-bold text-uppercase">Thuộc Sự Kiện & Bộ Môn:</p>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <h6 class="fw-bold text-dark mb-0" id="modalEventTitle">FPoly TechDay 2026</h6>
+                        <span class="badge rounded-pill" id="modalShiftDepartmentBadge" style="background: rgba(2, 132, 199, 0.12); color: #0284C7; border: 1px solid rgba(2, 132, 199, 0.25); font-size: 11.5px; font-weight: 600;">
+                            <i class="bi bi-palette2 me-1"></i> <span id="modalShiftDepartment">Công nghệ Thông tin</span>
+                        </span>
+                    </div>
                 </div>
                 
                 <div class="row g-2 mb-3 bg-light p-3 rounded-3" style="font-size:13px;">
+                    <div class="col-12 mb-1 pb-1 border-bottom">
+                        <span class="text-muted d-block small">Giảng Viên Phụ Trách:</span>
+                        <strong class="text-dark" id="modalShiftLecturer">Thầy/Cô Giảng viên (GV0102)</strong>
+                    </div>
                     <div class="col-6">
                         <span class="text-muted d-block">Khung Giờ:</span>
                         <strong class="text-dark num-tabular" id="modalShiftTime">06:30 - 09:30</strong>
@@ -4240,10 +4310,11 @@ function renderMonthGrid(year, month) {
         if (dayNotes.length > 0) {
             dayNotes.slice(0, 1).forEach(n => {
                 const noteTitle = n.title || n.content || 'Ghi chú';
-                previewHtml += `<div class="memo-chip d-flex justify-content-between align-items-center" title="Lưu ý: ${noteTitle}">
+                const noteColor = n.color || '#EA580C';
+                previewHtml += `<div class="memo-chip d-flex justify-content-between align-items-center" style="border-left: 2.5px solid ${noteColor} !important; background: ${noteColor}18 !important; color: ${noteColor} !important;" title="Lưu ý: ${noteTitle}">
                     <div class="d-flex align-items-center gap-1 overflow-hidden">
-                        <i class="fa-solid fa-bookmark" style="font-size:8px; color:#EA580C; flex:none;"></i>
-                        <span class="text-truncate">${noteTitle}</span>
+                        <i class="fa-solid fa-bookmark" style="font-size:8px; color:${noteColor}; flex:none;"></i>
+                        <span class="text-truncate" style="color:${noteColor}; font-weight:600;">${noteTitle}</span>
                     </div>
                     <button type="button" class="btn p-0 text-danger border-0 flex-shrink-0 ms-1 opacity-75 hover-opacity-100" style="font-size:10px; line-height:1;" onclick="event.stopPropagation(); deleteCalendarNote(${n.id});" title="Xóa lịch hẹn này">
                         <i class="bi bi-x-circle-fill"></i>
@@ -4332,11 +4403,12 @@ function renderWeekView(targetDateStr) {
             colNotes.forEach(n => {
                 const noteType = n.type || n.note_type || 'Lưu ý';
                 const noteTitle = n.title || n.content || '';
+                const noteColor = n.color || '#EA580C';
                 notesHtml += `
-                    <div class="memo-chip mb-2 d-flex justify-content-between align-items-center" title="${noteType}: ${noteTitle}">
+                    <div class="memo-chip mb-2 d-flex justify-content-between align-items-center" style="border-left: 2.5px solid ${noteColor} !important; background: ${noteColor}18 !important; color: ${noteColor} !important;" title="${noteType}: ${noteTitle}">
                         <div class="d-flex align-items-center gap-1 overflow-hidden min-w-0">
-                            <i class="fa-solid fa-bookmark text-warning me-1 flex-shrink-0" style="font-size:9px;"></i>
-                            <span class="text-truncate">${noteTitle}</span>
+                            <i class="fa-solid fa-bookmark me-1 flex-shrink-0" style="font-size:9px; color:${noteColor};"></i>
+                            <span class="text-truncate" style="color:${noteColor}; font-weight:600;">${noteTitle}</span>
                         </div>
                         <button type="button" class="btn p-0 text-danger border-0 flex-shrink-0 ms-1 opacity-75 hover-opacity-100" style="font-size:10px; line-height:1;" onclick="event.stopPropagation(); deleteCalendarNote(${n.id});" title="Xóa lịch hẹn này">
                             <i class="bi bi-x-circle-fill"></i>
@@ -4422,10 +4494,11 @@ function renderDayView(dateStr) {
                         const noteTitle = n.title ? `<strong>${n.title}</strong>: ` : '';
                         const noteContent = n.content || n.title || '';
                         const authorName = n.author || n.creator_name || 'BTC';
+                        const noteColor = n.color || '#EA580C';
                         return `
-                        <div class="d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border shadow-xs" style="background:#FFFFFF; border-color:rgba(0,0,0,0.08) !important; font-size:12.5px;">
-                            <i class="fa-regular fa-circle-check text-warning" style="font-size:13px; flex:none;"></i>
-                            <span class="badge num-tabular" style="background:#F4F4F6; color:var(--ux-ink-2); border:1px solid rgba(0,0,0,0.08); font-size:10px; flex:none;">${noteType}</span>
+                        <div class="d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border shadow-xs" style="background:#FFFFFF; border-left: 3.5px solid ${noteColor} !important; border-color:rgba(0,0,0,0.08) !important; font-size:12.5px;">
+                            <i class="fa-solid fa-bookmark" style="font-size:13px; color:${noteColor}; flex:none;"></i>
+                            <span class="badge num-tabular" style="background:${noteColor}18; color:${noteColor}; border:1px solid ${noteColor}33; font-size:10px; flex:none;">${noteType}</span>
                             <span class="flex-grow-1" style="color:var(--ux-ink);">${noteTitle}${noteContent}</span>
                             <span class="small num-tabular" style="color:var(--ux-ink-3); flex:none;"><i class="bi bi-person me-1"></i>${authorName}</span>
                             <button type="button" class="btn btn-sm text-danger p-0 ms-2" style="line-height:1; font-size:13px;" onclick="deleteCalendarNote(${n.id})" title="Xóa lịch hẹn / ghi chú này">
@@ -4527,7 +4600,8 @@ async function handleAddNoteSubmit(event) {
         title: formData.get('title'),
         date: formData.get('date'),
         content: formData.get('content') || formData.get('title'),
-        type: formData.get('type') || 'EVENT_REMINDER'
+        type: formData.get('type') || 'EVENT_REMINDER',
+        color: formData.get('color') || '#EA580C'
     };
 
     try {
@@ -4617,10 +4691,17 @@ function openShiftDetail(shiftId) {
     if (!shift) return;
 
     const allowance = shift.remuneration_amount ? Number(shift.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150,000 đ';
+    const lecturerName = shift.lecturer_name || 'ThS. Phan Hoàng Khải';
+    const lecturerCode = shift.lecturer_code ? ` (${shift.lecturer_code})` : '';
+    const deptName = shift.lecturer_department || shift.event_department || 'Công nghệ Thông tin';
 
     document.getElementById('modalShiftBadge').textContent = `+${shift.points} Điểm Tích Cực (Uy tín)`;
     document.getElementById('shiftModalTitle').textContent = shift.name;
     document.getElementById('modalEventTitle').textContent = shift.event_title;
+    const lecturerEl = document.getElementById('modalShiftLecturer');
+    if (lecturerEl) lecturerEl.textContent = `${lecturerName}${lecturerCode}`;
+    const deptEl = document.getElementById('modalShiftDepartment');
+    if (deptEl) deptEl.textContent = deptName;
     document.getElementById('modalShiftTime').textContent = `${shift.start_time.substring(11, 16)} - ${shift.end_time.substring(11, 16)} (${shift.start_time.substring(0, 10)})`;
     document.getElementById('modalShiftLocation').textContent = shift.location_name || 'Hội trường';
     document.getElementById('modalShiftQuota').textContent = `${shift.approved_qty} / ${shift.target_qty} CTV (Còn trống ${Math.max(0, shift.target_qty - shift.approved_qty)} chỗ)`;
@@ -5474,7 +5555,30 @@ function openContractModal(assignmentId) {
     document.getElementById('contractShiftName').textContent = shiftName;
     document.getElementById('contractTimeLocation').textContent = `${timeStr} • ${locName}`;
     document.getElementById('contractAmount').textContent = `${amountNum.toLocaleString('vi-VN')} VNĐ`;
-    document.getElementById('contractProofImg').src = proofImg;
+
+    // Phân loại minh chứng: Drive Link (CTV Media) vs Ảnh hiện trường (CTV thường)
+    const isDrive = proofImg.includes('drive.google.com') || proofImg.includes('docs.google.com') || (proofImg.startsWith('http') && !proofImg.match(/\.(jpg|jpeg|png|webp|gif)/i) && proofImg.includes('drive'));
+    const photoBox = document.getElementById('contractProofPhotoBox');
+    const driveBox = document.getElementById('contractProofDriveBox');
+    const driveLink = document.getElementById('contractProofDriveLink');
+    const conclusionEl = document.getElementById('contractProofConclusion');
+    const subtextEl = document.getElementById('contractProofSubtext');
+
+    if (isDrive) {
+        if (photoBox) photoBox.style.display = 'none';
+        if (driveBox) driveBox.style.display = 'block';
+        if (driveLink) driveLink.href = proofImg;
+        if (conclusionEl) conclusionEl.textContent = 'CTV Media đã nộp link Google Drive bộ ảnh sự kiện hoàn chỉnh, đã gắn Logo FPT và hoàn thành hậu kỳ chỉnh sửa sáng. Đủ điều kiện nghiệm thu.';
+        if (subtextEl) subtextEl.textContent = 'Minh chứng media được lưu trữ an toàn trên Google Drive FPT.';
+    } else {
+        if (photoBox) photoBox.style.display = 'inline-block';
+        if (driveBox) driveBox.style.display = 'none';
+        const imgEl = document.getElementById('contractProofImg');
+        if (imgEl) imgEl.src = proofImg;
+        if (conclusionEl) conclusionEl.textContent = 'CTV có mặt đúng vị trí phân công, hoàn thành đầy đủ nhiệm vụ được giao, đủ điều kiện nghiệm thu thanh toán.';
+        if (subtextEl) subtextEl.textContent = 'Ảnh chụp có xác thực vị trí và nhận diện sinh viên.';
+    }
+
     document.getElementById('contractProofNoteDisplay').textContent = proofNote;
     document.getElementById('contractSignCtv').textContent = ctvName;
     document.getElementById('contractSignLecturer').textContent = lecturer;
@@ -5496,8 +5600,10 @@ function openContractModal(assignmentId) {
                 <i class="bi bi-hourglass-split me-1"></i> Đang Chờ Ký Duyệt
             </span>
         `;
+        // Phân quyền chặt chẽ: Chỉ Cán bộ / Admin được thấy nút Trình Trường Ký, CTV tuyệt đối không thấy
+        const canSubmitSchool = userPermissions && (userPermissions.canSubmitSchoolSigning || ['HEAD_ADMIN', 'ADMIN'].includes(userPermissions.role));
         if (submitBtn) {
-            submitBtn.style.display = 'inline-block';
+            submitBtn.style.display = canSubmitSchool ? 'inline-block' : 'none';
         }
     }
 
