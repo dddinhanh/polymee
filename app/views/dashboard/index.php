@@ -759,8 +759,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .kpi-metric-strip {
         display: grid !important;
         grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-        gap: 6px !important;
-        margin-bottom: 6px !important;
+        gap: 10px !important;
+        margin-bottom: 12px !important;
         flex-shrink: 0 !important;
         width: 100% !important;
         box-sizing: border-box !important;
@@ -769,52 +769,54 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     @media (max-width: 992px) {
         .kpi-metric-strip {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
         }
     }
 
     .kpi-mini-card {
         background: #FFFFFF;
         border: 1px solid rgba(0, 0, 0, 0.08);
-        border-radius: 10px;
-        padding: 4px 12px;
-        height: clamp(32px, 3.8vh, 40px);
+        border-radius: 12px;
+        padding: 8px 14px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 6px;
+        gap: 10px;
         transition: all 0.2s var(--ux-spring);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
     }
 
     .kpi-mini-card:hover {
-        border-color: rgba(0, 0, 0, 0.15);
+        border-color: rgba(0, 0, 0, 0.16);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
     }
 
     .kpi-mini-label {
-        font-size: clamp(8.5px, 0.75vw, 10px);
-        font-weight: 650;
+        font-size: 10.5px;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.03em;
-        color: var(--ux-ink-3);
-        margin-bottom: 0;
-        line-height: 1;
+        letter-spacing: 0.04em;
+        color: #8E8E93;
+        margin-bottom: 2px;
+        line-height: 1.1;
     }
 
     .kpi-mini-val {
-        font-size: clamp(13px, 1.1vw, 16px);
+        font-size: 17px;
         font-weight: 800;
-        line-height: 1;
-        color: var(--ux-ink);
+        line-height: 1.1;
+        color: #1D1D1F;
     }
 
     .kpi-mini-icon {
-        width: clamp(22px, 2vh, 28px);
-        height: clamp(22px, 2vh, 28px);
-        border-radius: 6px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
         display: grid;
         place-items: center;
         flex: none;
-        font-size: clamp(11px, 1vh, 13px);
+        font-size: 14px;
         background: #F4F4F6 !important;
         color: #48484A !important;
     }
@@ -841,8 +843,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .calendar-container {
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
-        border-radius: 16px;
-        padding: 10px 14px;
+        border-radius: 18px;
+        padding: 14px 18px;
         box-shadow: var(--ux-shadow-sm);
         animation: fadeInPanel 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         width: 100% !important;
@@ -859,8 +861,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .spa-panel:not(#panelCalendar) {
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
-        border-radius: 16px;
-        padding: 14px 18px;
+        border-radius: 18px;
+        padding: 18px 22px;
         box-shadow: var(--ux-shadow-sm);
         animation: fadeInPanel 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         width: 100% !important;
@@ -885,8 +887,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         display: grid !important;
         grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
         text-align: center;
-        margin-bottom: 4px !important;
-        padding-bottom: 3px !important;
+        margin-bottom: 6px !important;
+        padding-bottom: 5px !important;
         border-bottom: 1px solid var(--ux-line);
         width: 100% !important;
         flex-shrink: 0 !important;
@@ -894,10 +896,10 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     .month-header-grid .day-label {
-        font-size: clamp(9.5px, 0.8vw, 11px) !important;
+        font-size: 11px !important;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: .03em;
+        letter-spacing: .04em;
         color: #8E8E93;
         padding: 2px 0 !important;
         min-width: 0;
@@ -1055,9 +1057,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             flex: 1 1 0% !important;
             min-height: 0 !important;
             height: 100% !important;
-            padding: clamp(8px, 1.2vh, 16px) clamp(10px, 1.2vw, 18px) !important;
+            padding: 14px 18px !important;
             margin-bottom: 0 !important;
-            border-radius: 16px;
+            border-radius: 18px;
             background: #FFFFFF;
             border: 1px solid rgba(0, 0, 0, 0.08);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
@@ -1066,8 +1068,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         }
 
         #panelCalendar > .d-flex.border-bottom {
-            padding-bottom: clamp(4px, 0.6vh, 8px) !important;
-            margin-bottom: clamp(4px, 0.6vh, 8px) !important;
+            padding-bottom: 8px !important;
+            margin-bottom: 10px !important;
             flex-shrink: 0 !important;
         }
 
@@ -1916,7 +1918,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <section class="calendar-container" id="panelCalendar">
 
                 <!-- KPI Metrics Strip: CHỈ HIỂN THỊ DUY NHẤT Ở TRANG LỊCH HOẠT ĐỘNG -->
-                <div class="kpi-metric-strip mb-2" id="kpiMetricsStrip">
+                <div class="kpi-metric-strip mb-3" id="kpiMetricsStrip">
                     <div class="kpi-mini-card">
                         <div>
                             <div class="kpi-mini-label">Tổng Sự Kiện</div>
@@ -1947,7 +1949,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <div class="kpi-mini-card">
                         <div>
                             <div class="kpi-mini-label">Quy Hoạch Nghiệm Thu</div>
-                            <div class="kpi-mini-val num-tabular text-dark"><?= count($accountingList) ?> <small style="font-size:11px; font-weight:500; color:var(--ux-ink-3);">Hồ sơ</small></div>
+                            <div class="kpi-mini-val num-tabular text-dark"><?= count($accountingList) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">Hồ sơ</small></div>
                         </div>
                         <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
                             <i class="bi bi-cash-coin"></i>
@@ -1955,22 +1957,22 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </div>
                 </div>
 
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-1.5 border-bottom mb-2 gap-2">
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-2" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
-                        <h2 class="fw-bold mb-0 text-dark" style="font-size: 13.5px;" id="calendarViewHeading">Lịch Tổng Quan Theo Tháng</h2>
-                        <p class="text-muted mb-0" style="font-size: 11px;" id="calendarViewSub">Nhấp vào ô ngày bất kỳ để vào thẳng Lịch Ngày xem chi tiết các ca trực</p>
+                        <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;" id="calendarViewHeading">Lịch Tổng Quan Theo Tháng</h2>
+                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;" id="calendarViewSub">Nhấp vào ô ngày bất kỳ để vào thẳng Lịch Ngày xem chi tiết các ca trực</p>
                     </div>
-                    <div class="d-flex align-items-center gap-2.5" style="font-size: 10.5px; font-weight: 600;">
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="d-inline-block rounded-circle" style="width:7px; height:7px; background:var(--ux-accent);"></span>
+                    <div class="d-flex align-items-center gap-3" style="font-size: 12px; font-weight: 600; color: #48484A;">
+                        <div class="d-flex align-items-center gap-1.5">
+                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-accent);"></span>
                             <span>Ca đang tuyển</span>
                         </div>
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="d-inline-block rounded-circle" style="width:7px; height:7px; background:var(--ux-mint);"></span>
+                        <div class="d-flex align-items-center gap-1.5">
+                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-mint);"></span>
                             <span>Ca của tôi</span>
                         </div>
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="d-inline-block rounded-circle" style="width:7px; height:7px; background:var(--ux-danger);"></span>
+                        <div class="d-flex align-items-center gap-1.5">
+                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-danger);"></span>
                             <span>Đã đủ CTV</span>
                         </div>
                     </div>
