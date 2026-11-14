@@ -1,6 +1,6 @@
 <!-- Lucian UX/UI Prompt #040 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#040 -->
 <!DOCTYPE html>
-<html lang="vi" data-bs-theme="dark" class="dark">
+<html lang="vi" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,66 +30,68 @@
        Màu sắc hiệu chuẩn: Slate 950/900/800 + Cam FPT Signature (#EA580C)
        Phân tầng thị giác tinh tế, giảm tải thông tin, chống rối mắt
        ========================================================= */
-    :root, [data-bs-theme="dark"] {
-        color-scheme: dark;
-        --ux-page: #0B0F17;              /* Deep Obsidian Canvas */
-        --ux-surface: #111827;           /* Slate 900 Glass Surface */
-        --ux-surface-2: #162032;         /* Slate 850 Card Surface */
-        --ux-surface-3: #1E293B;         /* Slate 800 Highlight Surface */
-        --ux-ink: #F8FAFC;               /* High-contrast Slate 50 Typography */
-        --ux-ink-2: #CBD5E1;             /* Slate 300 Secondary Text */
-        --ux-ink-3: #94A3B8;             /* Slate 400 Muted Captions */
-        --ux-line: rgba(255, 255, 255, 0.08); /* 1px Hairline White Border */
-        --ux-line-2: rgba(255, 255, 255, 0.16); /* Hover/Focus Border */
-        --ux-accent: #EA580C;            /* Calibrated FPT Orange (#EA580C) */
-        --ux-accent-hover: #F97316;      /* Rich Orange Hover */
-        --ux-accent-active: #C2410C;     /* Active state */
-        --ux-accent-soft: rgba(234, 88, 12, 0.12); /* Subtle Soft Glow */
-        --ux-accent-gradient: linear-gradient(135deg, #EA580C 0%, #C2410C 100%);
-        --ux-navy-gradient: linear-gradient(180deg, #0B0F17 0%, #111827 100%);
-        --ux-mint: #10B981;              /* Emerald 500 Success */
-        --ux-mint-soft: rgba(16, 185, 129, 0.12);
-        --ux-warn: #F59E0B;              /* Amber 500 Warning */
-        --ux-warn-soft: rgba(245, 158, 11, 0.12);
-        --ux-danger: #EF4444;            /* Red 500 Conflict / Full */
-        --ux-danger-soft: rgba(239, 68, 68, 0.12);
-        --ux-info: #0284C7;              /* Sky 600 Info */
-        --ux-info-soft: rgba(2, 132, 199, 0.12);
-        --ux-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-        --ux-shadow: 0 6px 20px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
-        --ux-shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+    :root, [data-bs-theme="light"] {
+        color-scheme: light;
+        --ux-page: #F5F5F7;              /* Apple Canvas Parchment */
+        --ux-surface: #FFFFFF;           /* Apple Pure White Canvas */
+        --ux-surface-2: #FAFAFC;         /* Apple Surface Pearl / Subtle Gray */
+        --ux-surface-3: #E5E5EA;         /* Apple System Gray 5 Highlight */
+        --ux-ink: #1D1D1F;               /* Apple Near-Black Ink */
+        --ux-ink-2: #48484A;             /* Secondary Text */
+        --ux-ink-3: #86868B;             /* Muted Gray Captions */
+        --ux-line: rgba(0, 0, 0, 0.08);  /* Apple 1px Hairline */
+        --ux-line-2: #D1D1D6;            /* Apple System Gray 4 */
+        --ux-accent: #EA580C;            /* FPT Orange (#EA580C) */
+        --ux-accent-hover: #F97316;
+        --ux-accent-active: #C2410C;
+        --ux-accent-soft: rgba(234, 88, 12, 0.08);
+        --ux-accent-gradient: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+        --ux-navy-gradient: linear-gradient(180deg, #FFFFFF 0%, #FAFAFC 100%);
+        --ux-mint: #059669;
+        --ux-mint-soft: rgba(16, 185, 129, 0.1);
+        --ux-warn: #D97706;
+        --ux-warn-soft: rgba(245, 158, 11, 0.1);
+        --ux-danger: #DC2626;
+        --ux-danger-soft: rgba(239, 68, 68, 0.1);
+        --ux-info: #0066CC;              /* Apple Action Blue */
+        --ux-info-soft: rgba(0, 102, 204, 0.08);
+        --ux-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+        --ux-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+        --ux-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.06);
         --ux-spring: cubic-bezier(0.16, 1, 0.3, 1);
         --ux-ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    [data-bs-theme="light"] {
-        color-scheme: light;
-        --ux-page: #F8FAFC;
-        --ux-surface: #FFFFFF;
-        --ux-surface-2: #F1F5F9;
-        --ux-surface-3: #E2E8F0;
-        --ux-ink: #0F172A;
-        --ux-ink-2: #334155;
-        --ux-ink-3: #64748B;
-        --ux-line: #E2E8F0;
-        --ux-line-2: #CBD5E1;
+    [data-bs-theme="dark"] {
+        color-scheme: dark;
+        --ux-page: #1C1C1E;              /* Apple Dark System Background */
+        --ux-surface: #2C2C2E;           /* Apple Dark Secondary Grouped */
+        --ux-surface-2: #3A3A3C;         /* Apple Dark Tertiary Grouped */
+        --ux-surface-3: #48484A;
+        --ux-ink: #FFFFFF;
+        --ux-ink-2: #EBEBF5;
+        --ux-ink-3: #8E8E93;
+        --ux-line: rgba(255, 255, 255, 0.12);
+        --ux-line-2: rgba(255, 255, 255, 0.2);
         --ux-accent: #EA580C;
-        --ux-accent-hover: #C2410C;
-        --ux-accent-active: #9A3412;
-        --ux-accent-soft: #FFF7ED;
-        --ux-accent-gradient: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
-        --ux-navy-gradient: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
-        --ux-mint: #059669;
-        --ux-mint-soft: #ECFDF5;
-        --ux-warn: #D97706;
-        --ux-warn-soft: #FFFBEB;
-        --ux-danger: #DC2626;
-        --ux-danger-soft: #FEF2F2;
-        --ux-info: #0284C7;
-        --ux-info-soft: #F0F9FF;
-        --ux-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
-        --ux-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
-        --ux-shadow-lg: 0 20px 40px -15px rgba(15, 23, 42, 0.07);
+        --ux-accent-hover: #F97316;
+        --ux-accent-active: #C2410C;
+        --ux-accent-soft: rgba(234, 88, 12, 0.15);
+        --ux-accent-gradient: linear-gradient(135deg, #EA580C 0%, #C2410C 100%);
+        --ux-navy-gradient: linear-gradient(180deg, #1C1C1E 0%, #2C2C2E 100%);
+        --ux-mint: #34D399;
+        --ux-mint-soft: rgba(52, 211, 153, 0.15);
+        --ux-warn: #FBBF24;
+        --ux-warn-soft: rgba(251, 191, 36, 0.15);
+        --ux-danger: #F87171;
+        --ux-danger-soft: rgba(248, 113, 113, 0.15);
+        --ux-info: #2997FF;              /* Apple Sky Link Blue on Dark */
+        --ux-info-soft: rgba(41, 151, 255, 0.15);
+        --ux-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+        --ux-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        --ux-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+        --ux-spring: cubic-bezier(0.16, 1, 0.3, 1);
+        --ux-ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     body {
@@ -146,14 +148,20 @@
         flex: 1;
         width: 100%;
         padding: 14px 10px;
-        border-radius: 24px;
-        background: var(--ux-navy-gradient);
-        color: var(--ux-page);
+        border-radius: 20px;
+        background: #FFFFFF;
+        color: #1D1D1F;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 16px 40px rgba(10, 25, 47, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    [data-bs-theme="dark"] .u040-rail {
+        background: #2C2C2E;
+        color: #FFFFFF;
+        border-color: rgba(255, 255, 255, 0.12);
     }
 
     .u040-top {
@@ -196,7 +204,7 @@
         letter-spacing: -.03em;
         white-space: nowrap;
         opacity: 0;
-        color: #fff;
+        color: var(--ux-ink);
         transition: opacity .25s;
     }
 
@@ -211,25 +219,33 @@
         top: 22px;
         width: 22px;
         height: 26px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(0, 0, 0, 0.12);
         padding: 0;
         border-radius: 6px;
-        background: #1E293B;
-        color: #fff;
+        background: #FFFFFF;
+        color: #1D1D1F;
         display: grid;
         place-items: center;
         opacity: 0.95;
         transition: all .25s var(--ux-spring);
         cursor: pointer;
         z-index: 1070;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .u040.is-wide .u040-tog {
         right: -11px;
         top: 22px;
-        background: #1E293B;
-        border-color: rgba(255, 255, 255, 0.25);
+        background: #FFFFFF;
+        border-color: rgba(0, 0, 0, 0.12);
+        color: #1D1D1F;
+    }
+
+    [data-bs-theme="dark"] .u040-tog,
+    [data-bs-theme="dark"] .u040.is-wide .u040-tog {
+        background: #3A3A3C;
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #FFFFFF;
     }
 
     .u040-tog svg {
@@ -290,11 +306,11 @@
         left: 0;
         right: 0;
         top: 0;
-        height: 48px;
-        border-radius: 15px;
-        background: rgba(255, 255, 255, 0.14);
+        height: 46px;
+        border-radius: 12px;
+        background: rgba(234, 88, 12, 0.08);
         transform: translateY(var(--y, 0));
-        transition: transform .5s var(--ux-spring);
+        transition: transform .4s var(--ux-spring);
         pointer-events: none;
     }
 
@@ -315,15 +331,15 @@
         align-items: center;
         gap: 14px;
         width: 100%;
-        height: 48px;
+        height: 46px;
         padding: 0 0 0 16px;
         border: 0;
-        border-radius: 15px;
+        border-radius: 12px;
         background: none;
-        color: #fff;
-        opacity: .72;
+        color: var(--ux-ink);
+        opacity: .78;
         text-align: left;
-        transition: opacity .25s, color .25s;
+        transition: all .2s var(--ux-ease);
         text-decoration: none;
         cursor: pointer;
     }
@@ -331,7 +347,7 @@
     .u040-it:hover,
     .u040-it[aria-current="page"] {
         opacity: 1;
-        color: #fff;
+        color: var(--ux-accent);
     }
 
     .u040-it svg, .u040-it i {
@@ -392,11 +408,17 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        height: 56px;
+        height: 54px;
         padding: 0 0 0 10px;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        background: #F5F5F7;
+        border: 1px solid rgba(0, 0, 0, 0.06);
         overflow: hidden;
+    }
+
+    [data-bs-theme="dark"] .u040-me {
+        background: #3A3A3C;
+        border-color: rgba(255, 255, 255, 0.08);
     }
 
     .u040-me i {
@@ -418,7 +440,7 @@
         font-weight: 650;
         white-space: nowrap;
         opacity: 0;
-        color: #fff;
+        color: var(--ux-ink);
         transition: opacity .25s;
     }
 
@@ -1174,11 +1196,11 @@
     <aside class="u040-wrapper">
         <div class="ux u040 is-wide" id="lucianSideRail">
             <nav class="u040-rail" aria-label="Main menu">
-                <!-- Top Brand -->
+                <!-- Top Brand (With Official School Logo) -->
                 <div class="u040-top">
-                    <span class="u040-logo" aria-hidden="true">
-                        <div class="u040-brand-mark">P</div>
-                    </span>
+                    <div class="d-flex align-items-center justify-content-center bg-white p-1 rounded-2 shadow-xs border flex-shrink-0" style="height: 34px; width: 44px; overflow: hidden;" title="FPT Polytechnic">
+                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 22px; width: auto; max-width: 100%; object-fit: contain;">
+                    </div>
                     <span class="u040-name">Poly<strong style="color:var(--ux-accent);">Mee</strong></span>
                 </div>
 
@@ -1283,10 +1305,10 @@
         <header class="dashboard-topbar">
             <!-- Left: Breadcrumbs & Screen Title -->
             <div class="d-flex align-items-center gap-3">
-                <div class="d-none d-lg-flex align-items-center justify-content-center text-white fw-bold rounded-3 shadow-xs flex-shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px; box-shadow: 0 4px 10px rgba(234, 88, 12, 0.35);">
-                    P
-                </div>
-                <div class="vr mx-1 d-none d-lg-block" style="height: 22px; opacity: 0.2;"></div>
+                <a href="/dashboard" class="d-flex align-items-center text-decoration-none bg-white p-1.5 px-2.5 rounded-3 border shadow-xs" style="height: 38px;" title="FPT Polytechnic">
+                    <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 25px; width: auto; object-fit: contain;">
+                </a>
+                <div class="vr mx-1 d-none d-sm-block" style="height: 24px; opacity: 0.25;"></div>
                 <div class="d-flex flex-column">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0" style="font-size: 11px; font-weight: 600;">
@@ -5272,7 +5294,7 @@ let qrCodeObj = null;
 // POLYMEE PROMAX THEME SYSTEM (Dark / Light)
 // =========================================================
 function initTheme() {
-    const saved = localStorage.getItem('polymee_theme') || 'dark';
+    const saved = localStorage.getItem('polymee_theme') || 'light';
     setTheme(saved);
 }
 

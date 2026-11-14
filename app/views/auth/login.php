@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" data-bs-theme="dark" class="dark">
+<html lang="vi" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,37 +22,42 @@
     <link rel="stylesheet" href="/assets/css/style.css">
 
     <style>
-    :root, [data-bs-theme="dark"] {
-        color-scheme: dark;
-        --ux-page: #0B0F17;
-        --ux-surface: #111827;
-        --ux-surface-2: #162032;
-        --ux-surface-3: #1E293B;
-        --ux-ink: #F8FAFC;
-        --ux-ink-2: #CBD5E1;
-        --ux-ink-3: #94A3B8;
-        --ux-line: rgba(255, 255, 255, 0.08);
-        --ux-line-2: rgba(255, 255, 255, 0.16);
+    :root, [data-bs-theme="light"] {
+        color-scheme: light;
+        --ux-page: #F5F5F7;
+        --ux-surface: #FFFFFF;
+        --ux-surface-2: #FAFAFC;
+        --ux-surface-3: #E5E5EA;
+        --ux-ink: #1D1D1F;
+        --ux-ink-2: #48484A;
+        --ux-ink-3: #86868B;
+        --ux-line: rgba(0, 0, 0, 0.08);
+        --ux-line-2: #D1D1D6;
         --ux-accent: #EA580C;
         --ux-accent-hover: #F97316;
-        --ux-accent-soft: rgba(234, 88, 12, 0.14);
+        --ux-accent-soft: rgba(234, 88, 12, 0.08);
+        --ux-navy-gradient: linear-gradient(180deg, #FFFFFF 0%, #FAFAFC 100%);
+        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         --ux-spring: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    [data-bs-theme="light"] {
-        color-scheme: light;
-        --ux-page: #F8FAFC;
-        --ux-surface: #FFFFFF;
-        --ux-surface-2: #F1F5F9;
-        --ux-surface-3: #E2E8F0;
-        --ux-ink: #0F172A;
-        --ux-ink-2: #334155;
-        --ux-ink-3: #64748B;
-        --ux-line: #E2E8F0;
-        --ux-line-2: #CBD5E1;
+    [data-bs-theme="dark"] {
+        color-scheme: dark;
+        --ux-page: #1C1C1E;
+        --ux-surface: #2C2C2E;
+        --ux-surface-2: #3A3A3C;
+        --ux-surface-3: #48484A;
+        --ux-ink: #FFFFFF;
+        --ux-ink-2: #EBEBF5;
+        --ux-ink-3: #8E8E93;
+        --ux-line: rgba(255, 255, 255, 0.12);
+        --ux-line-2: rgba(255, 255, 255, 0.2);
         --ux-accent: #EA580C;
-        --ux-accent-hover: #C2410C;
-        --ux-accent-soft: #FFF7ED;
+        --ux-accent-hover: #F97316;
+        --ux-accent-soft: rgba(234, 88, 12, 0.15);
+        --ux-navy-gradient: linear-gradient(180deg, #1C1C1E 0%, #2C2C2E 100%);
+        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        --ux-spring: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     body {
@@ -230,9 +235,15 @@
         <!-- Left Column: Hero Identity Showcase -->
         <div class="auth-hero-pane">
             <div>
-                <!-- Brand Title (Logo Removed) -->
+                <!-- School Brand & Identity -->
                 <div class="d-flex align-items-center justify-content-between mb-5">
-                    <span class="fw-bolder fs-4 tracking-tight" style="color: #FFFFFF;">Poly<strong style="color: var(--ux-accent);">Mee</strong></span>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white p-2 rounded-3 shadow-xs border" style="height: 44px; display: inline-flex; align-items: center;">
+                            <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 28px; width: auto; object-fit: contain;">
+                        </div>
+                        <div class="vr" style="height: 26px; opacity: 0.3; background-color: #fff;"></div>
+                        <span class="fw-bolder fs-4 tracking-tight" style="color: #FFFFFF;">Poly<strong style="color: var(--ux-accent);">Mee</strong></span>
+                    </div>
                     <span class="badge rounded-pill num-tabular" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 11px; padding: 6px 12px;">
                         <i class="bi bi-cpu-fill me-1"></i> AI Powered Hub
                     </span>
@@ -297,9 +308,15 @@
 
                 <!-- Header on Mobile / Card Header -->
                 <div class="d-flex align-items-center justify-content-between mb-4">
-                    <div>
-                        <h4 class="fw-bolder mb-1" style="color: var(--ux-ink);">Đăng Nhập PolyMee</h4>
-                        <p class="small mb-0" style="color: var(--ux-ink-3);">Đăng nhập tài khoản để vào không gian điều phối</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white p-1.5 px-2.5 rounded-3 border shadow-xs" style="height: 40px; display: inline-flex; align-items: center;">
+                            <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 26px; width: auto; object-fit: contain;">
+                        </div>
+                        <div class="vr" style="height: 24px; opacity: 0.25;"></div>
+                        <div>
+                            <h4 class="fw-bolder mb-0" style="color: var(--ux-ink); font-size: 19px;">Đăng Nhập PolyMee</h4>
+                            <p class="small mb-0" style="color: var(--ux-ink-3); font-size: 11.5px;">Cổng điều phối sự kiện FPT Polytechnic</p>
+                        </div>
                     </div>
                     <!-- Theme Switcher Button -->
                     <button type="button" class="btn btn-sm btn-outline-secondary border-0 px-2 py-1 rounded-circle" onclick="toggleAuthTheme()" title="Chuyển chế độ Sáng / Tối">
@@ -465,7 +482,7 @@
     }
 
     function initAuthTheme() {
-        const saved = localStorage.getItem('polymee_theme') || 'dark';
+        const saved = localStorage.getItem('polymee_theme') || 'light';
         setAuthTheme(saved);
     }
 

@@ -6,30 +6,30 @@
  */
 
 :root {
-    color-scheme: light dark;
+    color-scheme: light;
     --fpt-primary: #EA580C;
-    --fpt-primary-hover: #C2410C;
-    --fpt-primary-active: #9A3412;
-    --fpt-primary-soft: #FFF7ED;
-    --fpt-primary-border: #FED7AA;
+    --fpt-primary-hover: #F97316;
+    --fpt-primary-active: #C2410C;
+    --fpt-primary-soft: rgba(234, 88, 12, 0.08);
+    --fpt-primary-border: rgba(234, 88, 12, 0.25);
     
-    --fpt-navy: #0F172A;
-    --fpt-navy-surface: #1E293B;
-    --fpt-slate-bg: #F8FAFC;
-    --fpt-slate-card: #FFFFFF;
-    --fpt-slate-border: #E2E8F0;
-    --fpt-slate-border-focus: #CBD5E1;
+    --fpt-navy: #1D1D1F;
+    --fpt-navy-surface: #FAFAFC;
+    --fpt-slate-bg: #F5F5F7;          /* Apple Canvas Parchment */
+    --fpt-slate-card: #FFFFFF;        /* Apple Pure White */
+    --fpt-slate-border: rgba(0, 0, 0, 0.08); /* Apple 1px Hairline */
+    --fpt-slate-border-focus: #C7C7CC;
 
-    --fpt-text-main: #0F172A;
-    --fpt-text-muted: #475569;
-    --fpt-text-caption: #64748B;
+    --fpt-text-main: #1D1D1F;         /* Apple Near-Black Ink */
+    --fpt-text-muted: #6E6E73;        /* Apple Secondary Gray */
+    --fpt-text-caption: #86868B;      /* Apple Caption Gray */
 
     --fpt-emerald: #059669;
     --fpt-emerald-hover: #047857;
     --fpt-emerald-soft: #ECFDF5;
 
-    --fpt-sky: #0284C7;
-    --fpt-sky-hover: #0369A1;
+    --fpt-sky: #0066CC;              /* Apple Action Blue */
+    --fpt-sky-hover: #0071E3;
     --fpt-sky-soft: #F0F9FF;
 
     --fpt-ease: cubic-bezier(0.16, 1, 0.3, 1);

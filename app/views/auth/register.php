@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" data-bs-theme="dark" class="dark">
+<html lang="vi" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,39 +22,40 @@
     <link rel="stylesheet" href="/assets/css/style.css">
 
     <style>
-    :root, [data-bs-theme="dark"] {
-        color-scheme: dark;
-        --ux-page: #0B0F17;
-        --ux-surface: #111827;
-        --ux-surface-2: #162032;
-        --ux-surface-3: #1E293B;
-        --ux-ink: #F8FAFC;
-        --ux-ink-2: #CBD5E1;
-        --ux-ink-3: #94A3B8;
-        --ux-line: rgba(255, 255, 255, 0.08);
-        --ux-line-2: rgba(255, 255, 255, 0.16);
+    :root, [data-bs-theme="light"] {
+        color-scheme: light;
+        --ux-page: #F5F5F7;
+        --ux-surface: #FFFFFF;
+        --ux-surface-2: #FAFAFC;
+        --ux-surface-3: #E5E5EA;
+        --ux-ink: #1D1D1F;
+        --ux-ink-2: #48484A;
+        --ux-ink-3: #86868B;
+        --ux-line: rgba(0, 0, 0, 0.08);
+        --ux-line-2: #D1D1D6;
         --ux-accent: #EA580C;
         --ux-accent-hover: #F97316;
-        --ux-accent-soft: rgba(234, 88, 12, 0.14);
-        --ux-navy-gradient: linear-gradient(180deg, #0B0F17 0%, #111827 100%);
+        --ux-accent-soft: rgba(234, 88, 12, 0.08);
+        --ux-navy-gradient: linear-gradient(180deg, #FFFFFF 0%, #FAFAFC 100%);
         --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    [data-bs-theme="light"] {
-        color-scheme: light;
-        --ux-page: #F8FAFC;
-        --ux-surface: #FFFFFF;
-        --ux-surface-2: #F1F5F9;
-        --ux-surface-3: #E2E8F0;
-        --ux-ink: #0F172A;
-        --ux-ink-2: #334155;
-        --ux-ink-3: #64748B;
-        --ux-line: #E2E8F0;
-        --ux-line-2: #CBD5E1;
+    [data-bs-theme="dark"] {
+        color-scheme: dark;
+        --ux-page: #1C1C1E;
+        --ux-surface: #2C2C2E;
+        --ux-surface-2: #3A3A3C;
+        --ux-surface-3: #48484A;
+        --ux-ink: #FFFFFF;
+        --ux-ink-2: #EBEBF5;
+        --ux-ink-3: #8E8E93;
+        --ux-line: rgba(255, 255, 255, 0.12);
+        --ux-line-2: rgba(255, 255, 255, 0.2);
         --ux-accent: #EA580C;
-        --ux-accent-hover: #C2410C;
-        --ux-accent-soft: #FFF7ED;
-        --ux-navy-gradient: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+        --ux-accent-hover: #F97316;
+        --ux-accent-soft: rgba(234, 88, 12, 0.15);
+        --ux-navy-gradient: linear-gradient(180deg, #1C1C1E 0%, #2C2C2E 100%);
+        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     body {
@@ -136,10 +137,13 @@
 <body>
 
     <!-- Header / Brand Strip (No Image Logo) -->
-    <header class="py-3 px-4 border-bottom d-flex justify-content-between align-items-center" style="background: var(--ux-surface); border-color: var(--ux-line) !important;">
-        <a href="/dashboard" class="d-flex align-items-center text-decoration-none">
+    <header class="py-2.5 px-4 border-bottom d-flex justify-content-between align-items-center" style="background: var(--ux-surface); border-color: var(--ux-line) !important;">
+        <a href="/dashboard" class="d-flex align-items-center gap-3 text-decoration-none">
+            <div class="bg-white p-1.5 px-2.5 rounded-3 border shadow-xs" style="height: 38px; display: inline-flex; align-items: center;">
+                <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 24px; width: auto; object-fit: contain;">
+            </div>
+            <div class="vr mx-1" style="height: 22px; opacity: 0.25;"></div>
             <span class="fw-bolder fs-5 tracking-tight" style="color: var(--ux-ink);">Poly<strong style="color:var(--ux-accent);">Mee</strong></span>
-            <span class="badge ms-2" style="background: var(--ux-surface-2); color: var(--ux-ink-3); border: 1px solid var(--ux-line); font-size: 11px;">FPT Polytechnic</span>
         </a>
         <div class="d-flex align-items-center gap-2">
             <button type="button" class="btn btn-sm btn-outline-secondary border-0 px-2 py-1 rounded-circle" onclick="toggleRegisterTheme()" title="Chuyển chế độ Sáng / Tối">
@@ -261,7 +265,7 @@
     <!-- Scripts -->
     <script>
     function initRegisterTheme() {
-        const saved = localStorage.getItem('polymee_theme') || 'dark';
+        const saved = localStorage.getItem('polymee_theme') || 'light';
         setRegisterTheme(saved);
     }
 
