@@ -405,7 +405,7 @@
                 <div>
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span class="text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 0.05em; color: var(--ux-ink-3);">
-                            <i class="bi bi-stars text-warning me-1"></i> Chấm Điểm 1 Chạm (6 Demo Roles):
+                            <i class="bi bi-stars text-warning me-1"></i> Chấm Điểm 1 Chạm (7 Demo Roles Chuẩn BA):
                         </span>
                         <span class="badge num-tabular" style="font-size: 9.5px; background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.25);">Auto Login</span>
                     </div>
@@ -415,7 +415,7 @@
                             <div class="avatar-circle bg-primary-subtle text-primary">PA</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Đinh Nguyễn Phương Anh</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">PI03084 • Role: <strong style="color: var(--ux-ink-2);">CTV Media</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">PI03084 • Role: <strong style="color: var(--ux-ink-2);">CTV Media & Nhiếp Ảnh</strong></small>
                             </div>
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
@@ -424,7 +424,7 @@
                             <div class="avatar-circle bg-emerald-subtle text-success">ĐM</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Lê Đức Mạnh</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">PS20262 • Role: <strong style="color: var(--ux-ink-2);">CTV Lễ Tân</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">PS20262 • Role: <strong style="color: var(--ux-ink-2);">Cộng Tác Viên (CTV)</strong></small>
                             </div>
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
@@ -433,16 +433,7 @@
                             <div class="avatar-circle bg-warning-subtle text-warning-emphasis">GV</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Thầy Phan Hoàng Khải</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">GV0102 • Role: <strong style="color: var(--ux-ink-2);">Giảng Viên / BTC</strong></small>
-                            </div>
-                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
-                        </a>
-
-                        <a href="/auth/quickLogin/7" class="demo-account-pill">
-                            <div class="avatar-circle bg-success-subtle text-success">KT</div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold small lh-1">Đặng Thu Thảo</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">KT0105 • Role: <strong style="color: var(--ux-ink-2);">Kế Toán & Quyết Toán</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">GV0102 • Role: <strong style="color: var(--ux-ink-2);">Giảng Viên / Ban Tổ Chức</strong></small>
                             </div>
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
@@ -451,7 +442,25 @@
                             <div class="avatar-circle bg-info-subtle text-info-emphasis">HC</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Lê Đình Tuấn</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">HC0201 • Role: <strong style="color: var(--ux-ink-2);">Hành Chính CSVC</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">HC0201 • Role: <strong style="color: var(--ux-ink-2);">Nhân Viên Hành Chính CSVC</strong></small>
+                            </div>
+                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
+                        </a>
+
+                        <a href="/auth/quickLogin/13" class="demo-account-pill">
+                            <div class="avatar-circle bg-dark-subtle text-dark">PS</div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold small lh-1">ThS. Phạm Hồng Sơn</div>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">HC0001 • Role: <strong style="color: var(--ux-ink-2);">Trưởng Hành Chính / BGH</strong></small>
+                            </div>
+                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
+                        </a>
+
+                        <a href="/auth/quickLogin/7" class="demo-account-pill">
+                            <div class="avatar-circle bg-success-subtle text-success">KT</div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold small lh-1">Đặng Thu Thảo</div>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">KT0105 • Role: <strong style="color: var(--ux-ink-2);">Kế Toán / Quyền Lợi & Quyết Toán</strong></small>
                             </div>
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
@@ -460,7 +469,7 @@
                             <div class="avatar-circle bg-danger-subtle text-danger">AD</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Quản Trị Viên (Admin)</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">ADMIN001 • Role: <strong style="color: var(--ux-ink-2);">Toàn Quyền</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">ADMIN001 • Role: <strong style="color: var(--ux-ink-2);">Quản Trị Toàn Hệ Thống</strong></small>
                             </div>
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>

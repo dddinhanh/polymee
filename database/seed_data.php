@@ -135,34 +135,40 @@ if ((int)($row['cnt'] ?? 0) > 0) {
     return;
 }
 
-// 3. Nạp Roles
+// 3. Nạp Roles (Chuẩn hóa 7 vai trò theo BA Report v1.0 & Usecase specifications)
 $roles = [
     [1, 'Admin', 'Quản trị viên toàn quyền hệ thống'],
     [2, 'Organizer', 'Giảng viên và Ban tổ chức sự kiện'],
     [3, 'Staff', 'Cán bộ giám sát và điều phối hiện trường'],
-    [4, 'Student', 'Sinh viên FPoly / Cộng tác viên sự kiện']
+    [4, 'Student', 'Sinh viên FPoly / Cộng tác viên sự kiện'],
+    [5, 'Accountant', 'Kế toán & Quyết toán thù lao CTV'],
+    [6, 'Media', 'Cộng tác viên Media & Nhiếp ảnh bàn giao Drive'],
+    [7, 'Head_Admin', 'Trưởng hành chính & Ban giám hiệu phê duyệt']
 ];
 $stmt = $db->prepare("INSERT INTO roles (id, name, description) VALUES (?, ?, ?)");
 foreach ($roles as $r) {
     $stmt->execute($r);
 }
-echo "✓ Đã nạp 4 vai trò (Roles).\n";
+echo "✓ Đã nạp 7 vai trò (Roles) chuẩn BA.\n";
 
 // 4. Nạp Users
 $passHash = password_hash('123456', PASSWORD_BCRYPT);
 $users = [
     [1, 'ADMIN001', 'Quản Trị Viên Hệ Thống', 'admin@fpoly.edu.vn', $passHash, '0901234567', 1, 'Quản trị, Phân quyền'],
     [2, 'GV0102', 'Thầy Phan Hoàng Khải', 'khai.phan@fpt.edu.vn', $passHash, '0912345678', 2, 'Tổ chức sự kiện, Đào tạo'],
-    [3, 'PI03084', 'Đinh Nguyễn Phương Anh', 'phuonganh.pi03084@fpt.edu.vn', $passHash, '0923456789', 4, 'Media, Chụp ảnh sự kiện, Quay video recap'],
+    [3, 'PI03084', 'Đinh Nguyễn Phương Anh', 'phuonganh.pi03084@fpt.edu.vn', $passHash, '0923456789', 6, 'Media, Chụp ảnh sự kiện, Quay video recap'],
     [4, 'PS20262', 'Lê Đức Mạnh', 'ducmanh.ps20262@fpt.edu.vn', $passHash, '0934567890', 4, 'Lễ tân, Đón tiếp đại biểu, Setup'],
     [5, 'PS20263', 'Hoàng Minh Luận', 'minhluan.ps20263@fpt.edu.vn', $passHash, '0945678901', 4, 'Kỹ thuật âm thanh ánh sáng, Sân khấu'],
-    [6, 'PS20264', 'Dương Ngọc Hân', 'ngochan.ps20264@fpt.edu.vn', $passHash, '0956789012', 4, 'Hậu cần, Check-in, Hỗ trợ điều phối']
+    [6, 'PS20264', 'Dương Ngọc Hân', 'ngochan.ps20264@fpt.edu.vn', $passHash, '0956789012', 4, 'Hậu cần, Check-in, Hỗ trợ điều phối'],
+    [7, 'KT0105', 'Đặng Thu Thảo', 'thao.dt@fpt.edu.vn', $passHash, '0967890123', 5, 'Kế toán, Thẩm định VNeID & Quyết toán chi trả'],
+    [8, 'HC0201', 'Lê Đình Tuấn', 'tuan.ld@fpt.edu.vn', $passHash, '0978901234', 3, 'Hành chính, CSVC, Rà soát xung đột'],
+    [13, 'HC0001', 'ThS. Phạm Hồng Sơn', 'son.ph@fpt.edu.vn', $passHash, '0908889999', 7, 'Trưởng hành chính, Phê duyệt cuối, Giám sát vận hành']
 ];
 $stmt = $db->prepare("INSERT INTO users (id, student_code, full_name, email, password_hash, phone, role_id, skills) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 foreach ($users as $u) {
     $stmt->execute($u);
 }
-echo "✓ Đã nạp 6 tài khoản người dùng mẫu.\n";
+echo "✓ Đã nạp 9 tài khoản người dùng mẫu đại diện 7 vai trò.\n";
 
 // 5. Nạp Locations
 $locations = [

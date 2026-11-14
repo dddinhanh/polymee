@@ -1,3 +1,13 @@
+<?php
+/**
+ * PolyMee - Dashboard Single Page Application
+ * Áp dụng phân quyền chuẩn RBAC theo BA Report v1.0 & Usecase specifications
+ */
+require_once APP_ROOT . '/app/helpers/RolePermissionHelper.php';
+$perms = $permissions ?? RolePermissionHelper::getPermissions($currentUser ?? null);
+$userRole = $perms['role'];
+$ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)($u['role_id'] ?? 0), [4, 6], true) || in_array($u['role_name'] ?? '', ['Student', 'Media'], true)));
+?>
 <!-- Lucian UX/UI Prompt #040 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#040 -->
 <!DOCTYPE html>
 <html lang="vi" data-bs-theme="light">
@@ -1471,70 +1481,83 @@
                     <svg viewBox="0 0 16 16"><path d="M6 3.5L10.5 8 6 12.5"/></svg>
                 </button>
 
-                <!-- Navigation List (Menu Chính Hệ Thống) -->
+                <!-- Navigation List (Menu Chính Hệ Thống Phân Quyền Theo Chuẩn BA PolyMee) -->
                 <ul class="u040-nav" id="railNav">
                     <li class="u040-hl" role="presentation"></li>
 
                     <!-- 1. LỊCH TRÌNH & ĐIỀU PHỐI -->
                     <li class="u040-section-label"><span>LỊCH TRÌNH & ĐIỀU PHỐI</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:0" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')">
+                        <button class="u040-it" type="button" style="--i:0" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & phân rã ca trực">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
                             <span>Lịch Hoạt Động</span>
                         </button>
                     </li>
+                    <?php if ($perms['canViewMyShifts']): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:1" data-page="my-shifts" onclick="navigateToPage('my-shifts')">
+                        <button class="u040-it" type="button" style="--i:1" data-page="my-shifts" onclick="navigateToPage('my-shifts')" title="Ca trực cá nhân đã đăng ký & Check-in QR">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>
                             <span>Ca Trực Của Tôi</span>
                         </button>
                     </li>
+                    <?php endif; ?>
+                    <?php if ($perms['canViewContracts']): ?>
                     <li>
                         <button class="u040-it" type="button" style="--i:2" data-page="contract-dossier" onclick="navigateToPage('contract-dossier')" title="Hồ Sơ Hợp Đồng Nghiệm Thu">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 9V3.5L18.5 8H14zM8 13h8M8 17h5"/></svg>
                             <span>Hồ Sơ Hợp Đồng</span>
                         </button>
                     </li>
+                    <?php endif; ?>
 
-                    <!-- 2. TÀI CHÍNH & VNEID -->
+                    <!-- 2. TÀI CHÍNH & VNEID (Phân Quyền Kế Toán & Hồ Sơ) -->
+                    <?php if ($perms['canViewAccounting'] || $perms['canViewCtvProfiles'] || $perms['canViewMyProfile'] || $perms['canViewSubmissions']): ?>
                     <li class="u040-section-label"><span>TÀI CHÍNH & VNEID</span></li>
+                    <?php if ($perms['canViewAccounting']): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:3" data-page="accounting" onclick="navigateToPage('accounting')" title="Bảng Nghiệm Thu Kế Toán">
+                        <button class="u040-it" type="button" style="--i:3" data-page="accounting" onclick="navigateToPage('accounting')" title="Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7h6M9 11h6M9 15h4M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
                             <span>Nghiệm Thu Kế Toán</span>
                             <em class="u040-bd" aria-label="Hồ sơ nghiệm thu"><?= count($accountingList) ?></em>
                         </button>
                     </li>
-                    <?php
-                    $userRoleName = $currentUser['role_name'] ?? '';
-                    $userRoleId = (int)($currentUser['role_id'] ?? 4);
-                    $isManager = in_array($userRoleName, ['Admin', 'Organizer', 'Teacher'], true) || in_array($userRoleId, [1, 2, 7], true);
-                    $ctvCount = count(array_filter($allUsers, fn($u) => ($u['role_name'] ?? '') === 'Student' || (int)($u['role_id'] ?? 0) === 4));
-                    ?>
+                    <?php endif; ?>
+                    <?php if ($perms['canViewCtvProfiles']): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="<?= $isManager ? 'Quản lý hồ sơ định danh VNeID & STK của CTV' : 'Hồ sơ nhận thù lao cá nhân' ?>">
+                        <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="Quản lý hồ sơ định danh CCCD, VNeID & STK ngân hàng của CTV">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h2"/></svg>
-                            <span><?= $isManager ? 'Quản Lý Hồ Sơ CTV' : 'Hồ Sơ VNeID & STK' ?></span>
-                            <?php if ($isManager): ?>
-                            <em class="u040-bd" style="background:#0284C7; color:#fff;" aria-label="CTV Count"><?= $ctvCount ?></em>
-                            <?php endif; ?>
+                            <span>Quản Lý Hồ Sơ CTV</span>
+                            <em class="u040-bd" style="background:#0284C7; color:#fff;" aria-label="CTV Count"><?= count($ctvRoster ?? []) ?></em>
                         </button>
                     </li>
+                    <?php elseif ($perms['canViewMyProfile']): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:5" data-page="submissions" onclick="navigateToPage('submissions')">
+                        <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="Hồ sơ định danh VNeID & STK nhận thù lao cá nhân">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h2"/></svg>
+                            <span>Hồ Sơ VNeID & STK</span>
+                        </button>
+                    </li>
+                    <?php endif; ?>
+                    <?php if ($perms['canViewSubmissions']): ?>
+                    <li>
+                        <button class="u040-it" type="button" style="--i:5" data-page="submissions" onclick="navigateToPage('submissions')" title="Thẩm định nghiệm thu minh chứng Google Drive">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5V13M5 9V4.5M12 19.5V11M12 7V4.5M19 19.5V15M19 11V4.5M3 13h4M10 7h4M17 15h4"/></svg>
                             <span>Minh Chứng Drive</span>
                         </button>
                     </li>
+                    <?php endif; ?>
+                    <?php endif; ?>
 
                     <!-- 3. QUẢN LÝ TỔ CHỨC -->
+                    <?php if ($perms['canViewEvents']): ?>
                     <li class="u040-section-label"><span>QUẢN LÝ TỔ CHỨC</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:6" data-page="events" onclick="navigateToPage('events')">
+                        <button class="u040-it" type="button" style="--i:6" data-page="events" onclick="navigateToPage('events')" title="Quản lý sự kiện & điều phối ca trực">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>
                             <span>Quản Lý Sự Kiện</span>
                         </button>
                     </li>
+                    <?php endif; ?>
 
                     <!-- 4. HỆ THỐNG & TÀI KHOẢN -->
                     <li class="u040-section-label"><span>HỆ THỐNG & TÀI KHOẢN</span></li>
@@ -1544,9 +1567,9 @@
                             <span>Tài Khoản Cá Nhân</span>
                         </button>
                     </li>
-                    <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
+                    <?php if ($perms['canViewAdminManagement']): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:8" data-page="admin-management" onclick="navigateToPage('admin-management')" title="Quản trị viên cấp quyền & xem nhật ký">
+                        <button class="u040-it" type="button" style="--i:8" data-page="admin-management" onclick="navigateToPage('admin-management')" title="Quản trị viên cấp quyền & xem nhật ký hệ thống">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                             <span>Cấp Quyền & Nhật Ký</span>
                             <em class="u040-bd" style="background:#EA580C; color:#fff;" aria-label="Admin">Admin</em>
@@ -1712,10 +1735,12 @@
 
             <!-- Right: Action Controls (Clean, Minimalist Apple Design) -->
             <div class="d-flex align-items-center gap-2">
+                <?php if (!empty($perms['canCreateShift'])): ?>
                 <button type="button" class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
                     <i class="bi bi-calendar-plus-fill me-1"></i>
                     <span>Đặt Lịch Ca</span>
                 </button>
+                <?php endif; ?>
                 <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="openAddNoteModal()" title="Thêm ghi chú / lịch hẹn toàn trường">
                     <i class="fa-solid fa-note-sticky text-warning me-1"></i>
                     <span>Ghi Chú</span>
@@ -1976,9 +2001,14 @@
                                         <button type="button" class="btn btn-sm btn-light border rounded-pill px-2 py-1" onclick="openContractModal(<?= $acc['assignment_id'] ?>)" title="Xem Biên bản & Hợp đồng nghiệm thu">
                                             <i class="bi bi-file-earmark-text"></i>
                                         </button>
-                                        <?php if (empty($acc['lecturer_verified']) || $acc['lecturer_verified'] == 0): ?>
+                                        <?php if ((empty($acc['lecturer_verified']) || $acc['lecturer_verified'] == 0) && $perms['canVerifyLecturer']): ?>
                                         <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-2 py-1" onclick="verifyLecturerAcceptance(<?= $acc['assignment_id'] ?>)" title="Giảng viên duyệt nghiệm thu">
                                             <i class="bi bi-check-lg"></i>
+                                        </button>
+                                        <?php endif; ?>
+                                        <?php if (!empty($acc['lecturer_verified']) && $acc['lecturer_verified'] == 1 && ($acc['school_status'] ?? '') !== 'Signed_Paid' && $perms['canApproveAccounting']): ?>
+                                        <button type="button" class="btn btn-sm btn-warning text-dark rounded-pill px-2 py-1 fw-bold" onclick="submitToSchoolForSigning(<?= $acc['assignment_id'] ?>)" title="Kế toán duyệt chi & thanh toán thù lao">
+                                            <i class="bi bi-credit-card me-1"></i>Duyệt Chi
                                         </button>
                                         <?php endif; ?>
                                     </div>
@@ -2004,8 +2034,8 @@
             $hasVneidPhotoCount = count(array_filter($ctvRoster, fn($c) => !empty($c['vneid_image_url'])));
             ?>
             <section class="spa-panel fade-in-up" id="panelStudentPayrollProfile" style="display:none;">
-                <?php if ($isManager): ?>
-                <!-- Giao diện Quản Lý Hồ Sơ CTV Dành Cho Giảng Viên & Quản Trị Viên -->
+                <?php if ($perms['canViewCtvProfiles']): ?>
+                <!-- Giao diện Quản Lý Hồ Sơ CTV Dành Cho Kế Toán & Quản Trị Viên -->
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-4 gap-3">
                     <div>
                         <div class="d-flex align-items-center gap-2">
@@ -2142,7 +2172,7 @@
                     </div>
                 </div>
 
-                <?php else: ?>
+                <?php elseif ($perms['canViewMyProfile']): ?>
                 <!-- Giao diện cá nhân dành cho Sinh viên CTV tự kê khai hồ sơ của mình -->
                 <div class="pb-3 border-bottom mb-4">
                     <h2 class="h5 fw-bold mb-0 text-dark">Hồ Sơ Nhận Thù Lao & Thông Tin Định Danh Của Tôi</h2>
@@ -2205,6 +2235,17 @@
                         </div>
                     </div>
                 </div>
+                <?php else: ?>
+                <!-- Thông báo dành cho Cán bộ / Giảng viên biên chế nhà trường -->
+                <div class="card border-0 rounded-4 p-5 text-center shadow-xs bg-light">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center bg-white border mx-auto mb-3" style="width: 56px; height: 56px;">
+                        <i class="bi bi-person-badge text-secondary fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">Cán Bộ / Giảng Viên Biên Chế Nhà Trường</h5>
+                    <p class="text-muted small mx-auto mb-0" style="max-width: 540px; line-height: 1.6;">
+                        Tài khoản của bạn thuộc khối Cán bộ / Giảng viên (<strong><?= htmlspecialchars($perms['roleNameDisplay']) ?></strong>). Nhân sự nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID tại đây.
+                    </p>
+                </div>
                 <?php endif; ?>
             </section>
 
@@ -2250,9 +2291,11 @@
                         <h2 class="h5 fw-bold mb-0 text-dark">Danh Sách Sự Kiện & Phân Rã Ca Trực</h2>
                         <p class="text-muted small mb-0">Quản trị các chiến dịch tuyển CTV, giám sát tiến độ lấp đầy từng ca trực</p>
                     </div>
+                    <?php if (!empty($perms['canCreateShift'])): ?>
                     <button class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
                         <i class="bi bi-calendar-plus-fill me-1"></i> Đặt Lịch Ca Mới
                     </button>
+                    <?php endif; ?>
                 </div>
                 <div class="row g-4" id="eventsCardsContainer">
                     <?php foreach ($events as $e): ?>
@@ -3608,6 +3651,7 @@ const rawShifts = <?= json_encode($shifts, JSON_UNESCAPED_UNICODE) ?>;
 const rawAccountingList = <?= json_encode($accountingList, JSON_UNESCAPED_UNICODE) ?>;
 const rawCalendarNotes = <?= json_encode($calendarNotes ?? [], JSON_UNESCAPED_UNICODE) ?>;
 const currentUser = <?= json_encode($currentUser, JSON_UNESCAPED_UNICODE) ?>;
+const userPermissions = <?= json_encode($perms, JSON_UNESCAPED_UNICODE) ?>;
 
 let currentYear = 2026;
 let currentMonth = 10; // Tháng 11 (0-indexed)
@@ -3744,6 +3788,16 @@ function closeSidebarUserMenu() {
  * =========================================================
  */
 function navigateToPage(pageName) {
+    // RBAC Client-side Navigation Guard
+    if (pageName === 'accounting' && !userPermissions.canViewAccounting) {
+        showToast('Bạn không có quyền truy cập Bảng Nghiệm Thu Kế Toán. Quyền này chỉ dành cho Kế toán, Trưởng hành chính và Ban Giám hiệu.', 'warning');
+        return navigateToPage('calendar');
+    }
+    if (pageName === 'admin-management' && !userPermissions.canViewAdminManagement) {
+        showToast('Bạn không có quyền truy cập Trung tâm Cấp Quyền & Nhật ký. Chức năng chỉ dành riêng cho Quản trị viên hệ thống (Admin).', 'warning');
+        return navigateToPage('calendar');
+    }
+
     activePage = pageName;
 
     // Synchronize Lucian Rail Navigation
@@ -3799,7 +3853,7 @@ function navigateToPage(pageName) {
     } else if (pageName === 'student-payroll-profile') {
         const spp = document.getElementById('panelStudentPayrollProfile');
         if (spp) spp.style.setProperty('display', 'block', 'important');
-        const isMgr = ['Admin', 'Organizer', 'Teacher'].includes(currentUser?.role_name || '') || [1, 2, 7].includes(Number(currentUser?.role_id || 0));
+        const isMgr = !!userPermissions.canViewCtvProfiles;
         if (screenTitle) screenTitle.textContent = isMgr ? 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)' : 'Hồ Sơ Nhận Thù Lao & Thông Tin Định Danh Của Tôi';
         if (breadcrumb) breadcrumb.textContent = isMgr ? 'Quản Lý Hồ Sơ CTV' : 'Hồ Sơ VNeID & STK';
     } else if (pageName === 'my-shifts') {
@@ -4173,13 +4227,17 @@ function renderDayView(dateStr) {
             <div class="d-flex align-items-center gap-2">
                 ${isMine 
                     ? `<span class="badge bg-success px-3 py-2 fs-6 fw-bold"><i class="bi bi-check-circle me-1"></i>Bạn Đã Đăng Ký</span>` 
-                    : (currentUser && ['Student', 'Media'].includes(currentUser.role_name)
+                    : (userPermissions.canRegisterShift
                         ? `<button class="btn-fpt-primary" onclick="openShiftDetail(${s.id})">
                             ${isFull ? 'Đăng Ký Dự Phòng' : 'Đăng Ký Ca Này'}
                            </button>`
-                        : `<button class="btn-fpt-secondary" onclick="openShiftDetail(${s.id})">
-                            <i class="bi bi-gear me-1"></i> Quản Lý Ca
-                           </button>`)
+                        : (userPermissions.canCreateShift
+                            ? `<button class="btn-fpt-secondary" onclick="openShiftDetail(${s.id})">
+                                <i class="bi bi-gear me-1"></i> Quản Lý Ca
+                               </button>`
+                            : `<button class="btn-fpt-secondary" onclick="openShiftDetail(${s.id})">
+                                <i class="bi bi-eye me-1"></i> Chi Tiết Ca
+                               </button>`))
                 }
                 <button class="btn-fpt-ghost" onclick="openShiftDetail(${s.id})" title="Xem chi tiết">
                     <i class="bi bi-info-circle fs-5"></i>
@@ -4312,7 +4370,7 @@ function openShiftDetail(shiftId) {
     const noticeContainer = document.getElementById('modalRoleNotice');
     const isMine = parseInt(shift.is_registered_by_me) > 0;
 
-    if (currentUser && ['Student', 'Media'].includes(currentUser.role_name)) {
+    if (userPermissions.canRegisterShift) {
         noticeContainer.innerHTML = `
             <i class="bi bi-shield-check fs-5"></i>
             <span>Hệ thống tự động chạy thuật toán <strong>Collision Detection</strong> để đảm bảo bạn không bị trùng lịch học hay ca trực khác.</span>
@@ -4330,20 +4388,30 @@ function openShiftDetail(shiftId) {
                 </button>
             `;
         }
-    } else {
+    } else if (userPermissions.canCreateShift) {
         noticeContainer.innerHTML = `
             <i class="bi bi-person-check fs-5"></i>
-            <span>Chế độ Quản trị: Bạn có thể kích hoạt máy chiếu Dynamic QR trực tiếp cho ca này hoặc kiểm tra danh sách CTV đã tuyển.</span>
+            <span>Chế độ Quản lý / Ban tổ chức: Bạn có thể kích hoạt máy chiếu Dynamic QR trực tiếp cho ca này hoặc kiểm tra danh sách CTV đã tuyển.</span>
         `;
         actionContainer.innerHTML = `
             <div class="d-flex gap-2">
                 <a href="/admin/qrProjector/${shift.id}" target="_blank" class="btn-fpt-emerald">
                     <i class="bi bi-qr-code me-1"></i> Chiếu Dynamic QR
                 </a>
-                <button type="button" class="btn-fpt-secondary" onclick="navigateToPage('accounting')">
-                    <i class="bi bi-cash-stack me-1"></i> Nghiệm Thu Thù Lao
+                <button type="button" class="btn-fpt-secondary" onclick="shiftModalInstance.hide(); navigateToPage('events')">
+                    <i class="bi bi-people me-1"></i> Quản Lý Sự Kiện
                 </button>
             </div>
+        `;
+    } else {
+        noticeContainer.innerHTML = `
+            <i class="bi bi-info-circle fs-5"></i>
+            <span>Chế độ Tra cứu: Bạn đang xem thông tin ca trực theo vai trò <strong>${userPermissions.roleNameDisplay || ''}</strong>.</span>
+        `;
+        actionContainer.innerHTML = `
+            <button type="button" class="btn-fpt-secondary" data-bs-dismiss="modal">
+                <i class="bi bi-x-lg me-1"></i> Đóng
+            </button>
         `;
     }
 

@@ -46,6 +46,16 @@ class ShiftController extends BaseController
             return;
         }
 
+        // Kiểm tra quyền RBAC: Chỉ Sinh viên / CTV / Media mới đăng ký ca trực
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (!$permissions['canRegisterShift']) {
+            $msg = 'Chỉ Sinh viên / Cộng tác viên (CTV, Media) mới có quyền đăng ký nhận ca trực.';
+            if ($isAjax) $this->json(['success' => false, 'message' => $msg], 403);
+            SessionHelper::setFlash('error', $msg);
+            $this->redirect(URL_ROOT . '/');
+            return;
+        }
+
         // 1. Lấy thông tin ca trực
         $shift = $this->shiftModel->findWithEvent($shiftId);
         if (!$shift) {

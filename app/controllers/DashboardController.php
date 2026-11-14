@@ -28,8 +28,9 @@ class DashboardController extends BaseController
     {
         $db = Database::getInstance()->getConnection();
 
-        // 1. Thống kê tổng quan
+        // 1. Thống kê tổng quan & Phân quyền chuẩn RBAC
         $stats = $this->eventModel->getDashboardStats();
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
 
         // 2. Lấy toàn bộ ca trực kèm thông tin sự kiện & địa điểm phục vụ hiển thị lên lịch
         $sql = "SELECT s.*, 
@@ -62,7 +63,19 @@ class DashboardController extends BaseController
         $events = $this->eventModel->getEventsWithDetails();
         $locations = $this->eventModel->getAllLocations();
 
-        // 4. Lấy BẢNG NGHIỆM THU KẾ TOÁN (Bao gồm Họ tên, SĐT, CCCD, Ảnh VNeID, Ảnh hiện trường, GV duyệt, Hợp đồng, Ngân hàng, STK, Thù lao)
+        // 4. Lấy BẢNG NGHIỆM THU KẾ TOÁN (Tuân thủ RBAC: Kế toán, Trưởng HC, Admin xem toàn trường; CTV chỉ xem ca của mình)
+        $whereAccounting = "";
+        $paramsAccounting = [];
+        if (!$permissions['canViewAccounting']) {
+            if ($permissions['role'] === 'LECTURER') {
+                $whereAccounting = " WHERE e.created_by = :current_user_id ";
+                $paramsAccounting[':current_user_id'] = $this->currentUser['id'] ?? 0;
+            } else {
+                $whereAccounting = " WHERE sa.user_id = :current_user_id ";
+                $paramsAccounting[':current_user_id'] = $this->currentUser['id'] ?? 0;
+            }
+        }
+
         $sqlAccounting = "SELECT sa.id as assignment_id, sa.status as assignment_status, sa.assigned_at,
                                  sa.accounting_status, sa.accounting_note,
                                  sa.proof_image_url, sa.proof_note, sa.proof_submitted_at,
@@ -80,8 +93,11 @@ class DashboardController extends BaseController
                           INNER JOIN shifts s ON sa.shift_id = s.id
                           INNER JOIN events e ON s.event_id = e.id
                           LEFT JOIN locations l ON e.location_id = l.id
+                          {$whereAccounting}
                           ORDER BY sa.assigned_at DESC";
-        $accountingList = $db->query($sqlAccounting)->fetchAll(PDO::FETCH_ASSOC);
+        $stmtAcc = $db->prepare($sqlAccounting);
+        $stmtAcc->execute($paramsAccounting);
+        $accountingList = $stmtAcc->fetchAll(PDO::FETCH_ASSOC);
 
         // 5. Lấy danh sách Ghi chú / Lịch hẹn toàn trường (Calendar Notes & Memos theo BA Baseline)
         $calendarNotes = $db->query("SELECT * FROM calendar_notes ORDER BY date ASC")->fetchAll(PDO::FETCH_ASSOC) ?: [];
@@ -117,6 +133,7 @@ class DashboardController extends BaseController
             'roles' => $roles,
             'activityLogs' => $activityLogs,
             'currentUser' => $this->currentUser,
+            'permissions' => $permissions,
             'flash' => SessionHelper::getFlash(),
             'csrfToken' => SessionHelper::getCsrfToken()
         ]);
@@ -134,10 +151,10 @@ class DashboardController extends BaseController
             return;
         }
 
-        // Kiểm tra quyền: Chỉ Admin hoặc Organizer mới được đặt lịch
-        $roleName = $this->currentUser['role_name'] ?? '';
-        if (!in_array($roleName, ['Admin', 'Organizer'], true)) {
-            $this->json(['success' => false, 'message' => 'Bạn không có quyền tạo sự kiện / đặt lịch ca trực.'], 403);
+        // Kiểm tra quyền RBAC: Giảng viên/BTC, Trưởng HC, Admin
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (!$permissions['canCreateShift']) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền tạo sự kiện / đặt lịch ca trực. Chức năng dành cho Giảng viên/Ban tổ chức và Quản trị viên.'], 403);
             return;
         }
 
@@ -193,6 +210,13 @@ class DashboardController extends BaseController
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->json(['success' => false, 'message' => 'Phương thức không được hỗ trợ.'], 405);
+            return;
+        }
+
+        // Kiểm tra quyền RBAC: Kế toán, Trưởng HC, Admin
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (!$permissions['canApproveAccounting']) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền phê duyệt quyết toán thù lao. Quyền này chỉ dành cho Kế toán, Trưởng hành chính và Quản trị viên.'], 403);
             return;
         }
 
@@ -314,6 +338,13 @@ class DashboardController extends BaseController
             return;
         }
 
+        // Kiểm tra quyền RBAC: Giảng viên/BTC, Trưởng HC, Admin
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (!$permissions['canVerifyLecturer']) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền xác nhận nghiệm thu ca trực. Quyền này thuộc về Giảng viên / Ban tổ chức sự kiện.'], 403);
+            return;
+        }
+
         $assignmentId = (int)($_POST['assignment_id'] ?? 0);
         $lecturerName = trim($_POST['lecturer_name'] ?? ($this->currentUser['full_name'] ?? 'Giảng viên phụ trách'));
 
@@ -353,6 +384,13 @@ class DashboardController extends BaseController
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->json(['success' => false, 'message' => 'Phương thức không được hỗ trợ.'], 405);
+            return;
+        }
+
+        // Kiểm tra quyền RBAC: Nhân viên hành chính, Trưởng HC, Admin
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (!$permissions['canSubmitSchoolSigning']) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền trình trường ký duyệt. Quyền này dành cho Cán bộ Hành chính và Ban Giám hiệu.'], 403);
             return;
         }
 
@@ -551,11 +589,10 @@ class DashboardController extends BaseController
             return;
         }
 
-        $roleId = (int)($this->currentUser['role_id'] ?? 0);
-        $roleName = $this->currentUser['role_name'] ?? '';
-
-        if ($roleId !== 1 && $roleName !== 'Admin') {
-            $this->json(['success' => false, 'message' => 'Bạn không có quyền thực hiện chức năng này. Chỉ Quản trị viên mới được cấp quyền!'], 403);
+        // Kiểm tra quyền RBAC: CHỈ Admin
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (!$permissions['canManageRoles']) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền cấp và quản lý vai trò người dùng. Chỉ Quản trị viên hệ thống (Admin) mới có quyền!'], 403);
             return;
         }
 
