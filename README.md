@@ -451,23 +451,27 @@ Khi giảng viên yêu cầu mở demo sản phẩm trực tiếp, nhóm sinh vi
 
 ---
 
-### 🔹 Bước 4: Vận Hành Máy Chiếu Dynamic QR Code Điểm Danh (Zero Fraud)
-1. Chuyển sang phân hệ **"Máy Chiếu QR"** (`/admin/qrProjector/1`).
-2. Màn hình máy chiếu toàn cảnh hiện ra với mã QR phân giải cao và khung viền ánh sáng động.
-3. Quan sát **Thanh đếm ngược 30 giây**:
-   - Khi thanh đếm về 0, mã QR tự động vẽ lại mã mới hoàn toàn bằng hàm băm `HMAC-SHA256` mà **không tải lại trang**.
-   - Chứng minh cơ chế vô hiệu hóa hành vi gian lận điểm danh từ xa.
+### 🔹 Bước 4: Chụp Ảnh Hiện Trường & Giảng Viên Nghiệm Thu Ca Trực (Zero Fraud)
+1. Đăng nhập tài khoản CTV (ví dụ: **Đinh Nguyễn Phương Anh - PI03084**).
+2. Vào tab **"Ca Trực Của Tôi"** (`panelMyShifts`), tại ca trực đã hoàn thành bấm **"Chụp Ảnh Hiện Trường"**.
+3. Chọn ảnh chụp hiện trường tại vị trí trực kèm ghi chú báo cáo kết quả và bấm **"Gửi Minh Chứng"**.
+4. Chuyển vai sang **Giảng viên ThS. Phan Hoàng Khải (GV0102)**:
+   - Vào tab **"Nghiệm Thu Ca Trực"** (`panelLecturerAcceptance`).
+   - Xem ảnh hiện trường minh chứng của CTV phóng to sắc nét.
+   - Bấm nút **"Nghiệm Thu & Tạo HĐ"**: Hệ thống xác nhận và sinh mã hợp đồng pháp lý tự động (ví dụ: `HDNT-2026-FPLY-001`).
 
 ---
 
-### 🔹 Bước 5: Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán
-1. Chuyển vai sang **Kế toán Đặng Thu Thảo (KT0105)** và mở tab **"Nghiệm Thu Kế Toán"** (`panelAccounting`).
-2. Quan sát bảng danh sách CTV kèm số CCCD, tài khoản ngân hàng và ảnh đại diện thẻ VNeID.
-3. Nhấp vào ảnh thẻ VNeID để mở modal **"Đối Soát Định Danh VNeID"** sắc nét.
-4. Thực hiện thao tác 1-Click:
-   - Bấm nút **"Duyệt"** (Màu xanh lục): Chuyển hồ sơ sang trạng thái `Approved`.
-   - Bấm nút **"Đã Chi"** (Màu xanh dương): Chuyển trạng thái sang `Paid`.
-5. Bấm nút **"Tải File Excel (CSV)"**: Trình duyệt tải ngay file `.csv` có mã hóa BOM UTF-8, mở trên Microsoft Excel hiển thị tiếng Việt có dấu chuẩn 100%.
+### 🔹 Bước 5: Hồ Sơ Hợp Đồng Nghiệm Thu & Trình Trường Ký Duyệt Chuyển Tiền
+1. Mở tab **"Hồ Sơ Hợp Đồng"** (`panelContractDossier`) hoặc **"Nghiệm Thu Kế Toán"** (`panelAccounting`).
+2. Bấm nút **"Xem Hợp Đồng"**: Modal chuẩn văn bản **Trường Cao Đẳng FPT Polytechnic** hiện ra đầy đủ:
+   - Quốc hiệu, đơn vị đại diện, mã số hồ sơ điện tử.
+   - Bảng kê chi tiết thông tin CTV, sự kiện, ca trực, số tiền thù lao, số CCCD và STK ngân hàng.
+   - Ảnh chụp minh chứng hiện trường trực tiếp.
+   - Khung 3 chữ ký: Giảng viên phụ trách, Cộng tác viên, Đại diện Nhà trường.
+3. Bấm **"Trình Trường Ký Duyệt"**: Trạng thái chuyển sang `Đã Ký & Quyết Toán (Signed_Paid)`.
+4. Bấm **"In Hợp Đồng (PDF)"**: Khổ giấy A4 tối ưu `@media print` sẵn sàng trình ký và lưu trữ văn thư.
+5. Bấm **"Tải File Excel (CSV)"**: Xuất bảng kê thù lao kế toán UTF-8 BOM hiển thị tiếng Việt chuẩn 100%.
 
 ---
 
