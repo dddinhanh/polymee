@@ -1857,7 +1857,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             <li class="breadcrumb-item active" id="breadcrumbActive" style="color:var(--ux-accent);">Bảng Lịch Trung Tâm</li>
                         </ol>
                     </nav>
-                    <h1 class="h5 fw-bold mb-0 tracking-tight" id="activeScreenTitle">Lịch Hoạt Động & Điều Phối Ca Trực</h1>
+                    <h1 class="fw-bold mb-0 tracking-tight" style="font-size: 16px; color: #1D1D1F;" id="activeScreenTitle">Lịch Hoạt Động & Điều Phối Ca Trực</h1>
                 </div>
             </div>
 
@@ -2033,13 +2033,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 2: BẢNG NGHIỆM THU KẾ TOÁN & KIỂM DUYỆT THÙ LAO (ADMIN / ORGANIZER) -->
             <section class="spa-panel" id="panelAccounting" style="display:none;">
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-4 gap-2">
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-2" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold">PHÒNG KẾ TOÁN & TÀI CHÍNH</span>
-                            <h2 class="h5 fw-bold mb-0 text-dark">Bảng Nghiệm Thu Thù Lao Cộng Tác Viên</h2>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">PHÒNG KẾ TOÁN & TÀI CHÍNH</span>
+                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Bảng Nghiệm Thu Thù Lao Cộng Tác Viên</h2>
                         </div>
-                        <p class="text-muted small mb-0 mt-1">Quản lý định danh CCCD, ảnh VNeID, số tài khoản ngân hàng và thẩm định quyết toán chi thù lao CTV</p>
+                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Quản lý định danh CCCD, ảnh VNeID, số tài khoản ngân hàng và thẩm định quyết toán chi thù lao CTV</p>
                     </div>
                     <div class="d-flex gap-2">
                         <button class="btn-fpt-secondary btn-fpt-sm" onclick="window.print()">
@@ -2055,7 +2055,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 <div class="ai-audit-banner mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
                     <div class="d-flex align-items-center gap-3">
                         <div class="rounded-circle d-flex align-items-center justify-content-center text-dark" style="width:38px; height:38px; background:#FFFFFF; flex:none; border:1px solid rgba(0,0,0,0.08); box-shadow:0 1px 3px rgba(0,0,0,0.04);">
-                            <i class="bi bi-robot fs-5 text-dark"></i>
+                            <i class="fa-solid fa-wand-magic-sparkles fs-5 text-warning"></i>
                         </div>
                         <div>
                             <div class="d-flex align-items-center gap-2">
@@ -2194,13 +2194,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <section class="spa-panel fade-in-up" id="panelStudentPayrollProfile" style="display:none;">
                 <?php if ($perms['canViewCtvProfiles']): ?>
                 <!-- Giao diện Quản Lý Hồ Sơ CTV Dành Cho Kế Toán & Quản Trị Viên -->
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-4 gap-3">
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold">BAN TỔ CHỨC & QUẢN TRỊ</span>
-                            <h2 class="h5 fw-bold mb-0 text-dark">Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)</h2>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">BAN TỔ CHỨC & QUẢN TRỊ</span>
+                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)</h2>
                         </div>
-                        <p class="text-muted small mb-0 mt-1">Dành cho Giảng Viên và Quản Trị Viên kiểm tra, đối soát thông tin CCCD, ảnh định danh VNeID và số tài khoản ngân hàng của toàn bộ CTV đăng ký</p>
+                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Dành cho Giảng Viên và Quản Trị Viên kiểm tra, đối soát thông tin CCCD, ảnh định danh VNeID và số tài khoản ngân hàng của toàn bộ CTV đăng ký</p>
                     </div>
                     <div class="d-flex gap-2">
                         <button class="btn-fpt-secondary btn-fpt-sm" onclick="window.print()">
@@ -2213,29 +2213,41 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- 4 Thẻ Chỉ Số Tổng Quan Hồ Sơ CTV -->
-                <div class="row g-3 mb-4">
-                    <div class="col-6 col-md-3">
-                        <div class="card border-0 rounded-4 p-3 shadow-xs bg-light">
-                            <span class="text-muted small d-block mb-1">Tổng Số CTV Đăng Ký</span>
-                            <h4 class="fw-bold text-dark mb-0 num-tabular"><?= count($ctvRoster) ?> <small class="fs-6 text-muted font-normal">CTV</small></h4>
+                <div class="kpi-metric-strip mb-3">
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Tổng Số CTV Đăng Ký</div>
+                            <div class="kpi-mini-val num-tabular"><?= count($ctvRoster) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">CTV</small></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-people"></i>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3">
-                        <div class="card border-0 rounded-4 p-3 shadow-xs bg-light">
-                            <span class="text-muted small d-block mb-1">Đầy Đủ CCCD & STK</span>
-                            <h4 class="fw-bold text-success mb-0 num-tabular"><?= $completeDossierCount ?> <small class="fs-6 text-muted font-normal">hồ sơ (<?= round($completeDossierCount / max(1, count($ctvRoster)) * 100) ?>%)</small></h4>
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Đầy Đủ CCCD & STK</div>
+                            <div class="kpi-mini-val num-tabular text-success"><?= $completeDossierCount ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">(<?= round($completeDossierCount / max(1, count($ctvRoster)) * 100) ?>%)</small></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-check2-circle text-success"></i>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3">
-                        <div class="card border-0 rounded-4 p-3 shadow-xs bg-light">
-                            <span class="text-muted small d-block mb-1">Đã Nộp Ảnh VNeID</span>
-                            <h4 class="fw-bold text-primary mb-0 num-tabular"><?= $hasVneidPhotoCount ?> <small class="fs-6 text-muted font-normal">hồ sơ</small></h4>
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Đã Nộp Ảnh VNeID</div>
+                            <div class="kpi-mini-val num-tabular text-primary"><?= $hasVneidPhotoCount ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">hồ sơ</small></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-person-badge text-primary"></i>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3">
-                        <div class="card border-0 rounded-4 p-3 shadow-xs bg-light">
-                            <span class="text-muted small d-block mb-1">Tình Trạng Đối Soát</span>
-                            <h4 class="fw-bold text-warning mb-0" style="font-size: 1.15rem;"><i class="bi bi-patch-check-fill me-1 text-success"></i>100% Khớp FPoly</h4>
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Tình Trạng Đối Soát</div>
+                            <div class="kpi-mini-val num-tabular text-success" style="font-size: 15px;"><i class="bi bi-patch-check-fill me-1"></i>100% Khớp FPoly</div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-shield-check text-success"></i>
                         </div>
                     </div>
                 </div>
@@ -2337,12 +2349,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 4: LỊCH TRỰC CỦA TÔI -->
             <section class="spa-panel" id="panelMyShifts" style="display:none;">
-                <div class="d-flex justify-content-between align-items-center pb-3 border-bottom mb-4">
+                <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
-                        <h2 class="h5 fw-bold mb-0 text-dark">Lịch Trực & Ca Phân Công Của Tôi</h2>
-                        <p class="text-muted small mb-0">Theo dõi ca trực, nộp ảnh chụp hiện trường chứng minh có mặt để Giảng viên nghiệm thu và xem hợp đồng thanh toán thù lao.</p>
+                        <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Lịch Trực & Ca Phân Công Của Tôi</h2>
+                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Theo dõi ca trực, nộp ảnh chụp hiện trường chứng minh có mặt để Giảng viên nghiệm thu và xem hợp đồng thanh toán thù lao.</p>
                     </div>
-                    <span class="badge bg-primary px-3 py-2 fw-bold" id="myShiftsCountBadge">0 Ca Trực</span>
+                    <span class="badge bg-primary px-3 py-2 fw-bold" style="font-size: 12px; border-radius: 8px;" id="myShiftsCountBadge">0 Ca Trực</span>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
@@ -2369,10 +2381,10 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 5: QUẢN LÝ SỰ KIỆN -->
             <section class="spa-panel" id="panelEvents" style="display:none;">
-                <div class="d-flex justify-content-between align-items-center pb-3 border-bottom mb-4">
+                <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
-                        <h2 class="h5 fw-bold mb-0 text-dark">Danh Sách Sự Kiện & Phân Rã Ca Trực</h2>
-                        <p class="text-muted small mb-0">Quản trị các chiến dịch tuyển CTV, giám sát tiến độ lấp đầy từng ca trực</p>
+                        <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Danh Sách Sự Kiện & Phân Rã Ca Trực</h2>
+                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Quản trị các chiến dịch tuyển CTV, giám sát tiến độ lấp đầy từng ca trực</p>
                     </div>
                     <?php if (!empty($perms['canCreateShift'])): ?>
                     <button class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
@@ -2429,16 +2441,16 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 6: MINH CHỨNG ĐỂ NGHIỆM THU SAU MỖI SỰ KIỆN HOÀN THÀNH -->
             <section class="spa-panel" id="panelSubmissions" style="display:none;">
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-4 gap-3">
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-warning text-dark font-monospace fw-bold px-2.5 py-1">HẬU SỰ KIỆN</span>
-                            <h2 class="h5 fw-bold mb-0 text-dark">Minh Chứng Nghiệm Thu Sau Mỗi Sự Kiện Hoàn Thành</h2>
+                            <span class="badge bg-warning text-dark font-monospace fw-bold px-2.5 py-1" style="font-size: 11px;">HẬU SỰ KIỆN</span>
+                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Minh Chứng Nghiệm Thu Sau Mỗi Sự Kiện Hoàn Thành</h2>
                         </div>
-                        <p class="text-muted small mb-0">Role CTV: Up ảnh hiện trường • Role CTV Media: Up link Google Drive kèm logo & chỉnh sửa sáng • Giảng Viên: Duyệt đã đầy đủ minh chứng để nghiệm thu</p>
+                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Role CTV: Up ảnh hiện trường • Role CTV Media: Up link Google Drive kèm logo & chỉnh sửa sáng • Giảng Viên: Duyệt đã đầy đủ minh chứng để nghiệm thu</p>
                     </div>
                     <div class="d-flex gap-2">
-                        <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-2 fw-bold d-flex align-items-center gap-1">
+                        <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-2 fw-bold d-flex align-items-center gap-1" style="font-size: 12px; border-radius: 8px;">
                             <i class="bi bi-shield-check"></i> Zero-Fraud Acceptance
                         </span>
                     </div>
@@ -2585,13 +2597,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 7: HỒ SƠ HỢP ĐỒNG NGHIỆM THU HIỆN TRƯỜNG -->
             <section class="spa-panel py-3" id="panelContractDossier" style="display:none;">
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 border-bottom mb-4 gap-3">
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-warning text-dark font-monospace fw-bold px-2.5 py-1">QUY TRÌNH MỚI</span>
-                            <h2 class="h5 fw-bold mb-0 text-dark">Hồ Sơ Hợp Đồng Nghiệm Thu & Trình Ký Nhà Trường</h2>
+                            <span class="badge bg-warning text-dark font-monospace fw-bold px-2.5 py-1" style="font-size: 11px;">QUY TRÌNH MỚI</span>
+                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Hồ Sơ Hợp Đồng Nghiệm Thu & Trình Ký Nhà Trường</h2>
                         </div>
-                        <p class="text-muted small mb-0">Nghiệm thu bằng ảnh hiện trường thực tế của CTV • Giảng viên thẩm định & lập hợp đồng • Trình Ban Giám Hiệu ký duyệt chuyển tiền</p>
+                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Nghiệm thu bằng ảnh hiện trường thực tế của CTV • Giảng viên thẩm định & lập hợp đồng • Trình Ban Giám Hiệu ký duyệt chuyển tiền</p>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="exportAccountingCSV()">
@@ -2601,29 +2613,41 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- 4 KPI Thẻ Nghiệm Thu -->
-                <div class="row g-3 mb-4">
-                    <div class="col-6 col-lg-3">
-                        <div class="p-3 rounded-4 bg-light border">
-                            <div class="text-muted small text-uppercase fw-semibold mb-1">Tổng Hồ Sơ HĐ</div>
-                            <div class="h3 fw-bold text-dark mb-0 num-tabular"><?= count($accountingList) ?> <small class="fs-6 fw-normal text-muted">bộ</small></div>
+                <div class="kpi-metric-strip mb-3">
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Tổng Hồ Sơ HĐ</div>
+                            <div class="kpi-mini-val num-tabular"><?= count($accountingList) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">bộ</small></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-folder2-open"></i>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-3">
-                        <div class="p-3 rounded-4 bg-light border">
-                            <div class="text-muted small text-uppercase fw-semibold mb-1">Ảnh Hiện Trường</div>
-                            <div class="h3 fw-bold text-info mb-0 num-tabular"><?= count(array_filter($accountingList, fn($a) => !empty($a['proof_image_url']))) ?> <small class="fs-6 fw-normal text-muted">đã nộp</small></div>
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Ảnh Hiện Trường</div>
+                            <div class="kpi-mini-val num-tabular text-info"><?= count(array_filter($accountingList, fn($a) => !empty($a['proof_image_url']))) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">đã nộp</small></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-camera"></i>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-3">
-                        <div class="p-3 rounded-4 bg-light border">
-                            <div class="text-muted small text-uppercase fw-semibold mb-1">GV Đã Nghiệm Thu</div>
-                            <div class="h3 fw-bold text-success mb-0 num-tabular"><?= count(array_filter($accountingList, fn($a) => !empty($a['lecturer_verified']) && $a['lecturer_verified'] == 1)) ?> <small class="fs-6 fw-normal text-muted">hợp đồng</small></div>
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">GV Đã Nghiệm Thu</div>
+                            <div class="kpi-mini-val num-tabular text-success"><?= count(array_filter($accountingList, fn($a) => !empty($a['lecturer_verified']) && $a['lecturer_verified'] == 1)) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">hợp lệ</small></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-patch-check"></i>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-3">
-                        <div class="p-3 rounded-4 bg-light border">
-                            <div class="text-muted small text-uppercase fw-semibold mb-1">Trường Đã Chi Tiền</div>
-                            <div class="h3 fw-bold text-primary mb-0 num-tabular"><?= count(array_filter($accountingList, fn($a) => ($a['school_status'] ?? '') === 'Signed_Paid')) ?> <small class="fs-6 fw-normal text-muted">đã chi</small></div>
+                    <div class="kpi-mini-card">
+                        <div>
+                            <div class="kpi-mini-label">Trường Đã Chi Tiền</div>
+                            <div class="kpi-mini-val num-tabular text-primary"><?= count(array_filter($accountingList, fn($a) => ($a['school_status'] ?? '') === 'Signed_Paid')) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">đã chi</small></div>
+                        </div>
+                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                            <i class="bi bi-cash-stack"></i>
                         </div>
                     </div>
                 </div>
@@ -2983,12 +3007,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <?php if (!empty($perms['canManageRoles'])): ?>
             <section id="panelUserRoles" style="display:none;" class="fade-in-up">
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div class="card-header bg-transparent px-4 py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-shield-fill-check text-warning fs-5"></i> Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Quản trị viên có toàn quyền nâng cấp, giáng cấp hoặc chuyển đổi vai trò của từng thành viên</small>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">BẢO MẬT & PHÂN QUYỀN</span>
+                                <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng</h2>
+                            </div>
+                            <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Quản trị viên có toàn quyền nâng cấp, giáng cấp hoặc chuyển đổi vai trò của từng thành viên</p>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 12px;">
@@ -3091,12 +3116,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <?php if (!empty($perms['canViewAuditLogs'])): ?>
             <section id="panelAuditTrail" style="display:none;" class="fade-in-up">
                 <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent p-4 pb-3 border-0 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div class="card-header bg-transparent px-4 py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
-                            <h4 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 18px; color: var(--ux-ink);">
-                                <i class="bi bi-clock-history text-info fs-5"></i> Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)
-                            </h4>
-                            <small style="color: var(--ux-ink-3);">Ghi lại toàn bộ hành vi phân quyền, duyệt ca, ký biên bản và thao tác tự động của AI</small>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">KIỂM TOÁN HỆ THỐNG</span>
+                                <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)</h2>
+                            </div>
+                            <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Ghi lại toàn bộ hành vi phân quyền, duyệt ca, ký biên bản và thao tác tự động của AI</p>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11.5px;">
