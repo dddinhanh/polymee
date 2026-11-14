@@ -858,22 +858,58 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         overflow: hidden !important;
     }
 
-    .spa-panel:not(#panelCalendar) {
+    /* Hidden state rule: ALWAYS hide panels when style is display: none */
+    .spa-panel[style*="display: none"],
+    .spa-panel[style*="display:none"],
+    section[style*="display: none"],
+    section[style*="display:none"],
+    #panelCalendar[style*="display: none"],
+    #panelCalendar[style*="display:none"],
+    #panelAccounting[style*="display: none"],
+    #panelAccounting[style*="display:none"],
+    #panelStudentPayrollProfile[style*="display: none"],
+    #panelStudentPayrollProfile[style*="display:none"],
+    #panelMyShifts[style*="display: none"],
+    #panelMyShifts[style*="display:none"],
+    #panelEvents[style*="display: none"],
+    #panelEvents[style*="display:none"],
+    #panelSubmissions[style*="display: none"],
+    #panelSubmissions[style*="display:none"],
+    #panelContractDossier[style*="display: none"],
+    #panelContractDossier[style*="display:none"],
+    #panelProfileSettings[style*="display: none"],
+    #panelProfileSettings[style*="display:none"],
+    #panelUserRoles[style*="display: none"],
+    #panelUserRoles[style*="display:none"],
+    #panelAuditTrail[style*="display: none"],
+    #panelAuditTrail[style*="display:none"] {
+        display: none !important;
+    }
+
+    .spa-panel {
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
         border-radius: 16px;
         padding: 14px 18px;
         box-shadow: var(--ux-shadow-sm);
         animation: fadeInPanel 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        flex: 1 1 0%;
+        min-height: 0;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    /* Active panel ONLY (never applies to hidden panels) */
+    .spa-panel:not([style*="display: none"]):not([style*="display:none"]) {
         display: flex !important;
         flex-direction: column !important;
+        width: 100% !important;
+        height: 100% !important;
         flex: 1 1 0% !important;
         min-height: 0 !important;
-        height: 100% !important;
-        overflow: hidden !important;
     }
 
     #panelProfileSettings:not([style*="display: none"]):not([style*="display:none"]) {
@@ -1319,7 +1355,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             box-sizing: border-box;
         }
 
-        .spa-panel:not(#panelCalendar):not([style*="display: none"]):not([style*="display:none"]) {
+        .spa-panel:not([style*="display: none"]):not([style*="display:none"]) {
             width: 100% !important;
             padding: 14px 18px !important;
             display: flex !important;
@@ -2182,7 +2218,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             
 
             <!-- TAB 2: BẢNG NGHIỆM THU KẾ TOÁN & KIỂM DUYỆT THÙ LAO (ADMIN / ORGANIZER) -->
-            <section class="spa-panel" id="panelAccounting" style="display:none;">
+            <section class="spa-panel" id="panelAccounting" style="display:none !important;">
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-2" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
@@ -2341,7 +2377,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             $completeDossierCount = count(array_filter($ctvRoster, fn($c) => !empty($c['id_card_number']) && !empty($c['bank_account_number'])));
             $hasVneidPhotoCount = count(array_filter($ctvRoster, fn($c) => !empty($c['vneid_image_url'])));
             ?>
-            <section class="spa-panel fade-in-up" id="panelStudentPayrollProfile" style="display:none;">
+            <section class="spa-panel fade-in-up" id="panelStudentPayrollProfile" style="display:none !important;">
                 <?php if ($perms['canViewCtvProfiles']): ?>
                 <!-- Giao diện Quản Lý Hồ Sơ CTV Dành Cho Kế Toán & Quản Trị Viên -->
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
@@ -2498,7 +2534,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             
 
             <!-- TAB 4: LỊCH TRỰC CỦA TÔI -->
-            <section class="spa-panel" id="panelMyShifts" style="display:none;">
+            <section class="spa-panel" id="panelMyShifts" style="display:none !important;">
                 <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Lịch Trực & Ca Phân Công Của Tôi</h2>
@@ -2530,7 +2566,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             
 
             <!-- TAB 5: QUẢN LÝ SỰ KIỆN -->
-            <section class="spa-panel" id="panelEvents" style="display:none;">
+            <section class="spa-panel" id="panelEvents" style="display:none !important;">
                 <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Danh Sách Sự Kiện & Phân Rã Ca Trực</h2>
@@ -2590,7 +2626,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             
 
             <!-- TAB 6: MINH CHỨNG ĐỂ NGHIỆM THU SAU MỖI SỰ KIỆN HOÀN THÀNH -->
-            <section class="spa-panel" id="panelSubmissions" style="display:none;">
+            <section class="spa-panel" id="panelSubmissions" style="display:none !important;">
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
@@ -2751,7 +2787,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             
 
             <!-- TAB 7: HỒ SƠ HỢP ĐỒNG NGHIỆM THU HIỆN TRƯỜNG -->
-            <section class="spa-panel py-3" id="panelContractDossier" style="display:none;">
+            <section class="spa-panel py-3" id="panelContractDossier" style="display:none !important;">
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
@@ -4342,8 +4378,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (tabParam) {
         navigateToPage(tabParam);
-    } else if (viewParam) {
-        changeCalendarView(viewParam);
+    } else {
+        navigateToPage('calendar');
+        if (viewParam) {
+            changeCalendarView(viewParam);
+        }
     }
 });
 
