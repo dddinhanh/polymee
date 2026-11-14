@@ -213,10 +213,48 @@
         transition: opacity .3s .15s;
     }
 
+    .u040-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        height: 44px;
+        margin-bottom: 24px;
+        position: relative;
+        transition: all 0.3s var(--ux-spring);
+    }
+
+    .u040:not(.is-wide) .u040-top {
+        justify-content: center;
+        gap: 0;
+    }
+
+    .u040-school-box {
+        height: 36px;
+        width: 44px;
+        background: #FFFFFF;
+        border-radius: 9px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3px 5px;
+        flex-shrink: 0;
+        overflow: hidden;
+        transition: all 0.3s var(--ux-spring);
+    }
+
+    .u040:not(.is-wide) .u040-school-box {
+        width: 36px;
+        height: 36px;
+        padding: 3px;
+        margin: 0 auto;
+    }
+
     .u040-tog {
         position: absolute;
         right: -11px;
-        top: 22px;
+        top: 68px;
         width: 22px;
         height: 26px;
         border: 1px solid rgba(0, 0, 0, 0.12);
@@ -235,7 +273,7 @@
 
     .u040.is-wide .u040-tog {
         right: -11px;
-        top: 22px;
+        top: 68px;
         background: #FFFFFF;
         border-color: rgba(0, 0, 0, 0.12);
         color: #1D1D1F;
@@ -426,7 +464,7 @@
         height: 36px;
         flex: none;
         border-radius: 50%;
-        background: radial-gradient(circle at 35% 30%, #FED7AA, #EA580C 70%, #0F172A);
+        background: radial-gradient(circle at 35% 30%, #FED7AA, #EA580C 70%, #7C2D12);
         display: grid;
         place-items: center;
         color: #fff;
@@ -513,7 +551,7 @@
     }
 
     [data-bs-theme="dark"] .dropdown-menu {
-        background-color: #111827 !important;
+        background-color: var(--ux-surface) !important;
         border-color: rgba(255, 255, 255, 0.12) !important;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7) !important;
     }
@@ -540,7 +578,7 @@
     }
 
     [data-bs-theme="dark"] .central-mode-bar {
-        background: #111827;
+        background: var(--ux-surface-2);
         border-color: rgba(255, 255, 255, 0.08);
     }
 
@@ -628,7 +666,7 @@
     }
 
     [data-bs-theme="dark"] .view-switcher-group .btn.active {
-        background-color: #1E293B;
+        background-color: var(--ux-surface-3);
         color: #F8FAFC;
         border-color: rgba(255, 255, 255, 0.14);
     }
@@ -667,7 +705,7 @@
     }
 
     [data-bs-theme="dark"] .kpi-mini-card {
-        background: #111827;
+        background: var(--ux-surface-2);
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
@@ -712,7 +750,7 @@
         border-color: var(--ux-line-2);
     }
     [data-bs-theme="dark"] .kpi-card {
-        background: #111827;
+        background: var(--ux-surface-2);
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
@@ -727,7 +765,7 @@
 
     [data-bs-theme="dark"] .calendar-container,
     [data-bs-theme="dark"] .spa-panel {
-        background: #111827;
+        background: var(--ux-surface-2);
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
@@ -854,7 +892,7 @@
 
     [data-bs-theme="light"] .shift-chip {
         background: #F1F5F9;
-        color: #0F172A;
+        color: var(--ux-ink);
         border-color: #E2E8F0;
     }
 
@@ -975,7 +1013,7 @@
     }
 
     [data-bs-theme="dark"] .timeline-card {
-        background: #111827;
+        background: var(--ux-surface-2);
         border-color: rgba(255, 255, 255, 0.08);
         border-left-color: #EA580C;
     }
@@ -1020,7 +1058,7 @@
     }
 
     [data-bs-theme="dark"] .week-column {
-        background: #111827;
+        background: var(--ux-surface-2);
         border-color: rgba(255, 255, 255, 0.08);
     }
 
@@ -1061,7 +1099,7 @@
     }
 
     [data-bs-theme="dark"] .modal-content {
-        background: #111827 !important;
+        background: var(--ux-surface-2) !important;
         border-color: rgba(255, 255, 255, 0.1) !important;
     }
 
@@ -1198,8 +1236,8 @@
             <nav class="u040-rail" aria-label="Main menu">
                 <!-- Top Brand (With Official School Logo) -->
                 <div class="u040-top">
-                    <div class="d-flex align-items-center justify-content-center bg-white p-1 rounded-2 shadow-xs border flex-shrink-0" style="height: 34px; width: 44px; overflow: hidden;" title="FPT Polytechnic">
-                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 22px; width: auto; max-width: 100%; object-fit: contain;">
+                    <div class="u040-school-box" title="FPT Polytechnic">
+                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 20px; width: auto; max-width: 100%; object-fit: contain;">
                     </div>
                     <span class="u040-name">Poly<strong style="color:var(--ux-accent);">Mee</strong></span>
                 </div>
@@ -1576,7 +1614,7 @@
                 ?>
                 <!-- Profile Header Card -->
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #EA580C 100%);"></div>
+                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
                     <div class="card-body p-4 pt-0 position-relative">
                         <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
                             <div class="d-flex align-items-end gap-3">
@@ -2148,7 +2186,7 @@
                 ?>
                 <!-- Profile Header Card -->
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #EA580C 100%);"></div>
+                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
                     <div class="card-body p-4 pt-0 position-relative">
                         <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
                             <div class="d-flex align-items-end gap-3">
@@ -2593,7 +2631,7 @@
                 ?>
                 <!-- Profile Header Card -->
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #EA580C 100%);"></div>
+                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
                     <div class="card-body p-4 pt-0 position-relative">
                         <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
                             <div class="d-flex align-items-end gap-3">
@@ -3002,7 +3040,7 @@
                 ?>
                 <!-- Profile Header Card -->
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #EA580C 100%);"></div>
+                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
                     <div class="card-body p-4 pt-0 position-relative">
                         <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
                             <div class="d-flex align-items-end gap-3">
@@ -3415,7 +3453,7 @@
                 ?>
                 <!-- Profile Header Card -->
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #EA580C 100%);"></div>
+                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
                     <div class="card-body p-4 pt-0 position-relative">
                         <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
                             <div class="d-flex align-items-end gap-3">
@@ -3847,7 +3885,7 @@
                 ?>
                 <!-- Profile Header Card -->
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #EA580C 100%);"></div>
+                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
                     <div class="card-body p-4 pt-0 position-relative">
                         <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
                             <div class="d-flex align-items-end gap-3">
@@ -4354,7 +4392,7 @@
                 ?>
                 <!-- Profile Header Card -->
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; overflow: hidden;">
-                    <div style="height: 110px; background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #EA580C 100%);"></div>
+                    <div style="height: 110px; background: linear-gradient(135deg, #E5E5EA 0%, #F5F5F7 60%, rgba(234, 88, 12, 0.18) 100%);"></div>
                     <div class="card-body p-4 pt-0 position-relative">
                         <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -46px;">
                             <div class="d-flex align-items-end gap-3">
@@ -4743,7 +4781,7 @@
                         <small style="opacity:0.9;">Tạo ca trực trực tiếp lên Bảng Lịch & Thiết lập mức thù lao kế toán</small>
                     </div>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="createShiftForm" onsubmit="handleCreateShiftSubmit(event)">
                 <div class="modal-body p-4">
@@ -4809,15 +4847,15 @@
 <div class="modal fade" id="addNoteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius:24px; overflow:hidden;">
-            <div class="modal-header text-white" style="background:var(--ux-navy-gradient); padding:18px 24px;">
+            <div class="modal-header border-bottom" style="background:#FAFAFC; padding:18px 24px; color:#1D1D1F;">
                 <div class="d-flex align-items-center gap-2">
                     <i class="fa-solid fa-note-sticky text-warning fs-5"></i>
                     <div>
-                        <h6 class="modal-title fw-bold mb-0">Thêm Ghi Chú / Lịch Hẹn Toàn Trường</h6>
-                        <small class="text-white-50">Lưu ý, hạn chót hoặc dặn dò cho CTV và Ban tổ chức</small>
+                        <h6 class="modal-title fw-bold mb-0" style="color:#1D1D1F;">Thêm Ghi Chú / Lịch Hẹn Toàn Trường</h6>
+                        <small class="text-muted">Lưu ý, hạn chót hoặc dặn dò cho CTV và Ban tổ chức</small>
                     </div>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="addNoteForm" onsubmit="handleAddNoteSubmit(event)">
                 <div class="modal-body p-4">
@@ -4862,12 +4900,12 @@
 <div class="modal fade" id="previewVneidModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden;">
-            <div class="modal-header text-white" style="background:var(--ux-ink); padding:16px 20px;">
+            <div class="modal-header border-bottom" style="background:#FAFAFC; padding:16px 20px; color:#1D1D1F;">
                 <div>
-                    <h6 class="modal-title fw-bold mb-0" id="vneidModalTitle">Đối Soát Định Danh VNeID</h6>
-                    <small class="text-white-50" id="vneidModalSub">Số CCCD: 079203014589</small>
+                    <h6 class="modal-title fw-bold mb-0" id="vneidModalTitle" style="color:#1D1D1F;">Đối Soát Định Danh VNeID</h6>
+                    <small class="text-muted" id="vneidModalSub">Số CCCD: 079203014589</small>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-3 text-center bg-light">
                 <img id="vneidModalImage" src="" alt="VNeID Identity Card" class="img-fluid rounded-3 shadow-xs" style="max-height: 380px;">
@@ -4885,12 +4923,12 @@
 <div class="modal fade" id="previewProofModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden;">
-            <div class="modal-header text-white" style="background:var(--ux-ink); padding:16px 20px;">
+            <div class="modal-header border-bottom" style="background:#FAFAFC; padding:16px 20px; color:#1D1D1F;">
                 <div>
-                    <h6 class="modal-title fw-bold mb-0" id="proofModalTitle">Minh Chứng Hiện Trường Có Mặt</h6>
-                    <small class="text-white-50" id="proofModalSub">Sự kiện: FPoly TechDay 2026</small>
+                    <h6 class="modal-title fw-bold mb-0" id="proofModalTitle" style="color:#1D1D1F;">Minh Chứng Hiện Trường Có Mặt</h6>
+                    <small class="text-muted" id="proofModalSub">Sự kiện: FPoly TechDay 2026</small>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-3 text-center bg-light">
                 <div class="position-relative d-inline-block rounded-3 overflow-hidden shadow-xs mb-2">
@@ -4922,7 +4960,7 @@
                         <small class="text-white-50" id="submitProofShiftInfo">Ca trực sự kiện</small>
                     </div>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="submitProofForm" onsubmit="handleProofSubmit(event)">
                 <input type="hidden" name="assignment_id" id="submitProofAssignmentId" value="">
@@ -4977,15 +5015,15 @@
 <div class="modal fade" id="contractModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-lg" style="border-radius:24px; overflow:hidden;">
-            <div class="modal-header text-white" style="background:#0F172A; padding:18px 24px;">
+            <div class="modal-header border-bottom" style="background:#FAFAFC; padding:18px 24px; color:#1D1D1F;">
                 <div class="d-flex align-items-center gap-2">
                     <i class="bi bi-file-earmark-check-fill text-warning fs-5"></i>
                     <div>
-                        <h6 class="modal-title fw-bold mb-0">Hợp Đồng & Biên Bản Nghiệm Thu Thông Tin CTV</h6>
-                        <small class="text-white-50" id="contractModalSub">Mã hồ sơ: HDNT-2026-FPLY-001</small>
+                        <h6 class="modal-title fw-bold mb-0" style="color:#1D1D1F;">Hợp Đồng & Biên Bản Nghiệm Thu Thông Tin CTV</h6>
+                        <small class="text-muted" id="contractModalSub">Mã hồ sơ: HDNT-2026-FPLY-001</small>
                     </div>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 p-md-5 bg-white" id="contractPrintArea" style="font-family: 'Times New Roman', Times, serif; font-size: 14.5px; line-height: 1.6; color: #111827;">
                 <!-- Header Quốc Hiệu / Đơn Vị -->
@@ -5140,12 +5178,12 @@
 <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius:22px; overflow:hidden;">
-            <div class="modal-header text-white" style="background:var(--ux-ink); padding:20px 24px;">
+            <div class="modal-header border-bottom" style="background:#FAFAFC; padding:20px 24px; color:#1D1D1F;">
                 <div>
                     <span class="badge bg-warning text-dark font-monospace mb-1" id="modalShiftBadge">+10 Điểm Rèn Luyện</span>
-                    <h5 class="modal-title fw-bold" id="shiftModalTitle">Chi Tiết Ca Trực</h5>
+                    <h5 class="modal-title fw-bold" id="shiftModalTitle" style="color:#1D1D1F;">Chi Tiết Ca Trực</h5>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="mb-3">
@@ -5197,20 +5235,20 @@
 <div class="modal fade" id="aiModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg" style="border-radius:22px; overflow:hidden;">
-            <div class="modal-header text-white" style="background:#0F172A; padding:16px 24px;">
+            <div class="modal-header border-bottom" style="background:#FAFAFC; padding:16px 24px; color:#1D1D1F;">
                 <div class="d-flex align-items-center gap-2">
                     <i class="fa-solid fa-robot fs-5 text-warning"></i>
                     <div>
-                        <h5 class="modal-title fw-bold mb-0">Trợ Lý AI PolyMee</h5>
-                        <small class="text-white-50">Function Calling • Hỗ trợ tìm ca & Phân tích xung đột</small>
+                        <h5 class="modal-title fw-bold mb-0" style="color:#1D1D1F;">Trợ Lý AI PolyMee</h5>
+                        <small class="text-muted" style="color:#86868B;">Function Calling • Hỗ trợ tìm ca & Phân tích xung đột</small>
                     </div>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4" style="background:var(--ux-surface-2);">
                 <div id="aiChatHistory" class="d-flex flex-column gap-3 mb-3" style="max-height: 320px; overflow-y: auto; padding-right: 6px;">
                     <div class="d-flex gap-2">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#0F172A; box-shadow:0 2px 6px rgba(245,158,11,0.3);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#FFFFFF; box-shadow:0 2px 6px rgba(245,158,11,0.3);">
                             <i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i>
                         </div>
                         <div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%;">
@@ -5256,7 +5294,7 @@
                 <i class="bi bi-info-circle fs-5" id="toastIcon"></i>
                 <span id="toastText">Nội dung thông báo</span>
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
 </div>
@@ -6680,7 +6718,7 @@ async function sendPromptToAi(message) {
     const loadingMsg = document.createElement('div');
     loadingMsg.className = 'd-flex gap-2';
     loadingMsg.id = 'aiLoadingBubble';
-    loadingMsg.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#0F172A; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border text-muted" style="font-size:13px;"><i class="fa-solid fa-spinner fa-spin me-1"></i> Trợ lý AI đang phân tích dữ liệu...</div>`;
+    loadingMsg.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#FFFFFF; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border text-muted" style="font-size:13px;"><i class="fa-solid fa-spinner fa-spin me-1"></i> Trợ lý AI đang phân tích dữ liệu...</div>`;
     history.appendChild(loadingMsg);
     history.scrollTop = history.scrollHeight;
 
@@ -6697,7 +6735,7 @@ async function sendPromptToAi(message) {
         const replyHtml = data.reply_html || (data.reply ? data.reply.replace(/\n/g, '<br>') : 'PolyMee AI đã xử lý yêu cầu của bạn.');
         const aiReply = document.createElement('div');
         aiReply.className = 'd-flex gap-2';
-        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#0F172A; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%; line-height:1.5;">${replyHtml}</div>`;
+        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#FFFFFF; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-robot" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%; line-height:1.5;">${replyHtml}</div>`;
         history.appendChild(aiReply);
         history.scrollTop = history.scrollHeight;
 

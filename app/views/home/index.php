@@ -7,7 +7,7 @@ declare(strict_types=1);
 ?>
 
 <!-- Hero Banner Section -->
-<section class="relative bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 text-white pt-12 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+<section class="relative bg-gradient-to-b from-[#F5F5F7] via-white to-[#F5F5F7] text-[#1D1D1F] pt-12 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-[#E5E5EA]">
     <!-- Background Glow Accent -->
     <div class="absolute top-0 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -21,14 +21,14 @@ declare(strict_types=1);
                     <span>Hệ Thống Số Hóa Hoạt Động Sự Kiện 4.0</span>
                 </div>
                 
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1D1D1F] tracking-tight leading-tight">
                     Điều Phối Ca Trực & <br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-500 to-amber-300">
                         Cộng Tác Viên Thông Minh
                     </span>
                 </h1>
                 
-                <p class="text-base text-slate-300 max-w-2xl leading-relaxed">
+                <p class="text-base text-[#6E6E73] max-w-2xl leading-relaxed">
                     Nền tảng chính thức hỗ trợ sinh viên FPT Polytechnic đăng ký ca trực sự kiện, tự động ngăn chặn trùng lặp thời gian thực bằng thuật toán phân đoạn thời gian (Interval Collision), điểm danh bảo mật Dynamic QR và Trợ lý AI PolyMee.
                 </p>
 
@@ -38,7 +38,7 @@ declare(strict_types=1);
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <span>Khám Phá Ca Trực</span>
                     </a>
-                    <button type="button" onclick="toggleAiWidget()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold border border-slate-700 transition-all">
+                    <button type="button" onclick="toggleAiWidget()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#1D1D1F] hover:bg-black text-white text-sm font-semibold border border-[#1D1D1F] transition-all">
                         <i class="fa-solid fa-robot text-orange-400"></i>
                         <span>Hỏi Trợ Lý AI</span>
                     </button>
@@ -47,7 +47,7 @@ declare(strict_types=1);
 
             <!-- Stats Metric Cards -->
             <div class="lg:col-span-5 grid grid-cols-2 gap-4">
-                <div class="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:border-orange-500/40 transition">
+                <div class="p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-xs hover:border-orange-500/40 transition">
                     <div class="flex items-center justify-between text-slate-400 mb-2">
                         <span class="text-xs font-semibold uppercase">Tổng Sự Kiện</span>
                         <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
@@ -61,7 +61,7 @@ declare(strict_types=1);
                     </div>
                 </div>
 
-                <div class="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:border-orange-500/40 transition">
+                <div class="p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-xs hover:border-orange-500/40 transition">
                     <div class="flex items-center justify-between text-slate-400 mb-2">
                         <span class="text-xs font-semibold uppercase">Tổng Ca Trực</span>
                         <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm">
@@ -74,7 +74,7 @@ declare(strict_types=1);
                     </div>
                 </div>
 
-                <div class="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:border-orange-500/40 transition">
+                <div class="p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-xs hover:border-orange-500/40 transition">
                     <div class="flex items-center justify-between text-slate-400 mb-2">
                         <span class="text-xs font-semibold uppercase">Tỷ Lệ Lấp Đầy</span>
                         <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">
@@ -87,7 +87,7 @@ declare(strict_types=1);
                     </div>
                 </div>
 
-                <div class="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:border-orange-500/40 transition">
+                <div class="p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-xs hover:border-orange-500/40 transition">
                     <div class="flex items-center justify-between text-slate-400 mb-2">
                         <span class="text-xs font-semibold uppercase">CTV Tham Gia</span>
                         <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm">
@@ -169,7 +169,7 @@ declare(strict_types=1);
             </div>
             <h3 class="text-base font-bold text-slate-800 mb-1">Không tìm thấy sự kiện phù hợp</h3>
             <p class="text-xs text-slate-500 mb-4 max-w-sm mx-auto">Vui lòng thử từ khóa khác hoặc bỏ chọn bộ lọc để xem toàn bộ sự kiện hiện có.</p>
-            <a href="/" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition">
+            <a href="/" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1D1D1F] text-white text-xs font-semibold hover:bg-slate-800 transition">
                 <i class="fa-solid fa-arrow-left"></i>
                 <span>Xem tất cả sự kiện</span>
             </a>
@@ -259,7 +259,7 @@ declare(strict_types=1);
                             </div>
 
                             <!-- CTA Button -->
-                            <a href="/event/detail/<?= $event['id'] ?>" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 group-hover:bg-fpoly-primary text-white text-xs font-bold text-center block transition shadow-sm flex items-center justify-center gap-2">
+                            <a href="/event/detail/<?= $event['id'] ?>" class="w-full py-2.5 px-4 rounded-xl bg-[#1D1D1F] group-hover:bg-fpoly-primary text-white text-xs font-bold text-center block transition shadow-sm flex items-center justify-center gap-2">
                                 <span>Xem Chi Tiết & Đăng Ký Ca</span>
                                 <i class="fa-solid fa-arrow-right text-[11px] group-hover:translate-x-1 transition-transform"></i>
                             </a>

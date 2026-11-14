@@ -31,11 +31,11 @@ $endTime = date('H:i', strtotime($event['end_time']));
             
             <!-- Event Hero Card -->
             <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                <div class="relative h-64 sm:h-80 bg-slate-900">
+                <div class="relative h-64 sm:h-80 bg-[#F5F5F7]">
                     <?php if (!empty($event['banner_url']) && str_starts_with($event['banner_url'], 'http')): ?>
                         <img src="<?= htmlspecialchars($event['banner_url']) ?>" alt="<?= htmlspecialchars($event['title']) ?>" class="w-full h-full object-cover opacity-90">
                     <?php else: ?>
-                        <div class="w-full h-full flex flex-col items-center justify-center text-slate-400 bg-gradient-to-tr from-slate-900 via-orange-950/30 to-slate-900 p-8 text-center">
+                        <div class="w-full h-full flex flex-col items-center justify-center text-[#86868B] bg-gradient-to-tr from-[#F5F5F7] via-orange-50/50 to-[#F5F5F7] p-8 text-center">
                             <i class="fa-solid fa-bullhorn text-5xl text-orange-500/60 mb-3"></i>
                             <h2 class="text-xl font-bold text-white"><?= htmlspecialchars($event['title']) ?></h2>
                             <p class="text-xs text-slate-400 mt-1">Sự kiện chính thức FPT Polytechnic</p>
@@ -48,7 +48,7 @@ $endTime = date('H:i', strtotime($event['end_time']));
                         </span>
                     </div>
 
-                    <div class="absolute bottom-4 left-4 right-4 bg-slate-900/80 backdrop-blur-md rounded-xl p-4 border border-white/10 text-white">
+                    <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md rounded-xl p-4 border border-[#E5E5EA] text-[#1D1D1F] shadow-sm">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                             <div class="flex items-center gap-2">
                                 <div class="w-7 h-7 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center">
@@ -234,7 +234,7 @@ $endTime = date('H:i', strtotime($event['end_time']));
             </div>
 
             <!-- Algorithm Information Card -->
-            <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-5 space-y-3 shadow-lg">
+            <div class="bg-white border border-[#E5E5EA] text-[#1D1D1F] rounded-2xl p-5 space-y-3 shadow-xs">
                 <div class="flex items-center gap-2 text-orange-400 font-bold text-xs uppercase tracking-wide">
                     <i class="fa-solid fa-shield-halved"></i>
                     <span>Bảo Vệ Xung Đột Thời Gian Thực</span>
@@ -259,7 +259,7 @@ $endTime = date('H:i', strtotime($event['end_time']));
                 </div>
                 <h4 class="text-sm font-bold text-slate-900">Bạn Cần Trợ Giúp Phân Ca?</h4>
                 <p class="text-xs text-slate-600">Trợ lý AI PolyMee luôn sẵn sàng giải đáp thắc mắc và kiểm tra lịch rảnh cho bạn.</p>
-                <button type="button" onclick="toggleAiWidget()" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition shadow-sm">
+                <button type="button" onclick="toggleAiWidget()" class="px-4 py-2 rounded-xl bg-[#1D1D1F] text-white text-xs font-bold hover:bg-black transition shadow-sm">
                     Mở Trợ Lý AI
                 </button>
             </div>
@@ -270,7 +270,7 @@ $endTime = date('H:i', strtotime($event['end_time']));
 </div>
 
 <!-- Modal Thông Báo Xung Đột Lịch Trực (Interval Collision Alert) -->
-<div id="conflictModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+<div id="conflictModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-rose-100 animate-in fade-in zoom-in-95 duration-200">
         
         <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl mx-auto mb-4">
@@ -293,7 +293,7 @@ $endTime = date('H:i', strtotime($event['end_time']));
         </div>
 
         <div class="flex items-center gap-3">
-            <button type="button" onclick="closeConflictModal()" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+            <button type="button" onclick="closeConflictModal()" class="w-full py-2.5 px-4 rounded-xl bg-[#1D1D1F] hover:bg-black text-white text-xs font-bold transition">
                 Đã Hiểu & Chọn Ca Khác
             </button>
         </div>

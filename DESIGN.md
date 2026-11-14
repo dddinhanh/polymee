@@ -11,3 +11,4 @@
 - **Divider Soft**: `#f0f0f0`
 - **Action Primary (FPT / Apple)**: `#ea580c` / `#0066cc`
 - **Rounded Scale**: `sm: 8px`, `md: 11px`, `lg: 18px`, `pill: 9999px`
+

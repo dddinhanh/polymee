@@ -36,8 +36,8 @@
 }
 
 [data-bs-theme="dark"], html.dark {
-    --fpt-slate-bg: #0B0F17;
-    --fpt-slate-card: #111827;
+    --fpt-slate-bg: #1C1C1E;
+    --fpt-slate-card: #2C2C2E;
     --fpt-slate-border: rgba(255, 255, 255, 0.08);
     --fpt-slate-border-focus: rgba(255, 255, 255, 0.16);
     --fpt-text-main: #F8FAFC;

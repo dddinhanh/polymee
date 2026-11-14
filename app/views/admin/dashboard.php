@@ -6,7 +6,7 @@
 declare(strict_types=1);
 ?>
 
-<div class="bg-slate-900 text-white py-8 border-b border-slate-800">
+<div class="bg-[#FAFAFC] text-[#1D1D1F] py-8 border-b border-[#E5E5EA]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -196,7 +196,7 @@ declare(strict_types=1);
 
                     <div class="flex items-center justify-between pt-2 border-t border-slate-200/70 text-xs">
                         <span class="text-slate-600">Ca trực: <strong><?= $evt['shift_count'] ?? 1 ?> ca</strong></span>
-                        <a href="/admin/qrProjector/<?= $evt['id'] ?>" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-fpoly-primary text-white text-[11px] font-bold transition flex items-center gap-1.5">
+                        <a href="/admin/qrProjector/<?= $evt['id'] ?>" target="_blank" class="px-3 py-1.5 rounded-lg bg-[#1D1D1F] hover:bg-fpoly-primary text-white text-[11px] font-bold transition flex items-center gap-1.5">
                             <i class="fa-solid fa-desktop"></i>
                             <span>Chiếu QR</span>
                         </a>

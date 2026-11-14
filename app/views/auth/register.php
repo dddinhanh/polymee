@@ -84,7 +84,7 @@
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
         border-radius: 24px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
         width: 100%;
         max-width: 680px;
         overflow: hidden;
@@ -97,11 +97,14 @@
     }
 
     .auth-header {
-        background: var(--ux-navy-gradient);
+        background: #FAFAFC;
         border-bottom: 1px solid var(--ux-line);
-        padding: 28px 32px 22px;
-        color: #FFFFFF;
+        padding: 24px 32px 20px;
         position: relative;
+    }
+
+    [data-bs-theme="dark"] .auth-header {
+        background: #2C2C2E;
     }
 
     .form-control, .form-select {
@@ -115,10 +118,10 @@
     }
 
     .form-control:focus, .form-select:focus {
-        background-color: var(--ux-surface-3);
+        background-color: var(--ux-surface);
         border-color: var(--ux-accent);
-        color: #FFFFFF;
-        box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.25);
+        color: var(--ux-ink);
+        box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
     }
 
     .form-section-title {
@@ -160,14 +163,19 @@
     <div class="auth-container">
         <div class="auth-card">
             
-            <!-- Auth Header (No Image Logo) -->
-            <div class="auth-header d-flex align-items-center justify-content-between">
-                <div>
-                    <h4 class="fw-bolder mb-1" style="color: #FFFFFF;">Đăng Ký Cộng Tác Viên FPT Polytechnic</h4>
-                    <p class="small mb-0 text-white-50">Tạo hồ sơ nhận thù lao quyết toán và đăng ký ca trực sự kiện</p>
+            <!-- Auth Header (With Official School Logo & Apple Clean Aesthetic) -->
+            <div class="auth-header d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-white p-1.5 px-2.5 rounded-3 border shadow-xs d-inline-flex align-items-center justify-content-center flex-shrink-0" style="height: 38px;">
+                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 22px; width: auto; object-fit: contain;">
+                    </div>
+                    <div>
+                        <h4 class="fw-bolder mb-0.5" style="color: var(--ux-ink); font-size: 1.15rem;">Đăng Ký Cộng Tác Viên FPT Polytechnic</h4>
+                        <p class="small mb-0" style="color: var(--ux-ink-3);">Tạo hồ sơ nhận thù lao quyết toán và đăng ký ca trực sự kiện</p>
+                    </div>
                 </div>
-                <div class="d-none d-sm-block text-end">
-                    <span class="badge font-monospace fw-bold px-2.5 py-1.5" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.4);">Role: Student CTV</span>
+                <div>
+                    <span class="badge font-monospace fw-bold px-2.5 py-1.5 rounded-pill" style="background: rgba(234, 88, 12, 0.08); color: var(--ux-accent); border: 1px solid rgba(234, 88, 12, 0.25);">Role: Student CTV</span>
                 </div>
             </div>
 

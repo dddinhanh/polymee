@@ -84,9 +84,9 @@
 
     .auth-hero-pane {
         flex: 1.1;
-        background: radial-gradient(circle at 10% 20%, rgba(234, 88, 12, 0.15) 0%, transparent 40%),
-                    radial-gradient(circle at 90% 80%, rgba(2, 132, 199, 0.1) 0%, transparent 40%),
-                    linear-gradient(180deg, #0B0F17 0%, #111827 100%);
+        background: radial-gradient(circle at 10% 20%, rgba(234, 88, 12, 0.08) 0%, transparent 45%),
+                    radial-gradient(circle at 90% 80%, rgba(0, 102, 204, 0.06) 0%, transparent 45%),
+                    linear-gradient(180deg, #F5F5F7 0%, #E5E5EA 100%);
         border-right: 1px solid var(--ux-line);
         padding: 50px 60px;
         display: flex;
@@ -241,8 +241,8 @@
                         <div class="bg-white p-2 rounded-3 shadow-xs border" style="height: 44px; display: inline-flex; align-items: center;">
                             <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 28px; width: auto; object-fit: contain;">
                         </div>
-                        <div class="vr" style="height: 26px; opacity: 0.3; background-color: #fff;"></div>
-                        <span class="fw-bolder fs-4 tracking-tight" style="color: #FFFFFF;">Poly<strong style="color: var(--ux-accent);">Mee</strong></span>
+                        <div class="vr" style="height: 26px; opacity: 0.3; background-color: var(--ux-line-2);"></div>
+                        <span class="fw-bolder fs-4 tracking-tight" style="color: var(--ux-ink);">Poly<strong style="color: var(--ux-accent);">Mee</strong></span>
                     </div>
                     <span class="badge rounded-pill num-tabular" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 11px; padding: 6px 12px;">
                         <i class="bi bi-cpu-fill me-1"></i> AI Powered Hub

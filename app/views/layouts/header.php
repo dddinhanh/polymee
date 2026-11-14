@@ -56,20 +56,20 @@ declare(strict_types=1);
 <body class="flex flex-col min-h-screen text-slate-800 antialiased selection:bg-orange-500 selection:text-white">
 
 <!-- Top Announcement Bar -->
-<div class="bg-gradient-to-r from-fpoly-navy via-slate-900 to-fpoly-navy text-white text-xs py-2 px-4 border-b border-slate-800">
+<div class="bg-[#FAFAFC] text-[#1D1D1F] text-xs py-2 px-4 border-b border-[#E5E5EA]">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
         <div class="flex items-center gap-2">
             <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-orange-500/20 text-orange-400 border border-orange-500/30">
                 <i class="fa-solid fa-graduation-cap mr-1"></i> WEB212
             </span>
-            <span class="hidden sm:inline text-slate-300">Phát triển dự án Website với AI • <?= FPOLY_CAMPUS ?></span>
+            <span class="hidden sm:inline text-[#6E6E73]">Phát triển dự án Website với AI • <?= FPOLY_CAMPUS ?></span>
         </div>
-        <div class="flex items-center gap-4 text-slate-300">
+        <div class="flex items-center gap-4 text-[#6E6E73]">
             <div class="flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span class="text-[11px]">Dynamic QR 30s Active</span>
             </div>
-            <span class="text-slate-600">|</span>
+            <span class="text-[#C7C7CC]">|</span>
             <div class="flex items-center gap-1 text-[11px]">
                 <i class="fa-solid fa-phone text-orange-400"></i>
                 <span>Hotline: <?= FPOLY_HOTLINE ?></span>
@@ -140,7 +140,7 @@ declare(strict_types=1);
                     <div id="demoUserMenu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in duration-150">
                         <div class="px-4 py-2 border-b border-slate-100">
                             <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Chuyển Tài Khoản Demo (Hội đồng)</p>
-                            <p class="text-xs text-slate-600 mt-0.5">Click để hoán đổi role tức thì không cần mật khẩu:</p>
+                            <p class="text-xs text-[#C7C7CC] mt-0.5">Click để hoán đổi role tức thì không cần mật khẩu:</p>
                         </div>
                         
                         <div class="py-1">
@@ -174,11 +174,11 @@ declare(strict_types=1);
                             </a>
                         </div>
                         <div class="border-t border-slate-100 py-1">
-                            <a href="/auth/login" class="flex items-center gap-2 px-4 py-1.5 text-xs text-slate-600 hover:text-fpoly-primary hover:bg-orange-50">
+                            <a href="/auth/login" class="flex items-center gap-2 px-4 py-1.5 text-xs text-[#C7C7CC] hover:text-fpoly-primary hover:bg-orange-50">
                                 <i class="fa-solid fa-arrow-right-to-bracket text-slate-400"></i>
                                 <span>Trang Đăng Nhập</span>
                             </a>
-                            <a href="/auth/register" class="flex items-center gap-2 px-4 py-1.5 text-xs text-slate-600 hover:text-emerald-600 hover:bg-emerald-50">
+                            <a href="/auth/register" class="flex items-center gap-2 px-4 py-1.5 text-xs text-[#C7C7CC] hover:text-emerald-600 hover:bg-emerald-50">
                                 <i class="fa-solid fa-user-plus text-slate-400"></i>
                                 <span>Đăng Ký CTV Mới</span>
                             </a>
@@ -213,7 +213,7 @@ declare(strict_types=1);
             <i class="fa-solid <?= $icon ?> text-lg"></i>
             <span class="text-sm font-semibold"><?= htmlspecialchars($flash['message']) ?></span>
         </div>
-        <button type="button" onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600 p-1">
+        <button type="button" onclick="this.parentElement.remove()" class="text-slate-400 hover:text-[#C7C7CC] p-1">
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>

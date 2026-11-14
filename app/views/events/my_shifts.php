@@ -125,7 +125,7 @@ foreach ($shifts as $s) {
                                     <i class="fa-brands fa-google-drive"></i>
                                     <span>Nộp Minh Chứng Drive</span>
                                 </button>
-                                <a href="/admin/qrProjector/<?= $s['id'] ?>" target="_blank" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5">
+                                <a href="/admin/qrProjector/<?= $s['id'] ?>" target="_blank" class="px-4 py-2 rounded-xl bg-[#1D1D1F] hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5">
                                     <i class="fa-solid fa-qrcode"></i>
                                     <span>Xem Mã QR Điểm Danh</span>
                                 </a>
@@ -141,7 +141,7 @@ foreach ($shifts as $s) {
 </div>
 
 <!-- Drive Submission Quick Modal -->
-<div id="driveSubmitModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+<div id="driveSubmitModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-[#1D1D1F]/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in duration-150">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2">

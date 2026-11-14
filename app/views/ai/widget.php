@@ -26,27 +26,27 @@ declare(strict_types=1);
 <div id="aiChatDialog" class="hidden fixed bottom-6 right-6 z-50 w-full sm:w-96 max-w-[calc(100vw-2rem)] h-[580px] bg-white rounded-3xl shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-200">
     
     <!-- Chat Header -->
-    <div class="bg-gradient-to-r from-slate-900 via-fpoly-navy to-slate-900 p-4 text-white flex items-center justify-between shadow-md">
+    <div class="bg-[#FAFAFC] p-4 text-[#1D1D1F] flex items-center justify-between border-b border-[#E5E5EA]">
         <div class="flex items-center gap-3">
             <div class="relative">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-fpoly-primary to-orange-400 flex items-center justify-center text-white font-bold shadow-md">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-fpoly-primary to-orange-400 flex items-center justify-center text-white font-bold shadow-xs">
                     <i class="fa-solid fa-robot text-base"></i>
                 </div>
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-900 absolute -bottom-0.5 -right-0.5"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white absolute -bottom-0.5 -right-0.5"></span>
             </div>
             <div>
                 <div class="flex items-center gap-1.5">
-                    <h3 class="font-extrabold text-sm text-white">PolyMee Assistant</h3>
+                    <h3 class="font-extrabold text-sm text-[#1D1D1F]">PolyMee Assistant</h3>
                     <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-orange-500/30 text-orange-300 border border-orange-500/40">AI 4.0</span>
                 </div>
-                <p class="text-[11px] text-slate-300 flex items-center gap-1">
+                <p class="text-[11px] text-[#86868B] flex items-center gap-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                     <span>Sẵn sàng hỗ trợ điều phối CTV</span>
                 </p>
             </div>
         </div>
 
-        <button type="button" onclick="toggleAiWidget()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition">
+        <button type="button" onclick="toggleAiWidget()" class="text-[#86868B] hover:text-[#1D1D1F] p-1 rounded-lg hover:bg-black/5 transition">
             <i class="fa-solid fa-xmark text-lg"></i>
         </button>
     </div>

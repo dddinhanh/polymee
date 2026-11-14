@@ -170,7 +170,7 @@ class AiAssistantController extends BaseController
                            ORDER BY l.capacity DESC");
         $locations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $html = '<div class="ai-card p-4 rounded-4 shadow-sm mb-3" style="background: var(--ux-surface, #111827); border: 1px solid var(--ux-line, rgba(255,255,255,0.08));">';
+        $html = '<div class="ai-card p-4 rounded-4 shadow-sm mb-3" style="background: var(--ux-surface, #FFFFFF); border: 1px solid var(--ux-line, rgba(0,0,0,0.08));">';
         $html .= '<h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="font-size:14px; color: var(--ux-ink);"><i class="bi bi-building-check text-success fs-5"></i> TÌNH TRẠNG PHÒNG & HỘI TRƯỜNG FPT POLYTECHNIC:</h6>';
         
         $plain = "🏢 **TÌNH TRẠNG PHÒNG & HỘI TRƯỜNG FPT POLYTECHNIC:**\n\n";
@@ -192,7 +192,7 @@ class AiAssistantController extends BaseController
                 $slotText = "Đang bận: " . implode(', ', $occupied) . ". Trống các khung giờ còn lại.";
             }
 
-            $html .= '<div class="p-3.5 mb-3 rounded-4" style="background: var(--ux-surface-2, #162032); border: 1px solid var(--ux-line, rgba(255,255,255,0.08)); line-height:1.6; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">';
+            $html .= '<div class="p-3.5 mb-3 rounded-4" style="background: var(--ux-surface-2, #FAFAFC); border: 1px solid var(--ux-line, rgba(0,0,0,0.08)); line-height:1.6; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">';
             $html .= '<div class="d-flex justify-content-between align-items-center mb-2">';
             $html .= '<div><strong style="font-size:14.5px; color: var(--ux-ink);">' . ($i + 1) . '. ' . htmlspecialchars($loc['name']) . '</strong></div>';
             $html .= $statusBadge;
@@ -232,14 +232,14 @@ class AiAssistantController extends BaseController
                 ORDER BY u.id ASC";
         $ctvs = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
-        $html = '<div class="ai-card p-4 rounded-4 shadow-sm mb-3" style="background: var(--ux-surface, #111827); border: 1px solid var(--ux-line, rgba(255,255,255,0.08));">';
+        $html = '<div class="ai-card p-4 rounded-4 shadow-sm mb-3" style="background: var(--ux-surface, #FFFFFF); border: 1px solid var(--ux-line, rgba(0,0,0,0.08));">';
         $html .= '<h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="font-size:14px; color: var(--ux-ink);"><i class="bi bi-people-fill text-warning fs-5"></i> DANH SÁCH CỘNG TÁC VIÊN (CTV) SẴN SÀNG NHẬN CA:</h6>';
         
         $plain = "👥 **DANH SÁCH CỘNG TÁC VIÊN (CTV) SẴN SÀNG NHẬN CA:**\n\n";
 
         foreach ($ctvs as $i => $c) {
             $initial = mb_strtoupper(mb_substr($c['full_name'], 0, 1));
-            $html .= '<div class="p-3.5 mb-3 rounded-4 d-flex justify-content-between align-items-center gap-3" style="background: var(--ux-surface-2, #162032); border: 1px solid var(--ux-line, rgba(255,255,255,0.08)); box-shadow: 0 4px 14px rgba(0,0,0,0.15);">';
+            $html .= '<div class="p-3.5 mb-3 rounded-4 d-flex justify-content-between align-items-center gap-3" style="background: var(--ux-surface-2, #FAFAFC); border: 1px solid var(--ux-line, rgba(0,0,0,0.08)); box-shadow: 0 4px 14px rgba(0,0,0,0.15);">';
             
             $html .= '<div class="d-flex align-items-center gap-3" style="min-width: 0;">';
             $html .= '<div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold flex-shrink-0 shadow-xs" style="width: 42px; height: 42px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 15px;">' . htmlspecialchars($initial) . '</div>';

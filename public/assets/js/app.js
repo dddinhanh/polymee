@@ -109,7 +109,7 @@ function appendChatMessage(sender, text) {
 
     if (sender === 'user') {
         div.innerHTML = `
-            <div class="bg-gradient-to-r from-slate-900 to-fpoly-navy text-white px-3.5 py-2.5 rounded-2xl rounded-tr-sm max-w-[85%] shadow-xs break-words">
+            <div class="bg-[#1D1D1F] text-white px-3.5 py-2.5 rounded-2xl rounded-tr-sm max-w-[85%] shadow-xs break-words">
                 ${escapeHtml(text)}
             </div>
         `;
