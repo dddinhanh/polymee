@@ -485,7 +485,7 @@
                             <div class="avatar-circle bg-emerald-subtle text-success">ĐM</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Lê Đức Mạnh</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">PS20262 • Role: <strong style="color: var(--ux-ink-2);">Cộng Tác Viên (CTV)</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">PI03067 • Role: <strong style="color: var(--ux-ink-2);">Cộng Tác Viên (CTV)</strong></small>
                             </div>
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>

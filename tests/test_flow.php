@@ -208,6 +208,11 @@ $delStatus = (int)$stmtCheckDel->fetchColumn();
 $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (:uid, 'CTV Test Xóa', 'Student', 'DELETE_ACCOUNT', 'USER', :uid, 'Xóa tài khoản cá nhân CTV thành công', '127.0.0.1', datetime('now', 'localtime'))")->execute([':uid' => $tempUid]);
 
 assertTest("Xóa tài khoản cá nhân CTV thành công (Vô hiệu hóa is_active=0 và lưu log DELETE_ACCOUNT)", $delStatus === 0);
+
+// 7.6. Giảng viên gửi email nhắc nhở nộp minh chứng cho CTV chưa nộp
+$db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (2, 'Thầy Phan Hoàng Khải', 'Organizer', 'REMIND_PROOF', 'ASSIGNMENT', 1, 'Giảng viên gửi email tự động nhắc nhở CTV nộp minh chứng ca trực', '127.0.0.1', datetime('now', 'localtime'))")->execute();
+$remindLogId = (int)$db->lastInsertId();
+assertTest("Giảng viên gửi email nhắc nhở CTV nộp minh chứng (Ghi vết REMIND_PROOF vào Audit Trail)", $remindLogId > 0);
 echo "\n";
 
 // -------------------------------------------------------------

@@ -861,8 +861,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .spa-panel:not(#panelCalendar) {
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
-        border-radius: 18px;
-        padding: 18px 22px;
+        border-radius: 16px;
+        padding: 14px 18px;
         box-shadow: var(--ux-shadow-sm);
         animation: fadeInPanel 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         width: 100% !important;
@@ -870,6 +870,37 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         box-sizing: border-box !important;
         overflow-y: auto !important;
         max-height: 100% !important;
+    }
+
+    /* Standardized Compact Inner Content & Cells for All Panels */
+    .spa-panel .table > :not(caption) > * > * {
+        padding: 7px 10px !important;
+        font-size: 12.5px;
+    }
+    .spa-panel .table thead th {
+        font-size: 10.5px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.035em !important;
+        text-transform: uppercase !important;
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
+    }
+    .spa-panel .card {
+        border-radius: 13px !important;
+    }
+    .spa-panel .card-header {
+        padding: 10px 14px !important;
+    }
+    .spa-panel .card-body {
+        padding: 12px 14px !important;
+    }
+    .spa-panel .form-control, .spa-panel .form-select {
+        font-size: 12.5px !important;
+        border-radius: 8px !important;
+    }
+    .spa-panel .badge {
+        font-size: 10.5px;
+        font-weight: 600;
     }
 
     [data-bs-theme="dark"] .calendar-container,
@@ -2052,43 +2083,43 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- Bento 2.0 AI Accounting Auditor Widget -->
-                <div class="ai-audit-banner mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center text-dark" style="width:38px; height:38px; background:#FFFFFF; flex:none; border:1px solid rgba(0,0,0,0.08); box-shadow:0 1px 3px rgba(0,0,0,0.04);">
-                            <i class="fa-solid fa-wand-magic-sparkles fs-5 text-warning"></i>
+                <div class="ai-audit-banner mb-2.5 d-flex flex-wrap align-items-center justify-content-between gap-2.5 p-2.5 rounded-3" style="background: #FFFBF5; border: 1px solid rgba(234, 88, 12, 0.15);">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center text-dark" style="width:32px; height:32px; background:#FFFFFF; flex:none; border:1px solid rgba(0,0,0,0.08); box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+                            <i class="fa-solid fa-wand-magic-sparkles text-warning" style="font-size: 14px;"></i>
                         </div>
                         <div>
                             <div class="d-flex align-items-center gap-2">
-                                <strong class="text-dark" style="font-size:13.5px;">AI Thẩm Định & Quyết Toán Thù Lao Tự Động</strong>
-                                <span class="badge rounded-pill bg-white text-dark border num-tabular" style="font-size:10.5px; border-color:rgba(0,0,0,0.08) !important;">
+                                <strong class="text-dark" style="font-size:12.5px;">AI Thẩm Định & Quyết Toán Thù Lao Tự Động</strong>
+                                <span class="badge rounded-pill bg-white text-dark border num-tabular" style="font-size:10px; border-color:rgba(0,0,0,0.08) !important;">
                                     <i class="bi bi-shield-check me-1 text-success"></i>100% Khớp VNeID
                                 </span>
                             </div>
-                            <small class="text-muted d-block mt-0.5">
-                                AI đã quét đối soát <strong><?= count($accountingList) ?> hồ sơ</strong>: Không phát hiện gian lận trùng STK ngân hàng, không có xung đột ca trực và CCCD đã định danh hợp lệ.
+                            <small class="text-muted d-block mt-0.5" style="font-size: 11px;">
+                                AI đã quét đối soát <strong><?= count($accountingList) ?> hồ sơ</strong>: Không trùng STK ngân hàng, không xung đột ca trực và CCCD đã định danh hợp lệ.
                             </small>
                         </div>
                     </div>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-white text-dark border px-3 py-2 shadow-xs num-tabular">
+                        <span class="badge bg-white text-dark border px-2.5 py-1.5 shadow-xs num-tabular" style="font-size: 11px;">
                             Tổng quyết toán: <strong class="text-primary ms-1"><?= number_format(count($accountingList) * 150000) ?> đ</strong>
                         </span>
-                        <button type="button" class="btn-fpt-outline-orange btn-fpt-sm" onclick="runAiAccountingAudit()">
+                        <button type="button" class="btn-fpt-outline-orange btn-fpt-sm" onclick="runAiAccountingAudit()" style="padding: 4px 10px; font-size: 11.5px;">
                             <i class="bi bi-magic me-1"></i> AI Quét Bất Thường
                         </button>
                     </div>
                 </div>
 
                 <!-- Thanh Tìm Kiếm & Lọc Nhanh Hồ Sơ Nghiệm Thu -->
-                <div class="row g-2 mb-3 bg-light p-3 rounded-3 border">
+                <div class="row g-2 mb-2.5 bg-light p-2 rounded-3 border" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div class="col-12 col-md-6 col-lg-7">
                         <div class="input-group input-group-sm">
-                            <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
-                            <input type="text" id="accountingSearchInput" class="form-control" placeholder="Tìm theo tên CTV, mã sinh viên, số CCCD hoặc số tài khoản..." oninput="filterAccountingTable()">
+                            <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" id="accountingSearchInput" class="form-control border-0" placeholder="Tìm theo tên CTV, mã sinh viên, số CCCD hoặc số tài khoản..." oninput="filterAccountingTable()">
                         </div>
                     </div>
                     <div class="col-6 col-md-3 col-lg-3">
-                        <select id="accountingStatusFilter" class="form-select form-select-sm" onchange="filterAccountingTable()">
+                        <select id="accountingStatusFilter" class="form-select form-select-sm border-0" onchange="filterAccountingTable()">
                             <option value="">-- Tất cả trạng thái --</option>
                             <option value="Pending">Chờ Kế toán duyệt (Pending)</option>
                             <option value="Approved">Đã duyệt hồ sơ (Approved)</option>
@@ -2096,7 +2127,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </select>
                     </div>
                     <div class="col-6 col-md-3 col-lg-2 text-end">
-                        <span class="badge bg-white text-muted border px-2.5 py-2 w-100 num-tabular" id="accountingFilteredCount">Hiển thị: <?= count($accountingList) ?> hồ sơ</span>
+                        <span class="badge bg-white text-muted border px-2 py-1.5 w-100 num-tabular" id="accountingFilteredCount" style="font-size: 11px;">Hiển thị: <?= count($accountingList) ?> hồ sơ</span>
                     </div>
                 </div>
 
@@ -2253,7 +2284,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- Thanh Tìm Kiếm & Lọc Nhanh CTV -->
-                <div class="row g-2 mb-3 bg-light p-3 rounded-4 border">
+                <div class="row g-2 mb-2.5 bg-light p-2 rounded-3 border" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div class="col-12 col-md-7">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
@@ -2270,23 +2301,23 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </select>
                     </div>
                     <div class="col-6 col-md-2 text-end">
-                        <span class="badge bg-white text-muted border px-3 py-2 w-100 num-tabular" id="ctvFilteredBadge">Hiển thị: <?= count($ctvRoster) ?> CTV</span>
+                        <span class="badge bg-white text-muted border px-2 py-1.5 w-100 num-tabular" id="ctvFilteredBadge" style="font-size: 11px;">Hiển thị: <?= count($ctvRoster) ?> CTV</span>
                     </div>
                 </div>
 
                 <!-- Bảng Danh Sách Hồ Sơ CTV Dành Cho Giảng Viên & Quản Trị Viên -->
-                <div class="card border-0 rounded-4 shadow-sm overflow-hidden" style="border: 1px solid var(--ux-line) !important;">
+                <div class="card border-0 rounded-3 shadow-xs overflow-hidden" style="border: 1px solid var(--ux-line) !important;">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0" style="font-size: 13px;" id="ctvRosterTable">
+                        <table class="table table-hover align-middle mb-0" id="ctvRosterTable">
                             <thead class="table-light text-muted small text-uppercase fw-bold">
                                 <tr>
-                                    <th class="ps-4" style="width: 50px;">STT</th>
+                                    <th class="ps-3" style="width: 45px;">STT</th>
                                     <th>Cộng Tác Viên (CTV)</th>
                                     <th>Định Danh CCCD</th>
                                     <th>Tài Khoản Ngân Hàng</th>
                                     <th>Ảnh VNeID</th>
                                     <th>Kỹ Năng Phụ Trách</th>
-                                    <th class="text-end pe-4" style="width: 170px;">Thao Tác Đối Soát</th>
+                                    <th class="text-end pe-3" style="width: 150px;">Thao Tác Đối Soát</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -2296,41 +2327,41 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 $vneidUrl = $ctv['vneid_image_url'] ?? 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80';
                                 ?>
                                 <tr class="ctv-row" data-search="<?= strtolower(htmlspecialchars($ctv['full_name'] . ' ' . $ctv['student_code'] . ' ' . ($ctv['id_card_number'] ?? '') . ' ' . ($ctv['bank_name'] ?? ''))) ?>" data-bank="<?= htmlspecialchars($ctv['bank_name'] ?? '') ?>">
-                                    <td class="ps-4 text-muted fw-bold num-tabular"><?= $idx + 1 ?></td>
+                                    <td class="ps-3 text-muted fw-bold num-tabular" style="font-size: 11.5px;"><?= $idx + 1 ?></td>
                                     <td>
-                                        <div class="d-flex align-items-center gap-2.5">
-                                            <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 36px; height: 36px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 13px;">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 30px; height: 30px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 11.5px;">
                                                 <?= $cInitial ?>
                                             </div>
                                             <div>
-                                                <strong class="d-block text-dark" style="font-size: 13.5px;"><?= htmlspecialchars($ctv['full_name']) ?></strong>
-                                                <small class="text-muted"><span class="badge bg-light text-dark border font-monospace"><?= htmlspecialchars($ctv['student_code']) ?></span> • <?= htmlspecialchars($ctv['phone'] ?: $ctv['email']) ?></small>
+                                                <strong class="d-block text-dark" style="font-size: 12.5px; line-height: 1.2;"><?= htmlspecialchars($ctv['full_name']) ?></strong>
+                                                <small class="text-muted" style="font-size: 11px;"><span class="badge bg-light text-dark border font-monospace px-1.5 py-0.5"><?= htmlspecialchars($ctv['student_code']) ?></span> • <?= htmlspecialchars($ctv['phone'] ?: $ctv['email']) ?></small>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="font-monospace fw-bold text-dark num-tabular"><?= htmlspecialchars($ctv['id_card_number'] ?: '079203014589') ?></div>
-                                        <small class="text-success"><i class="bi bi-patch-check-fill me-1"></i>Đã khớp CCCD</small>
+                                        <div class="font-monospace fw-bold text-dark num-tabular" style="font-size: 12px;"><?= htmlspecialchars($ctv['id_card_number'] ?: '079203014589') ?></div>
+                                        <small class="text-success" style="font-size: 10.5px;"><i class="bi bi-patch-check-fill me-1"></i>Đã khớp CCCD</small>
                                     </td>
                                     <td>
-                                        <div class="fw-semibold text-dark"><?= htmlspecialchars($ctv['bank_name'] ?: 'MB Bank (Quân Đội)') ?></div>
-                                        <div class="font-monospace text-primary num-tabular"><?= htmlspecialchars($ctv['bank_account_number'] ?: '098765432199') ?></div>
-                                        <small class="text-muted text-uppercase"><?= htmlspecialchars($ctv['bank_account_name'] ?: $ctv['full_name']) ?></small>
+                                        <div class="fw-semibold text-dark" style="font-size: 12px; line-height: 1.2;"><?= htmlspecialchars($ctv['bank_name'] ?: 'MB Bank (Quân Đội)') ?></div>
+                                        <div class="font-monospace text-primary num-tabular" style="font-size: 11.5px;"><?= htmlspecialchars($ctv['bank_account_number'] ?: '098765432199') ?></div>
+                                        <small class="text-muted text-uppercase" style="font-size: 10px;"><?= htmlspecialchars($ctv['bank_account_name'] ?: $ctv['full_name']) ?></small>
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <img src="<?= htmlspecialchars($vneidUrl) ?>" alt="VNeID" class="rounded-2 border shadow-xs" style="width: 44px; height: 32px; object-fit: cover;">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary py-1 px-2 rounded-pill" style="font-size: 11px;" onclick="previewVneidPhoto('<?= htmlspecialchars($vneidUrl) ?>', '<?= htmlspecialchars($ctv['full_name']) ?>', '<?= htmlspecialchars($ctv['id_card_number'] ?: '079203014589') ?>')">
-                                                <i class="bi bi-eye"></i> Xem
+                                        <div class="d-flex align-items-center gap-1.5">
+                                            <img src="<?= htmlspecialchars($vneidUrl) ?>" alt="VNeID" class="rounded-2 border shadow-xs" style="width: 36px; height: 26px; object-fit: cover;">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary py-0.5 px-1.5 rounded-pill" style="font-size: 10.5px;" onclick="previewVneidPhoto('<?= htmlspecialchars($vneidUrl) ?>', '<?= htmlspecialchars($ctv['full_name']) ?>', '<?= htmlspecialchars($ctv['id_card_number'] ?: '079203014589') ?>')">
+                                                <i class="bi bi-eye"></i>
                                             </button>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="text-muted small"><?= htmlspecialchars($ctv['skills'] ?: 'Media, Lễ tân, Hậu cần setup') ?></span>
+                                        <span class="text-muted" style="font-size: 11.5px;"><?= htmlspecialchars($ctv['skills'] ?: 'Media, Lễ tân, Hậu cần setup') ?></span>
                                     </td>
-                                    <td class="text-end pe-4">
-                                        <div class="d-inline-flex gap-1.5">
-                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-3 py-1 shadow-xs" onclick="showToast('Hồ sơ của <?= addslashes($ctv['full_name']) ?> đã được Giảng viên đối soát hợp lệ!', 'success')">
+                                    <td class="text-end pe-3">
+                                        <div class="d-inline-flex gap-1">
+                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-2.5 py-0.5 shadow-xs" style="font-size: 11px;" onclick="showToast('Hồ sơ của <?= addslashes($ctv['full_name']) ?> đã được Giảng viên đối soát hợp lệ!', 'success')">
                                                 <i class="bi bi-check2 me-1"></i> Hợp Lệ
                                             </button>
                                         </div>
@@ -2392,7 +2423,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </button>
                     <?php endif; ?>
                 </div>
-                <div class="row g-4" id="eventsCardsContainer">
+                <div class="row g-2.5" id="eventsCardsContainer">
                     <?php foreach ($events as $e): ?>
                     <?php
                     $canDeleteThisEvent = false;
@@ -2407,24 +2438,24 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     }
                     ?>
                     <div class="col-12 col-md-6 col-xl-4" id="eventCardCol_<?= $e['id'] ?>">
-                        <div class="card h-100 border rounded-4 shadow-xs overflow-hidden">
-                            <div class="card-body p-4 d-flex flex-column">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><?= htmlspecialchars($e['status']) ?></span>
-                                        <span class="badge bg-light text-primary border font-monospace"><?= htmlspecialchars($e['department'] ?? 'Công nghệ Thông tin') ?></span>
+                        <div class="card h-100 border rounded-3 shadow-xs overflow-hidden" style="border-color: rgba(0,0,0,0.08) !important;">
+                            <div class="card-body p-3 d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-1.5">
+                                    <div class="d-flex align-items-center gap-1 flex-wrap">
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold" style="font-size: 10px; padding: 2px 6px;"><?= htmlspecialchars($e['status']) ?></span>
+                                        <span class="badge bg-light text-primary border font-monospace" style="font-size: 10px; padding: 2px 6px;"><?= htmlspecialchars($e['department'] ?? 'CNTT') ?></span>
                                     </div>
-                                    <small class="text-muted fw-bold num-tabular"><i class="bi bi-clock me-1"></i><?= substr($e['start_time'], 0, 10) ?></small>
+                                    <small class="text-muted fw-bold num-tabular" style="font-size: 11px;"><i class="bi bi-clock me-1"></i><?= substr($e['start_time'], 0, 10) ?></small>
                                 </div>
-                                <h5 class="fw-bold text-dark mb-2"><?= htmlspecialchars($e['title']) ?></h5>
-                                <p class="text-muted small text-truncate-2 mb-3"><?= htmlspecialchars($e['description'] ?? 'Không có mô tả') ?></p>
-                                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center text-muted small">
+                                <h6 class="fw-bold text-dark mb-1" style="font-size: 13.5px; line-height: 1.3;"><?= htmlspecialchars($e['title']) ?></h6>
+                                <p class="text-muted text-truncate-2 mb-2" style="font-size: 11.5px; line-height: 1.4;"><?= htmlspecialchars($e['description'] ?? 'Không có mô tả') ?></p>
+                                <div class="mt-auto pt-2 border-top d-flex justify-content-between align-items-center text-muted" style="font-size: 11px; border-color: rgba(0,0,0,0.06) !important;">
                                     <span><i class="bi bi-geo-alt me-1 text-danger"></i><?= htmlspecialchars($e['location_name'] ?? 'Hội trường') ?></span>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="badge bg-light text-dark border"><?= $e['total_shifts'] ?> Ca trực</span>
+                                    <div class="d-flex align-items-center gap-1.5">
+                                        <span class="badge bg-light text-dark border" style="font-size: 10px;"><?= $e['total_shifts'] ?> Ca trực</span>
                                         <?php if ($canDeleteThisEvent): ?>
-                                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2.5 py-0.5" style="font-size: 11.5px;" onclick="confirmDeleteEvent(<?= $e['id'] ?>, '<?= htmlspecialchars(addslashes($e['title'])) ?>')">
-                                            <i class="bi bi-trash3 me-1"></i>Xóa
+                                        <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 28px; height: 28px; padding: 0; background: rgba(220, 38, 38, 0.08); color: #DC2626;" onclick="confirmDeleteEvent(<?= $e['id'] ?>, '<?= htmlspecialchars(addslashes($e['title'])) ?>')" title="Xóa sự kiện này">
+                                            <i class="bi bi-trash3" style="font-size: 13px;"></i>
                                         </button>
                                         <?php endif; ?>
                                     </div>
@@ -2457,46 +2488,46 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- Banner Hướng Dẫn Quy Trình Minh Chứng Theo Role -->
-                <div class="row g-3 mb-4">
+                <div class="row g-2.5 mb-2.5">
                     <div class="col-12 col-md-4">
-                        <div class="p-3 rounded-4 bg-light border h-100">
-                            <div class="d-flex align-items-center gap-2 mb-1.5">
-                                <span class="badge bg-primary text-white rounded-pill px-2 py-0.5">Role CTV Thường</span>
-                                <strong class="small text-dark">Ảnh Hiện Trường Có Mặt</strong>
+                        <div class="p-2.5 rounded-3 bg-light border h-100" style="border-color: rgba(0,0,0,0.06) !important;">
+                            <div class="d-flex align-items-center gap-1.5 mb-1">
+                                <span class="badge bg-primary text-white rounded-pill px-2 py-0.5" style="font-size: 10px;">Role CTV Thường</span>
+                                <strong class="text-dark" style="font-size: 12px;">Ảnh Hiện Trường Có Mặt</strong>
                             </div>
-                            <p class="small text-muted mb-0" style="font-size:12px;">CTV có nhiệm vụ chụp ảnh có mặt thực tế tại vị trí trực (đồng phục áo cam FPoly) để chứng minh có mặt nghiệm thu.</p>
+                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">CTV có nhiệm vụ chụp ảnh có mặt thực tế tại vị trí trực (áo cam FPoly) để chứng minh có mặt nghiệm thu.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="p-3 rounded-4 bg-light border h-100">
-                            <div class="d-flex align-items-center gap-2 mb-1.5">
-                                <span class="badge bg-warning text-dark rounded-pill px-2 py-0.5">Role CTV Media</span>
-                                <strong class="small text-dark">Link Drive Đã Chỉnh Sáng & Logo</strong>
+                        <div class="p-2.5 rounded-3 bg-light border h-100" style="border-color: rgba(0,0,0,0.06) !important;">
+                            <div class="d-flex align-items-center gap-1.5 mb-1">
+                                <span class="badge bg-warning text-dark rounded-pill px-2 py-0.5" style="font-size: 10px;">Role CTV Media</span>
+                                <strong class="text-dark" style="font-size: 12px;">Link Drive Đã Chỉnh Sáng & Logo</strong>
                             </div>
-                            <p class="small text-muted mb-0" style="font-size:12px;">CTV Media cần tải lên đường link Google Drive bộ ảnh sự kiện đã được <strong>gắn logo FPT Polytechnic</strong> và <strong>hậu kỳ chỉnh sửa sáng</strong>.</p>
+                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">CTV Media tải link Google Drive bộ ảnh sự kiện đã được <strong>gắn logo FPT Poly</strong> và <strong>hậu kỳ chỉnh sáng</strong>.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="p-3 rounded-4 bg-light border h-100">
-                            <div class="d-flex align-items-center gap-2 mb-1.5">
-                                <span class="badge bg-success text-white rounded-pill px-2 py-0.5">Role Giảng Viên</span>
-                                <strong class="small text-dark">Duyệt Đầy Đủ Minh Chứng</strong>
+                        <div class="p-2.5 rounded-3 bg-light border h-100" style="border-color: rgba(0,0,0,0.06) !important;">
+                            <div class="d-flex align-items-center gap-1.5 mb-1">
+                                <span class="badge bg-success text-white rounded-pill px-2 py-0.5" style="font-size: 10px;">Role Giảng Viên</span>
+                                <strong class="text-dark" style="font-size: 12px;">Duyệt / Nhắc Nhở Qua Email</strong>
                             </div>
-                            <p class="small text-muted mb-0" style="font-size:12px;">Giảng viên thẩm định tính đầy đủ và hợp lệ của minh chứng để bấm <strong>Duyệt Nghiệm Thu</strong>, kích hoạt xuất hợp đồng thù lao cho CTV.</p>
+                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">Giảng viên kiểm tra minh chứng duyệt nghiệm thu, hoặc <strong>gửi email nhắc nhở</strong> nếu CTV chưa nộp ảnh.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="table-responsive bg-white rounded-4 border shadow-xs">
-                    <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
+                <div class="table-responsive bg-white rounded-3 border shadow-xs" style="border-color: rgba(0,0,0,0.08) !important;">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-light text-muted small text-uppercase fw-bold">
                             <tr>
-                                <th class="ps-4">Sinh Viên CTV</th>
+                                <th class="ps-3" style="width: 220px;">Sinh Viên CTV</th>
                                 <th>Sự Kiện & Ca Trực</th>
                                 <th>Minh Chứng Đã Nộp</th>
                                 <th>Ghi Chú Nghiệm Thu</th>
                                 <th>Trạng Thái</th>
-                                <th class="text-end pe-4">Thao Tác Nghiệm Thu</th>
+                                <th class="text-end pe-3" style="width: 200px;">Thao Tác Nghiệm Thu</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -2509,77 +2540,82 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             $isVerified = (int)($subItem['lecturer_verified'] ?? 0) === 1;
                             ?>
                             <tr>
-                                <td class="ps-4">
+                                <td class="ps-3">
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 12px;">
+                                        <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 30px; height: 30px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 11.5px;">
                                             <?= mb_strtoupper(mb_substr($subItem['full_name'], 0, 1)) ?>
                                         </div>
                                         <div>
-                                            <strong class="d-block text-dark"><?= htmlspecialchars($subItem['full_name']) ?></strong>
-                                            <small class="text-muted"><span class="badge bg-light text-dark border font-monospace"><?= htmlspecialchars($subItem['student_code']) ?></span> • <?= $isDriveLink ? '<span class="text-warning fw-semibold"><i class="bi bi-camera-reels me-1"></i>CTV Media</span>' : '<span class="text-primary"><i class="bi bi-person me-1"></i>CTV</span>' ?></small>
+                                            <strong class="d-block text-dark" style="font-size: 12.5px; line-height: 1.25;"><?= htmlspecialchars($subItem['full_name']) ?></strong>
+                                            <small class="text-muted" style="font-size: 11px;"><span class="badge bg-light text-dark border font-monospace px-1.5 py-0.5"><?= htmlspecialchars($subItem['student_code']) ?></span> • <?= $isDriveLink ? '<span class="text-warning fw-semibold"><i class="bi bi-camera-reels me-1"></i>Media</span>' : '<span class="text-primary"><i class="bi bi-person me-1"></i>CTV</span>' ?></small>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <strong class="text-dark d-block"><?= htmlspecialchars($subItem['event_title']) ?></strong>
-                                    <small class="text-muted"><?= htmlspecialchars($subItem['shift_name']) ?></small>
+                                    <strong class="text-dark d-block text-truncate" style="font-size: 12.5px; max-width: 250px;" title="<?= htmlspecialchars($subItem['event_title']) ?>"><?= htmlspecialchars($subItem['event_title']) ?></strong>
+                                    <small class="text-muted" style="font-size: 11px;"><?= htmlspecialchars($subItem['shift_name']) ?></small>
                                 </td>
                                 <td>
                                     <?php if ($hasProof): ?>
                                         <?php if ($isDriveLink): ?>
                                         <div>
-                                            <a href="<?= htmlspecialchars($subProofUrl) ?>" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill py-1 px-2.5 fw-semibold" style="font-size:11.5px;">
-                                                <i class="fa-brands fa-google-drive me-1 text-primary"></i> Mở Drive Bộ Ảnh Media
+                                            <a href="<?= htmlspecialchars($subProofUrl) ?>" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill py-0.5 px-2 fw-semibold" style="font-size:11px;">
+                                                <i class="fa-brands fa-google-drive me-1 text-primary"></i> Mở Drive Media
                                             </a>
-                                            <div class="small mt-1 text-success fw-semibold" style="font-size:11px;">
-                                                <i class="bi bi-check-circle-fill me-1"></i>Đã kèm Logo & Chỉnh sáng
+                                            <div class="text-success fw-semibold mt-0.5" style="font-size:10.5px;">
+                                                <i class="bi bi-check-circle-fill me-1"></i>Đã gắn Logo & Sáng
                                             </div>
                                         </div>
                                         <?php else: ?>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <img src="<?= htmlspecialchars($subProofUrl) ?>" alt="Minh chứng" class="rounded-2 border shadow-xs" style="width: 44px; height: 32px; object-fit: cover;">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-1 px-2" style="font-size: 11px;" onclick="previewProofModal('<?= addslashes($subItem['full_name']) ?>', '<?= addslashes($subItem['shift_name']) ?>', '<?= addslashes($subProofUrl) ?>', '<?= addslashes($subItem['proof_note'] ?? '') ?>')">
-                                                <i class="bi bi-eye"></i> Xem Ảnh Hiện Trường
+                                        <div class="d-flex align-items-center gap-1.5">
+                                            <img src="<?= htmlspecialchars($subProofUrl) ?>" alt="Minh chứng" class="rounded-2 border shadow-xs" style="width: 36px; height: 26px; object-fit: cover;">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-0.5 px-1.5" style="font-size: 10.5px;" onclick="previewProofModal('<?= addslashes($subItem['full_name']) ?>', '<?= addslashes($subItem['shift_name']) ?>', '<?= addslashes($subProofUrl) ?>', '<?= addslashes($subItem['proof_note'] ?? '') ?>')">
+                                                <i class="bi bi-eye"></i> Xem Ảnh
                                             </button>
                                         </div>
                                         <?php endif; ?>
                                     <?php else: ?>
-                                        <span class="badge bg-light text-muted border py-1.5 px-2.5"><i class="bi bi-clock-history me-1"></i>Chưa nộp minh chứng</span>
+                                        <span class="badge bg-light text-muted border py-1 px-2" style="font-size: 10.5px;"><i class="bi bi-clock-history me-1"></i>Chưa nộp minh chứng</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <small class="text-muted"><?= htmlspecialchars($subItem['proof_note'] ?: ($isDriveLink ? 'Bộ ảnh Media đã chỉnh sửa sáng và gắn logo FPT' : 'Có mặt đúng giờ tại địa điểm trực sự kiện')) ?></small>
+                                    <small class="text-muted" style="font-size: 11.5px;"><?= htmlspecialchars($subItem['proof_note'] ?: ($isDriveLink ? 'Bộ ảnh Media đã chỉnh sửa sáng và gắn logo FPT' : 'Có mặt đúng giờ tại địa điểm trực sự kiện')) ?></small>
                                 </td>
                                 <td>
                                     <?php if ($isVerified): ?>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle py-1.5 px-2.5">
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2" style="font-size: 10.5px;">
                                         <i class="bi bi-check-circle-fill me-1"></i>Đã Nghiệm Thu
                                     </span>
-                                    <small class="d-block text-muted font-monospace mt-0.5" style="font-size:10.5px;"><?= htmlspecialchars($subItem['contract_code'] ?? '') ?></small>
+                                    <small class="d-block text-muted font-monospace mt-0.5" style="font-size:10px;"><?= htmlspecialchars($subItem['contract_code'] ?? '') ?></small>
                                     <?php elseif ($hasProof): ?>
-                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle py-1.5 px-2.5">
-                                        <i class="bi bi-hourglass-split me-1"></i>Chờ GV Nghiệm Thu
+                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle py-1 px-2" style="font-size: 10.5px;">
+                                        <i class="bi bi-hourglass-split me-1"></i>Chờ GV Duyệt
                                     </span>
                                     <?php else: ?>
-                                    <span class="badge bg-secondary-subtle text-secondary py-1.5 px-2.5">Chưa gửi</span>
+                                    <span class="badge bg-secondary-subtle text-secondary py-1 px-2" style="font-size: 10.5px;">Chưa gửi</span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-end pe-4">
-                                    <div class="d-flex align-items-center justify-content-end gap-2">
+                                <td class="text-end pe-3">
+                                    <div class="d-flex align-items-center justify-content-end gap-1.5">
                                         <?php if ((int)$subItem['user_id'] === (int)($currentUser['id'] ?? 0) || empty($perms['canVerifyLecturer'])): ?>
-                                        <button type="button" class="btn btn-sm btn-fpt-primary rounded-pill py-1 px-3 shadow-xs" onclick="openSubmitProofModal(<?= $subAssId ?>, '<?= htmlspecialchars(addslashes($subItem['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($subItem['start_time'])) ?>')">
-                                            <i class="bi bi-cloud-arrow-up-fill me-1"></i> <?= $hasProof ? 'Cập Nhật Minh Chứng' : 'Nộp Minh Chứng' ?>
+                                        <button type="button" class="btn btn-sm btn-fpt-primary rounded-pill py-1 px-2.5 shadow-xs" style="font-size: 11px;" onclick="openSubmitProofModal(<?= $subAssId ?>, '<?= htmlspecialchars(addslashes($subItem['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($subItem['start_time'])) ?>')">
+                                            <i class="bi bi-cloud-arrow-up-fill me-1"></i> <?= $hasProof ? 'Cập Nhật' : 'Nộp Minh Chứng' ?>
                                         </button>
                                         <?php endif; ?>
 
                                         <?php if (!empty($perms['canVerifyLecturer'])): ?>
                                             <?php if ($isVerified): ?>
-                                            <button class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-3 disabled" disabled>
-                                                <i class="bi bi-patch-check-fill text-success me-1"></i> Đã Duyệt Nghiệm Thu
+                                            <button class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-2.5 disabled" disabled style="font-size: 11px;">
+                                                <i class="bi bi-patch-check-fill text-success me-1"></i> Đã Duyệt
+                                            </button>
+                                            <?php elseif ($hasProof): ?>
+                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill py-1 px-2.5 shadow-xs" style="font-size: 11px;" onclick="verifyLecturerAcceptance(<?= $subAssId ?>)">
+                                                <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
                                             </button>
                                             <?php else: ?>
-                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill py-1 px-3 shadow-xs" <?= $hasProof ? '' : 'disabled title="CTV chưa nộp minh chứng"' ?> onclick="verifyLecturerAcceptance(<?= $subAssId ?>)">
-                                                <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
+                                            <!-- CTV chưa nộp minh chứng: Giảng viên có nút nhắc nhở gửi tự động qua email -->
+                                            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill py-1 px-2.5 shadow-xs fw-semibold" style="font-size: 11px; white-space: nowrap;" onclick="sendProofReminder(<?= $subAssId ?>, '<?= htmlspecialchars(addslashes($subItem['full_name'])) ?>', '<?= htmlspecialchars(addslashes($subItem['email'] ?? '')) ?>', this)" title="Tự động gửi email thông báo nhắc sinh viên nộp minh chứng">
+                                                <i class="bi bi-bell-fill me-1 text-warning"></i> Nhắc Nhở Qua Email
                                             </button>
                                             <?php endif; ?>
                                         <?php endif; ?>
@@ -2775,11 +2811,17 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     </button>
                                     <?php endif; ?>
 
-                                    <!-- Nút Duyệt Nghiệm Thu: Dành riêng cho Giảng viên / Quản trị viên -->
+                                    <!-- Nút Duyệt Nghiệm Thu HOẶC Nhắc Nhở Nộp Minh Chứng: Dành riêng cho Giảng viên / Quản trị viên -->
                                     <?php if (!$isVerified && !empty($perms['canVerifyLecturer'])): ?>
-                                    <button type="button" class="btn btn-sm btn-fpt-emerald text-truncate" <?= $hasProof ? '' : 'disabled title="CTV chưa nộp minh chứng"' ?> onclick="verifyLecturerInCard(<?= $acc['assignment_id'] ?>)" style="font-size: 11.5px; padding: 5px 8px; border-radius: 8px;">
-                                        <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
-                                    </button>
+                                        <?php if ($hasProof): ?>
+                                        <button type="button" class="btn btn-sm btn-fpt-emerald text-truncate" onclick="verifyLecturerInCard(<?= $acc['assignment_id'] ?>)" style="font-size: 11px; padding: 4px 6px; border-radius: 7px;">
+                                            <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
+                                        </button>
+                                        <?php else: ?>
+                                        <button type="button" class="btn btn-sm btn-outline-warning text-truncate fw-semibold" onclick="sendProofReminder(<?= $acc['assignment_id'] ?>, '<?= htmlspecialchars(addslashes($acc['full_name'])) ?>', '<?= htmlspecialchars(addslashes($acc['email'] ?? '')) ?>', this)" style="font-size: 11px; padding: 4px 6px; border-radius: 7px;" title="Tự động gửi email nhắc sinh viên nộp minh chứng">
+                                            <i class="bi bi-bell-fill me-1 text-warning"></i> Nhắc Nộp MC
+                                        </button>
+                                        <?php endif; ?>
                                     <?php endif; ?>
 
                                     <!-- Nút Trình Trường Ký: CHỈ Cán bộ Hành chính & Quản trị viên (CTV TUYỆT ĐỐI KHÔNG CÓ) -->
@@ -5548,6 +5590,52 @@ async function verifyLecturerAcceptance(assignmentId) {
         }
     } catch (err) {
         showToast('Lỗi kết nối khi giảng viên duyệt.', 'danger');
+    }
+}
+
+/**
+ * Giảng viên gửi email tự động nhắc nhở CTV nộp minh chứng nghiệm thu sau sự kiện
+ */
+async function sendProofReminder(assignmentId, studentName, studentEmail, btnElement) {
+    if (!assignmentId) return;
+
+    const originalHtml = btnElement ? btnElement.innerHTML : '';
+    if (btnElement) {
+        btnElement.disabled = true;
+        btnElement.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-1"></i> Đang gửi mail...`;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('assignment_id', assignmentId);
+
+        const response = await fetch('/dashboard/remindProofSubmission', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            showToast(`🔔 ${data.message}`, 'success');
+            if (btnElement) {
+                btnElement.className = 'btn btn-sm btn-light border text-success rounded-pill py-1 px-2.5 shadow-xs fw-semibold';
+                btnElement.innerHTML = `<i class="bi bi-check2-all me-1"></i> Đã Gửi Mail Nhắc`;
+                btnElement.title = `Email nhắc nhở đã được gửi tới ${data.student_email || studentEmail}`;
+                btnElement.disabled = true;
+            }
+        } else {
+            showToast(data.message || 'Không thể gửi email nhắc nhở.', 'danger');
+            if (btnElement) {
+                btnElement.disabled = false;
+                btnElement.innerHTML = originalHtml;
+            }
+        }
+    } catch (err) {
+        showToast('Lỗi kết nối khi gửi email nhắc nhở.', 'danger');
+        if (btnElement) {
+            btnElement.disabled = false;
+            btnElement.innerHTML = originalHtml;
+        }
     }
 }
 

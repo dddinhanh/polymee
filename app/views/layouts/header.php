@@ -151,7 +151,7 @@ declare(strict_types=1);
                                 <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs">ĐM</div>
                                 <div>
                                     <div class="font-bold">Lê Đức Mạnh</div>
-                                    <div class="text-[10px] text-slate-500">PS20262 • CTV Lễ tân / Sinh viên</div>
+                                    <div class="text-[10px] text-slate-500">PI03067 • CTV Lễ tân / Sinh viên</div>
                                 </div>
                             </a>
                             <a href="/home/switchUser/1" class="flex items-center gap-3 px-4 py-2 text-xs hover:bg-orange-50 text-slate-700 <?= ($currentUser['id'] ?? 0) === 1 ? 'bg-orange-50/80 font-bold text-fpoly-primary' : '' ?>">

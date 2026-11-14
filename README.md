@@ -26,9 +26,9 @@
 | STT | Mã Sinh Viên | Họ và Tên | Vai Trò Trong Nhóm | Phần Việc Đảm Nhiệm Chi Tiết |
 |:---:|:---:|:---|:---:|:---|
 | 1 | **PI03084** | **Đinh Nguyễn Phương Anh** | **Trưởng nhóm** | Phân tích SRS, Kiến trúc MVC PHP OOP, Tích hợp AI Assistant Function Calling |
-| 2 | **PS20262** | **Lê Đức Mạnh** | **Thành viên** | Thiết kế CSDL ERD 3NF, DDL MySQL, Quản trị phân quyền RBAC & CollisionService |
-| 3 | **PS20263** | **Hoàng Minh Luận** | **Thành viên** | Lập trình Backend Controllers, Máy chiếu Dynamic QR Code HMAC-SHA256, API JSON |
-| 4 | **PS20264** | **Dương Ngọc Hân** | **Thành viên** | Thiết kế UI/UX Apple Sonoma/iPadOS, Bento Grid 2.0, Viết tài liệu báo cáo & slides |
+| 2 | **PI03067** | **Lê Đức Mạnh** | **Thành viên** | Thiết kế CSDL ERD 3NF, DDL MySQL, Quản trị phân quyền RBAC & CollisionService |
+| 3 | **PI03015** | **Hoàng Minh Luận** | **Thành viên** | Lập trình Backend Controllers, Máy chiếu Dynamic QR Code HMAC-SHA256, API JSON |
+| 4 | **PI02895** | **Dương Ngọc Hân** | **Thành viên** | Thiết kế UI/UX Apple Sonoma/iPadOS, Bento Grid 2.0, Viết tài liệu báo cáo & slides |
 
 ---
 
@@ -433,7 +433,7 @@ Hệ thống đã tích hợp menu chuyển vai nhanh **(Role Switcher Dropdown)
 | STT | Họ và Tên | Mã Số | Vai Trò | Mật Khẩu | Phân Vùng Chuyên Biệt |
 |:---:|:---|:---:|:---:|:---:|:---|
 | 1 | **Đinh Nguyễn Phương Anh** | `PI03084` | **CTV Media** | `123456` | Lịch cá nhân, Nộp link Google Drive ảnh/video |
-| 2 | **Lê Đức Mạnh** | `PS20262` | **CTV Lễ Tân** | `123456` | Đăng ký ca, Check-in Dynamic QR, Hồ sơ VNeID |
+| 2 | **Lê Đức Mạnh** | `PI03067` | **CTV Lễ Tân** | `123456` | Đăng ký ca, Check-in Dynamic QR, Hồ sơ VNeID |
 | 3 | **Thầy Phan Hoàng Khải** | `GV0102` | **Ban Tổ Chức** | `123456` | Đặt lịch ca trực mới, Thẩm định minh chứng Drive |
 | 4 | **Lê Đình Tuấn** | `HC0201` | **Hành Chính CSVC** | `123456` | Kiểm tra thiết bị âm thanh, ghi chú hội trường |
 | 5 | **Đặng Thu Thảo** | `KT0105` | **Kế Toán Quyết Toán** | `123456` | Bảng nghiệm thu thù lao, đối soát VNeID, xuất CSV |

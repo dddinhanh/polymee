@@ -157,9 +157,9 @@ $users = [
     [1, 'ADMIN001', 'Quản Trị Viên Hệ Thống', 'admin@fpoly.edu.vn', $passHash, '0901234567', 1, 'Quản trị, Phân quyền'],
     [2, 'GV0102', 'Thầy Phan Hoàng Khải', 'khai.phan@fpt.edu.vn', $passHash, '0912345678', 2, 'Tổ chức sự kiện, Đào tạo'],
     [3, 'PI03084', 'Đinh Nguyễn Phương Anh', 'phuonganh.pi03084@fpt.edu.vn', $passHash, '0923456789', 6, 'Media, Chụp ảnh sự kiện, Quay video recap'],
-    [4, 'PS20262', 'Lê Đức Mạnh', 'ducmanh.ps20262@fpt.edu.vn', $passHash, '0934567890', 4, 'Lễ tân, Đón tiếp đại biểu, Setup'],
-    [5, 'PS20263', 'Hoàng Minh Luận', 'minhluan.ps20263@fpt.edu.vn', $passHash, '0945678901', 4, 'Kỹ thuật âm thanh ánh sáng, Sân khấu'],
-    [6, 'PS20264', 'Dương Ngọc Hân', 'ngochan.ps20264@fpt.edu.vn', $passHash, '0956789012', 4, 'Hậu cần, Check-in, Hỗ trợ điều phối'],
+    [4, 'PI03067', 'Lê Đức Mạnh', 'ducmanh.pi03067@fpt.edu.vn', $passHash, '0934567890', 4, 'Lễ tân, Đón tiếp đại biểu, Setup'],
+    [5, 'PI03015', 'Hoàng Minh Luận', 'minhluan.pi03015@fpt.edu.vn', $passHash, '0945678901', 4, 'Kỹ thuật âm thanh ánh sáng, Sân khấu'],
+    [6, 'PI02895', 'Dương Ngọc Hân', 'ngochan.pi02895@fpt.edu.vn', $passHash, '0956789012', 4, 'Hậu cần, Check-in, Hỗ trợ điều phối'],
     [7, 'KT0105', 'Đặng Thu Thảo', 'thao.dt@fpt.edu.vn', $passHash, '0967890123', 5, 'Kế toán, Thẩm định VNeID & Quyết toán chi trả'],
     [8, 'HC0201', 'Lê Đình Tuấn', 'tuan.ld@fpt.edu.vn', $passHash, '0978901234', 3, 'Hành chính, CSVC, Rà soát xung đột'],
     [13, 'HC0001', 'ThS. Phạm Hồng Sơn', 'son.ph@fpt.edu.vn', $passHash, '0908889999', 7, 'Trưởng hành chính, Phê duyệt cuối, Giám sát vận hành']

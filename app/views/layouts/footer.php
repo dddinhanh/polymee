@@ -37,15 +37,15 @@ declare(strict_types=1);
                     </li>
                     <li class="flex items-center gap-2">
                         <i class="fa-solid fa-user-graduate text-slate-500 text-[10px]"></i>
-                        <span>Lê Đức Mạnh (PS20262)</span>
+                        <span>Lê Đức Mạnh (PI03067)</span>
                     </li>
                     <li class="flex items-center gap-2">
                         <i class="fa-solid fa-user-graduate text-slate-500 text-[10px]"></i>
-                        <span>Hoàng Minh Luận (PS20263)</span>
+                        <span>Hoàng Minh Luận (PI03015)</span>
                     </li>
                     <li class="flex items-center gap-2">
                         <i class="fa-solid fa-user-graduate text-slate-500 text-[10px]"></i>
-                        <span>Dương Ngọc Hân (PS20264)</span>
+                        <span>Dương Ngọc Hân (PI02895)</span>
                     </li>
                 </ul>
             </div>

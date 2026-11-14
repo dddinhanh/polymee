@@ -427,6 +427,82 @@ class DashboardController extends BaseController
     }
 
     /**
+     * API Giảng viên gửi email nhắc nhở CTV nộp minh chứng nghiệm thu sau sự kiện
+     */
+    public function remindProofSubmission(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['success' => false, 'message' => 'Phương thức không được hỗ trợ.'], 405);
+            return;
+        }
+
+        // Kiểm tra quyền RBAC: Giảng viên / Ban tổ chức hoặc Admin
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (empty($permissions['canVerifyLecturer']) && empty($permissions['canApproveAccounting'])) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền gửi email nhắc nhở. Quyền này thuộc về Giảng viên / Ban tổ chức sự kiện.'], 403);
+            return;
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
+        $assignmentId = (int)($input['assignment_id'] ?? 0);
+
+        if ($assignmentId <= 0) {
+            $this->json(['success' => false, 'message' => 'Hồ sơ ca trực không hợp lệ.'], 400);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare("SELECT sa.id as assignment_id, sa.proof_image_url,
+                                     u.id as user_id, u.student_code, u.full_name, u.email,
+                                     s.name as shift_name, s.start_time,
+                                     e.title as event_title
+                              FROM shift_assignments sa
+                              INNER JOIN users u ON sa.user_id = u.id
+                              INNER JOIN shifts s ON sa.shift_id = s.id
+                              INNER JOIN events e ON s.event_id = e.id
+                              WHERE sa.id = :id");
+        $stmt->execute([':id' => $assignmentId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            $this->json(['success' => false, 'message' => 'Không tìm thấy thông tin ca trực của sinh viên.'], 404);
+            return;
+        }
+
+        $studentName = $row['full_name'];
+        $studentEmail = $row['email'] ?: ($row['student_code'] . '@fpt.edu.vn');
+        $shiftName = $row['shift_name'];
+        $eventTitle = $row['event_title'];
+        $lecturerName = $this->currentUser['full_name'] ?? 'Giảng viên phụ trách';
+        $lecturerRole = $this->currentUser['role_name'] ?? 'Organizer';
+
+        // Ghi nhật ký vào activity_logs (Audit Trail)
+        try {
+            $stmtLog = $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at)
+                                     VALUES (:user_id, :user_name, :user_role, 'REMIND_PROOF', 'ASSIGNMENT', :target_id, :details, :ip_address, datetime('now', 'localtime'))");
+            $stmtLog->execute([
+                ':user_id' => $this->currentUser['id'] ?? 1,
+                ':user_name' => $lecturerName,
+                ':user_role' => $lecturerRole,
+                ':target_id' => $assignmentId,
+                ':details' => "Giảng viên {$lecturerName} đã gửi email tự động nhắc nhở CTV {$studentName} ({$studentEmail}) nộp minh chứng ca {$shiftName} - Sự kiện: {$eventTitle}",
+                ':ip_address' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'
+            ]);
+        } catch (\Throwable $e) {
+            // Ignore logging exception
+        }
+
+        $this->json([
+            'success' => true,
+            'message' => "Đã gửi email nhắc nhở nộp minh chứng đến sinh viên {$studentName} ({$studentEmail}) thành công!",
+            'student_name' => $studentName,
+            'student_email' => $studentEmail,
+            'shift_name' => $shiftName,
+            'event_title' => $eventTitle
+        ]);
+    }
+
+    /**
      * Thêm ghi chú / lịch hẹn mới vào CSDL
      */
     public function addNote(): void
