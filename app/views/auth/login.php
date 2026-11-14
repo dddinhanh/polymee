@@ -318,10 +318,10 @@
                     PolyMee đồng bộ hóa toàn bộ quy trình từ đăng ký ca trực, kiểm tra xung đột thời gian thực, chụp ảnh minh chứng tại chỗ, ký hợp đồng điện tử và quyết toán tài chính FPT Polytechnic.
                 </p>
 
-                <!-- 4 Core Engine Showcases -->
+                <!-- 4 Core Engine Showcases (3 Màu Chuẩn Logo FPT: Cam, Xanh Lá, Xanh Dương) -->
                 <div class="d-flex flex-column gap-3 mb-5" style="max-width: 540px;">
-                    <div class="feature-pill">
-                        <div class="feature-icon-box text-warning" style="background: rgba(245, 158, 11, 0.12);">
+                    <div class="feature-pill" style="border-left: 3.5px solid #EA580C !important;">
+                        <div class="feature-icon-box" style="color: #EA580C; background: rgba(234, 88, 12, 0.12);">
                             <i class="bi bi-shield-check"></i>
                         </div>
                         <div>
@@ -330,8 +330,8 @@
                         </div>
                     </div>
 
-                    <div class="feature-pill">
-                        <div class="feature-icon-box text-success" style="background: rgba(16, 185, 129, 0.12);">
+                    <div class="feature-pill" style="border-left: 3.5px solid #16A34A !important;">
+                        <div class="feature-icon-box" style="color: #16A34A; background: rgba(22, 163, 74, 0.12);">
                             <i class="bi bi-camera-fill"></i>
                         </div>
                         <div>
@@ -340,8 +340,8 @@
                         </div>
                     </div>
 
-                    <div class="feature-pill">
-                        <div class="feature-icon-box" style="color: var(--ux-accent); background: var(--ux-accent-soft);">
+                    <div class="feature-pill" style="border-left: 3.5px solid #0054A6 !important;">
+                        <div class="feature-icon-box" style="color: #0054A6; background: rgba(0, 84, 166, 0.12);">
                             <i class="bi bi-robot"></i>
                         </div>
                         <div>

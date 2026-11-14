@@ -69,17 +69,12 @@ class DashboardController extends BaseController
         $events = $this->eventModel->getEventsWithDetails();
         $locations = $this->eventModel->getAllLocations();
 
-        // 4. Lấy BẢNG NGHIỆM THU KẾ TOÁN (Tuân thủ RBAC: Kế toán, Trưởng HC, Admin xem toàn trường; CTV chỉ xem ca của mình)
+        // 4. Lấy BẢNG NGHIỆM THU KẾ TOÁN (Tuân thủ RBAC: Kế toán, Trưởng HC, Admin, Giảng viên xem toàn bộ để nghiệm thu & trình ký; CTV chỉ xem ca của mình)
         $whereAccounting = "";
         $paramsAccounting = [];
-        if (!$permissions['canViewAccounting']) {
-            if ($permissions['role'] === 'LECTURER') {
-                $whereAccounting = " WHERE e.created_by = :current_user_id ";
-                $paramsAccounting[':current_user_id'] = $this->currentUser['id'] ?? 0;
-            } else {
-                $whereAccounting = " WHERE sa.user_id = :current_user_id ";
-                $paramsAccounting[':current_user_id'] = $this->currentUser['id'] ?? 0;
-            }
+        if (!$permissions['canViewAccounting'] && $permissions['role'] !== 'LECTURER') {
+            $whereAccounting = " WHERE sa.user_id = :current_user_id ";
+            $paramsAccounting[':current_user_id'] = $this->currentUser['id'] ?? 0;
         }
 
         $sqlAccounting = "SELECT sa.id as assignment_id, sa.status as assignment_status, sa.assigned_at,

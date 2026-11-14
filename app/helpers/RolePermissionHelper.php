@@ -158,8 +158,8 @@ class RolePermissionHelper
             'canSubmitProof' => in_array($role, ['CTV', 'MEDIA'], true),
             // Giảng viên nghiệm thu ca trực (Work Confirmation): Giảng viên/BTC, Trưởng HC, Admin
             'canVerifyLecturer' => in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Kiểm tra CSVC / Trình trường ký duyệt: Nhân viên hành chính, Trưởng HC, Admin
-            'canSubmitSchoolSigning' => in_array($role, ['STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Kiểm tra CSVC / Trình trường ký duyệt: Giảng viên, Nhân viên hành chính, Trưởng HC, Admin
+            'canSubmitSchoolSigning' => in_array($role, ['LECTURER', 'STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
             // Phê duyệt thanh toán / Quyết toán thù lao: Kế toán, Trưởng HC, Admin
             'canApproveAccounting' => in_array($role, ['ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
             // Quản lý hồ sơ CTV: Giảng viên, Kế toán, Trưởng HC, Admin

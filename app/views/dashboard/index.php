@@ -868,8 +868,83 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+
+    #panelProfileSettings:not([style*="display: none"]):not([style*="display:none"]) {
         overflow-y: auto !important;
-        max-height: 100% !important;
+        display: block !important;
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        height: 100% !important;
+    }
+
+    /* Fixed Headers & Banners: Never scroll out of view */
+    .spa-panel > *:not(.table-responsive):not(.card):not(#eventsCardsContainer):not(#contractDossierContainer):not(.panel-scroll-body) {
+        flex-shrink: 0 !important;
+    }
+
+    /* Scrollable student list & table bodies only */
+    .spa-panel .table-responsive,
+    .panel-scroll-body {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        position: relative !important;
+        border-radius: 12px;
+    }
+
+    .spa-panel .card:has(.table-responsive),
+    .spa-panel > .card {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    .spa-panel .card:has(.table-responsive) .card-body,
+    .spa-panel > .card .card-body {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+    }
+
+    .spa-panel #eventsCardsContainer,
+    .spa-panel #contractDossierContainer {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        padding-right: 2px;
+    }
+
+    /* Sticky table header so column names stay in place when scrolling */
+    .spa-panel .table {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+    }
+    .spa-panel .table thead th {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 10 !important;
+        background: #F8F9FA !important;
+        border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.06) !important;
+    }
+
+    [data-bs-theme="dark"] .spa-panel .table thead th {
+        background: #1E293B !important;
+        color: #F8FAFC !important;
+        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
     }
 
     /* Standardized Compact Inner Content & Cells for All Panels */
@@ -901,6 +976,38 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .spa-panel .badge {
         font-size: 10.5px;
         font-weight: 600;
+    }
+
+    /* Fixed Hover State & Compact Sizing for Profile Save Button */
+    .btn-profile-save {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        background: #EA580C !important;
+        color: #FFFFFF !important;
+        border: 1px solid #C2410C !important;
+        padding: 8px 16px !important;
+        font-size: 12.5px !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: 0 1px 3px rgba(234, 88, 12, 0.2) !important;
+        user-select: none !important;
+    }
+    .btn-profile-save:hover {
+        background: #C2410C !important;
+        color: #FFFFFF !important;
+        border-color: #9A3412 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35) !important;
+    }
+    .btn-profile-save:active {
+        background: #9A3412 !important;
+        transform: translateY(0) !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2) !important;
     }
 
     [data-bs-theme="dark"] .calendar-container,
@@ -1077,7 +1184,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         .spa-panel[style*="display: none"],
         .spa-panel[style*="display:none"],
         #panelCalendar[style*="display: none"],
-        #panelCalendar[style*="display:none"] {
+        #panelCalendar[style*="display:none"],
+        #panelProfileSettings[style*="display: none"],
+        #panelProfileSettings[style*="display:none"],
+        #panelUserRoles[style*="display: none"],
+        #panelUserRoles[style*="display:none"],
+        #panelAuditTrail[style*="display: none"],
+        #panelAuditTrail[style*="display:none"] {
             display: none !important;
         }
 
@@ -1207,9 +1320,15 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         }
 
         .spa-panel:not(#panelCalendar):not([style*="display: none"]):not([style*="display:none"]) {
-            width: 100%;
-            padding: 14px 18px;
-            display: block !important;
+            width: 100% !important;
+            padding: 14px 18px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
         }
     }
 
@@ -1370,14 +1489,14 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .timeline-card {
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
-        border-radius: 18px;
-        padding: 16px 20px;
+        border-radius: 12px;
+        padding: 10px 14px;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: 14px;
-        border-left: 4px solid #EA580C;
+        gap: 10px;
+        border-left: 3.5px solid #EA580C;
         box-shadow: var(--ux-shadow-sm);
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -2490,30 +2609,30 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 <!-- Banner Hướng Dẫn Quy Trình Minh Chứng Theo Role -->
                 <div class="row g-2.5 mb-2.5">
                     <div class="col-12 col-md-4">
-                        <div class="p-2.5 rounded-3 bg-light border h-100" style="border-color: rgba(0,0,0,0.06) !important;">
-                            <div class="d-flex align-items-center gap-1.5 mb-1">
-                                <span class="badge bg-primary text-white rounded-pill px-2 py-0.5" style="font-size: 10px;">Role CTV Thường</span>
-                                <strong class="text-dark" style="font-size: 12px;">Ảnh Hiện Trường Có Mặt</strong>
+                        <div class="rounded-3 border h-100 shadow-xs" style="background: #FAFAFC; border-color: rgba(0,0,0,0.08) !important; padding: 12px 14px;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge bg-primary text-white rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 10.5px;">Role CTV Thường</span>
+                                <strong class="text-dark" style="font-size: 12.5px;">Ảnh Hiện Trường Có Mặt</strong>
                             </div>
-                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">CTV có nhiệm vụ chụp ảnh có mặt thực tế tại vị trí trực (áo cam FPoly) để chứng minh có mặt nghiệm thu.</p>
+                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.5;">CTV có nhiệm vụ chụp ảnh có mặt thực tế tại vị trí trực (áo cam FPoly) để chứng minh có mặt nghiệm thu.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="p-2.5 rounded-3 bg-light border h-100" style="border-color: rgba(0,0,0,0.06) !important;">
-                            <div class="d-flex align-items-center gap-1.5 mb-1">
-                                <span class="badge bg-warning text-dark rounded-pill px-2 py-0.5" style="font-size: 10px;">Role CTV Media</span>
-                                <strong class="text-dark" style="font-size: 12px;">Link Drive Đã Chỉnh Sáng & Logo</strong>
+                        <div class="rounded-3 border h-100 shadow-xs" style="background: #FAFAFC; border-color: rgba(0,0,0,0.08) !important; padding: 12px 14px;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge bg-warning text-dark rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 10.5px;">Role CTV Media</span>
+                                <strong class="text-dark" style="font-size: 12.5px;">Link Drive Đã Chỉnh Sáng & Logo</strong>
                             </div>
-                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">CTV Media tải link Google Drive bộ ảnh sự kiện đã được <strong>gắn logo FPT Poly</strong> và <strong>hậu kỳ chỉnh sáng</strong>.</p>
+                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.5;">CTV Media tải link Google Drive bộ ảnh sự kiện đã được <strong>gắn logo FPT Poly</strong> và <strong>hậu kỳ chỉnh sáng</strong>.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="p-2.5 rounded-3 bg-light border h-100" style="border-color: rgba(0,0,0,0.06) !important;">
-                            <div class="d-flex align-items-center gap-1.5 mb-1">
-                                <span class="badge bg-success text-white rounded-pill px-2 py-0.5" style="font-size: 10px;">Role Giảng Viên</span>
-                                <strong class="text-dark" style="font-size: 12px;">Duyệt / Nhắc Nhở Qua Email</strong>
+                        <div class="rounded-3 border h-100 shadow-xs" style="background: #FAFAFC; border-color: rgba(0,0,0,0.08) !important; padding: 12px 14px;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge bg-success text-white rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 10.5px;">Role Giảng Viên</span>
+                                <strong class="text-dark" style="font-size: 12.5px;">Duyệt / Nhắc Nhở Qua Email</strong>
                             </div>
-                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">Giảng viên kiểm tra minh chứng duyệt nghiệm thu, hoặc <strong>gửi email nhắc nhở</strong> nếu CTV chưa nộp ảnh.</p>
+                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.5;">Giảng viên kiểm tra minh chứng duyệt nghiệm thu, hoặc <strong>gửi email nhắc nhở</strong> nếu CTV chưa nộp ảnh.</p>
                         </div>
                     </div>
                 </div>
@@ -2689,7 +2808,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- Danh sách Hợp Đồng Dossier Cards -->
-                <div class="row g-3">
+                <div class="row g-2.5" id="contractDossierContainer">
                     <?php if (empty($accountingList)): ?>
                     <div class="col-12 text-center py-5 rounded-4 border bg-white shadow-xs">
                         <i class="bi bi-file-earmark-check text-muted display-4 mb-3 d-block"></i>
@@ -2841,35 +2960,35 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 <!-- =========================================================
                  PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
                  ========================================================= -->
-            <section id="panelProfileSettings" style="display:none;" class="fade-in-up">
+            <section id="panelProfileSettings" style="display:none !important;" class="spa-panel fade-in-up">
                 <?php 
                 $profRoleId = (int)($userProfile['role_id'] ?? 4);
                 $profRoleName = $userProfile['role_name'] ?? 'Student';
                 $isInstitutionalStaff = in_array($profRoleId, [1, 2], true) || in_array($profRoleName, ['Admin', 'Organizer'], true);
                 ?>
-                <!-- Profile Header Card -->
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: #FFFFFF; border: 1px solid rgba(0,0,0,0.08) !important; overflow: hidden;">
-                    <div style="height: 70px; background: #F4F4F6; border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
-                    <div class="card-body p-4 pt-0 position-relative">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3" style="margin-top: -42px;">
-                            <div class="d-flex align-items-end gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-sm border border-4 border-white" style="width: 84px; height: 84px; min-width: 84px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 32px;">
+                <!-- Profile Header Card (Apple-grade Compact) -->
+                <div class="card border-0 rounded-3 shadow-xs mb-3" style="background: #FFFFFF; border: 1px solid rgba(0,0,0,0.08) !important; overflow: hidden; flex-shrink: 0;">
+                    <div style="height: 44px; background: #F4F4F6; border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
+                    <div class="card-body p-3 pt-0 position-relative">
+                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-2" style="margin-top: -25px;">
+                            <div class="d-flex align-items-end gap-2.5">
+                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-xs" style="width: 50px; height: 50px; min-width: 50px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 20px; border: 3px solid #FFFFFF;">
                                     <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
                                 </div>
-                                <div class="mb-1">
+                                <div class="mb-0.5">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 20px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-3 py-1 rounded-pill" style="font-size: 11.5px; background: #F4F4F6; color: var(--ux-ink); border: 1px solid rgba(0,0,0,0.08);">
+                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 15.5px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
+                                        <span class="badge px-2.5 py-0.5 rounded-pill" style="font-size: 10.5px; background: #F4F4F6; color: var(--ux-ink); border: 1px solid rgba(0,0,0,0.08);">
                                             <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
                                         </span>
                                     </div>
-                                    <div class="small mt-0.5" style="color: var(--ux-ink-3);">
+                                    <div class="small mt-0.5" style="color: var(--ux-ink-3); font-size: 11px;">
                                         Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <?= htmlspecialchars($userProfile['email'] ?? '') ?>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex gap-2">
-                                <span class="badge px-3 py-2 rounded-pill font-monospace" style="background: #F4F4F6; color: var(--ux-ink-2); border: 1px solid rgba(0,0,0,0.08); font-size: 12px;">
+                                <span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: #F4F4F6; color: var(--ux-ink-2); border: 1px solid rgba(0,0,0,0.08); font-size: 11px;">
                                     <i class="bi bi-clock-history me-1"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
                                 </span>
                             </div>
@@ -2879,40 +2998,40 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                 <!-- Profile Edit Form -->
                 <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
-                    <div class="row g-4">
+                    <div class="row g-2.5">
                         <!-- Left Column: Thông Tin Định Danh & Liên Hệ -->
                         <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-7' : 'col-lg-6' ?>">
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
+                            <div class="card border-0 rounded-3 shadow-xs h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
+                                <div class="card-header bg-transparent p-3 pb-1 border-0">
+                                    <h5 class="fw-bold mb-0.5 d-flex align-items-center gap-1.5" style="font-size: 14px; color: var(--ux-ink);">
                                         <i class="bi bi-person-lines-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
                                     </h5>
-                                    <small style="color: var(--ux-ink-3);">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</small>
+                                    <small style="color: var(--ux-ink-3); font-size: 11px;">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</small>
                                 </div>
-                                <div class="card-body p-4 pt-2">
-                                    <div class="row g-3">
+                                <div class="card-body p-3 pt-1">
+                                    <div class="row g-2">
                                         <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Họ và Tên <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" required>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Họ và Tên <span class="text-danger">*</span></label>
+                                            <input type="text" name="full_name" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" required>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mã Định Danh / MSSV</label>
-                                            <input type="text" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Mã sinh viên / Mã cán bộ do Nhà trường cấp cố định</div>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Mã Định Danh / MSSV</label>
+                                            <input type="text" class="form-control form-control-sm font-monospace" style="font-size: 12px; padding: 6px 10px; opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly>
+                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Mã sinh viên / Mã cán bộ do Nhà trường cấp cố định</div>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Email FPT Education</label>
-                                            <input type="email" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly style="opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Email FPT Education</label>
+                                            <input type="email" class="form-control form-control-sm font-monospace" style="font-size: 12px; padding: 6px 10px; opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly>
+                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
-                                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
+                                            <input type="tel" name="phone" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
-                                            <textarea name="skills" class="form-control" rows="3" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để gợi ý bạn vào các ca trực phù hợp</div>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
+                                            <textarea name="skills" class="form-control form-control-sm" rows="2" style="font-size: 12px; padding: 6px 10px;" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
+                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để gợi ý bạn vào các ca trực phù hợp</div>
                                         </div>
                                     </div>
                                 </div>
@@ -2923,95 +3042,95 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
                             <?php if ($isInstitutionalStaff): ?>
                             <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
+                            <div class="card border-0 rounded-3 shadow-xs h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
+                                <div class="card-header bg-transparent p-3 pb-1 border-0">
+                                    <h5 class="fw-bold mb-0.5 d-flex align-items-center gap-1.5" style="font-size: 14px; color: var(--ux-ink);">
                                         <i class="bi bi-shield-lock-fill text-primary"></i> Phân Quyền & Bảo Mật
                                     </h5>
-                                    <small style="color: var(--ux-ink-3);">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
+                                    <small style="color: var(--ux-ink-3); font-size: 11px;">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
                                 </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
+                                <div class="card-body p-3 pt-1 d-flex flex-column justify-content-between">
                                     <div>
-                                        <div class="p-3.5 rounded-4 mb-4" style="background: #F4F4F6; border: 1px solid rgba(0, 0, 0, 0.08);">
-                                            <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-dark mt-1" style="width: 38px; height: 38px; min-width: 38px; background: #FFFFFF; border: 1px solid rgba(0, 0, 0, 0.08);">
-                                                    <i class="bi bi-mortarboard-fill fs-5"></i>
+                                        <div class="p-2.5 rounded-3 mb-2.5" style="background: #F4F4F6; border: 1px solid rgba(0, 0, 0, 0.08);">
+                                            <div class="d-flex align-items-start gap-2.5">
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-dark mt-0.5" style="width: 32px; height: 32px; min-width: 32px; background: #FFFFFF; border: 1px solid rgba(0, 0, 0, 0.08);">
+                                                    <i class="bi bi-mortarboard-fill fs-6"></i>
                                                 </div>
                                                 <div>
-                                                    <h6 class="fw-bold mb-1" style="color: var(--ux-ink); font-size: 14px;">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                    <p class="small mb-0" style="color: var(--ux-ink-2); line-height: 1.55; font-size: 12.5px;">
+                                                    <h6 class="fw-bold mb-0.5" style="color: var(--ux-ink); font-size: 13px;">Tài Khoản Biên Chế Nhà Trường</h6>
+                                                    <p class="small mb-0" style="color: var(--ux-ink-2); line-height: 1.45; font-size: 11.5px;">
                                                         Bạn đang đăng nhập với vai trò <strong><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong>không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="p-3.5 rounded-4 mb-3" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line);">
-                                            <div class="fw-bold mb-2 small" style="color: var(--ux-ink);">Đổi Mật Khẩu Đăng Nhập</div>
-                                            <label class="form-label small" style="color: var(--ux-ink-3);">Mật khẩu mới (bỏ trống nếu không đổi)</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Tối thiểu 6 ký tự...">
+                                        <div class="p-2.5 rounded-3 mb-2" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line);">
+                                            <div class="fw-bold mb-1 small" style="font-size: 12px; color: var(--ux-ink);">Đổi Mật Khẩu Đăng Nhập</div>
+                                            <label class="form-label small mb-1" style="font-size: 11px; color: var(--ux-ink-3);">Mật khẩu mới (bỏ trống nếu không đổi)</label>
+                                            <input type="password" name="new_password" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" placeholder="Tối thiểu 6 ký tự...">
                                         </div>
                                     </div>
 
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-check-circle-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
+                                    <div class="pt-2 border-top mt-2" style="border-color: var(--ux-line) !important;">
+                                        <button type="submit" class="btn-profile-save w-100" id="btnSaveProfile">
+                                            <i class="bi bi-check-circle-fill me-1"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
                                         </button>
                                     </div>
                                 </div>
                             </div>
                             <?php else: ?>
                             <!-- Trường hợp CTV (Sinh Viên / Media): Có đầy đủ hồ sơ CCCD, STK, VNeID -->
-                            <div class="card border-0 rounded-4 shadow-sm h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-4 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 16px; color: var(--ux-ink);">
+                            <div class="card border-0 rounded-3 shadow-xs h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
+                                <div class="card-header bg-transparent p-3 pb-1 border-0">
+                                    <h5 class="fw-bold mb-0.5 d-flex align-items-center gap-1.5" style="font-size: 14px; color: var(--ux-ink);">
                                         <i class="bi bi-wallet2 text-success"></i> Hồ Sơ Quyết Toán & Thù Lao CTV
                                     </h5>
-                                    <small style="color: var(--ux-ink-3);">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</small>
+                                    <small style="color: var(--ux-ink-3); font-size: 11px;">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</small>
                                 </div>
-                                <div class="card-body p-4 pt-2 d-flex flex-column justify-content-between">
-                                    <div class="row g-3">
+                                <div class="card-body p-3 pt-1 d-flex flex-column justify-content-between">
+                                    <div class="row g-2">
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số CCCD (Chỉ cần 12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="12 chữ số CCCD chính chủ..." value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Nhập chính xác 12 chữ số CCCD hiển thị trên VNeID</div>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Số CCCD (12 số) <span class="text-danger">*</span></label>
+                                            <input type="text" name="id_card_number" class="form-control form-control-sm font-monospace" style="font-size: 12px; padding: 6px 10px;" placeholder="12 chữ số CCCD chính chủ..." value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
+                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Nhập chính xác 12 chữ số CCCD hiển thị trên VNeID</div>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_name" class="form-control" placeholder="Ví dụ: MB Bank, Vietcombank, TPBank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
+                                            <input type="text" name="bank_name" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" placeholder="Ví dụ: MB Bank, Vietcombank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_number" class="form-control font-monospace" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
+                                            <input type="text" name="bank_account_number" class="form-control form-control-sm font-monospace" style="font-size: 12px; padding: 6px 10px;" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
+                                            <input type="text" name="bank_account_name" class="form-control form-control-sm text-uppercase font-monospace" style="font-size: 12px; padding: 6px 10px;" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Ảnh Chụp Màn Hình Ứng Dụng VNeID (Mức 2)</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://... (URL ảnh chụp màn hình app VNeID)" value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp màn hình app VNeID đã kích hoạt định danh Mức 2 (không cần chụp thẻ CCCD vật lý)</div>
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Ảnh Chụp Màn Hình Ứng Dụng VNeID (Mức 2)</label>
+                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" placeholder="https://... (URL ảnh chụp màn hình app VNeID)" value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
+                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Dán URL ảnh chụp màn hình app VNeID đã kích hoạt định danh Mức 2 (không cần chụp thẻ CCCD vật lý)</div>
                                             
                                             <!-- Image Preview -->
-                                            <div class="mt-2 p-2 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
+                                            <div class="mt-1.5 p-1.5 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 90px; overflow: hidden;" id="vneidPreviewBox">
                                                 <?php if (!empty($userProfile['vneid_image_url'])): ?>
-                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px;" id="vneidPreviewImg">
+                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 75px; width: auto; object-fit: contain; border-radius: 6px;" id="vneidPreviewImg">
                                                 <?php else: ?>
-                                                    <span class="small text-muted" id="vneidPlaceholder"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                    <img src="" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px; display: none;" id="vneidPreviewImg">
+                                                    <span class="small text-muted" id="vneidPlaceholder" style="font-size: 11px;"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
+                                                    <img src="" alt="VNeID Preview" style="max-height: 75px; width: auto; object-fit: contain; border-radius: 6px; display: none;" id="vneidPreviewImg">
                                                 <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-bold small" style="color: var(--ux-ink);">Mật Khẩu Mới</label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="Để trống nếu giữ nguyên mật khẩu cũ...">
+                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Mật Khẩu Mới</label>
+                                            <input type="password" name="new_password" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" placeholder="Để trống nếu giữ nguyên mật khẩu cũ...">
                                         </div>
                                     </div>
 
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-3 fw-bold" id="btnSaveProfile">
-                                            <i class="bi bi-save2-fill me-1.5"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
+                                    <div class="pt-2 border-top mt-2" style="border-color: var(--ux-line) !important;">
+                                        <button type="submit" class="btn-profile-save w-100" id="btnSaveProfile">
+                                            <i class="bi bi-save2-fill me-1"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
                                         </button>
                                     </div>
                                 </div>
@@ -3022,19 +3141,19 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </form>
 
                 <!-- Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân (Dành Cho CTV / Sinh Viên) -->
-                <div class="card border-0 rounded-4 shadow-xs mt-4" style="background: #FFF5F5; border: 1px solid rgba(239, 68, 68, 0.25) !important;">
-                    <div class="card-body p-4">
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="card border-0 rounded-3 shadow-xs mt-3" style="background: #FFF5F5; border: 1px solid rgba(239, 68, 68, 0.25) !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5">
                             <div>
-                                <h6 class="fw-bold mb-1 text-danger d-flex align-items-center gap-2">
+                                <h6 class="fw-bold mb-1 text-danger d-flex align-items-center gap-1.5" style="font-size: 13px;">
                                     <i class="bi bi-exclamation-triangle-fill"></i> Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân
                                 </h6>
-                                <p class="small mb-0 text-muted" style="max-width: 650px; font-size: 12.5px;">
+                                <p class="small mb-0 text-muted" style="max-width: 650px; font-size: 11.5px; line-height: 1.45;">
                                     Khi thực hiện xóa tài khoản, toàn bộ hồ sơ sinh viên, thông tin định danh và lịch phân công chưa hoàn thành sẽ bị vô hiệu hóa khỏi hệ thống PolyMee. Các hợp đồng đã quyết toán chi trả sẽ được lưu trữ phục vụ đối soát kế toán theo quy chế nhà trường.
                                 </p>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3.5 py-2 fw-bold" onclick="openDeleteAccountModal()">
+                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3.5 py-1.5 fw-bold" onclick="openDeleteAccountModal()" style="font-size: 11.5px;">
                                     <i class="bi bi-trash3-fill me-1.5"></i> Xóa Tài Khoản
                                 </button>
                             </div>
@@ -3047,7 +3166,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                  PANEL 9: TRUNG TÂM CẤP QUYỀN NGƯỜI DÙNG (ADMIN ONLY)
                  ========================================================= -->
             <?php if (!empty($perms['canManageRoles'])): ?>
-            <section id="panelUserRoles" style="display:none;" class="fade-in-up">
+            <section id="panelUserRoles" style="display:none !important;" class="spa-panel fade-in-up">
                 <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
                     <div class="card-header bg-transparent px-4 py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
@@ -3156,7 +3275,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                  PANEL 10: NHẬT KÝ THAO TÁC HỆ THỐNG - AUDIT TRAIL (TRANG RIÊNG BIỆT)
                  ========================================================= -->
             <?php if (!empty($perms['canViewAuditLogs'])): ?>
-            <section id="panelAuditTrail" style="display:none;" class="fade-in-up">
+            <section id="panelAuditTrail" style="display:none !important;" class="spa-panel fade-in-up">
                 <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
                     <div class="card-header bg-transparent px-4 py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
@@ -3892,6 +4011,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <button type="button" class="btn-fpt-secondary" onclick="printContractModal()">
                         <i class="bi bi-printer me-1"></i> In Hợp Đồng (PDF)
                     </button>
+                    <button type="button" class="btn-fpt-emerald" id="btnVerifyInModal" onclick="verifyCurrentModalLecturer()" style="display:none;">
+                        <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
+                    </button>
                     <button type="button" class="btn-fpt-primary" id="btnSubmitToSchoolInModal" onclick="submitCurrentModalToSchool()">
                         <i class="bi bi-send-check-fill me-1"></i> Trình Trường Ký Xác Nhận Chuyển Tiền
                     </button>
@@ -4284,6 +4406,9 @@ function closeSidebarUserMenu() {
  * =========================================================
  */
 function navigateToPage(pageName) {
+    if (pageName === 'admin-management') {
+        pageName = 'user-roles';
+    }
     // RBAC Client-side Navigation Guard
     if (pageName === 'accounting' && !userPermissions.canViewAccounting) {
         showToast('Bạn không có quyền truy cập Bảng Nghiệm Thu Kế Toán. Quyền này chỉ dành cho Kế toán, Trưởng hành chính và Ban Giám hiệu.', 'warning');
@@ -4724,15 +4849,15 @@ function renderDayView(dateStr) {
         const card = document.createElement('div');
         card.className = 'timeline-card';
         card.innerHTML = `
-            <div class="d-flex align-items-center gap-3">
-                <div class="text-center px-3 py-2 rounded-3 border" style="background:var(--ux-surface-2); border-color:var(--ux-line) !important; min-width:90px;">
-                    <span class="fw-bolder fs-5 d-block num-tabular" style="color:var(--ux-accent);">${startTime}</span>
-                    <small class="fw-bold num-tabular" style="color:var(--ux-ink-3);">${endTime}</small>
+            <div class="d-flex align-items-center gap-2.5">
+                <div class="text-center px-2 py-1.5 rounded-2 border" style="background:var(--ux-surface-2); border-color:var(--ux-line) !important; min-width:68px;">
+                    <span class="fw-bold d-block num-tabular" style="color:var(--ux-accent); font-size:14px; line-height:1.2;">${startTime}</span>
+                    <small class="num-tabular" style="color:var(--ux-ink-3); font-size:10.5px;">${endTime}</small>
                 </div>
                 <div>
-                    <span class="badge mb-1 num-tabular" style="background:var(--ux-surface-3); color:var(--ux-ink-2); border:1px solid var(--ux-line); font-size:11px;">${s.event_title}</span>
-                    <h5 class="fw-bold mb-1" style="color:var(--ux-ink);">${s.name}</h5>
-                    <div class="d-flex flex-wrap align-items-center gap-3 small" style="color:var(--ux-ink-3);">
+                    <span class="badge mb-0.5 num-tabular" style="background:var(--ux-surface-3); color:var(--ux-ink-2); border:1px solid var(--ux-line); font-size:10px; padding:2px 6px;">${s.event_title}</span>
+                    <h6 class="fw-bold mb-0.5" style="color:var(--ux-ink); font-size:13.5px;">${s.name}</h6>
+                    <div class="d-flex flex-wrap align-items-center gap-2.5" style="color:var(--ux-ink-3); font-size:11.5px;">
                         <span><i class="bi bi-geo-alt-fill text-danger me-1"></i>${s.location_name || 'Hội trường'}</span>
                         <span class="num-tabular"><i class="bi bi-people-fill text-info me-1"></i>Đã tuyển: <strong>${s.approved_qty}/${s.target_qty} CTV</strong></span>
                         <span class="text-success fw-bold num-tabular"><i class="bi bi-cash me-1"></i>Thù lao: ${allowance}</span>
@@ -4741,21 +4866,21 @@ function renderDayView(dateStr) {
             </div>
             <div class="d-flex align-items-center gap-2">
                 ${isMine 
-                    ? `<span class="badge bg-success px-3 py-2 fs-6 fw-bold"><i class="bi bi-check-circle me-1"></i>Bạn Đã Đăng Ký</span>` 
+                    ? `<span class="badge bg-success px-2.5 py-1.5 fw-bold" style="font-size:11.5px;"><i class="bi bi-check-circle me-1"></i>Bạn Đã Đăng Ký</span>` 
                     : (userPermissions.canRegisterShift
-                        ? `<button class="btn-fpt-primary" onclick="openShiftDetail(${s.id})">
+                        ? `<button class="btn-fpt-primary btn-fpt-sm" onclick="openShiftDetail(${s.id})">
                             ${isFull ? 'Đăng Ký Dự Phòng' : 'Đăng Ký Ca Này'}
                            </button>`
                         : (userPermissions.canCreateShift
-                            ? `<button class="btn-fpt-secondary" onclick="openShiftDetail(${s.id})">
+                            ? `<button class="btn-fpt-secondary btn-fpt-sm" onclick="openShiftDetail(${s.id})">
                                 <i class="bi bi-gear me-1"></i> Quản Lý Ca
                                </button>`
-                            : `<button class="btn-fpt-secondary" onclick="openShiftDetail(${s.id})">
+                            : `<button class="btn-fpt-secondary btn-fpt-sm" onclick="openShiftDetail(${s.id})">
                                 <i class="bi bi-eye me-1"></i> Chi Tiết Ca
                                </button>`))
                 }
-                <button class="btn-fpt-ghost" onclick="openShiftDetail(${s.id})" title="Xem chi tiết">
-                    <i class="bi bi-info-circle fs-5"></i>
+                <button class="btn-fpt-ghost btn-fpt-sm p-1" onclick="openShiftDetail(${s.id})" title="Xem chi tiết">
+                    <i class="bi bi-info-circle fs-6"></i>
                 </button>
             </div>
         `;
@@ -5827,14 +5952,28 @@ function openContractModal(assignmentId) {
                 <i class="bi bi-hourglass-split me-1"></i> Đang Chờ Ký Duyệt
             </span>
         `;
-        // Phân quyền chặt chẽ: Chỉ Cán bộ / Admin được thấy nút Trình Trường Ký, CTV tuyệt đối không thấy
-        const canSubmitSchool = userPermissions && (userPermissions.canSubmitSchoolSigning || ['HEAD_ADMIN', 'ADMIN'].includes(userPermissions.role));
+        // Phân quyền chặt chẽ: Chỉ Cán bộ, Giảng viên / Admin được thấy nút Trình Trường Ký, CTV tuyệt đối không thấy
+        const canSubmitSchool = userPermissions && (userPermissions.canSubmitSchoolSigning || ['HEAD_ADMIN', 'ADMIN', 'LECTURER'].includes(userPermissions.role));
         if (submitBtn) {
             submitBtn.style.display = canSubmitSchool ? 'inline-block' : 'none';
         }
     }
 
+    // Nút Duyệt Nghiệm Thu ngay trong Modal dành cho Giảng viên & Admin
+    const verifyModalBtn = document.getElementById('btnVerifyInModal');
+    const isVerifiedAcc = (parseInt(acc.lecturer_verified) === 1 || parseInt(acc.my_lecturer_verified) === 1);
+    const canVerifyAcc = userPermissions && (userPermissions.canVerifyLecturer || ['HEAD_ADMIN', 'ADMIN', 'LECTURER'].includes(userPermissions.role));
+    if (verifyModalBtn) {
+        verifyModalBtn.style.display = (!isVerifiedAcc && canVerifyAcc) ? 'inline-block' : 'none';
+    }
+
     contractModalInstance.show();
+}
+
+async function verifyCurrentModalLecturer() {
+    if (!currentContractAssignmentId) return;
+    await verifyLecturerInCard(currentContractAssignmentId);
+    openContractModal(currentContractAssignmentId);
 }
 
 /**
