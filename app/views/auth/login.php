@@ -309,7 +309,7 @@
                 <!-- Header on Mobile / Card Header -->
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-white p-1.5 px-2.5 rounded-3 border shadow-xs" style="height: 40px; display: inline-flex; align-items: center;">
+                        <div class="d-inline-flex align-items-center justify-content-center p-1 rounded-3" style="height: 40px; border: none !important; box-shadow: none !important; background: transparent;">
                             <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 26px; width: auto; object-fit: contain;">
                         </div>
                         <div class="vr" style="height: 24px; opacity: 0.25;"></div>

@@ -194,7 +194,8 @@ assertTest("Ghi nhận sự kiện GRANT_ROLE vào Audit Trail thành công", (i
 
 // 7.5. Mô phỏng chức năng CTV xóa tài khoản cá nhân (is_active = 0 & audit log)
 $tempCtvEmail = "test_delete_" . time() . "@fpt.edu.vn";
-$db->prepare("INSERT INTO users (role_id, student_code, full_name, email, password_hash, is_active, created_at) VALUES (4, 'PI99999', 'CTV Test Xóa', :email, 'hash', 1, datetime('now', 'localtime'))")->execute([':email' => $tempCtvEmail]);
+$tempStudentCode = 'PI' . substr((string)(time() . rand(100, 999)), -5);
+$db->prepare("INSERT INTO users (role_id, student_code, full_name, email, password_hash, is_active, created_at) VALUES (4, :code, 'CTV Test Xóa', :email, 'hash', 1, datetime('now', 'localtime'))")->execute([':code' => $tempStudentCode, ':email' => $tempCtvEmail]);
 $tempUid = (int)$db->lastInsertId();
 
 $stmtDel = $db->prepare("UPDATE users SET is_active = 0 WHERE id = :uid");

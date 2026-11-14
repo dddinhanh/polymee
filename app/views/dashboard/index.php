@@ -151,7 +151,7 @@
         border-radius: 20px;
         background: #FFFFFF;
         color: #1D1D1F;
-        overflow: hidden;
+        overflow: visible;
         display: flex;
         flex-direction: column;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
@@ -492,6 +492,58 @@
     .u040.is-wide .u040-me span {
         opacity: 1;
         transition-delay: .25s;
+    }
+
+    .u040-me:hover {
+        background: #EBEBEF;
+        cursor: pointer;
+    }
+
+    #sidebarUserMenuBtn[aria-expanded="true"] .u040-chevron {
+        transform: rotate(90deg);
+    }
+
+    /* Apple-Grade Floating Sidebar Account Flyout (Adjacent to Rail, Never Covers Navigation) */
+    .sidebar-account-flyout.dropdown-menu {
+        position: fixed !important;
+        left: calc(var(--rw, 252px) + 24px) !important;
+        bottom: 16px !important;
+        top: auto !important;
+        transform: none !important;
+        width: 320px !important;
+        max-height: calc(100vh - 32px) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        border-radius: 20px !important;
+        background: #FFFFFF !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 20px 50px -6px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.04) !important;
+        z-index: 99999 !important;
+        transition: left .5s var(--ux-spring);
+        animation: accountFlyoutIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes accountFlyoutIn {
+        from { opacity: 0; transform: translateX(-8px) scale(0.97); }
+        to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    .sidebar-account-flyout::-webkit-scrollbar {
+        width: 5px;
+    }
+    .sidebar-account-flyout::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 10px;
+    }
+
+    @media (max-width: 767.98px) {
+        .sidebar-account-flyout.dropdown-menu {
+            left: 12px !important;
+            right: 12px !important;
+            bottom: 12px !important;
+            width: auto !important;
+            max-width: calc(100vw - 24px) !important;
+        }
     }
 
     /* =========================================================
@@ -1331,143 +1383,108 @@
                     <?php endif; ?>
                 </ul>
 
-                <!-- Profile Footer With Account Switcher, Login & Logout (Dropup Menu) -->
-                <div class="dropup w-100 position-relative" style="margin-top: auto; z-index: 1080;">
-                    <button class="u040-me w-100 border-0 text-start d-flex align-items-center" type="button" id="sidebarUserMenuBtn" data-bs-toggle="dropdown" aria-expanded="false" title="Nhấp để chuyển đổi vai trò, cài đặt hoặc đăng xuất">
+                <!-- Profile Footer With Side Account Flyout (Never Covers Navigation) -->
+                <div class="u040-user-menu-wrapper w-100 position-relative" style="margin-top: auto; z-index: 1080;">
+                    <button class="u040-me w-100 border-0 text-start d-flex align-items-center" type="button" id="sidebarUserMenuBtn" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" title="Nhấp để chuyển đổi vai trò, cài đặt hoặc đăng xuất">
                         <i aria-hidden="true"><?= mb_substr($currentUser['full_name'] ?? 'U', 0, 1) ?></i>
                         <span class="flex-grow-1 overflow-hidden text-truncate">
                             <?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?>
                             <small><?= htmlspecialchars($currentUser['role_name'] ?? 'Sinh viên') ?> • <?= htmlspecialchars($currentUser['student_code'] ?? 'CTV') ?></small>
                         </span>
-                        <svg class="u040-chevron d-none d-md-block flex-shrink-0 ms-auto me-1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.45;"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                        <svg class="u040-chevron d-none d-md-block flex-shrink-0 ms-auto me-1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.45; transition: transform 0.2s;"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-start shadow-xl border-0 py-2 rounded-4" aria-labelledby="sidebarUserMenuBtn" style="font-size: 12.5px; width: 295px; margin-bottom: 8px; z-index: 99999 !important; background: #FFFFFF; box-shadow: 0 16px 40px rgba(0,0,0,0.14); border: 1px solid rgba(0,0,0,0.08) !important;">
+                    <div class="dropdown-menu sidebar-account-flyout p-0 border-0" id="sidebarUserFlyoutMenu" aria-labelledby="sidebarUserMenuBtn">
                         <!-- Current User Header Card -->
-                        <li class="px-3 py-2 border-bottom mb-1 bg-light rounded-top-4" style="margin-top: -8px;">
+                        <div class="p-3 border-bottom" style="background: #FAFAFC; border-color: rgba(0,0,0,0.06) !important; border-top-left-radius: 20px; border-top-right-radius: 20px;">
                             <div class="d-flex align-items-center gap-2.5">
-                                <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 36px; height: 36px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
+                                <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 38px; height: 38px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
                                     <?= mb_substr($currentUser['full_name'] ?? 'U', 0, 1) ?>
                                 </div>
                                 <div class="overflow-hidden">
-                                    <strong class="d-block text-truncate" style="color: var(--ux-ink); font-size: 13.5px;"><?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?></strong>
+                                    <strong class="d-block text-truncate" style="color: #1D1D1F; font-size: 13.5px;"><?= htmlspecialchars($currentUser['full_name'] ?? 'User') ?></strong>
                                     <span class="badge px-2 py-0.5 rounded-pill font-monospace" style="font-size: 10px; background: rgba(234, 88, 12, 0.1); color: var(--ux-accent);"><?= htmlspecialchars($currentUser['role_name'] ?? 'Sinh viên') ?> • <?= htmlspecialchars($currentUser['student_code'] ?? 'CTV') ?></span>
                                 </div>
                             </div>
-                        </li>
+                        </div>
 
-                        <!-- Personal Account Settings -->
-                        <li>
-                            <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="javascript:void(0)" onclick="navigateToPage('profile-settings')">
-                                <i class="bi bi-person-gear text-primary fs-6"></i>
+                        <!-- Quick Navigation Actions -->
+                        <div class="p-2 border-bottom" style="border-color: rgba(0,0,0,0.06) !important;">
+                            <a class="dropdown-item py-2 px-2.5 rounded-3 d-flex align-items-center gap-2.5" href="javascript:void(0)" onclick="navigateToPage('profile-settings'); closeSidebarUserMenu();">
+                                <div class="d-grid place-items-center rounded-2 bg-primary-subtle text-primary flex-shrink-0" style="width: 28px; height: 28px; font-size: 14px;">
+                                    <i class="bi bi-person-gear"></i>
+                                </div>
                                 <div>
-                                    <span class="fw-semibold text-dark">Cài Đặt Tài Khoản Cá Nhân</span>
-                                    <small class="d-block text-muted" style="font-size: 10.5px;">Hồ sơ, mật khẩu & xóa tài khoản</small>
+                                    <span class="fw-semibold text-dark d-block" style="font-size: 12.5px;">Cài Đặt Tài Khoản Cá Nhân</span>
+                                    <small class="text-muted" style="font-size: 10.5px;">Hồ sơ, mật khẩu & xóa tài khoản</small>
                                 </div>
                             </a>
-                        </li>
 
-                        <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-                        <li>
-                            <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="javascript:void(0)" onclick="navigateToPage('admin-management')">
-                                <i class="bi bi-shield-lock-fill text-warning fs-6"></i>
+                            <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
+                            <a class="dropdown-item py-2 px-2.5 rounded-3 d-flex align-items-center gap-2.5 mt-1" href="javascript:void(0)" onclick="navigateToPage('admin-management'); closeSidebarUserMenu();">
+                                <div class="d-grid place-items-center rounded-2 bg-warning-subtle text-warning-emphasis flex-shrink-0" style="width: 28px; height: 28px; font-size: 14px;">
+                                    <i class="bi bi-shield-lock-fill"></i>
+                                </div>
                                 <div>
-                                    <span class="fw-semibold text-dark">Cấp Quyền & Nhật Ký Kiểm Toán</span>
-                                    <small class="d-block text-muted" style="font-size: 10.5px;">Phân quyền Admin & Audit Trail</small>
+                                    <span class="fw-semibold text-dark d-block" style="font-size: 12.5px;">Cấp Quyền & Nhật Ký Kiểm Toán</span>
+                                    <small class="text-muted" style="font-size: 10.5px;">Phân quyền Admin & Audit Trail</small>
                                 </div>
                             </a>
-                        </li>
-                        <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
 
-                        <li><hr class="dropdown-divider my-1.5"></li>
+                        <!-- 6 Demo Roles Switcher (Compact 2-Column Grid) -->
+                        <div class="p-2.5 border-bottom" style="border-color: rgba(0,0,0,0.06) !important;">
+                            <div class="d-flex align-items-center justify-content-between mb-2 px-1">
+                                <span class="text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 0.05em; color: #86868B;">
+                                    <i class="bi bi-arrow-left-right me-1 text-warning"></i> Chuyển Đổi Role Demo
+                                </span>
+                                <span class="badge rounded-pill bg-light text-secondary border" style="font-size: 9.5px;">6 Roles</span>
+                            </div>
+                            <div class="d-grid gap-1.5" style="grid-template-columns: 1fr 1fr;">
+                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 3 ? 'active fw-bold' : '' ?>" href="/home/switchUser/3" title="CTV Media">
+                                    <span class="badge rounded-circle bg-primary-subtle text-primary flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">PA</span>
+                                    <span class="text-truncate" style="font-size: 11px;">Phương Anh</span>
+                                </a>
+                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 4 ? 'active fw-bold' : '' ?>" href="/home/switchUser/4" title="CTV Lễ Tân">
+                                    <span class="badge rounded-circle bg-success-subtle text-success flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">ĐM</span>
+                                    <span class="text-truncate" style="font-size: 11px;">Đức Mạnh</span>
+                                </a>
+                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 2 ? 'active fw-bold' : '' ?>" href="/home/switchUser/2" title="Giảng Viên / BTC">
+                                    <span class="badge rounded-circle bg-warning-subtle text-warning-emphasis flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">GV</span>
+                                    <span class="text-truncate" style="font-size: 11px;">Thầy Khải</span>
+                                </a>
+                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 8 ? 'active fw-bold' : '' ?>" href="/home/switchUser/8" title="Hành Chính">
+                                    <span class="badge rounded-circle bg-info-subtle text-info-emphasis flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">HC</span>
+                                    <span class="text-truncate" style="font-size: 11px;">Đình Tuấn</span>
+                                </a>
+                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 7 ? 'active fw-bold' : '' ?>" href="/home/switchUser/7" title="Kế Toán">
+                                    <span class="badge rounded-circle bg-success-subtle text-success flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">KT</span>
+                                    <span class="text-truncate" style="font-size: 11px;">Thu Thảo</span>
+                                </a>
+                                <a class="dropdown-item p-1.5 rounded-2 d-flex align-items-center gap-1.5 <?= ($currentUser['id'] ?? 0) == 1 ? 'active fw-bold' : '' ?>" href="/home/switchUser/1" title="Admin Toàn Quyền">
+                                    <span class="badge rounded-circle bg-danger-subtle text-danger flex-shrink-0 d-grid place-items-center" style="width:22px;height:22px;font-size:9px;">AD</span>
+                                    <span class="text-truncate" style="font-size: 11px;">Quản Trị</span>
+                                </a>
+                            </div>
+                        </div>
 
-                        <!-- 6 Demo Roles Switcher -->
-                        <li class="dropdown-header text-uppercase fw-bold px-3 py-1" style="font-size: 10px; letter-spacing: 0.04em; color: var(--ux-ink-3);">
-                            <i class="bi bi-arrow-left-right me-1 text-warning"></i> Chuyển Đổi Tài Khoản Demo (6 Role)
-                        </li>
-                        <li>
-                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 3 ? 'active fw-bold' : '' ?>" href="/home/switchUser/3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="avatar-circle bg-primary-subtle text-primary fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">PA</span>
-                                    <div>
-                                        <strong style="font-size: 12px;">Đinh N. Phương Anh</strong> <small class="text-muted">(CTV Media)</small>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 4 ? 'active fw-bold' : '' ?>" href="/home/switchUser/4">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="avatar-circle bg-success-subtle text-success fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">ĐM</span>
-                                    <div>
-                                        <strong style="font-size: 12px;">Lê Đức Mạnh</strong> <small class="text-muted">(CTV Lễ Tân)</small>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 2 ? 'active fw-bold' : '' ?>" href="/home/switchUser/2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="avatar-circle bg-warning-subtle text-warning-emphasis fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">GV</span>
-                                    <div>
-                                        <strong style="font-size: 12px;">Thầy Phan Hoàng Khải</strong> <small class="text-muted">(Giảng Viên / BTC)</small>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 8 ? 'active fw-bold' : '' ?>" href="/home/switchUser/8">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="avatar-circle bg-info-subtle text-info-emphasis fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">HC</span>
-                                    <div>
-                                        <strong style="font-size: 12px;">Lê Đình Tuấn</strong> <small class="text-muted">(Hành Chính)</small>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 7 ? 'active fw-bold' : '' ?>" href="/home/switchUser/7">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="avatar-circle bg-success-subtle text-success fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">KT</span>
-                                    <div>
-                                        <strong style="font-size: 12px;">Đặng Thu Thảo</strong> <small class="text-muted">(Kế Toán)</small>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item py-1.5 <?= ($currentUser['id'] ?? 0) == 1 ? 'active fw-bold' : '' ?>" href="/home/switchUser/1">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="avatar-circle bg-danger-subtle text-danger fw-bold" style="width:24px;height:24px;font-size:10px;border-radius:50%;display:grid;place-items:center;">AD</span>
-                                    <div>
-                                        <strong style="font-size: 12px;">Quản Trị Viên</strong> <small class="text-muted">(Admin Toàn Quyền)</small>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li><hr class="dropdown-divider my-1.5"></li>
-
-                        <!-- Auth Links: Login, Register, Logout -->
-                        <li>
-                            <a class="dropdown-item py-2 text-primary d-flex align-items-center gap-2" href="/auth/login">
+                        <!-- Auth Actions: Login, Register, Logout -->
+                        <div class="p-2">
+                            <a class="dropdown-item py-1.5 px-2.5 rounded-2 text-primary d-flex align-items-center gap-2" href="/auth/login" style="font-size: 12px;">
                                 <i class="bi bi-box-arrow-in-right"></i>
                                 <span>Đăng Nhập Tài Khoản Khác</span>
                             </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item py-2 text-secondary d-flex align-items-center gap-2" href="/auth/register">
+                            <a class="dropdown-item py-1.5 px-2.5 rounded-2 text-secondary d-flex align-items-center gap-2" href="/auth/register" style="font-size: 12px;">
                                 <i class="bi bi-person-plus"></i>
                                 <span>Đăng Ký CTV Mới</span>
                             </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item py-2 text-danger fw-bold d-flex align-items-center gap-2" href="/auth/logout">
+                            <a class="dropdown-item py-1.5 px-2.5 rounded-2 text-danger fw-bold d-flex align-items-center gap-2 mt-0.5" href="/auth/logout" style="font-size: 12px;">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Đăng Xuất</span>
                             </a>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -3431,6 +3448,20 @@ function initLucianSideRail() {
     });
 
     if (its.length > 0) place(its[0]);
+}
+
+function closeSidebarUserMenu() {
+    const btn = document.getElementById('sidebarUserMenuBtn');
+    if (btn) {
+        const dropdown = bootstrap.Dropdown.getInstance(btn);
+        if (dropdown) {
+            dropdown.hide();
+        } else {
+            const flyout = document.getElementById('sidebarUserFlyoutMenu');
+            if (flyout) flyout.classList.remove('show');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    }
 }
 
 /**
