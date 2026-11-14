@@ -134,18 +134,23 @@
     }
 
     .u040-logo {
-        width: 40px;
-        height: 40px;
+        width: 42px;
+        height: 42px;
         flex: none;
         margin-left: 8px;
         border-radius: 12px;
-        background: linear-gradient(135deg, #F26F21, #FB923C 60%, #0284C7);
-        display: grid;
-        place-items: center;
-        color: #fff;
-        font-weight: 800;
-        font-size: 19px;
-        box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4);
+        background: #ffffff;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+
+    .u040-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     .u040-name {
@@ -939,7 +944,7 @@
                 <!-- Top Brand -->
                 <div class="u040-top">
                     <span class="u040-logo" aria-hidden="true">
-                        <i class="fa-solid fa-graduation-cap"></i>
+                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic">
                     </span>
                     <span class="u040-name">Poly<strong style="color:var(--ux-accent);">Mee</strong></span>
                 </div>
@@ -1027,6 +1032,10 @@
         <header class="dashboard-topbar">
             <!-- Left: Breadcrumbs & Screen Title -->
             <div class="d-flex align-items-center gap-3">
+                <a href="/dashboard" class="d-none d-lg-block text-decoration-none p-1 bg-white rounded-3 shadow-xs border">
+                    <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 30px; width: auto; object-fit: contain;">
+                </a>
+                <div class="vr mx-1 d-none d-lg-block" style="height: 26px; opacity: 0.2;"></div>
                 <div class="d-flex flex-column">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0" style="font-size: 11px; font-weight: 600;">
@@ -2045,16 +2054,19 @@
             </div>
             <div class="modal-body p-4 p-md-5 bg-white" id="contractPrintArea" style="font-family: 'Times New Roman', Times, serif; font-size: 14.5px; line-height: 1.6; color: #111827;">
                 <!-- Header Quốc Hiệu / Đơn Vị -->
-                <div class="row g-2 text-center pb-3 border-bottom mb-4">
-                    <div class="col-6 text-start">
-                        <strong style="font-size: 13px;" class="text-uppercase d-block">TRƯỜNG CAO ĐẲNG FPT POLYTECHNIC</strong>
-                        <span style="font-size: 12.5px;" class="d-block">PHÒNG CÔNG TÁC SINH VIÊN & KẾ TOÁN</span>
-                        <div class="font-monospace text-primary fw-bold mt-1" style="font-size: 12px;" id="contractDocNumber">Số: HDNT-2026-FPLY-001 / HĐNT-FPLY</div>
+                <div class="row g-2 pb-3 border-bottom mb-4 align-items-center">
+                    <div class="col-7 text-start d-flex align-items-center gap-3">
+                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 48px; width: auto; object-fit: contain;" class="flex-shrink-0">
+                        <div>
+                            <strong style="font-size: 13px;" class="text-uppercase d-block">TRƯỜNG CAO ĐẲNG FPT POLYTECHNIC</strong>
+                            <span style="font-size: 12px;" class="d-block text-secondary">PHÒNG CÔNG TÁC SINH VIÊN & KẾ TOÁN</span>
+                            <div class="font-monospace text-primary fw-bold mt-0.5" style="font-size: 11.5px;" id="contractDocNumber">Số: HDNT-2026-FPLY-001 / HĐNT-FPLY</div>
+                        </div>
                     </div>
-                    <div class="col-6 text-end">
-                        <strong style="font-size: 13px;" class="text-uppercase d-block">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong>
-                        <span style="font-size: 12.5px;" class="fw-bold d-block text-decoration-underline">Độc lập - Tự do - Hạnh phúc</span>
-                        <small class="text-muted fst-italic d-block mt-1" style="font-size: 11.5px;">TP. Hồ Chí Minh, ngày 15 tháng 11 năm 2026</small>
+                    <div class="col-5 text-end">
+                        <strong style="font-size: 12.5px;" class="text-uppercase d-block">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong>
+                        <span style="font-size: 12px;" class="fw-bold d-block text-decoration-underline">Độc lập - Tự do - Hạnh phúc</span>
+                        <small class="text-muted fst-italic d-block mt-1" style="font-size: 11px;">TP. Hồ Chí Minh, ngày 15 tháng 11 năm 2026</small>
                     </div>
                 </div>
 

@@ -165,13 +165,12 @@
 <body>
 
     <!-- Header / Brand Strip -->
-    <header class="py-3 px-4 border-bottom bg-white d-flex justify-content-between align-items-center">
-        <a href="/dashboard" class="d-flex align-items-center gap-2 text-decoration-none">
-            <span class="rounded-3 px-2 py-1 bg-warning text-white fw-black" style="background:var(--ux-accent-gradient) !important;">
-                <i class="fa-solid fa-graduation-cap"></i>
-            </span>
+    <header class="py-3 px-4 border-bottom bg-white d-flex justify-content-between align-items-center shadow-xs">
+        <a href="/dashboard" class="d-flex align-items-center text-decoration-none">
+            <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 36px; width: auto; object-fit: contain;" class="me-2">
+            <div class="vr mx-2 d-none d-sm-block" style="height: 24px; opacity: 0.25;"></div>
             <span class="fw-bold fs-5 tracking-tight text-dark">Poly<strong style="color:var(--ux-accent);">Mee</strong></span>
-            <span class="badge bg-light text-muted border">WEB212</span>
+            <span class="badge bg-light text-muted border ms-2">WEB212</span>
         </a>
         <a href="/dashboard" class="btn-fpt-secondary btn-fpt-sm">
             <i class="bi bi-grid-3x3-gap-fill me-1"></i> Vào Bảng Lịch (Dashboard)
@@ -184,8 +183,8 @@
             
             <!-- Auth Header -->
             <div class="auth-header">
-                <div class="auth-logo-badge">
-                    <i class="fa-solid fa-lock"></i>
+                <div class="d-inline-flex p-2 bg-white rounded-3 shadow-sm mb-3">
+                    <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 44px; width: auto; object-fit: contain;">
                 </div>
                 <h4 class="fw-bold mb-1">Đăng Nhập PolyMee</h4>
                 <p class="small mb-0 text-white-50">Cổng Quản Trị Hoạt Động & Nghiệm Thu Thù Lao CTV</p>

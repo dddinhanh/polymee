@@ -109,15 +109,15 @@ flowchart LR
     subgraph "Hệ Thống PolyMee (WEB212)"
         UC1["Xem Bảng Lịch Trung Tâm (Tháng/Tuần/Ngày)"]
         UC2["Đăng Ký Ca Trực (Collision Detection)"]
-        UC3["Quét Mã Dynamic QR Điểm Danh"]
+        UC3["Nộp Ảnh Hiện Trường Minh Chứng"]
         UC4["Hồ Sơ Nhận Thù Lao & VNeID"]
         UC5["Nộp Minh Chứng Google Drive"]
         UC6["Thẩm Định Drive & Duyệt Điểm Rèn Luyện"]
         UC7["Tạo Sự Kiện & Phân Rã Ca Trực"]
         UC8["Thêm Ghi Chú Lịch (Apple Memos)"]
-        UC9["Nghiệm Thu Thù Lao & Xuất CSV Kế Toán"]
+        UC9["GV Nghiệm Thu & Khởi Tạo Hợp Đồng"]
         UC10["Trợ Lý AI Tư Vấn & Function Calling"]
-        UC11["Vận Hành Máy Chiếu Dynamic QR (HMAC-30s)"]
+        UC11["Hồ Sơ Hợp Đồng & Trình Trường Ký Duyệt"]
     end
 
     ST --> UC1
@@ -134,8 +134,10 @@ flowchart LR
     ORG --> UC6
     ORG --> UC7
     ORG --> UC8
+    ORG --> UC9
 
     ACC --> UC9
+    ACC --> UC11
     ACC --> UC1
 
     ADM --> UC11

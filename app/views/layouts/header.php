@@ -84,12 +84,12 @@ declare(strict_types=1);
         <div class="flex items-center justify-between h-16">
             
             <!-- Logo & Brand -->
-            <div class="flex items-center gap-8">
+            <div class="flex items-center gap-6">
                 <a href="/" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-fpoly-primary to-orange-400 flex items-center justify-center text-white font-black text-xl shadow-md shadow-orange-500/30 group-hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-calendar-check text-lg"></i>
+                    <div class="h-10 px-2.5 py-1 bg-white rounded-xl flex items-center justify-center shadow-sm border border-slate-200 group-hover:shadow transition-all">
+                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic Logo" class="h-7 w-auto object-contain">
                     </div>
-                    <div>
+                    <div class="hidden sm:block">
                         <div class="flex items-center gap-1.5">
                             <span class="font-extrabold text-xl tracking-tight text-slate-900 group-hover:text-fpoly-primary transition-colors">Poly<span class="text-fpoly-primary">Mee</span></span>
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-700">AI</span>
