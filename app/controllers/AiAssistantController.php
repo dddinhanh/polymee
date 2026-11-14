@@ -192,14 +192,14 @@ class AiAssistantController extends BaseController
                 $slotText = "Đang bận: " . implode(', ', $occupied) . ". Trống các khung giờ còn lại.";
             }
 
-            $html .= '<div class="p-2.5 bg-light rounded-3 border mb-2 shadow-xs">';
-            $html .= '<div class="d-flex justify-content-between align-items-start mb-1">';
-            $html .= '<div><strong class="text-dark">' . ($i + 1) . '. ' . htmlspecialchars($loc['name']) . '</strong></div>';
+            $html .= '<div class="p-3.5 bg-light rounded-3 border mb-3 shadow-xs" style="line-height:1.5;">';
+            $html .= '<div class="d-flex justify-content-between align-items-center mb-1.5">';
+            $html .= '<div><strong class="text-dark" style="font-size:14px;">' . ($i + 1) . '. ' . htmlspecialchars($loc['name']) . '</strong></div>';
             $html .= $statusBadge;
             $html .= '</div>';
-            $html .= '<div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>' . htmlspecialchars($loc['address']) . ' • Sức chứa: <strong>' . $loc['capacity'] . ' chỗ</strong></div>';
-            $html .= '<div class="small text-secondary mb-2"><i class="bi bi-clock-history me-1"></i>' . $slotText . '</div>';
-            $html .= '<button class="btn btn-sm btn-outline-primary py-0.5 px-2.5 rounded-pill" onclick="quickAskAi(\'Đặt giúp lịch sự kiện tại ' . addslashes($loc['name']) . ', khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu\')"><i class="bi bi-calendar-plus me-1"></i> Đặt Sự Kiện Tại Phòng Này</button>';
+            $html .= '<div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1.5 text-danger"></i>' . htmlspecialchars($loc['address']) . ' <span class="mx-1">•</span> Sức chứa: <strong class="text-dark">' . $loc['capacity'] . ' chỗ</strong></div>';
+            $html .= '<div class="small text-secondary mb-2.5"><i class="bi bi-clock-history me-1.5 text-info"></i>' . $slotText . '</div>';
+            $html .= '<button class="btn btn-sm btn-outline-primary px-3 py-1.5 rounded-pill shadow-xs" style="font-size:12px; font-weight:600;" onclick="quickAskAi(\'Đặt giúp lịch sự kiện tại ' . addslashes($loc['name']) . ', khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu\')"><i class="bi bi-calendar-plus me-1"></i> Đặt Sự Kiện Tại Phòng Này</button>';
             $html .= '</div>';
 
             $plain .= sprintf("%d. **%s** (Sức chứa %d chỗ)\n   • Vị trí: %s\n   • Trạng thái: %s\n\n",
@@ -232,21 +232,21 @@ class AiAssistantController extends BaseController
                 ORDER BY u.id ASC";
         $ctvs = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
-        $html = '<div class="ai-card p-3 rounded-3 bg-white border shadow-xs mb-2">';
-        $html .= '<h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-1.5"><i class="bi bi-people-fill text-warning"></i> DANH SÁCH CỘNG TÁC VIÊN (CTV) SẴN SÀNG NHẬN CA:</h6>';
+        $html = '<div class="ai-card p-3.5 rounded-4 bg-white border shadow-sm mb-3">';
+        $html .= '<h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2" style="font-size:13.5px;"><i class="bi bi-people-fill text-warning fs-6"></i> DANH SÁCH CỘNG TÁC VIÊN (CTV) SẴN SÀNG NHẬN CA:</h6>';
         
         $plain = "👥 **DANH SÁCH CỘNG TÁC VIÊN (CTV) SẴN SÀNG NHẬN CA:**\n\n";
 
         foreach ($ctvs as $i => $c) {
-            $html .= '<div class="p-2.5 bg-light rounded-3 border mb-2 shadow-xs d-flex justify-content-between align-items-center">';
-            $html .= '<div>';
-            $html .= '<div class="fw-bold text-dark">' . htmlspecialchars($c['full_name']) . ' <span class="badge bg-white text-secondary border font-monospace">' . htmlspecialchars($c['student_code']) . '</span></div>';
-            $html .= '<div class="small text-muted"><i class="bi bi-award me-1 text-warning"></i>Kỹ năng: <strong>' . htmlspecialchars($c['skills'] ?? 'Đa năng') . '</strong></div>';
-            $html .= '<div class="small text-secondary"><i class="bi bi-envelope me-1"></i>' . htmlspecialchars($c['email']) . ' • SĐT: ' . htmlspecialchars($c['phone'] ?? '09xx') . '</div>';
+            $html .= '<div class="p-3.5 bg-light rounded-3 border mb-3 shadow-xs d-flex justify-content-between align-items-center gap-3">';
+            $html .= '<div style="line-height: 1.5;">';
+            $html .= '<div class="fw-bold text-dark mb-1.5" style="font-size:14px;">' . htmlspecialchars($c['full_name']) . ' <span class="badge bg-white text-secondary border font-monospace ms-1.5 px-2 py-0.5" style="font-size:11px;">' . htmlspecialchars($c['student_code']) . '</span></div>';
+            $html .= '<div class="small text-muted mb-1"><i class="bi bi-award me-1.5 text-warning"></i>Kỹ năng: <strong class="text-dark">' . htmlspecialchars($c['skills'] ?? 'Đa năng') . '</strong></div>';
+            $html .= '<div class="small text-secondary"><i class="bi bi-envelope me-1.5"></i>' . htmlspecialchars($c['email']) . ' <span class="mx-1">•</span> SĐT: ' . htmlspecialchars($c['phone'] ?? '09xx') . '</div>';
             $html .= '</div>';
-            $html .= '<div class="text-end">';
-            $html .= '<span class="badge bg-success-subtle text-success border border-success-subtle mb-1 d-block"><i class="bi bi-check-circle-fill me-1"></i>Đang Rảnh</span>';
-            $html .= '<button class="btn btn-sm btn-outline-warning py-0.5 px-2 rounded-pill" onclick="quickAskAi(\'Gửi mail cho CTV ' . addslashes($c['full_name']) . ' đăng ký lịch ca trực sắp tới\')"><i class="bi bi-envelope-plus me-1"></i> Gửi Mail</button>';
+            $html .= '<div class="d-flex flex-column align-items-end justify-content-center gap-2 flex-shrink-0">';
+            $html .= '<span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill" style="font-size:11px;"><i class="bi bi-check-circle-fill me-1"></i>Đang Rảnh</span>';
+            $html .= '<button class="btn btn-sm btn-outline-warning px-3 py-1 rounded-pill shadow-xs" style="font-size:12px; font-weight:600;" onclick="quickAskAi(\'Gửi mail cho CTV ' . addslashes($c['full_name']) . ' đăng ký lịch ca trực sắp tới\')"><i class="bi bi-envelope-plus me-1"></i> Gửi Mail</button>';
             $html .= '</div>';
             $html .= '</div>';
 
@@ -255,8 +255,8 @@ class AiAssistantController extends BaseController
             );
         }
 
-        $html .= '<div class="mt-2.5 pt-2 border-top d-flex gap-2">';
-        $html .= '<button class="btn btn-sm btn-fpt-primary rounded-pill px-3" onclick="quickAskAi(\'Gửi mail cho tất cả CTV đăng ký lịch ca trực\')"><i class="bi bi-send-check-fill me-1"></i> Gửi Mail Mời Tất Cả CTV</button>';
+        $html .= '<div class="mt-3 pt-2.5 border-top d-flex gap-2">';
+        $html .= '<button class="btn btn-sm btn-fpt-primary rounded-pill px-3.5 py-1.5" style="font-weight:600;" onclick="quickAskAi(\'Gửi mail cho tất cả CTV đăng ký lịch ca trực\')"><i class="bi bi-send-check-fill me-1"></i> Gửi Mail Mời Tất Cả CTV</button>';
         $html .= '</div>';
         $html .= '</div>';
 

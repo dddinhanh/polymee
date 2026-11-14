@@ -362,6 +362,80 @@ class DashboardController extends BaseController
     }
 
     /**
+     * Thêm ghi chú / lịch hẹn mới vào CSDL
+     */
+    public function addNote(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['success' => false, 'message' => 'Yêu cầu không hợp lệ'], 400);
+            return;
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
+        $title = trim($input['title'] ?? '');
+        $date = trim($input['date'] ?? '');
+        $content = trim($input['content'] ?? '') ?: $title;
+        $type = trim($input['type'] ?? 'EVENT_REMINDER');
+        $author = $this->currentUser['full_name'] ?? 'BTC';
+
+        if (!$title || !$date) {
+            $this->json(['success' => false, 'message' => 'Vui lòng nhập đầy đủ tiêu đề và ngày áp dụng'], 422);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare("INSERT INTO calendar_notes (date, title, content, type, author, color) VALUES (:date, :title, :content, :type, :author, :color)");
+        $stmt->execute([
+            ':date' => $date,
+            ':title' => $title,
+            ':content' => $content,
+            ':type' => $type,
+            ':author' => $author,
+            ':color' => '#EA580C'
+        ]);
+
+        $newId = (int)$db->lastInsertId();
+
+        $this->json([
+            'success' => true,
+            'message' => 'Đã lưu lịch hẹn / ghi chú thành công!',
+            'note' => [
+                'id' => $newId,
+                'date' => $date,
+                'target_date' => $date,
+                'title' => $title,
+                'content' => $content,
+                'type' => $type,
+                'note_type' => $type,
+                'author' => $author,
+                'creator_name' => $author,
+                'color' => '#EA580C'
+            ]
+        ]);
+    }
+
+    /**
+     * Xóa lịch hẹn / ghi chú theo ID
+     */
+    public function deleteNote(int|string $id): void
+    {
+        $noteId = (int)$id;
+        if ($noteId <= 0) {
+            $this->json(['success' => false, 'message' => 'ID lịch hẹn không hợp lệ'], 400);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare("DELETE FROM calendar_notes WHERE id = :id");
+        $stmt->execute([':id' => $noteId]);
+
+        $this->json([
+            'success' => true,
+            'message' => 'Đã xóa lịch hẹn thành công khỏi hệ thống!'
+        ]);
+    }
+
+    /**
      * Render view Bootstrap 5 độc lập
      */
     private function renderBootstrapDashboard(string $view, array $data = []): void

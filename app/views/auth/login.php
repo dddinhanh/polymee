@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi" data-bs-theme="light">
+<html lang="vi" data-bs-theme="dark" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($pageTitle ?? 'Đăng Nhập PolyMee - FPT Polytechnic') ?></title>
+    <meta name="color-scheme" content="dark light">
+    <title><?= htmlspecialchars($pageTitle ?? 'Đăng Nhập PolyMee - FPT Polytechnic Hub') ?></title>
 
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,18 +18,41 @@
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- PolyMee Design-Engineered Stylesheet (design-taste-frontend-v1) -->
+    <!-- PolyMee Design-Engineered Stylesheet -->
     <link rel="stylesheet" href="/assets/css/style.css">
 
     <style>
-    :root {
+    :root, [data-bs-theme="dark"] {
+        color-scheme: dark;
+        --ux-page: #0B0F17;
+        --ux-surface: #111827;
+        --ux-surface-2: #162032;
+        --ux-surface-3: #1E293B;
+        --ux-ink: #F8FAFC;
+        --ux-ink-2: #CBD5E1;
+        --ux-ink-3: #94A3B8;
+        --ux-line: rgba(255, 255, 255, 0.08);
+        --ux-line-2: rgba(255, 255, 255, 0.16);
+        --ux-accent: #EA580C;
+        --ux-accent-hover: #F97316;
+        --ux-accent-soft: rgba(234, 88, 12, 0.14);
+        --ux-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-bs-theme="light"] {
+        color-scheme: light;
         --ux-page: #F8FAFC;
+        --ux-surface: #FFFFFF;
+        --ux-surface-2: #F1F5F9;
+        --ux-surface-3: #E2E8F0;
         --ux-ink: #0F172A;
+        --ux-ink-2: #334155;
+        --ux-ink-3: #64748B;
+        --ux-line: #E2E8F0;
+        --ux-line-2: #CBD5E1;
         --ux-accent: #EA580C;
         --ux-accent-hover: #C2410C;
-        --ux-accent-gradient: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
-        --ux-navy-gradient: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
-        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        --ux-accent-soft: #FFF7ED;
     }
 
     body {
@@ -36,163 +60,257 @@
         background-color: var(--ux-page);
         color: var(--ux-ink);
         min-height: 100vh;
+        margin: 0;
         display: flex;
         flex-direction: column;
-        margin: 0;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(242, 111, 33, 0.08) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(10, 25, 47, 0.08) 0px, transparent 50%);
+        overflow-x: hidden;
     }
 
     .num-tabular {
         font-variant-numeric: tabular-nums;
     }
 
-    .auth-container {
+    /* Split-Screen Layout */
+    .auth-split-wrapper {
+        min-height: 100vh;
+        display: flex;
+        flex: 1;
+    }
+
+    .auth-hero-pane {
+        flex: 1.1;
+        background: radial-gradient(circle at 10% 20%, rgba(234, 88, 12, 0.15) 0%, transparent 40%),
+                    radial-gradient(circle at 90% 80%, rgba(2, 132, 199, 0.1) 0%, transparent 40%),
+                    linear-gradient(180deg, #0B0F17 0%, #111827 100%);
+        border-right: 1px solid var(--ux-line);
+        padding: 50px 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+
+    .auth-form-pane {
         flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px 16px;
-    }
-
-    .auth-card {
-        background: #FFFFFF;
-        border: 1.5px solid #E2E8F0;
-        border-radius: 24px;
-        box-shadow: 0 16px 40px rgba(10, 25, 47, 0.08);
-        width: 100%;
-        max-width: 460px;
-        overflow: hidden;
-        animation: cardFadeIn 0.25s var(--ease-out);
-    }
-
-    @keyframes cardFadeIn {
-        from { opacity: 0; transform: translateY(8px) scale(0.98); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .auth-header {
-        background: var(--ux-navy-gradient);
-        padding: 32px 28px 24px;
-        color: #FFFFFF;
-        text-align: center;
+        padding: 40px 30px;
+        background: var(--ux-page);
         position: relative;
     }
 
-    .auth-logo-badge {
-        width: 52px;
-        height: 52px;
+    @media (max-width: 992px) {
+        .auth-hero-pane {
+            display: none;
+        }
+        .auth-form-pane {
+            padding: 30px 16px;
+        }
+    }
+
+    .login-glass-card {
+        width: 100%;
+        max-width: 480px;
+        background: var(--ux-surface);
+        border: 1px solid var(--ux-line);
+        border-radius: 24px;
+        padding: 32px 34px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        position: relative;
+    }
+
+    [data-bs-theme="light"] .login-glass-card {
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    .feature-pill {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 18px;
         border-radius: 16px;
-        background: var(--ux-accent-gradient);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(12px);
+        transition: all 0.2s var(--ux-spring);
+    }
+
+    .feature-pill:hover {
+        background: rgba(255, 255, 255, 0.07);
+        transform: translateY(-2px);
+        border-color: rgba(234, 88, 12, 0.3);
+    }
+
+    .feature-icon-box {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
         display: grid;
         place-items: center;
-        font-size: 24px;
-        color: #FFFFFF;
-        margin: 0 auto 14px;
-        box-shadow: 0 6px 18px rgba(242, 111, 33, 0.4);
-    }
-
-    .form-control {
-        border-radius: 12px;
-        padding: 12px 14px;
-        border: 1.5px solid #CBD5E1;
-        font-size: 14px;
-        transition: all 0.18s var(--ease-out);
-    }
-
-    .form-control:focus {
-        border-color: var(--ux-accent);
-        box-shadow: 0 0 0 3.5px rgba(242, 111, 33, 0.15);
-    }
-
-    .btn-submit {
-        background: var(--ux-accent-gradient);
-        color: #FFFFFF;
-        border: none;
-        border-radius: 12px;
-        padding: 12px;
-        font-size: 14.5px;
-        font-weight: 750;
-        width: 100%;
-        cursor: pointer;
-        transition: transform 120ms var(--ease-out), box-shadow 150ms ease;
-        box-shadow: 0 4px 14px rgba(242, 111, 33, 0.32);
-    }
-
-    .btn-submit:active {
-        transform: scale(0.97); /* Emil Kowalski active rule */
+        flex: none;
+        font-size: 16px;
     }
 
     .demo-account-pill {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px 12px;
-        border-radius: 12px;
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        cursor: pointer;
+        gap: 12px;
+        padding: 9px 12px;
+        border-radius: 14px;
+        background: var(--ux-surface-2);
+        border: 1px solid var(--ux-line);
         text-decoration: none;
         color: var(--ux-ink);
-        transition: all 0.15s ease;
+        transition: all 0.18s var(--ux-spring);
     }
 
     .demo-account-pill:hover {
-        background: #FFF7ED;
-        border-color: #FDBA74;
+        background: var(--ux-surface-3);
+        border-color: var(--ux-accent);
         transform: translateY(-1px);
+        color: #FFFFFF;
     }
 
     .demo-account-pill:active {
-        transform: scale(0.97);
+        transform: scale(0.98);
     }
 
     .avatar-circle {
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: grid;
+        place-items: center;
         font-weight: 800;
-        font-size: 11.5px;
+        font-size: 11px;
         line-height: 1;
         flex: none;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        padding: 11px 14px;
+        background-color: var(--ux-surface-2);
+        border: 1px solid var(--ux-line);
+        color: var(--ux-ink);
+        font-size: 13.5px;
+        transition: all 0.18s var(--ux-spring);
+    }
+
+    .form-control:focus {
+        background-color: var(--ux-surface-3);
+        border-color: var(--ux-accent);
+        color: #FFFFFF;
+        box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.25);
+    }
+
+    .input-group-text {
+        background-color: var(--ux-surface-2);
+        border: 1px solid var(--ux-line);
+        color: var(--ux-ink-3);
+        border-radius: 12px 0 0 12px;
+    }
+
+    .brand-glass-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 8px 16px;
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     }
     </style>
 </head>
 <body>
 
-    <!-- Header / Brand Strip -->
-    <header class="py-3 px-4 border-bottom bg-white d-flex justify-content-between align-items-center shadow-xs">
-        <a href="/dashboard" class="d-flex align-items-center text-decoration-none">
-            <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 36px; width: auto; object-fit: contain;" class="me-2">
-            <div class="vr mx-2 d-none d-sm-block" style="height: 24px; opacity: 0.25;"></div>
-            <span class="fw-bold fs-5 tracking-tight text-dark">Poly<strong style="color:var(--ux-accent);">Mee</strong></span>
-            <span class="badge bg-light text-muted border ms-2">WEB212</span>
-        </a>
-        <a href="/dashboard" class="btn-fpt-secondary btn-fpt-sm">
-            <i class="bi bi-grid-3x3-gap-fill me-1"></i> Vào Bảng Lịch (Dashboard)
-        </a>
-    </header>
+    <div class="auth-split-wrapper">
 
-    <!-- Main Auth Content -->
-    <div class="auth-container">
-        <div class="auth-card">
-            
-            <!-- Auth Header -->
-            <div class="auth-header">
-                <div class="d-inline-flex p-2 bg-white rounded-3 shadow-sm mb-3">
-                    <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 44px; width: auto; object-fit: contain;">
+        <!-- Left Column: Hero Identity Showcase -->
+        <div class="auth-hero-pane">
+            <div>
+                <!-- Brand Badge -->
+                <div class="d-flex align-items-center justify-content-between mb-5">
+                    <div class="brand-glass-badge">
+                        <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 32px; width: auto; object-fit: contain;">
+                    </div>
+                    <span class="badge rounded-pill num-tabular" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 11px; padding: 6px 12px;">
+                        <i class="bi bi-cpu-fill me-1"></i> AI Powered Hub
+                    </span>
                 </div>
-                <h4 class="fw-bold mb-1">Đăng Nhập PolyMee</h4>
-                <p class="small mb-0 text-white-50">Cổng Quản Trị Hoạt Động & Nghiệm Thu Thù Lao CTV</p>
+
+                <!-- Hero Headline -->
+                <h1 class="display-6 fw-bolder mb-3" style="letter-spacing: -0.03em; line-height: 1.2;">
+                    Nền Tảng Điều Phối Sự Kiện & <span style="color: var(--ux-accent);">Nghiệm Thu Thù Lao CTV</span>
+                </h1>
+                <p class="mb-4" style="color: var(--ux-ink-3); font-size: 15px; max-width: 520px; line-height: 1.6;">
+                    PolyMee đồng bộ hóa toàn bộ quy trình từ đăng ký ca trực, kiểm tra xung đột thời gian thực, chụp ảnh minh chứng tại chỗ, ký hợp đồng điện tử và quyết toán tài chính FPT Polytechnic.
+                </p>
+
+                <!-- 4 Core Engine Showcases -->
+                <div class="d-flex flex-column gap-3 mb-5" style="max-width: 540px;">
+                    <div class="feature-pill">
+                        <div class="feature-icon-box text-warning" style="background: rgba(245, 158, 11, 0.12);">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div>
+                            <strong style="color: var(--ux-ink); font-size: 13.5px;">Interval Collision Engine</strong>
+                            <div style="font-size: 12px; color: var(--ux-ink-3);">Tự động phát hiện và chặn trùng ca trực tức thời theo mốc thời gian giao thoa.</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-pill">
+                        <div class="feature-icon-box text-success" style="background: rgba(16, 185, 129, 0.12);">
+                            <i class="bi bi-camera-fill"></i>
+                        </div>
+                        <div>
+                            <strong style="color: var(--ux-ink); font-size: 13.5px;">Minh Chứng Hiện Trường (Zero Fraud)</strong>
+                            <div style="font-size: 12px; color: var(--ux-ink-3);">CTV chụp ảnh có mặt thực tế, Giảng viên nghiệm thu và tự động sinh hợp đồng chuẩn A4.</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-pill">
+                        <div class="feature-icon-box" style="color: var(--ux-accent); background: var(--ux-accent-soft);">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <div>
+                            <strong style="color: var(--ux-ink); font-size: 13.5px;">Trợ Lý AI Function Calling 4.0</strong>
+                            <div style="font-size: 12px; color: var(--ux-ink-3);">Admin/BTC có thể hỏi tự nhiên: tra cứu phòng trống, lọc CTV rảnh, gửi email và đặt lịch tự động.</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="p-4">
+            <!-- Footer Ticker -->
+            <div class="pt-4 border-top d-flex align-items-center justify-content-between" style="border-color: var(--ux-line) !important; font-size: 12px; color: var(--ux-ink-3);">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="d-flex align-items-center gap-1.5"><span class="rounded-circle d-inline-block" style="width: 7px; height: 7px; background: #10B981;"></span> Hệ Thống Hoạt Động 100%</span>
+                    <span>•</span>
+                    <span>Bản Quyền © 2026 FPT Polytechnic</span>
+                </div>
+                <span class="num-tabular font-monospace">Fall 2026 • WEB212</span>
+            </div>
+        </div>
 
-                <!-- Flash Message Notification -->
+        <!-- Right Column: Login Card & 1-Click Demo -->
+        <div class="auth-form-pane">
+            <div class="login-glass-card">
+
+                <!-- Header on Mobile / Card Header -->
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <h4 class="fw-bolder mb-1" style="color: var(--ux-ink);">Đăng Nhập PolyMee</h4>
+                        <p class="small mb-0" style="color: var(--ux-ink-3);">Đăng nhập tài khoản để vào không gian điều phối</p>
+                    </div>
+                    <!-- Theme Switcher Button -->
+                    <button type="button" class="btn btn-sm btn-outline-secondary border-0 px-2 py-1 rounded-circle" onclick="toggleAuthTheme()" title="Chuyển chế độ Sáng / Tối">
+                        <i class="bi bi-sun-fill dark-icon text-warning"></i>
+                        <i class="bi bi-moon-stars-fill light-icon text-secondary d-none"></i>
+                    </button>
+                </div>
+
+                <!-- Flash Notification -->
                 <?php if (!empty($flash)): ?>
                 <div class="alert <?= $flash['type'] === 'success' ? 'alert-success' : ($flash['type'] === 'info' ? 'alert-info' : 'alert-danger') ?> py-2.5 px-3 small rounded-3 d-flex align-items-center justify-content-between mb-3" role="alert">
                     <div class="d-flex align-items-center gap-2">
@@ -203,19 +321,19 @@
                 </div>
                 <?php endif; ?>
 
-                <!-- Form Đăng Nhập -->
-                <form action="/auth/login" method="POST" id="loginForm">
+                <!-- Form Đăng Nhập Chính -->
+                <form action="/auth/login" method="POST" id="loginForm" class="mb-3">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken ?? '') ?>">
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold small text-dark">Email FPT hoặc Mã Sinh Viên (MSSV)</label>
+                        <label class="form-label fw-bold small" style="color: var(--ux-ink);">Email FPT hoặc Mã Sinh Viên (MSSV)</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person-fill"></i></span>
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
                             <input 
                                 type="text" 
                                 name="account" 
                                 id="loginAccount" 
-                                class="form-control border-start-0 ps-0" 
+                                class="form-control" 
                                 placeholder="Ví dụ: PI03084 hoặc phuonganh@fpt.edu.vn" 
                                 value="<?= htmlspecialchars($oldAccount ?? '') ?>" 
                                 required 
@@ -226,118 +344,115 @@
 
                     <div class="mb-3">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <label class="form-label fw-bold small text-dark mb-0">Mật Khẩu</label>
-                            <span class="text-muted small" style="font-size:11.5px;">Mặc định: <strong>123456</strong></span>
+                            <label class="form-label fw-bold small mb-0" style="color: var(--ux-ink);">Mật Khẩu</label>
+                            <span class="small num-tabular" style="font-size: 11px; color: var(--ux-ink-3);">Mặc định: <strong>123456</strong></span>
                         </div>
                         <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-shield-lock-fill"></i></span>
+                            <span class="input-group-text"><i class="bi bi-shield-lock-fill"></i></span>
                             <input 
                                 type="password" 
                                 name="password" 
                                 id="loginPassword" 
-                                class="form-control border-start-0 border-end-0 px-0" 
+                                class="form-control" 
                                 placeholder="Nhập mật khẩu..." 
                                 required
                             >
-                            <button class="btn btn-outline-secondary border-start-0 text-muted" type="button" onclick="togglePasswordVisibility('loginPassword', this)">
+                            <button class="btn btn-outline-secondary border" type="button" onclick="togglePasswordVisibility('loginPassword', this)">
                                 <i class="bi bi-eye-fill"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center mb-4" style="font-size: 12.5px;">
+                    <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 12px;">
                         <div class="form-check mb-0">
                             <input class="form-check-input" type="checkbox" id="rememberMe" checked>
-                            <label class="form-check-label text-muted" for="rememberMe">Ghi nhớ đăng nhập</label>
+                            <label class="form-check-label" for="rememberMe" style="color: var(--ux-ink-3);">Ghi nhớ đăng nhập</label>
                         </div>
-                        <a href="javascript:void(0)" onclick="alert('Vui lòng liên hệ Phòng CTSV FPT Polytechnic để cấp lại mật khẩu.')" class="text-decoration-none fw-semibold" style="color:var(--ux-accent);">Quên mật khẩu?</a>
+                        <a href="javascript:void(0)" onclick="alert('Vui lòng liên hệ Phòng CTSV FPT Polytechnic để cấp lại mật khẩu.')" class="text-decoration-none fw-semibold" style="color: var(--ux-accent);">Quên mật khẩu?</a>
                     </div>
 
-                    <button type="submit" class="btn-fpt-primary w-100 py-2.5 mb-3">
+                    <button type="submit" class="btn-fpt-primary w-100 py-2.5">
                         <i class="bi bi-box-arrow-in-right me-1.5"></i> Đăng Nhập Vào Hệ Thống
                     </button>
                 </form>
 
-                <div class="text-center pb-3 border-bottom mb-3" style="font-size: 13px;">
-                    <span class="text-muted">Chưa có tài khoản CTV?</span>
-                    <a href="/auth/register" class="fw-bold text-decoration-none ms-1" style="color:var(--ux-accent);">Đăng ký CTV ngay ↗</a>
+                <div class="text-center pb-2.5 border-bottom mb-3" style="font-size: 12.5px; border-color: var(--ux-line) !important;">
+                    <span style="color: var(--ux-ink-3);">Chưa có tài khoản CTV?</span>
+                    <a href="/auth/register" class="fw-bold text-decoration-none ms-1" style="color: var(--ux-accent);">Đăng ký tài khoản mới ↗</a>
                 </div>
 
-                <!-- ĐĂNG NHẬP NHANH DEMO DÀNH CHO HỘI ĐỒNG CHẤM BÀI / GIẢNG VIÊN -->
+                <!-- 1-Click Demo Accounts (Dành cho Giảng viên / Hội đồng chấm thi) -->
                 <div>
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-uppercase text-muted fw-bold" style="font-size:10.5px; letter-spacing:0.04em;">Chấm Bài Demo 1 Chạm:</span>
-                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle" style="font-size:10px;">Không cần gõ pass</span>
+                        <span class="text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 0.05em; color: var(--ux-ink-3);">
+                            <i class="bi bi-stars text-warning me-1"></i> Chấm Điểm 1 Chạm (6 Demo Roles):
+                        </span>
+                        <span class="badge num-tabular" style="font-size: 9.5px; background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.25);">Auto Login</span>
                     </div>
 
-                    <div class="d-flex flex-column gap-2" style="max-height: 280px; overflow-y: auto; padding-right: 2px;">
+                    <div class="d-flex flex-column gap-2" style="max-height: 250px; overflow-y: auto; padding-right: 3px;">
                         <a href="/auth/quickLogin/3" class="demo-account-pill">
                             <div class="avatar-circle bg-primary-subtle text-primary">PA</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Đinh Nguyễn Phương Anh</div>
-                                <small class="text-muted" style="font-size:11px;">PI03084 • Role: <strong>Sinh Viên CTV Media</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">PI03084 • Role: <strong style="color: var(--ux-ink-2);">CTV Media</strong></small>
                             </div>
-                            <i class="bi bi-chevron-right text-muted small"></i>
+                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
 
                         <a href="/auth/quickLogin/4" class="demo-account-pill">
                             <div class="avatar-circle bg-emerald-subtle text-success">ĐM</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Lê Đức Mạnh</div>
-                                <small class="text-muted" style="font-size:11px;">PS20262 • Role: <strong>Sinh Viên CTV Lễ Tân</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">PS20262 • Role: <strong style="color: var(--ux-ink-2);">CTV Lễ Tân</strong></small>
                             </div>
-                            <i class="bi bi-chevron-right text-muted small"></i>
+                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
 
                         <a href="/auth/quickLogin/2" class="demo-account-pill">
                             <div class="avatar-circle bg-warning-subtle text-warning-emphasis">GV</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Thầy Phan Hoàng Khải</div>
-                                <small class="text-muted" style="font-size:11px;">GV0102 • Role: <strong>Giảng Viên / Ban Tổ Chức</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">GV0102 • Role: <strong style="color: var(--ux-ink-2);">Giảng Viên / BTC</strong></small>
                             </div>
-                            <i class="bi bi-chevron-right text-muted small"></i>
+                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
 
                         <a href="/auth/quickLogin/7" class="demo-account-pill">
                             <div class="avatar-circle bg-success-subtle text-success">KT</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Đặng Thu Thảo</div>
-                                <small class="text-muted" style="font-size:11px;">KT0105 • Role: <strong>Kế Toán & Quyết Toán</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">KT0105 • Role: <strong style="color: var(--ux-ink-2);">Kế Toán & Quyết Toán</strong></small>
                             </div>
-                            <i class="bi bi-chevron-right text-muted small"></i>
+                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
 
                         <a href="/auth/quickLogin/8" class="demo-account-pill">
                             <div class="avatar-circle bg-info-subtle text-info-emphasis">HC</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Lê Đình Tuấn</div>
-                                <small class="text-muted" style="font-size:11px;">HC0201 • Role: <strong>Nhân Viên Hành Chính CSVC</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">HC0201 • Role: <strong style="color: var(--ux-ink-2);">Hành Chính CSVC</strong></small>
                             </div>
-                            <i class="bi bi-chevron-right text-muted small"></i>
+                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
 
                         <a href="/auth/quickLogin/1" class="demo-account-pill">
                             <div class="avatar-circle bg-danger-subtle text-danger">AD</div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold small lh-1">Quản Trị Viên (Admin)</div>
-                                <small class="text-muted" style="font-size:11px;">ADMIN001 • Role: <strong>Toàn Quyền Hệ Thống</strong></small>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">ADMIN001 • Role: <strong style="color: var(--ux-ink-2);">Toàn Quyền</strong></small>
                             </div>
-                            <i class="bi bi-chevron-right text-muted small"></i>
+                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
                     </div>
                 </div>
 
             </div>
-
-            <!-- Card Footer -->
-            <div class="bg-light px-4 py-3 border-top text-center text-muted" style="font-size: 11.5px;">
-                <span>FPT Polytechnic • Môn học WEB212 Phát Triển Dự Án Với AI</span>
-            </div>
-
         </div>
+
     </div>
 
-    <!-- Toggle Password Script -->
+    <!-- Scripts -->
     <script>
     function togglePasswordVisibility(fieldId, btn) {
         const field = document.getElementById(fieldId);
@@ -350,8 +465,34 @@
             icon.className = 'bi bi-eye-fill';
         }
     }
+
+    function initAuthTheme() {
+        const saved = localStorage.getItem('polymee_theme') || 'dark';
+        setAuthTheme(saved);
+    }
+
+    function setAuthTheme(theme) {
+        const root = document.documentElement;
+        root.setAttribute('data-bs-theme', theme);
+        if (theme === 'dark') {
+            root.classList.add('dark');
+            document.querySelectorAll('.dark-icon').forEach(i => i.classList.remove('d-none'));
+            document.querySelectorAll('.light-icon').forEach(i => i.classList.add('d-none'));
+        } else {
+            root.classList.remove('dark');
+            document.querySelectorAll('.dark-icon').forEach(i => i.classList.add('d-none'));
+            document.querySelectorAll('.light-icon').forEach(i => i.classList.remove('d-none'));
+        }
+        localStorage.setItem('polymee_theme', theme);
+    }
+
+    function toggleAuthTheme() {
+        const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+        setAuthTheme(isDark ? 'light' : 'dark');
+    }
+
+    initAuthTheme();
     </script>
 
 </body>
 </html>
-

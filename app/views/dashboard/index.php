@@ -162,20 +162,22 @@
         gap: 12px;
         height: 44px;
         margin-bottom: 20px;
+        position: relative;
     }
 
     .u040-logo {
-        width: 42px;
-        height: 42px;
+        width: 38px;
+        height: 38px;
         flex: none;
-        margin-left: 8px;
-        border-radius: 12px;
+        margin-left: 3px;
+        border-radius: 10px;
         background: #ffffff;
-        padding: 4px;
+        padding: 3px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        z-index: 2;
     }
 
     .u040-logo img {
@@ -201,27 +203,29 @@
 
     .u040-tog {
         position: absolute;
-        right: 0;
-        top: 18px;
-        width: 28px;
-        height: 36px;
-        border: 0;
+        right: -10px;
+        top: 20px;
+        width: 22px;
+        height: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 0;
-        border-radius: 10px 0 0 10px;
-        background: rgba(255, 255, 255, 0.12);
+        border-radius: 6px;
+        background: #1E293B;
         color: #fff;
         display: grid;
         place-items: center;
-        opacity: 0.85;
-        transition: opacity .2s, background .2s;
+        opacity: 0.95;
+        transition: all .25s var(--ux-spring);
         cursor: pointer;
+        z-index: 1060;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
     }
 
-    .u040-rail:hover .u040-tog,
-    .u040-tog:focus-visible,
     .u040.is-wide .u040-tog {
-        opacity: 1;
-        background: rgba(255, 255, 255, 0.22);
+        right: 8px;
+        top: 20px;
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.2);
     }
 
     .u040-tog svg {
@@ -439,7 +443,7 @@
 
     .dashboard-topbar {
         position: relative;
-        z-index: 1080 !important;
+        z-index: 1020;
         background: var(--ux-surface);
         border: 1px solid var(--ux-line);
         border-radius: 20px;
@@ -463,15 +467,23 @@
 
     .dashboard-topbar .dropdown {
         position: relative;
-        z-index: 1085;
+        z-index: 1025;
     }
 
     .dashboard-topbar .dropdown-menu {
-        z-index: 9999 !important;
+        z-index: 1035 !important;
         background-color: var(--ux-surface) !important;
         border: 1px solid var(--ux-line-2) !important;
         box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35) !important;
         border-radius: 16px;
+    }
+
+    /* Modal Backdrop & Dialog Must ALWAYS Float Above Topbar (Zero Collision) */
+    .modal-backdrop {
+        z-index: 1080 !important;
+    }
+    .modal {
+        z-index: 1090 !important;
     }
 
     [data-bs-theme="dark"] .dropdown-menu {
@@ -2827,9 +2839,14 @@ function renderMonthGrid(year, month) {
         if (dayNotes.length > 0) {
             dayNotes.slice(0, 1).forEach(n => {
                 const noteTitle = n.title || n.content || 'Ghi chú';
-                previewHtml += `<div class="memo-chip" title="Lưu ý: ${noteTitle}">
-                    <i class="fa-solid fa-bookmark" style="font-size:9px; color:#EA580C; flex:none;"></i>
-                    <span class="text-truncate">${noteTitle}</span>
+                previewHtml += `<div class="memo-chip d-flex justify-content-between align-items-center" title="Lưu ý: ${noteTitle}">
+                    <div class="d-flex align-items-center gap-1 overflow-hidden">
+                        <i class="fa-solid fa-bookmark" style="font-size:9px; color:#EA580C; flex:none;"></i>
+                        <span class="text-truncate">${noteTitle}</span>
+                    </div>
+                    <button type="button" class="btn p-0 text-danger border-0 flex-shrink-0 ms-1 opacity-75 hover-opacity-100" style="font-size:10px; line-height:1;" onclick="event.stopPropagation(); deleteCalendarNote(${n.id});" title="Xóa lịch hẹn này">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
                 </div>`;
             });
         }
@@ -2907,9 +2924,14 @@ function renderWeekView(targetDateStr) {
                 const noteType = n.type || n.note_type || 'Lưu ý';
                 const noteTitle = n.title || n.content || '';
                 notesHtml += `
-                    <div class="memo-chip text-truncate mb-2" title="${noteType}: ${noteTitle}">
-                        <i class="fa-solid fa-bookmark text-warning me-1"></i>
-                        <span>${noteTitle}</span>
+                    <div class="memo-chip mb-2 d-flex justify-content-between align-items-center" title="${noteType}: ${noteTitle}">
+                        <div class="d-flex align-items-center gap-1 overflow-hidden min-w-0">
+                            <i class="fa-solid fa-bookmark text-warning me-1 flex-shrink-0" style="font-size:9px;"></i>
+                            <span class="text-truncate">${noteTitle}</span>
+                        </div>
+                        <button type="button" class="btn p-0 text-danger border-0 flex-shrink-0 ms-1 opacity-75 hover-opacity-100" style="font-size:10px; line-height:1;" onclick="event.stopPropagation(); deleteCalendarNote(${n.id});" title="Xóa lịch hẹn này">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </button>
                     </div>
                 `;
             });
@@ -2992,11 +3014,14 @@ function renderDayView(dateStr) {
                         const noteContent = n.content || n.title || '';
                         const authorName = n.author || n.creator_name || 'BTC';
                         return `
-                        <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 border shadow-xs" style="background:var(--ux-surface); border-color:var(--ux-line) !important; font-size:12.5px;">
+                        <div class="d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border shadow-xs" style="background:var(--ux-surface); border-color:var(--ux-line) !important; font-size:12.5px;">
                             <i class="fa-regular fa-circle-check text-warning" style="font-size:13px; flex:none;"></i>
                             <span class="badge num-tabular" style="background:var(--ux-surface-2); color:var(--ux-ink-2); border:1px solid var(--ux-line); font-size:10px; flex:none;">${noteType}</span>
-                            <span style="color:var(--ux-ink);">${noteTitle}${noteContent}</span>
-                            <span class="ms-auto small num-tabular" style="color:var(--ux-ink-3); flex:none;"><i class="bi bi-person me-1"></i>${authorName}</span>
+                            <span class="flex-grow-1" style="color:var(--ux-ink);">${noteTitle}${noteContent}</span>
+                            <span class="small num-tabular" style="color:var(--ux-ink-3); flex:none;"><i class="bi bi-person me-1"></i>${authorName}</span>
+                            <button type="button" class="btn btn-sm text-danger p-0 ms-2" style="line-height:1; font-size:13px;" onclick="deleteCalendarNote(${n.id})" title="Xóa lịch hẹn / ghi chú này">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
                         </div>
                     `;}).join('')}
                 </div>
@@ -3081,29 +3106,48 @@ function openAddNoteModal() {
     if (addNoteModalInstance) addNoteModalInstance.show();
 }
 
-function handleAddNoteSubmit(event) {
+async function handleAddNoteSubmit(event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-    const newNote = {
-        id: Date.now(),
-        date: formData.get('date'),
-        target_date: formData.get('date'),
+    const payload = {
         title: formData.get('title'),
+        date: formData.get('date'),
         content: formData.get('content') || formData.get('title'),
-        type: formData.get('type') || 'EVENT_REMINDER',
-        note_type: formData.get('type') || 'EVENT_REMINDER',
-        author: currentUser ? (currentUser.full_name || currentUser.username) : 'BTC',
-        creator_name: currentUser ? (currentUser.full_name || currentUser.username) : 'BTC',
-        color: '#EA580C'
+        type: formData.get('type') || 'EVENT_REMINDER'
     };
 
-    rawCalendarNotes.push(newNote);
+    try {
+        const response = await fetch('/dashboard/addNote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (data.success && data.note) {
+            rawCalendarNotes.push(data.note);
+            showToast('Đã thêm ghi chú mới vào lịch thành công!', 'success');
+        } else {
+            payload.id = Date.now();
+            payload.target_date = payload.date;
+            payload.author = currentUser ? (currentUser.full_name || currentUser.username) : 'BTC';
+            payload.creator_name = payload.author;
+            rawCalendarNotes.push(payload);
+            showToast('Đã thêm ghi chú mới vào lịch!', 'success');
+        }
+    } catch (err) {
+        payload.id = Date.now();
+        payload.target_date = payload.date;
+        payload.author = currentUser ? (currentUser.full_name || currentUser.username) : 'BTC';
+        payload.creator_name = payload.author;
+        rawCalendarNotes.push(payload);
+        showToast('Đã thêm ghi chú mới vào lịch!', 'success');
+    }
+
     if (addNoteModalInstance) {
         addNoteModalInstance.hide();
     }
     form.reset();
-    showToast('Đã thêm ghi chú mới vào lịch thành công!', 'success');
 
     if (currentCalendarTier === 'month') {
         renderMonthGrid(currentYear, currentMonth);
@@ -3111,6 +3155,42 @@ function handleAddNoteSubmit(event) {
         renderWeekView(selectedDateStr);
     } else if (currentCalendarTier === 'day') {
         renderDayView(selectedDateStr);
+    }
+}
+
+/**
+ * Xóa lịch hẹn / ghi chú theo ID
+ */
+async function deleteCalendarNote(noteId) {
+    if (!confirm('Bạn có chắc chắn muốn xóa lịch hẹn / ghi chú này khỏi hệ thống không?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch('/dashboard/deleteNote/' + noteId, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+
+        // Xóa khỏi state local
+        const idx = rawCalendarNotes.findIndex(n => parseInt(n.id) === parseInt(noteId));
+        if (idx !== -1) {
+            rawCalendarNotes.splice(idx, 1);
+        }
+
+        showToast(data.message || 'Đã xóa lịch hẹn thành công!', 'success');
+
+        // Render lại tầng lịch hiện tại
+        if (currentCalendarTier === 'month') {
+            renderMonthGrid(currentYear, currentMonth);
+        } else if (currentCalendarTier === 'week') {
+            renderWeekView(selectedDateStr);
+        } else if (currentCalendarTier === 'day') {
+            renderDayView(selectedDateStr);
+        }
+    } catch (err) {
+        showToast('Lỗi khi xóa lịch hẹn.', 'danger');
     }
 }
 
