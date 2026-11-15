@@ -441,23 +441,30 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .u040-bd {
         position: absolute;
         left: 28px;
-        top: 6px;
+        top: 4px;
         min-width: 18px;
         height: 18px;
-        padding: 0 4px;
-        border-radius: 10px;
-        background: var(--ux-accent);
+        padding: 0 4.5px;
+        border-radius: 999px;
+        background: #EA580C;
         color: #FFFFFF;
         font-size: 10px;
         font-weight: 800;
-        display: grid;
-        place-items: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         font-style: normal;
         border: none !important;
-        box-shadow: 0 0 0 1.5px #FFFFFF !important;
+        box-shadow: 0 0 0 2px #FFFFFF;
         transition: all .35s var(--ux-spring);
         line-height: 1;
-        z-index: 5;
+        z-index: 10;
+        pointer-events: none;
+        font-variant-numeric: tabular-nums;
+    }
+
+    [data-bs-theme="dark"] .u040-bd {
+        box-shadow: 0 0 0 2px #1C1C1E;
     }
 
     .u040.is-wide .u040-bd {
@@ -1901,13 +1908,40 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         color: #111827 !important;
     }
 
-    /* When sidebar is collapsed (compact mode 56px), hide badge completely to avoid overlapping icons */
+    /* When sidebar is collapsed (rail mode / compact mode), show notification badge clearly at the top-right of the icon (iOS / macOS HIG badge) */
     .u040:not(.is-wide) .u040-bd,
     .u040:not(.is-wide) .u040-bd-admin,
     .u040:not(.is-wide) em.u040-bd {
-        display: none !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
+        display: inline-flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        position: absolute !important;
+        left: 28px !important;
+        top: 4px !important;
+        right: auto !important;
+        transform: none !important;
+        min-width: 18px !important;
+        height: 18px !important;
+        padding: 0 4.5px !important;
+        border-radius: 999px !important;
+        background: #EA580C !important;
+        color: #FFFFFF !important;
+        font-size: 10px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-style: normal !important;
+        border: none !important;
+        box-shadow: 0 0 0 2px #FFFFFF !important;
+        z-index: 10 !important;
+        pointer-events: none !important;
+    }
+
+    [data-bs-theme="dark"] .u040:not(.is-wide) .u040-bd,
+    [data-bs-theme="dark"] .u040:not(.is-wide) .u040-bd-admin,
+    [data-bs-theme="dark"] .u040:not(.is-wide) em.u040-bd {
+        box-shadow: 0 0 0 2px #1C1C1E !important;
     }
 
     /* Table Clean & Spacious Styling */
@@ -1952,6 +1986,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" style="--i:0" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & phân rã ca trực">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
                             <span>Lịch Hoạt Động</span>
+                            <?php if (!empty($events)): ?>
+                            <em class="u040-bd" aria-label="Sự kiện"><?= count($events) ?></em>
+                            <?php endif; ?>
                         </button>
                     </li>
                     <?php if ($perms['canViewMyShifts']): ?>
@@ -1959,6 +1996,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" style="--i:1" data-page="my-shifts" onclick="navigateToPage('my-shifts')" title="Ca trực cá nhân đã đăng ký & Nộp minh chứng">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>
                             <span>Ca Trực Của Tôi</span>
+                            <?php 
+                            $myRegisteredShiftsCount = count(array_filter($shifts ?? [], fn($s) => !empty($s['is_registered_by_me']) || !empty($s['is_registered'])));
+                            if ($myRegisteredShiftsCount > 0): 
+                            ?>
+                            <em class="u040-bd" aria-label="Ca trực cá nhân"><?= $myRegisteredShiftsCount ?></em>
+                            <?php endif; ?>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -1967,6 +2010,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" style="--i:2" data-page="contract-dossier" onclick="navigateToPage('contract-dossier')" title="Hồ Sơ Hợp Đồng Nghiệm Thu">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 9V3.5L18.5 8H14zM8 13h8M8 17h5"/></svg>
                             <span>Hồ Sơ Hợp Đồng</span>
+                            <?php 
+                            $contractsCount = count(array_filter($accountingList ?? [], fn($a) => !empty($a['contract_code']) || in_array($a['status'] ?? '', ['Accepted', 'Signed_Paid'], true)));
+                            if ($contractsCount === 0 && !empty($accountingList)) $contractsCount = count($accountingList);
+                            if ($contractsCount > 0): 
+                            ?>
+                            <em class="u040-bd" aria-label="Hồ sơ hợp đồng"><?= $contractsCount ?></em>
+                            <?php endif; ?>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -1988,7 +2038,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="Quản lý hồ sơ định danh CCCD, VNeID & STK ngân hàng của CTV">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h2"/></svg>
                             <span>Quản Lý Hồ Sơ CTV</span>
-                            <em class="u040-bd" style="background:#0284C7; color:#fff;" aria-label="CTV Count"><?= count($ctvRoster ?? []) ?></em>
+                            <em class="u040-bd" aria-label="CTV Count"><?= count($ctvRoster ?? []) ?></em>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -1997,6 +2047,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" style="--i:5" data-page="submissions" onclick="navigateToPage('submissions')" title="Thẩm định nghiệm thu minh chứng Google Drive">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5V13M5 9V4.5M12 19.5V11M12 7V4.5M19 19.5V15M19 11V4.5M3 13h4M10 7h4M17 15h4"/></svg>
                             <span>Minh Chứng Drive</span>
+                            <?php 
+                            $subsCount = count(array_filter($accountingList ?? [], fn($a) => !empty($a['proof_image_url']) || !empty($a['drive_url'])));
+                            if ($subsCount === 0 && !empty($accountingList)) $subsCount = count($accountingList);
+                            if ($subsCount > 0): 
+                            ?>
+                            <em class="u040-bd" aria-label="Minh chứng"><?= $subsCount ?></em>
+                            <?php endif; ?>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -2009,6 +2066,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" style="--i:6" data-page="events" onclick="navigateToPage('events')" title="Quản lý sự kiện & điều phối ca trực">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>
                             <span>Quản Lý Sự Kiện</span>
+                            <?php if (!empty($events)): ?>
+                            <em class="u040-bd" aria-label="Sự kiện"><?= count($events) ?></em>
+                            <?php endif; ?>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -2026,6 +2086,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" style="--i:8" data-page="user-roles" onclick="navigateToPage('user-roles')" title="Trung tâm cấp quyền & phân vai trò người dùng">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                             <span>Cấp Quyền</span>
+                            <?php if (!empty($roles)): ?>
+                            <em class="u040-bd" aria-label="Cấp quyền"><?= count($roles) ?></em>
+                            <?php endif; ?>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -2034,7 +2097,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" style="--i:9" data-page="audit-trail" onclick="navigateToPage('audit-trail')" title="Nhật ký lịch sử thao tác hệ thống (Audit Trail)">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
                             <span>Nhật Ký Audit Trail</span>
-                            <em class="u040-bd" style="background:#0284C7; color:#fff;" aria-label="Logs"><?= count($activityLogs) ?></em>
+                            <em class="u040-bd" aria-label="Logs"><?= count($activityLogs) > 99 ? '99+' : count($activityLogs) ?></em>
                         </button>
                     </li>
                     <?php endif; ?>
