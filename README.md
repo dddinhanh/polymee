@@ -25,9 +25,9 @@
 
 | STT | Mã Sinh Viên | Họ và Tên | Vai Trò Trong Nhóm | Phần Việc Đảm Nhiệm Chi Tiết |
 |:---:|:---:|:---|:---:|:---|
-| 1 | **PI03084** | **Đinh Nguyễn Phương Anh** | **Trưởng nhóm** | Thiết kế UI/UX Apple Sonoma / iPadOS & Bento Grid 2.0; Thiết kế toàn bộ giao diện Responsive; Phân tích SRS & Viết tài liệu báo cáo; Kiến trúc MVC PHP OOP; Tích hợp AI Assistant Function Calling; Quản trị phân quyền RBAC & Dịch vụ CollisionService |
+| 1 | **PI03084** | **Đinh Nguyễn Phương Anh** | **Trưởng nhóm** | Thiết kế UI/UX Apple Sonoma / iPadOS & Bento Grid 2.0; Thiết kế toàn bộ giao diện Responsive; Phân tích SRS & Viết tài liệu báo cáo; Kiến trúc MVC PHP OOP; Tích hợp AI Assistant Function Calling; Quản trị phân quyền RBAC & CollisionService |
 | 2 | **PI02895** | **Dương Ngọc Hân** | **Thành viên** | Thiết kế Cơ sở dữ liệu (ERD 3NF, Data Dictionary, DDL MySQL & SQLite); Thiết kế Slide thuyết trình bảo vệ dự án |
-| 3 | **PI03067** | **Lê Đức Mạnh** | **Thành viên** | Lập trình Backend (Controllers, Models, API JSON, Máy chiếu Dynamic QR Code HMAC-SHA256) |
+| 3 | **PI03067** | **Lê Đức Mạnh** | **Thành viên** | Lập trình Backend (Controllers, Models, API JSON, Dynamic QR Code HMAC-SHA256) |
 | 4 | **PI03015** | **Hoàng Minh Luận** | **Thành viên** | Soạn thảo & Hoàn thiện Báo cáo dự án, Tài liệu kịch bản kiểm thử & Bảo vệ đề tài |
 
 ---

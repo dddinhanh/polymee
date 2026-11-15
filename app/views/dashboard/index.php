@@ -2036,23 +2036,23 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
 
                         <!-- Quick Navigation Actions -->
-                        <div class="p-2.5 border-bottom d-flex flex-column gap-1.5" style="border-color: rgba(0,0,0,0.06) !important;">
-                            <a class="dropdown-item p-2.5 rounded-3 d-flex align-items-center gap-3 transition-all" href="javascript:void(0)" onclick="navigateToPage('profile-settings'); closeSidebarUserMenu();" style="border: 1px solid transparent;">
-                                <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 shadow-2xs" style="width: 36px; height: 36px; background: #F8FAFC; border: 1px solid #E2E8F0; color: #475569; font-size: 16px;">
+                        <div class="border-bottom d-flex flex-column gap-1" style="padding: 8px 10px; border-color: rgba(0,0,0,0.06) !important;">
+                            <a class="dropdown-item rounded-3 d-flex align-items-center gap-3 transition-all" href="javascript:void(0)" onclick="navigateToPage('profile-settings'); closeSidebarUserMenu();" style="padding: 8px 12px; border: 1px solid transparent;">
+                                <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 shadow-2xs" style="width: 36px; height: 36px; background: #F1F5F9; border: 1px solid #CBD5E1; color: #334155; font-size: 16px;">
                                     <i class="bi bi-person-gear"></i>
                                 </div>
-                                <div class="d-flex flex-column justify-content-center overflow-hidden" style="line-height: 1.3;">
+                                <div class="d-flex flex-column justify-content-center overflow-hidden" style="line-height: 1.25;">
                                     <span class="fw-bold text-dark d-block text-truncate" style="font-size: 13px;">Cài Đặt Tài Khoản Cá Nhân</span>
                                     <small class="text-muted d-block text-truncate mt-0.5" style="font-size: 11px;">Hồ sơ, mật khẩu & xóa tài khoản</small>
                                 </div>
                             </a>
 
                             <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-                            <a class="dropdown-item p-2.5 rounded-3 d-flex align-items-center gap-3 transition-all" href="javascript:void(0)" onclick="navigateToPage('admin-management'); closeSidebarUserMenu();" style="border: 1px solid transparent;">
-                                <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 shadow-2xs" style="width: 36px; height: 36px; background: #F8FAFC; border: 1px solid #E2E8F0; color: #0284C7; font-size: 16px;">
+                            <a class="dropdown-item rounded-3 d-flex align-items-center gap-3 transition-all" href="javascript:void(0)" onclick="navigateToPage('admin-management'); closeSidebarUserMenu();" style="padding: 8px 12px; border: 1px solid transparent;">
+                                <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 shadow-2xs" style="width: 36px; height: 36px; background: #E0F2FE; border: 1px solid #BAE6FD; color: #0284C7; font-size: 16px;">
                                     <i class="bi bi-shield-lock-fill"></i>
                                 </div>
-                                <div class="d-flex flex-column justify-content-center overflow-hidden" style="line-height: 1.3;">
+                                <div class="d-flex flex-column justify-content-center overflow-hidden" style="line-height: 1.25;">
                                     <span class="fw-bold text-dark d-block text-truncate" style="font-size: 13px;">Cấp Quyền & Nhật Ký Kiểm Toán</span>
                                     <small class="text-muted d-block text-truncate mt-0.5" style="font-size: 11px;">Phân quyền Admin & Audit Trail</small>
                                 </div>
