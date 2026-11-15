@@ -27,7 +27,7 @@
 
 | STT | Mã Sinh Viên | Họ và Tên | Vai Trò Trong Nhóm | Phần Việc Đảm Nhiệm Chi Tiết |
 |:---:|:---:|:---|:---:|:---|
-| 1 | **PI03084** | **Đinh Nguyễn Phương Anh** | **Trưởng nhóm** | **Chủ nhiệm kiến trúc & Thiết kế chính:**<br>• Thiết kế toàn bộ UI/UX chuẩn Apple macOS Sonoma & iPadOS Materials, Bento Grid 2.0, Lucian UX #040 Design System.<br>• Thiết kế giao diện 100% Responsive (Mobile, Tablet, Desktop, Bản in Hợp đồng A4).<br>• Xây dựng Kiến trúc mã nguồn MVC PHP OOP, PSR-4, Singleton Pattern.<br>• Phân tích đặc tả yêu cầu SRS & Thiết kế hệ thống mô hình hóa UML 2.5 Use Case & ERD 3NF.<br>• Tích hợp Trí tuệ nhân tạo AI Assistant Function Calling (4 nghiệp vụ điều phối tự động).<br>• Lập trình thuật toán chống trùng giờ `Interval Collision Detection` & Quản trị phân quyền RBAC Matrix 5 vai trò.<br>• Thiết kế, chuẩn hóa & nạp bộ Mock Data sạch, phong phú, chuẩn thực tế FPT Polytechnic Đồng Nai.<br>• Soạn thảo tài liệu báo cáo toàn diện & Đạo diễn kịch bản nghiệm thu đề tài. |
+| 1 | **PI03084** | **Đinh Nguyễn Phương Anh** | **Trưởng nhóm** | **Chủ nhiệm kiến trúc & Thiết kế chính:**<br>• Thiết kế toàn bộ UI/UX chuẩn Apple macOS Sonoma & iPadOS Materials, Bento Grid 2.0, Lucian UX #040 Design System.<br>• Thiết kế giao diện 100% Responsive (Mobile, Tablet, Desktop, Bản in Hợp đồng A4).<br>• Xây dựng Kiến trúc mã nguồn MVC PHP OOP, PSR-4, Singleton Pattern.<br>• Phân tích đặc tả yêu cầu SRS & Thiết kế hệ thống mô hình hóa UML 2.5 Use Case & ERD 3NF.<br>• Tích hợp Trí tuệ nhân tạo AI Assistant Function Calling (4 nghiệp vụ điều phối tự động).<br>• Lập trình thuật toán chống trùng giờ `Interval Collision Detection` & Quản trị phân quyền RBAC Matrix 5 vai trò.<br>• Thiết kế, chuẩn hóa & nạp bộ Mock Data sạch, chuẩn thực tế FPT Polytechnic Đồng Nai.<br>• Soạn thảo tài liệu báo cáo toàn diện & Đạo diễn kịch bản nghiệm thu đề tài. |
 | 2 | **PI02895** | **Dương Ngọc Hân** | **Thành viên** | Phụ trách Cơ sở dữ liệu (Thiết kế ERD 3NF, Data Dictionary chi tiết, DDL MySQL & SQLite); Tài liệu kịch bản kiểm thử; Thiết kế bộ Slide thuyết trình bảo vệ dự án chuẩn thương hiệu FPT Edu. |
 | 3 | **PI03067** | **Lê Đức Mạnh** | **Thành viên** | Lập trình Backend (Controllers, Models, RESTful API JSON, Tích hợp quy trình Nghiệm thu minh chứng & Quyết toán thù lao). |
 | 4 | **PI03015** | **Hoàng Minh Luận** | **Thành viên** | Soạn thảo & Hoàn thiện Báo cáo dự án, Tổng hợp tài liệu kịch bản kiểm thử tự động & Hỗ trợ kỹ thuật bảo vệ đề tài. |
@@ -82,7 +82,7 @@
 
 ### 2.1. Giới thiệu đề tài & Tính cấp thiết
 
-Tại **Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai** (Toà nhà FPT Polytechnic, Đường số 1, KCN Biên Hoà 2, TP. Biên Hoà, Tỉnh Đồng Nai), mỗi học kỳ diễn ra hàng chục sự kiện lớn nhỏ: *FPoly TechDay, Lễ Khai giảng & Tốt nghiệp, Workshop công nghệ, Giải thể thao sinh viên Poly Champion, Triển lãm FPoly Creative, Ngày hội Doanh nghiệp Tuyển dụng...* Mỗi sự kiện đòi hỏi lực lượng Cộng tác viên (CTV) sinh viên tham gia hỗ trợ rất đông đảo (từ 20 đến hơn 100 sinh viên cho các vị trí: Lễ tân đón tiếp, Hậu cần setup bàn ghế, Kỹ thuật âm thanh ánh sáng, MC điều phối và Media quay chụp).
+Tại **Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai** mỗi học kỳ diễn ra hàng chục sự kiện lớn nhỏ: *FPoly TechDay, Lễ Khai giảng & Tốt nghiệp, Workshop công nghệ, Giải thể thao sinh viên Poly Champion, Triển lãm FPoly Creative, Ngày hội Doanh nghiệp Tuyển dụng...* Mỗi sự kiện đòi hỏi lực lượng Cộng tác viên (CTV) sinh viên tham gia hỗ trợ cho các vị trí: Lễ tân đón tiếp, Hậu cần setup bàn ghế, Kỹ thuật âm thanh ánh sáng, MC điều phối và Media quay chụp.
 
 Tuy nhiên, quá trình điều phối lực lượng CTV hiện nay còn gặp phải **4 rào cản và khó khăn nhức nhối thực tế**:
 
@@ -99,8 +99,7 @@ Tuy nhiên, quá trình điều phối lực lượng CTV hiện nay còn gặp 
 3. **Trùng lịch học / trùng ca trực (Collision):**
    - Sinh viên không có công cụ xem lịch tổng thể, đăng ký chồng chéo nhiều ca trực cùng giờ hoặc trùng với lịch học/lịch thi trên giảng đường, dẫn đến tình trạng bỏ ca hoặc tác nghiệp nửa vời.
 
-4. **Gian lận điểm danh & thất lạc minh chứng nghiệm thu:**
-   - Các phương thức điểm danh trước đây (ký giấy hoặc quét mã QR tĩnh) bộc lộ lỗ hổng gian lận lớn: sinh viên chụp ảnh mã QR gửi qua Zalo/Messenger cho bạn bè ở nhà quét hộ mà không có mặt tác nghiệp thực tế.
+4. **Thất lạc minh chứng nghiệm thu:**
    - CTV Media nộp ảnh RAW và video recap qua tin nhắn Zalo, Telegram cá nhân bị trôi tin nhắn, giảm chất lượng hình ảnh và thất lạc bài nộp, gây khó khăn cho Giảng viên khi thẩm định nghiệm thu.
 
 ---
@@ -110,7 +109,7 @@ Tuy nhiên, quá trình điều phối lực lượng CTV hiện nay còn gặp 
 Nhận diện sâu sắc các khó khăn trên, **PolyMee** ra đời như một giải pháp nền tảng web điều phối thông minh, tự động hóa toàn diện quy trình sự kiện tại FPT Polytechnic Đồng Nai:
 - **Tự động hóa tìm kiếm & phát tán thư mời CTV bằng AI Function Calling:** Ban tổ chức chỉ cần một câu lệnh tự nhiên: *"Tìm CTV rảnh và gửi mail mời ca trực"*, Trợ lý AI sẽ tự động truy vấn CSDL, lọc danh sách sinh viên đang rảnh theo đúng kỹ năng và phát tán email mời nhận ca tức thì trong 1 click.
 - **Tự động hóa lập Hợp đồng điện tử (Zero-Friction Contract Generation):** CTV chỉ cần cập nhật hồ sơ định danh (CCCD 12 số, VNeID Mức 2, STK) một lần duy nhất vào hệ thống. Ngay khi Giảng viên duyệt nghiệm thu minh chứng, hệ thống tự động sinh Mã Hợp đồng điện tử `HDNT-2026-FPLY-xxx`, tự động nhúng ảnh hiện trường, chuẩn hóa định dạng in ấn A4 và chuyển sang Cán bộ Hành chính ký duyệt chi tiền tức thì.
-- **Loại bỏ 100% gian lận với Cơ chế Nghiệm thu Minh chứng Thực tế:** Xóa bỏ hoàn toàn quét mã QR từ xa; chỉ nghiệm thu dựa trên ảnh hiện trường tác nghiệp thực tế tại nơi làm việc và đường dẫn Google Drive sản phẩm Media.
+- **Loại bỏ 100% gian lận với Cơ chế Nghiệm thu Minh chứng Thực tế:** Chỉ nghiệm thu dựa trên ảnh hiện trường tác nghiệp thực tế tại nơi làm việc và đường dẫn Google Drive sản phẩm Media.
 - **Thuật toán Interval Collision Detection:** Tự động chặn trùng giờ trực ngay ở tầng Controller với độ phức tạp tối ưu.
 
 ---
