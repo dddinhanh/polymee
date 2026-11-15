@@ -615,16 +615,22 @@ Sau khi Terminal thông báo `Development Server started`, mở trình duyệt t
 
 ### 7.3. Danh Sách Tài Khoản Đăng Nhập & Chuyển Vai (Role Switcher Demo)
 
-Hệ thống đã tích hợp menu chuyển vai nhanh **(Role Switcher Dropdown)** ở góc trên bên phải màn hình để Thầy/Cô và Hội đồng chuyển đổi vai trò mà không cần đăng nhập lại:
+Hệ thống PolyMee cung cấp **3 cơ chế chuyển đổi tài khoản linh hoạt** để Thầy/Cô và Hội đồng chấm thi trải nghiệm đầy đủ quyền hạn của cả 5 vai trò mà không mất thời gian gõ mật khẩu:
 
-| STT | Họ và Tên | Mã Số | Vai Trò | Mật Khẩu | Phân Vùng Chuyên Biệt |
-|:---:|:---|:---:|:---:|:---:|:---|
-| 1 | **Lê Đức Mạnh** | `PI03067` | **Sinh Viên CTV (Student)** | `123456` | Đăng ký ca trực, Chụp ảnh minh chứng hiện trường, Kê khai CCCD/VNeID |
-| 2 | **Đinh Nguyễn Phương Anh** | `PI03084` | **CTV Media (Media)** | `123456` | Tác nghiệp hình ảnh, Nộp link Google Drive ảnh RAW & Video recap |
-| 3 | **Thầy Phan Hoàng Khải** | `GV0102` | **Giảng Viên / BTC (Organizer)** | `123456` | Tạo sự kiện, rã ca, Thẩm định minh chứng & Tự động tạo HĐ điện tử |
-| 4 | **Lê Đình Tuấn** | `HC0201` | **Cán Bộ Hành Chính (Staff)** | `123456` | Quản lý thiết bị CSVC, ghi chú lịch, đối soát hồ sơ thù lao CTV |
-| 5 | **ThS. Phạm Hồng Sơn** | `HC0001` | **Cán Bộ Hành Chính (Staff - TP)** | `123456` | Ký duyệt số hợp đồng, phê duyệt chi trả thù lao, giám sát audit log |
-| 6 | **Quản Trị Viên** | `ADMIN001` | **Quản Trị Hệ Thống (Admin)** | `123456` | Cấp quyền phân vai trò RBAC 5 Roles, giám sát toàn diện hệ thống |
+- **Cách 1 (Ngay trên Dashboard):** Nhấp vào nút **[🎭 Chuyển Vai (Tên Cán Bộ/CTV) ▾]** được tích hợp sẵn ở thanh Topbar (góc trên bên phải màn hình). Menu thả xuống hiển thị danh sách 6 tài khoản đại diện cho 5 roles chuẩn; chỉ cần bấm chọn là hệ thống tức thì chuyển vai và nạp lại quyền hạn tương ứng.
+- **Cách 2 (Tại màn hình Đăng Nhập `/auth/login`):** Nhấp trực tiếp vào các thẻ **"Tài Khoản Demo Hội Đồng Chấm Thi (Chuyển Vai Nhanh 1-Click)"** ở khung bên phải để tự động đăng nhập tức thì.
+- **Cách 3 (Đăng nhập thủ công chuẩn mực):** Sử dụng Email hoặc Mã số định danh cùng mật khẩu mặc định: `123456`.
+
+#### Bảng Danh Sách 6 Tài Khoản Mẫu Đại Diện 5 Vai Trò Chuẩn:
+
+| STT | Họ và Tên | Email Đăng Nhập | Mã Số | Vai Trò (Role) | Mật Khẩu | Link Chuyển Nhanh 1-Click | Phân Vùng Chuyên Biệt & Quyền Hạn Thực Tế |
+|:---:|:---|:---|:---:|:---:|:---:|:---:|:---|
+| 1 | **Đinh Nguyễn Phương Anh** *(Trưởng nhóm)* | `phuonganh.pi03084@fpt.edu.vn` | `PI03084` | **CTV Media**<br>*(Role ID: 6 - Media)* | `123456` | [`/auth/quickLogin/3`](http://localhost:8080/auth/quickLogin/3) | Lịch cá nhân, Tác nghiệp hình ảnh, Phân hệ nộp link Google Drive ảnh RAW & Video recap, Kê khai CCCD/VNeID/STK thù lao |
+| 2 | **Lê Đức Mạnh** *(Thành viên)* | `ducmanh.pi03067@fpt.edu.vn` | `PI03067` | **Sinh Viên CTV**<br>*(Role ID: 4 - Student)* | `123456` | [`/auth/quickLogin/4`](http://localhost:8080/auth/quickLogin/4) | Đăng ký ca trực sự kiện (kèm check Collision), Chụp & nộp ảnh minh chứng hiện trường tại chỗ, Theo dõi thù lao |
+| 3 | **Thầy Phan Hoàng Khải** | `khai.phan@fpt.edu.vn` | `GV0102` | **Giảng Viên / BTC**<br>*(Role ID: 2 - Organizer)* | `123456` | [`/auth/quickLogin/2`](http://localhost:8080/auth/quickLogin/2) | Tạo sự kiện, Đặt phòng, Phân rã ca trực, Thẩm định ảnh/drive của CTV, Bấm duyệt nghiệm thu & Tự động sinh HĐ điện tử `HDNT` |
+| 4 | **ThS. Phạm Hồng Sơn** | `son.ph@fpt.edu.vn` | `HC0001` | **Cán Bộ Hành Chính**<br>*(Role ID: 3 - Staff TP)* | `123456` | [`/auth/quickLogin/13`](http://localhost:8080/auth/quickLogin/13) | Trưởng phòng Hành chính: Đối soát hồ sơ CCCD/VNeID/STK, Ký duyệt số hợp đồng, Phê duyệt chi trả thù lao (`Signed_Paid`), Audit Log |
+| 5 | **Lê Đình Tuấn** | `tuan.ld@fpt.edu.vn` | `HC0201` | **Cán Bộ Hành Chính**<br>*(Role ID: 3 - Staff CSVC)* | `123456` | [`/auth/quickLogin/8`](http://localhost:8080/auth/quickLogin/8) | Quản lý cơ sở vật chất, Giám sát phòng máy Lab & Hội trường, Bàn giao trang thiết bị âm thanh ánh sáng, Ghi chú lịch toàn trường |
+| 6 | **Quản Trị Viên (Admin)** | `admin@fpoly.edu.vn` | `ADMIN001` | **Quản Trị Toàn Hệ Thống**<br>*(Role ID: 1 - Admin)* | `123456` | [`/auth/quickLogin/1`](http://localhost:8080/auth/quickLogin/1) | Toàn quyền quản trị tài khoản, Cấp quyền vai trò RBAC Matrix 5 Roles, Giám sát toàn diện Audit Trail, Cấu hình hệ thống |
 
 ---
 

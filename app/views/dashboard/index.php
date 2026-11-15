@@ -2197,6 +2197,83 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- Right: Action Controls (Clean, Minimalist Apple Design) -->
             <div class="d-flex align-items-center gap-2">
+                <!-- ROLE SWITCHER DROPDOWN (1-Click Chuyển Đổi Nhanh Tài Khoản Demo Cho Hội Đồng Chấm Thi) -->
+                <div class="dropdown">
+                    <button class="btn btn-fpt-secondary btn-fpt-sm dropdown-toggle d-flex align-items-center gap-1.5 shadow-xs" type="button" id="topbarRoleSwitcher" data-bs-toggle="dropdown" aria-expanded="false" title="Chuyển đổi nhanh vai trò tài khoản demo (1-Click)">
+                        <i class="bi bi-person-badge-fill text-primary"></i>
+                        <span class="d-none d-lg-inline fw-semibold text-truncate" style="max-width: 140px; font-size: 12px;"><?= htmlspecialchars($currentUser['full_name'] ?? 'Chuyển Vai') ?></span>
+                        <span class="badge rounded-pill" style="font-size: 10px; background: rgba(234, 88, 12, 0.12); color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.25);"><?= htmlspecialchars($perms['roleNameDisplay'] ?? ($currentUser['role_name'] ?? 'Role')) ?></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 p-2" aria-labelledby="topbarRoleSwitcher" style="min-width: 290px; border-radius: 14px; background: var(--ux-surface); border: 1px solid var(--ux-line) !important; z-index: 1060;">
+                        <li class="px-2.5 py-1.5 border-bottom mb-1" style="border-color: var(--ux-line) !important;">
+                            <div class="fw-bold d-flex align-items-center justify-content-between" style="font-size: 11.5px; color: var(--ux-ink);">
+                                <span><i class="bi bi-arrow-left-right me-1 text-primary"></i>Chuyển Vai Demo (1-Click)</span>
+                                <span class="badge bg-light text-muted border" style="font-size: 9.5px;">5 Roles</span>
+                            </div>
+                            <div style="font-size: 10.5px; color: var(--ux-ink-3);">Dành cho Thầy/Cô và Hội đồng bảo vệ</div>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 3) ? 'active' : '' ?>" href="/auth/quickLogin/3">
+                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(2, 132, 199, 0.15); color: #0284C7;">PA</span>
+                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
+                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Đinh Nguyễn Phương Anh</div>
+                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">PI03084 • CTV Media & Nhiếp Ảnh</div>
+                                </div>
+                                <?php if ((int)($currentUser['id'] ?? 0) === 3): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 4) ? 'active' : '' ?>" href="/auth/quickLogin/4">
+                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(16, 185, 129, 0.15); color: #059669;">ĐM</span>
+                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
+                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Lê Đức Mạnh</div>
+                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">PI03067 • Sinh Viên CTV Sự Kiện</div>
+                                </div>
+                                <?php if ((int)($currentUser['id'] ?? 0) === 4): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 2) ? 'active' : '' ?>" href="/auth/quickLogin/2">
+                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(245, 158, 11, 0.15); color: #D97706;">GV</span>
+                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
+                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Thầy Phan Hoàng Khải</div>
+                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">GV0102 • Giảng Viên / Ban Tổ Chức</div>
+                                </div>
+                                <?php if ((int)($currentUser['id'] ?? 0) === 2): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 13) ? 'active' : '' ?>" href="/auth/quickLogin/13">
+                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(14, 165, 233, 0.15); color: #0284C7;">HC</span>
+                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
+                                    <div class="fw-bold text-truncate" style="font-size: 12px;">ThS. Phạm Hồng Sơn</div>
+                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">HC0001 • Cán Bộ Hành Chính (Trưởng phòng)</div>
+                                </div>
+                                <?php if ((int)($currentUser['id'] ?? 0) === 13): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 8) ? 'active' : '' ?>" href="/auth/quickLogin/8">
+                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(14, 165, 233, 0.15); color: #0284C7;">HC</span>
+                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
+                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Lê Đình Tuấn</div>
+                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">HC0201 • Cán Bộ Hành Chính (CSVC)</div>
+                                </div>
+                                <?php if ((int)($currentUser['id'] ?? 0) === 8): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 1) ? 'active' : '' ?>" href="/auth/quickLogin/1">
+                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(239, 68, 68, 0.15); color: #DC2626;">AD</span>
+                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
+                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Quản Trị Viên (Admin)</div>
+                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">ADMIN001 • Toàn Quyền Hệ Thống</div>
+                                </div>
+                                <?php if ((int)($currentUser['id'] ?? 0) === 1): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 <?php if (!empty($perms['canCreateShift'])): ?>
                 <button type="button" class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
                     <i class="bi bi-calendar-plus-fill me-1"></i>
