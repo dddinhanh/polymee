@@ -49,15 +49,9 @@ Tại **Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai** (Số 120/1
 
 Hệ thống thiết lập 6 vai trò rõ ràng theo mô hình phân quyền chuẩn doanh nghiệp:
 
-```mermaid
-graph TD
-    A["Hệ Thống PolyMee (FPoly Đồng Nai)"] --> R1["1. Sinh viên / CTV Sự kiện (Student)"]
-    A --> R2["2. CTV Media & Nhiếp ảnh (Media)"]
-    A --> R3["3. Giảng viên / Ban Tổ Chức (Organizer)"]
-    A --> R4["4. Cán bộ CSVC & Hiện trường (Staff)"]
-    A --> R5["5. Trưởng Ban Hành Chính / BGH (Head_Admin)"]
-    A --> R6["6. Quản trị viên Hệ thống (Admin)"]
-```
+<p align="center">
+  <img src="docs/assets/role_hierarchy.svg" alt="Sơ Đồ Phân Quyền 6 Vai Trò PolyMee FPT Polytechnic Đồng Nai" width="100%">
+</p>
 
 1. **Sinh viên / CTV Sự kiện (`Student` - Demo: Lê Đức Mạnh, Hoàng Minh Luận, Dương Ngọc Hân, Trần Quang Khải):**
    - Xem tổng quan lịch sự kiện và các ca trực theo định dạng Tháng / Tuần / Ngày.
@@ -98,63 +92,64 @@ graph TD
 
 ### 2.3. Sơ Đồ Use Case Chuẩn Hệ Thống (UML Use Case Diagram)
 
-Sơ đồ Use Case tổng thể được mô hình hóa theo chuẩn UML phân định rõ 6 tác nhân (Actors) và 3 phân hệ cốt lõi:
+Sơ đồ Use Case tổng thể được mô hình hóa theo chuẩn quốc tế UML 2.5, phân định rõ ràng **6 Tác nhân (Actors)** tương tác trực tiếp với **3 Phân hệ cốt lõi** trong ranh giới hệ thống:
+
+<p align="center">
+  <img src="docs/assets/use_case_diagram.svg" alt="Sơ Đồ Use Case Chuẩn UML 2.5 Nền Tảng PolyMee" width="100%">
+</p>
+
+<details>
+<summary><b>🔍 Bấm để xem mã nguồn UML Use Case (Mermaid Specification)</b></summary>
 
 ```mermaid
 flowchart LR
-    %% Actors Definition
-    subgraph ACTORS ["TÁC NHÂN HỆ THỐNG (ACTORS)"]
+    subgraph ACTORS ["TAC NHAN HE THONG (6 ACTORS)"]
         direction TB
-        ACT_CTV["🧑‍🎓 Sinh Viên / CTV Sự Kiện"]
-        ACT_MED["📸 CTV Media & Truyền Thông"]
-        ACT_ORG["👨‍🏫 Giảng Viên / Ban Tổ Chức"]
-        ACT_STF["🏢 Cán Bộ CSVC & Hiện Trường"]
-        ACT_BGH["🏛️ Trưởng Ban Hành Chính / BGH"]
-        ACT_ADM["⚙️ Quản Trị Viên (Admin)"]
+        ACT_CTV["1. Sinh Vien CTV (Student)"]
+        ACT_MED["2. CTV Media (Media)"]
+        ACT_ORG["3. Giang Vien / BTC (Organizer)"]
+        ACT_STF["4. Can Bo CSVC (Staff)"]
+        ACT_BGH["5. Truong Ban HC / BGH (Head_Admin)"]
+        ACT_ADM["6. Quan Tri Vien (Admin)"]
     end
 
-    %% Subsystem 1
-    subgraph SYS_CAL ["1. PHÂN HỆ QUẢN TRỊ LỊCH & CA TRỰC"]
+    subgraph SYS_CAL ["1. PHAN HE QUAN TRI LICH & CA TRUC"]
         direction TB
-        UC_CAL["Xem Bảng Lịch Trung Tâm (Tháng/Tuần/Ngày)"]
-        UC_REG["Đăng Ký Ca Trực"]
-        UC_COL["Kiểm Tra Xung Đột Lịch (Collision Detection)"]
-        UC_QR["Điểm Danh Check-in/out Dynamic QR 30s"]
-        UC_NOTE["Thêm Ghi Chú Lịch Hẹn Toàn Trường"]
-        UC_CREATE_EV["Tạo Sự Kiện & Đặt Phòng Hội Trường"]
-        UC_SPLIT_SH["Phân Rã Ca Trực & Định Mức Thù Lao"]
+        UC_CAL(["UC01: Xem Lich Trung Tam (Thang/Tuan/Ngay)"])
+        UC_REG(["UC02: Dang Ky Ca Truc"])
+        UC_COL(["UC03: Kiem Tra Trung Gio (Collision)"])
+        UC_QR(["UC04: Diem Danh Dynamic QR 30s"])
+        UC_NOTE(["UC05: Ghi Chu Lich CSVC / Su Kien"])
+        UC_CREATE_EV(["UC06: Tao Su Kien & Dat Phong"])
+        UC_SPLIT_SH(["UC07: Phan Ra Ca & Dinh Thu Lao"])
 
-        UC_REG -.->|"<<include>>"| UC_COL
-        UC_QR -.->|"<<include>>"| UC_CAL
+        UC_REG -.->|include| UC_COL
     end
 
-    %% Subsystem 2
-    subgraph SYS_ACC ["2. PHÂN HỆ NGHIỆM THU & QUYẾT TOÁN THÙ LAO"]
+    subgraph SYS_ACC ["2. PHAN HE NGHIEM THU & QUYET TOAN THU LAO"]
         direction TB
-        UC_PROOF_IMG["Nộp Ảnh Minh Chứng Hiện Trường"]
-        UC_PROOF_DRV["Nộp Link Google Drive (Ảnh/Video Recap)"]
-        UC_VERIFY["Giảng Viên Nghiệm Thu Đạt Chuẩn"]
-        UC_CONTRACT["Khởi Tạo Hợp Đồng Điện Tử (HDNT-2026)"]
-        UC_PROFILE["Hồ Sơ Nhận Tiền (CCCD & Ảnh VNeID, STK)"]
-        UC_SIGN["BGH Ký Duyệt Số & Chuyển Khoản Chi Trả"]
-        UC_EXPORT["Xuất Báo Cáo Quyết Toán & Bản In Hợp Đồng A4"]
+        UC_PROOF_IMG(["UC08: Nop Anh Minh Chung Hien Truong"])
+        UC_PROOF_DRV(["UC09: Nop Link Drive (Anh/Video RAW)"])
+        UC_VERIFY(["UC10: Giang Vien Nghiem Thu Ca"])
+        UC_CONTRACT(["UC11: Lap Hop Dong Dien Tu (HDNT)"])
+        UC_PROFILE(["UC12: Ke Khai CCCD, VNeID, STK"])
+        UC_SIGN(["UC13: BGH Ky Duyet & Chi Tra"])
+        UC_EXPORT(["UC14: Xuat Báo Cáo CSV & In A4"])
 
-        UC_VERIFY -.->|"<<include>>"| UC_CONTRACT
-        UC_SIGN -.->|"<<include>>"| UC_PROFILE
+        UC_VERIFY -.->|include| UC_CONTRACT
+        UC_SIGN -.->|include| UC_PROFILE
     end
 
-    %% Subsystem 3
-    subgraph SYS_ADM ["3. PHÂN HỆ AI & QUẢN TRỊ HỆ THỐNG"]
+    subgraph SYS_ADM ["3. PHAN HE AI & QUAN TRI HE THONG"]
         direction TB
-        UC_AI["Hỏi Đáp Trợ Lý AI Assistant (Theo Role)"]
-        UC_FUNC["AI Function Calling (Tìm Phòng & Soạn Thư)"]
-        UC_RBAC["Phân Quyền Vai Trò RBAC (Matrix 6 Roles)"]
-        UC_AUDIT["Nhật Ký Kiểm Toán Toàn Diện (Audit Trail)"]
+        UC_AI(["UC15: Tro Ly AI Theo Vai Tro"])
+        UC_FUNC(["UC16: AI Function Calling"])
+        UC_RBAC(["UC17: Cap Quyen Vai Tro RBAC"])
+        UC_AUDIT(["UC18: Nhat Ky Kiem Toan (Audit Trail)"])
 
-        UC_AI -.->|"<<extend>>"| UC_FUNC
+        UC_AI -.->|extend| UC_FUNC
     end
 
-    %% Actor Relationships - Sinh viên CTV
     ACT_CTV --> UC_CAL
     ACT_CTV --> UC_REG
     ACT_CTV --> UC_QR
@@ -162,43 +157,34 @@ flowchart LR
     ACT_CTV --> UC_PROFILE
     ACT_CTV --> UC_AI
 
-    %% Actor Relationships - CTV Media
     ACT_MED --> UC_CAL
     ACT_MED --> UC_REG
-    ACT_MED --> UC_QR
     ACT_MED --> UC_PROOF_DRV
     ACT_MED --> UC_PROFILE
-    ACT_MED --> UC_AI
 
-    %% Actor Relationships - Giảng viên / BTC
     ACT_ORG --> UC_CAL
     ACT_ORG --> UC_CREATE_EV
     ACT_ORG --> UC_SPLIT_SH
     ACT_ORG --> UC_NOTE
     ACT_ORG --> UC_VERIFY
-    ACT_ORG --> UC_AI
     ACT_ORG --> UC_EXPORT
+    ACT_ORG --> UC_AI
 
-    %% Actor Relationships - Cán bộ CSVC
     ACT_STF --> UC_CAL
     ACT_STF --> UC_NOTE
     ACT_STF --> UC_AI
 
-    %% Actor Relationships - Trưởng ban Hành chính / BGH
     ACT_BGH --> UC_CAL
     ACT_BGH --> UC_SIGN
     ACT_BGH --> UC_EXPORT
     ACT_BGH --> UC_AUDIT
-    ACT_BGH --> UC_AI
 
-    %% Actor Relationships - Admin Quản trị
     ACT_ADM --> UC_CAL
-    ACT_ADM --> UC_CREATE_EV
     ACT_ADM --> UC_RBAC
     ACT_ADM --> UC_AUDIT
-    ACT_ADM --> UC_SIGN
     ACT_ADM --> UC_AI
 ```
+</details>
 
 #### Bảng Ma Trận Phân Quyền Use Case (Use Case Traceability Matrix)
 
@@ -330,6 +316,13 @@ Toàn bộ các phân hệ danh sách và bảng biểu dữ liệu trong PolyMe
 
 ### 4.1. Sơ Đồ Quan Hệ Thực Thể (ERD - Chuẩn Hóa 3NF)
 
+<p align="center">
+  <img src="docs/assets/erd_diagram.svg" alt="Sơ Đồ Quan Hệ Thực Thể 3NF Database PolyMee" width="100%">
+</p>
+
+<details>
+<summary><b>🔍 Bấm để xem mã nguồn ERD (Mermaid Specification)</b></summary>
+
 ```mermaid
 erDiagram
     ROLES ||--o{ USERS : "has"
@@ -344,7 +337,7 @@ erDiagram
 
     ROLES {
         int id PK
-        varchar name "Admin, Organizer, Staff, Student, Accountant, Media"
+        varchar name "Admin, Organizer, Staff, Student, Media, Head_Admin"
         varchar description
     }
 
@@ -437,6 +430,7 @@ erDiagram
         datetime created_at
     }
 ```
+</details>
 
 ---
 
