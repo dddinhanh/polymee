@@ -35,13 +35,13 @@
 ## 2. PHÂN TÍCH YÊU CẦU PHẦN MỀM (SRS & USE CASES - 2.0 ĐIỂM)
 
 ### 2.1. Giới thiệu đề tài & Tính cấp thiết
-Tại Trường Cao đẳng FPT Polytechnic, mỗi học kỳ diễn ra hàng chục sự kiện lớn nhỏ: *TechDay, Lễ Tốt nghiệp, Workshop chuyên ngành, Ngày hội việc làm, Giải thể thao sinh viên Poly Champion...* Quá trình điều phối lực lượng Cộng tác viên (CTV) sinh viên hiện nay còn gặp các hạn chế:
+Tại **Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai** (Số 120/1 đường Trương Định, Khu phố 2, Phường Tân Mai, TP. Biên Hòa, Tỉnh Đồng Nai), mỗi học kỳ diễn ra hàng chục sự kiện lớn nhỏ: *TechDay, Lễ Khai giảng & Tốt nghiệp, Workshop công nghệ, Giải thể thao sinh viên Poly Champion, Triển lãm FPoly Creative...* Quá trình điều phối lực lượng Cộng tác viên (CTV) sinh viên hiện nay còn gặp các hạn chế:
 - **Trùng lịch học / trùng ca trực:** Sinh viên đăng ký nhiều ca cùng lúc dẫn đến bỏ ca đột xuất.
 - **Gian lận điểm danh:** CTV chụp ảnh mã QR tĩnh gửi qua Zalo/Messenger cho bạn bè điểm danh hộ.
 - **Thất lạc minh chứng nghiệm thu:** Nhóm truyền thông (Media) nộp ảnh/video recap qua tin nhắn rời rạc, ban tổ chức khó quản lý tập trung.
-- **Chậm trễ quyết toán thù lao:** Phòng kế toán thiếu công cụ đối soát ảnh VNeID/CCCD và số tài khoản ngân hàng, phải rà soát thủ công qua bảng tính Excel rời rạc.
+- **Chậm trễ quyết toán thù lao:** Bộ phận quản lý thiếu công cụ đối soát ảnh VNeID/CCCD và số tài khoản ngân hàng, phải rà soát thủ công qua bảng tính Excel rời rạc.
 
-**PolyMee** ra đời như một giải pháp nền tảng web hiện đại, giải quyết triệt để 100% bài toán trên với sự hỗ trợ của **Trí tuệ nhân tạo (AI)** và các thuật toán chuyên sâu.
+**PolyMee** ra đời như một giải pháp nền tảng web hiện đại, giải quyết triệt để 100% bài toán trên với sự hỗ trợ của **Trí tuệ nhân tạo (AI)** và các thuật toán chuyên sâu tại cơ sở Đồng Nai.
 
 ---
 
@@ -51,99 +51,172 @@ Hệ thống thiết lập 6 vai trò rõ ràng theo mô hình phân quyền chu
 
 ```mermaid
 graph TD
-    A[Hệ Thống PolyMee] --> R1[1. Sinh viên / CTV Sự kiện]
-    A --> R2[2. CTV Media & Truyền thông]
-    A --> R3[3. Giảng viên / Ban Tổ Chức]
-    A --> R4[4. Nhân viên CSVC & Hành chính]
-    A --> R5[5. Phòng Kế toán & Quyết toán]
-    A --> R6[6. Quản trị viên Hệ thống Admin]
+    A["Hệ Thống PolyMee (FPoly Đồng Nai)"] --> R1["1. Sinh viên / CTV Sự kiện (Student)"]
+    A --> R2["2. CTV Media & Nhiếp ảnh (Media)"]
+    A --> R3["3. Giảng viên / Ban Tổ Chức (Organizer)"]
+    A --> R4["4. Cán bộ CSVC & Hiện trường (Staff)"]
+    A --> R5["5. Trưởng Ban Hành Chính / BGH (Head_Admin)"]
+    A --> R6["6. Quản trị viên Hệ thống (Admin)"]
 ```
 
-1. **Sinh viên / CTV Sự kiện (`Student` - Demo: Đinh Nguyễn Phương Anh, Lê Đức Mạnh):**
+1. **Sinh viên / CTV Sự kiện (`Student` - Demo: Lê Đức Mạnh, Hoàng Minh Luận, Dương Ngọc Hân, Trần Quang Khải):**
    - Xem tổng quan lịch sự kiện và các ca trực theo định dạng Tháng / Tuần / Ngày.
-   - Đăng ký ca trực theo nguyện vọng (tự động kiểm tra trùng giờ).
+   - Đăng ký ca trực theo nguyện vọng (tự động kiểm tra trùng giờ qua CollisionService).
+   - Điểm danh Check-in/out qua máy chiếu Dynamic QR Code xoay vòng 30 giây (HMAC-SHA256).
    - Chụp & nộp ảnh hiện trường chứng minh có mặt trực tiếp tại sự kiện để Giảng viên nghiệm thu.
    - Tra cứu Hợp đồng nghiệm thu điện tử và thù lao được quyết toán.
-   - Quản lý hồ sơ nhận thù lao (Cập nhật số CCCD, ngân hàng, ảnh VNeID).
+   - Quản lý hồ sơ nhận thù lao (Cập nhật số CCCD 12 số, tài khoản ngân hàng, ảnh chụp màn hình ứng dụng VNeID Mức 2).
 
-2. **CTV Media & Truyền thông (`Media` - Demo: PI03084):**
-   - Toàn bộ quyền của CTV sinh viên.
-   - Phân hệ tự phục vụ nộp đường dẫn Google Drive (ảnh chụp RAW, ảnh chỉnh sửa, video recap).
+2. **CTV Media & Nhiếp ảnh (`Media` - Demo: Đinh Nguyễn Phương Anh, Nguyễn Thảo My):**
+   - Toàn bộ quyền hạn của CTV sinh viên.
+   - Phân hệ tự phục vụ nộp đường dẫn Google Drive (ảnh chụp RAW, ảnh chỉnh sửa màu tone FPT, video recap).
 
-3. **Giảng viên / Ban Tổ Chức (`Organizer` - Demo: Thầy Phan Hoàng Khải):**
+3. **Giảng viên / Ban Tổ Chức (`Organizer` - Demo: Thầy Phan Hoàng Khải, Cô Hoàng Thị Mai Trang):**
    - Đăng tải sự kiện, phân rã sự kiện thành các ca trực nhỏ (Setup, Lễ tân, Media, Hậu cần).
    - Thiết lập chỉ tiêu tuyển (`target_qty`), kỹ năng yêu cầu và định mức thù lao/Điểm Tích Cực (đánh giá uy tín & năng lực CTV).
-   - Thẩm định minh chứng hiện trường của CTV (ảnh hiện trường đối với CTV thường; link Google Drive ảnh đã chỉnh sửa sáng & gắn kèm logo FPT đối với CTV Media), xác nhận duyệt đã đầy đủ minh chứng để nghiệm thu và lập Hợp đồng (`HDNT-2026-FPLY-xxx`).
-   - Thẩm định và phê duyệt minh chứng sau sự kiện hoàn thành.
+   - Thẩm định minh chứng hiện trường của CTV (ảnh hiện trường đối với CTV thường; link Google Drive đối với CTV Media), xác nhận duyệt đã đầy đủ minh chứng để nghiệm thu và lập Hợp đồng (`HDNT-2026-FPLY-xxx`).
    - Thêm ghi chú/dặn dò lịch toàn trường (Apple Calendar Notes).
 
-4. **Nhân viên CSVC & Hành chính (`Staff` - Demo: Lê Đình Tuấn):**
-   - Giám sát tình trạng sử dụng hội trường, bàn giao trang thiết bị (âm thanh, ánh sáng, máy chiếu).
+4. **Cán bộ CSVC & Hiện trường (`Staff` - Demo: Lê Đình Tuấn):**
+   - Giám sát tình trạng sử dụng hội trường, phòng máy Lab tại FPoly Đồng Nai.
+   - Bàn giao trang thiết bị (âm thanh, ánh sáng, máy chiếu, micro không dây).
    - Ghi chú nhắc nhở hiện trường lên bảng lịch trung tâm.
 
-5. **Phòng Kế toán & Quyết toán (`Accountant` - Demo: Đặng Thu Thảo):**
+5. **Trưởng Ban Hành Chính & Ban Giám Hiệu (`Head_Admin` - Demo: ThS. Phạm Hồng Sơn):**
    - Bảng điều phối nghiệm thu thù lao tập trung (`panelAccounting`).
-   - Thẩm định hồ sơ định danh: So sánh số CCCD và ảnh chụp VNeID đã tải lên.
-   - Thẩm định ảnh hiện trường do CTV chụp tại địa điểm trực.
-   - Trình Hợp đồng nghiệm thu lên Ban Giám Hiệu ký duyệt và chuyển khoản thù lao (`Signed_Paid`).
-   - Xuất bảng quyết toán tài chính ra file CSV (chuẩn UTF-8 with BOM mở được trực tiếp trên Excel).
+   - Thẩm định hồ sơ định danh: Đối soát số CCCD, tài khoản ngân hàng và ảnh chụp VNeID.
+   - Ký duyệt số hợp đồng điện tử và phê duyệt lệnh chi trả thù lao (`Signed_Paid`).
+   - Xuất bảng quyết toán tài chính ra file CSV (chuẩn UTF-8 with BOM mở trực tiếp trên Excel).
+   - Giám sát nhật ký kiểm toán hệ thống (Audit Trail).
 
 6. **Quản trị viên Hệ thống (`Admin` - Demo: ADMIN001):**
-   - Toàn quyền cấu hình hệ thống, quản trị tài khoản, địa điểm, phân quyền.
+   - Toàn quyền cấu hình hệ thống, quản trị tài khoản, cấp quyền phân vai trò RBAC.
    - Giám sát toàn bộ hồ sơ hợp đồng nghiệm thu toàn trường.
+   - Vận hành máy chiếu Dynamic QR Code điểm danh tự động.
 
 ---
 
-### 2.3. Sơ Đồ Use Case Tổng Thể Hệ Thống
+### 2.3. Sơ Đồ Use Case Chuẩn Hệ Thống (UML Use Case Diagram)
+
+Sơ đồ Use Case tổng thể được mô hình hóa theo chuẩn UML phân định rõ 6 tác nhân (Actors) và 3 phân hệ cốt lõi:
 
 ```mermaid
 flowchart LR
-    subgraph Actors
-        ST["Sinh Viên / CTV"]
-        MED["CTV Media"]
-        ORG["Giảng Viên / BTC"]
-        ACC["Kế Toán"]
-        ADM["Admin"]
+    %% Actors Definition
+    subgraph ACTORS ["TÁC NHÂN HỆ THỐNG (ACTORS)"]
+        direction TB
+        ACT_CTV["🧑‍🎓 Sinh Viên / CTV Sự Kiện"]
+        ACT_MED["📸 CTV Media & Truyền Thông"]
+        ACT_ORG["👨‍🏫 Giảng Viên / Ban Tổ Chức"]
+        ACT_STF["🏢 Cán Bộ CSVC & Hiện Trường"]
+        ACT_BGH["🏛️ Trưởng Ban Hành Chính / BGH"]
+        ACT_ADM["⚙️ Quản Trị Viên (Admin)"]
     end
 
-    subgraph "Hệ Thống PolyMee (WEB212)"
-        UC1["Xem Bảng Lịch Trung Tâm (Tháng/Tuần/Ngày)"]
-        UC2["Đăng Ký Ca Trực (Collision Detection)"]
-        UC3["Nộp Ảnh Hiện Trường Minh Chứng (CTV Thường)"]
-        UC4["Hồ Sơ Nhận Thù Lao (Chỉ cần Số CCCD & Ảnh VNeID)"]
-        UC5["Nộp Link Google Drive Đã Chỉnh Sáng & Gắn Logo (CTV Media)"]
-        UC6["GV Duyệt Đầy Đủ Minh Chứng Nghiệm Thu & Điểm Tích Cực"]
-        UC7["Tạo Sự Kiện & Phân Rã Ca Trực"]
-        UC8["Thêm Ghi Chú Lịch (Apple Memos)"]
-        UC9["GV Nghiệm Thu & Khởi Tạo Hợp Đồng"]
-        UC10["Trợ Lý AI Phân Quyền Theo Role & Function Calling"]
-        UC11["Hồ Sơ Hợp Đồng & Trình Trường Ký Duyệt"]
+    %% Subsystem 1
+    subgraph SYS_CAL ["1. PHÂN HỆ QUẢN TRỊ LỊCH & CA TRỰC"]
+        direction TB
+        UC_CAL["Xem Bảng Lịch Trung Tâm (Tháng/Tuần/Ngày)"]
+        UC_REG["Đăng Ký Ca Trực"]
+        UC_COL["Kiểm Tra Xung Đột Lịch (Collision Detection)"]
+        UC_QR["Điểm Danh Check-in/out Dynamic QR 30s"]
+        UC_NOTE["Thêm Ghi Chú Lịch Hẹn Toàn Trường"]
+        UC_CREATE_EV["Tạo Sự Kiện & Đặt Phòng Hội Trường"]
+        UC_SPLIT_SH["Phân Rã Ca Trực & Định Mức Thù Lao"]
+
+        UC_REG -.->|"<<include>>"| UC_COL
+        UC_QR -.->|"<<include>>"| UC_CAL
     end
 
-    ST --> UC1
-    ST --> UC2
-    ST --> UC3
-    ST --> UC4
-    ST --> UC10
+    %% Subsystem 2
+    subgraph SYS_ACC ["2. PHÂN HỆ NGHIỆM THU & QUYẾT TOÁN THÙ LAO"]
+        direction TB
+        UC_PROOF_IMG["Nộp Ảnh Minh Chứng Hiện Trường"]
+        UC_PROOF_DRV["Nộp Link Google Drive (Ảnh/Video Recap)"]
+        UC_VERIFY["Giảng Viên Nghiệm Thu Đạt Chuẩn"]
+        UC_CONTRACT["Khởi Tạo Hợp Đồng Điện Tử (HDNT-2026)"]
+        UC_PROFILE["Hồ Sơ Nhận Tiền (CCCD & Ảnh VNeID, STK)"]
+        UC_SIGN["BGH Ký Duyệt Số & Chuyển Khoản Chi Trả"]
+        UC_EXPORT["Xuất Báo Cáo Quyết Toán & Bản In Hợp Đồng A4"]
 
-    MED --> UC5
-    MED --> UC1
-    MED --> UC2
+        UC_VERIFY -.->|"<<include>>"| UC_CONTRACT
+        UC_SIGN -.->|"<<include>>"| UC_PROFILE
+    end
 
-    ORG --> UC1
-    ORG --> UC6
-    ORG --> UC7
-    ORG --> UC8
-    ORG --> UC9
+    %% Subsystem 3
+    subgraph SYS_ADM ["3. PHÂN HỆ AI & QUẢN TRỊ HỆ THỐNG"]
+        direction TB
+        UC_AI["Hỏi Đáp Trợ Lý AI Assistant (Theo Role)"]
+        UC_FUNC["AI Function Calling (Tìm Phòng & Soạn Thư)"]
+        UC_RBAC["Phân Quyền Vai Trò RBAC (Matrix 6 Roles)"]
+        UC_AUDIT["Nhật Ký Kiểm Toán Toàn Diện (Audit Trail)"]
 
-    ACC --> UC9
-    ACC --> UC11
-    ACC --> UC1
+        UC_AI -.->|"<<extend>>"| UC_FUNC
+    end
 
-    ADM --> UC11
-    ADM --> UC7
-    ADM --> UC9
+    %% Actor Relationships - Sinh viên CTV
+    ACT_CTV --> UC_CAL
+    ACT_CTV --> UC_REG
+    ACT_CTV --> UC_QR
+    ACT_CTV --> UC_PROOF_IMG
+    ACT_CTV --> UC_PROFILE
+    ACT_CTV --> UC_AI
+
+    %% Actor Relationships - CTV Media
+    ACT_MED --> UC_CAL
+    ACT_MED --> UC_REG
+    ACT_MED --> UC_QR
+    ACT_MED --> UC_PROOF_DRV
+    ACT_MED --> UC_PROFILE
+    ACT_MED --> UC_AI
+
+    %% Actor Relationships - Giảng viên / BTC
+    ACT_ORG --> UC_CAL
+    ACT_ORG --> UC_CREATE_EV
+    ACT_ORG --> UC_SPLIT_SH
+    ACT_ORG --> UC_NOTE
+    ACT_ORG --> UC_VERIFY
+    ACT_ORG --> UC_AI
+    ACT_ORG --> UC_EXPORT
+
+    %% Actor Relationships - Cán bộ CSVC
+    ACT_STF --> UC_CAL
+    ACT_STF --> UC_NOTE
+    ACT_STF --> UC_AI
+
+    %% Actor Relationships - Trưởng ban Hành chính / BGH
+    ACT_BGH --> UC_CAL
+    ACT_BGH --> UC_SIGN
+    ACT_BGH --> UC_EXPORT
+    ACT_BGH --> UC_AUDIT
+    ACT_BGH --> UC_AI
+
+    %% Actor Relationships - Admin Quản trị
+    ACT_ADM --> UC_CAL
+    ACT_ADM --> UC_CREATE_EV
+    ACT_ADM --> UC_RBAC
+    ACT_ADM --> UC_AUDIT
+    ACT_ADM --> UC_SIGN
+    ACT_ADM --> UC_AI
 ```
+
+#### Bảng Ma Trận Phân Quyền Use Case (Use Case Traceability Matrix)
+
+| Mã Use Case | Tên Chức Năng (Use Case) | Sinh Viên CTV | CTV Media | Giảng Viên / BTC | Cán Bộ CSVC | Trưởng HC / BGH | Quản Trị Viên (Admin) |
+|:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **UC01** | Xem Bảng Lịch Trung Tâm (Tháng/Tuần/Ngày) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **UC02** | Đăng Ký Ca Trực (Kèm Check Trùng Lịch) | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ *(demo)* |
+| **UC03** | Điểm Danh Dynamic QR Code 30s | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ *(máy chiếu)* |
+| **UC04** | Nộp Ảnh Hiện Trường / Link Google Drive | ✅ *(ảnh)* | ✅ *(drive)* | ❌ | ❌ | ❌ | ❌ |
+| **UC05** | Cài Đặt Hồ Sơ Quyền Lợi (CCCD & VNeID & STK) | ✅ | ✅ | ❌ *(miễn nộp)* | ❌ *(miễn nộp)* | ❌ *(miễn nộp)* | ❌ *(miễn nộp)* |
+| **UC06** | Tạo Sự Kiện & Phân Rã Ca Trực | ❌ | ❌ | ✅ | ❌ | ✅ | ✅ |
+| **UC07** | Thêm Ghi Chú Lịch Lễ Hội / Bảo Trì | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **UC08** | Giảng Viên Duyệt Nghiệm Thu Ca Trực | ❌ | ❌ | ✅ | ❌ | ✅ | ✅ |
+| **UC09** | Ký Duyệt Số Hợp Đồng & Quyết Toán Chi Trả | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **UC10** | Xuất Báo Cáo Quyết Toán & Bản In Hợp Đồng A4 | ❌ | ❌ | ✅ | ❌ | ✅ | ✅ |
+| **UC11** | Trợ Lý AI Assistant & Function Calling | ✅ *(cá nhân)* | ✅ *(cá nhân)* | ✅ *(soạn thư)* | ✅ *(tra cứu)* | ✅ *(báo cáo)* | ✅ *(toàn quyền)* |
+| **UC12** | Cấp Quyền Vai Trò RBAC & Quản Trị Tài Khoản | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **UC13** | Giám Sát Nhật Ký Kiểm Toán (Audit Trail) | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
 
 ---
 
@@ -158,8 +231,8 @@ Khi phát hiện trùng lịch, hệ thống lập tức chặn giao dịch tạ
 Nhằm khắc phục triệt để nhược điểm gian lận điểm danh từ xa, PolyMee chuyển đổi toàn diện sang quy trình nghiệm thu bằng ảnh chụp hiện trường thực tế theo chu trình 4 bước:
 1. **CTV nộp ảnh hiện trường có mặt:** Tại vị trí trực thực tế (Sảnh đón khách, Sân khấu, Bàn lễ tân), CTV chụp ảnh hiện trường chứng minh sự hiện diện và gửi kèm ghi chú công việc lên hệ thống.
 2. **Giảng viên giám sát xác nhận nghiệm thu:** Giảng viên kiểm tra đối soát ảnh hiện trường. Khi bấm *"Xác nhận nghiệm thu"*, hệ thống tự động sinh Mã Hợp đồng: `HDNT-2026-FPLY-xxx`.
-3. **Lập Hợp đồng & Biên bản Nghiệm thu Thông tin CTV:** Hệ thống tự động tổng hợp thông tin định danh (CCCD, đối chiếu ứng dụng VNeID), số tài khoản ngân hàng thụ hưởng, chi tiết ca trực, thù lao thỏa thuận và nhúng trực tiếp **Ảnh Hiện Trường Minh Chứng** vào văn bản chuẩn hành chính của Trường Cao đẳng FPT Polytechnic.
-4. **Trình Nhà trường Ký Duyệt & Chuyển Tiền:** Giảng viên và Kế toán trình hồ sơ lên Ban Giám Hiệu ký duyệt chi, chuyển trạng thái sang `Signed_Paid` (Đã Ký & Đã Chi Tiền), đồng thời hỗ trợ xuất bản in A4 hoặc PDF tức thì (`window.print()`).
+3. **Lập Hợp đồng & Biên bản Nghiệm thu Thông tin CTV:** Hệ thống tự động tổng hợp thông tin định danh (CCCD, đối chiếu ứng dụng VNeID), số tài khoản ngân hàng thụ hưởng, chi tiết ca trực, thù lao thỏa thuận và nhúng trực tiếp **Ảnh Hiện Trường Minh Chứng** vào văn bản chuẩn hành chính của Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai.
+4. **Trình Ban Giám Hiệu Ký Duyệt & Chuyển Tiền:** Giảng viên trình hồ sơ lên Ban Giám Hiệu ký duyệt chi, chuyển trạng thái sang `Signed_Paid` (Đã Ký & Đã Chi Tiền), đồng thời hỗ trợ xuất bản in A4 hoặc PDF tức thì (`window.print()`).
 
 #### C. Thẩm định minh chứng Google Drive tự động
 Khi CTV Media gửi link bài nộp, hệ thống sử dụng Regex trích xuất thư mục Google Drive, gán với ca trực tương ứng, chuyển sang trạng thái chờ duyệt và thông báo cho Ban tổ chức thẩm định.
@@ -225,15 +298,15 @@ Hệ thống giải quyết triệt để bài toán khác biệt quyền lợi 
   - Tải đường dẫn ảnh chụp màn hình ứng dụng định danh **VNeID Mức 2** (hỗ trợ xem trước ảnh thời gian thực).
   - Đổi mật khẩu đăng nhập an toàn.
   - Khu vực nguy hiểm (Danger Zone): Tính năng Xóa tài khoản cá nhân dành riêng cho sinh viên với modal cảnh báo bảo mật đa lớp.
-- **Dành Cho Các Vai Trò Khác (Admin, Giảng Viên, Hành Chính, Kế Toán):**
+- **Dành Cho Các Vai Trò Khác (Admin, Giảng Viên, Hành Chính, BGH):**
   - **Bỏ hết toàn bộ** các trường kê khai tài chính, CCCD và ảnh VNeID (nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao ca lẻ).
-  - Tự động hiển thị Thẻ **Phân Quyền & Bảo Mật Cán Bộ Nhà Trường** phong cách Bento với spacing thoáng đãng, khẳng định vai trò biên chế FPT Polytechnic.
+  - Tự động hiển thị Thẻ **Phân Quyền & Bảo Mật Cán Bộ Nhà Trường** phong cách Bento với spacing thoáng đãng, khẳng định vai trò biên chế FPT Polytechnic cơ sở Đồng Nai.
   - Cho phép cập nhật Họ tên, SĐT, Đơn vị/Phòng ban chuyên môn phụ trách và Đổi mật khẩu đăng nhập bảo mật.
 
 ---
 
 ### 3.6. Tiêu Chuẩn Kỹ Thuật UI/UX: Sticky Header & Scrollable Body
-Toàn bộ các phân hệ danh sách và bảng biểu dữ liệu trong PolyMee (Bảng Nghiệm Thu Kế Toán, Quản Lý Hồ Sơ CTV, Ca Trực Của Tôi, Thẩm Định Drive, Quản Trị Cấp Quyền, Nhật Ký Audit Trail...) đều tuân thủ nghiêm ngặt chuẩn kiến trúc Single Page App không cuộn trang (Zero Page-level Scroll):
+Toàn bộ các phân hệ danh sách và bảng biểu dữ liệu trong PolyMee (Bảng Nghiệm Thu Thù Lao, Quản Lý Hồ Sơ CTV, Ca Trực Của Tôi, Thẩm Định Drive, Quản Trị Cấp Quyền, Nhật Ký Audit Trail...) đều tuân thủ nghiêm ngặt chuẩn kiến trúc Single Page App không cuộn trang (Zero Page-level Scroll):
 1. **Cố định phần Header & Bộ lọc (`Non-scrollable Top Section`):**
    - Tiêu đề màn hình, thanh KPI metrics, ô tìm kiếm thời gian thực và bộ lọc dropdown trạng thái được bọc trong container `flex-shrink-0`.
    - Giữ nguyên vị trí cố định ở phía trên, tuyệt đối không bị trôi khi người dùng cuộn xem dữ liệu.
@@ -246,7 +319,7 @@ Toàn bộ các phân hệ danh sách và bảng biểu dữ liệu trong PolyMe
 
 ---
 
-### 3.7. Tối Ưu Bảng Nghiệm Thu Kế Toán & Nút Xem Ảnh Phóng To
+### 3.7. Tối Ưu Bảng Nghiệm Thu Thù Lao & Nút Xem Ảnh Phóng To
 - **Chế độ xem ảnh minh chứng tối ưu:** Thay vì tải trực tiếp ảnh thumbnail làm nặng và biến dạng bảng dữ liệu, hệ thống hiển thị nút pill **Xem Ảnh** (`previewProofModal`) thanh lịch; khi người dùng nhấp vào mới hiển thị popup modal phóng to ảnh minh chứng sắc nét.
 - **Thiết kế bảng không ngắt dòng xấu (Zero Orphan Words):** Tên CTV, đơn vị, thời gian, số tiền và trạng thái được căn chỉnh tỉ lệ độ rộng cột chuẩn mực, kích hoạt `white-space: nowrap` và `text-truncate` thông minh, loại bỏ hoàn toàn tình trạng rớt chữ đơn lẻ gây rối mắt.
 - **Loại bỏ trùng lặp thông tin:** Tinh gọn cột Thao tác, chỉ giữ lại các nút hành động cốt lõi (`Chi Tiết`, `Hợp Đồng`, `Duyệt`, `Trình Ký`), không lặp lại badge trạng thái chi tiền đã có ở cột bên cạnh.
@@ -370,11 +443,11 @@ erDiagram
 ### 4.2. Từ Điển Dữ Liệu (Data Dictionary) Tóm Tắt
 
 1. **`roles`:** Bảng danh mục 6 vai trò người dùng trong hệ thống.
-2. **`users`:** Bảng người dùng chứa thông tin sinh viên, email, mật khẩu băm, CCCD và thông tin ngân hàng phục vụ kế toán.
-3. **`locations`:** Danh mục hội trường và phòng lab của FPT Polytechnic.
+2. **`users`:** Bảng người dùng chứa thông tin sinh viên, email, mật khẩu băm, CCCD và thông tin ngân hàng nhận thù lao.
+3. **`locations`:** Danh mục hội trường và phòng lab của FPT Polytechnic cơ sở Đồng Nai.
 4. **`events`:** Quản lý các chiến dịch sự kiện của nhà trường.
 5. **`shifts`:** Phân rã sự kiện thành các ca làm việc độc lập kèm định mức thù lao và chỉ tiêu CTV.
-6. **`shift_assignments`:** Bảng trung gian liên kết Sinh viên với Ca trực, trạng thái duyệt và trạng thái kế toán.
+6. **`shift_assignments`:** Bảng trung gian liên kết Sinh viên với Ca trực, trạng thái duyệt và trạng thái thù lao.
 7. **`check_ins`:** Nhật ký quét mã QR động điểm danh.
 8. **`drive_submissions`:** Lưu trữ link thư mục Google Drive ảnh/video recap do CTV nộp.
 9. **`calendar_notes`:** Bảng dặn dò, hạn chót và lưu ý cơ sở vật chất hiển thị trên Bảng Lịch Apple Calendar.
@@ -464,7 +537,7 @@ Hệ thống đã tích hợp menu chuyển vai nhanh **(Role Switcher Dropdown)
 | 2 | **Lê Đức Mạnh** | `PI03067` | **CTV Lễ Tân** | `123456` | Đăng ký ca, Check-in Dynamic QR, Hồ sơ VNeID |
 | 3 | **Thầy Phan Hoàng Khải** | `GV0102` | **Ban Tổ Chức** | `123456` | Đặt lịch ca trực mới, Thẩm định minh chứng Drive |
 | 4 | **Lê Đình Tuấn** | `HC0201` | **Hành Chính CSVC** | `123456` | Kiểm tra thiết bị âm thanh, ghi chú hội trường |
-| 5 | **Đặng Thu Thảo** | `KT0105` | **Kế Toán Quyết Toán** | `123456` | Bảng nghiệm thu thù lao, đối soát VNeID, xuất CSV |
+| 5 | **ThS. Phạm Hồng Sơn** | `HC0001` | **Trưởng Ban Hành Chính / BGH** | `123456` | Ký duyệt số hợp đồng, quyết toán thù lao CTV, xem audit log |
 | 6 | **Quản Trị Viên** | `ADMIN001` | **Admin Hệ Thống** | `123456` | Vận hành Máy chiếu Dynamic QR Code xoay vòng 30s |
 
 ---
@@ -514,7 +587,7 @@ Khi giảng viên yêu cầu mở demo sản phẩm trực tiếp, nhóm sinh vi
 ---
 
 ### 🔹 Bước 5: Hồ Sơ Hợp Đồng Nghiệm Thu & Trình Trường Ký Duyệt Chuyển Tiền
-1. Mở tab **"Hồ Sơ Hợp Đồng"** (`panelContractDossier`) hoặc **"Nghiệm Thu Kế Toán"** (`panelAccounting`).
+1. Mở tab **"Hồ Sơ Hợp Đồng"** (`panelContractDossier`) hoặc **"Nghiệm Thu Thù Lao"** (`panelAccounting`).
 2. Bấm nút **"Xem Hợp Đồng"**: Modal chuẩn văn bản **Trường Cao Đẳng FPT Polytechnic** hiện ra đầy đủ:
    - Quốc hiệu, đơn vị đại diện, mã số hồ sơ điện tử.
    - Bảng kê chi tiết thông tin CTV, sự kiện, ca trực, số tiền thù lao, số CCCD và STK ngân hàng.
@@ -522,7 +595,7 @@ Khi giảng viên yêu cầu mở demo sản phẩm trực tiếp, nhóm sinh vi
    - Khung 3 chữ ký: Giảng viên phụ trách, Cộng tác viên, Đại diện Nhà trường.
 3. Bấm **"Trình Trường Ký Duyệt"**: Trạng thái chuyển sang `Đã Ký & Quyết Toán (Signed_Paid)`.
 4. Bấm **"In Hợp Đồng (PDF)"**: Khổ giấy A4 tối ưu `@media print` sẵn sàng trình ký và lưu trữ văn thư.
-5. Bấm **"Tải File Excel (CSV)"**: Xuất bảng kê thù lao kế toán UTF-8 BOM hiển thị tiếng Việt chuẩn 100%.
+5. Bấm **"Tải File Excel (CSV)"**: Xuất bảng kê thù lao UTF-8 BOM hiển thị tiếng Việt chuẩn 100%.
 
 ---
 
@@ -547,7 +620,7 @@ polymee/
 │   ├── controllers/            # Tầng Điều Khiển (Controllers)
 │   │   ├── BaseController.php      # Lớp cha đóng gói View render & Session
 │   │   ├── HomeController.php      # Điều hướng trang chủ & Switch User
-│   │   ├── DashboardController.php # Bảng Lịch Trung Tâm, Kế Toán & Lịch Notes
+│   │   ├── DashboardController.php # Bảng Lịch Trung Tâm, Quyết Toán Thù Lao & Lịch Notes
 │   │   ├── ShiftController.php     # Đăng ký ca, AJAX Collision Detection
 │   │   ├── AdminController.php     # Máy chiếu Dynamic QR & Quản trị
 │   │   └── AiAssistantController.php # Trợ lý AI Function Calling

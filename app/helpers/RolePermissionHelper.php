@@ -24,9 +24,6 @@ class RolePermissionHelper
         if ($roleId === 3 || in_array($name, ['STAFF', 'HÀNH CHÍNH', 'HANH CHINH', 'CSVC'], true)) {
             return 'STAFF';
         }
-        if ($roleId === 5 || in_array($name, ['ACCOUNTANT', 'KẾ TOÁN', 'KE TOAN', 'TÀI CHÍNH'], true)) {
-            return 'ACCOUNTANT';
-        }
         if ($roleId === 6 || in_array($name, ['MEDIA', 'CTV MEDIA', 'TRUYỀN THÔNG', 'TRUYEN THONG'], true)) {
             return 'MEDIA';
         }
@@ -99,12 +96,7 @@ class RolePermissionHelper
             'HEAD_ADMIN' => [
                 'name' => 'Trưởng hành chính / BGH',
                 'badge' => 'bg-dark text-white',
-                'desc' => 'Phê duyệt cuối đặt phòng/sự kiện, quản lý địa điểm, báo cáo'
-            ],
-            'ACCOUNTANT' => [
-                'name' => 'Kế toán / Quyền lợi',
-                'badge' => 'bg-success',
-                'desc' => 'Tổng hợp công, lập đợt thanh toán, đối soát STK/VNeID, ghi mã giao dịch'
+                'desc' => 'Phê duyệt cuối đặt phòng/sự kiện, ký duyệt số hợp đồng & quyết toán thù lao'
             ],
             'MEDIA' => [
                 'name' => 'CTV Media / Truyền thông',
@@ -131,12 +123,12 @@ class RolePermissionHelper
             'canViewCalendar' => true,
             // Ca trực của tôi: Chỉ dành cho CTV và Media (Admin và Giảng viên không có trang ca trực CTV)
             'canViewMyShifts' => in_array($role, ['CTV', 'MEDIA'], true),
-            // Hồ sơ hợp đồng: CTV xem hợp đồng của mình; GV xem ca của mình; Kế toán/Trưởng HC/Admin xem toàn bộ
-            'canViewContracts' => in_array($role, ['CTV', 'MEDIA', 'LECTURER', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Nghiệm thu & Quyết toán: Dành cho Kế toán, Nhân viên Hành chính, Trưởng hành chính và Admin
-            'canViewAccounting' => in_array($role, ['STAFF', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Quản lý hồ sơ CTV: Giảng viên, Nhân viên Hành chính, Kế toán, Trưởng HC, Admin đối soát thông tin toàn trường
-            'canViewCtvProfiles' => in_array($role, ['LECTURER', 'STAFF', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Hồ sơ hợp đồng: CTV xem hợp đồng của mình; GV xem ca của mình; Trưởng HC/Admin xem toàn bộ
+            'canViewContracts' => in_array($role, ['CTV', 'MEDIA', 'LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Nghiệm thu & Quyết toán: Dành cho Nhân viên Hành chính, Trưởng hành chính và Admin
+            'canViewAccounting' => in_array($role, ['STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Quản lý hồ sơ CTV: Giảng viên, Nhân viên Hành chính, Trưởng HC, Admin đối soát thông tin toàn trường
+            'canViewCtvProfiles' => in_array($role, ['LECTURER', 'STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
             // Cài đặt tài khoản cá nhân: Toàn bộ người dùng đã đăng nhập đều có quyền
             'canViewProfileSettings' => true,
             // Cập nhật hồ sơ VNeID & STK cá nhân: CTV và Media
@@ -162,10 +154,10 @@ class RolePermissionHelper
             'canVerifyLecturer' => in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
             // Kiểm tra CSVC / Trình trường ký duyệt: Giảng viên, Nhân viên hành chính, Trưởng HC, Admin
             'canSubmitSchoolSigning' => in_array($role, ['LECTURER', 'STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Phê duyệt thanh toán / Quyết toán thù lao: Kế toán, Trưởng HC, Admin
-            'canApproveAccounting' => in_array($role, ['ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Quản lý hồ sơ CTV: Giảng viên, Kế toán, Trưởng HC, Admin
-            'canManageCtvProfiles' => in_array($role, ['LECTURER', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Phê duyệt thanh toán / Quyết toán thù lao: Trưởng HC, Admin
+            'canApproveAccounting' => in_array($role, ['HEAD_ADMIN', 'ADMIN'], true),
+            // Quản lý hồ sơ CTV: Giảng viên, Trưởng HC, Admin
+            'canManageCtvProfiles' => in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
             // Xóa sự kiện: Cấp bậc từ Giảng viên trở lên
             // - Head_Admin và Admin: Xóa được mọi sự kiện
             // - Giảng viên: Chỉ xóa được sự kiện do mình đặt

@@ -517,15 +517,6 @@
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
 
-                        <a href="/auth/quickLogin/7" class="demo-account-pill">
-                            <div class="avatar-circle bg-success-subtle text-success">KT</div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold small lh-1">Đặng Thu Thảo</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">KT0105 • Role: <strong style="color: var(--ux-ink-2);">Kế Toán / Quyền Lợi & Quyết Toán</strong></small>
-                            </div>
-                            <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
-                        </a>
-
                         <a href="/auth/quickLogin/1" class="demo-account-pill">
                             <div class="avatar-circle bg-danger-subtle text-danger">AD</div>
                             <div class="flex-grow-1">
