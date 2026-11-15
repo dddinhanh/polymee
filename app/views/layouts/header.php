@@ -20,9 +20,6 @@ declare(strict_types=1);
     <!-- FontAwesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- QRCode.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
     <!-- Tailwind CSS with Custom FPoly Theme -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -67,7 +64,7 @@ declare(strict_types=1);
         <div class="flex items-center gap-4 text-[#6E6E73]">
             <div class="flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-[11px]">Dynamic QR 30s Active</span>
+                <span class="text-[11px]">Nghiệm thu minh chứng số</span>
             </div>
             <span class="text-[#C7C7CC]">|</span>
             <div class="flex items-center gap-1 text-[11px]">

@@ -21,14 +21,11 @@ class RolePermissionHelper
         if ($roleId === 2 || in_array($name, ['ORGANIZER', 'LECTURER', 'TEACHER', 'GIẢNG VIÊN', 'GIANG VIEN', 'BTC'], true)) {
             return 'LECTURER';
         }
-        if ($roleId === 3 || in_array($name, ['STAFF', 'HÀNH CHÍNH', 'HANH CHINH', 'CSVC'], true)) {
-            return 'STAFF';
+        if (in_array($roleId, [3, 7], true) || in_array($name, ['STAFF', 'HEAD_ADMIN', 'HÀNH CHÍNH', 'HANH CHINH', 'HÀNH CHÁNH', 'HANH CHANH', 'CSVC', 'BGH', 'TRƯỞNG HÀNH CHÍNH', 'TRUONG HANH CHINH'], true)) {
+            return 'STAFF'; // Gộp Cán bộ CSVC và Trưởng Hành chính / BGH thành 1 Role duy nhất: Hành chính
         }
         if ($roleId === 6 || in_array($name, ['MEDIA', 'CTV MEDIA', 'TRUYỀN THÔNG', 'TRUYEN THONG'], true)) {
             return 'MEDIA';
-        }
-        if ($roleId === 7 || in_array($name, ['HEAD_ADMIN', 'TRƯỞNG HÀNH CHÍNH', 'TRUONG HANH CHINH', 'BGH'], true)) {
-            return 'HEAD_ADMIN';
         }
         return 'CTV'; // Mặc định role_id = 4: Student / CTV
     }
@@ -86,17 +83,12 @@ class RolePermissionHelper
             'LECTURER' => [
                 'name' => 'Giảng viên / Ban tổ chức',
                 'badge' => 'bg-warning text-dark',
-                'desc' => 'Tạo sự kiện, đặt phòng, tuyển CTV, duyệt hoàn thành'
+                'desc' => 'Tạo sự kiện, đặt phòng, tuyển CTV, duyệt nghiệm thu minh chứng'
             ],
             'STAFF' => [
-                'name' => 'Nhân viên Hành chính',
+                'name' => 'Cán bộ Hành chính',
                 'badge' => 'bg-info text-dark',
-                'desc' => 'Kiểm tra cơ sở vật chất, đối soát xung đột, chuyển duyệt'
-            ],
-            'HEAD_ADMIN' => [
-                'name' => 'Trưởng hành chính / BGH',
-                'badge' => 'bg-dark text-white',
-                'desc' => 'Phê duyệt cuối đặt phòng/sự kiện, ký duyệt số hợp đồng & quyết toán thù lao'
+                'desc' => 'Quản lý CSVC, đối soát hồ sơ CTV, ký duyệt số hợp đồng & phê duyệt lệnh chi trả thù lao'
             ],
             'MEDIA' => [
                 'name' => 'CTV Media / Truyền thông',
@@ -106,7 +98,7 @@ class RolePermissionHelper
             default => [
                 'name' => 'Cộng tác viên (CTV)',
                 'badge' => 'bg-success-subtle text-success border border-success-subtle',
-                'desc' => 'Đăng ký đầu việc, Check-in/out QR, theo dõi thù lao'
+                'desc' => 'Đăng ký ca trực, nộp ảnh minh chứng hiện trường, theo dõi hợp đồng & thù lao'
             ]
         };
 
@@ -123,48 +115,48 @@ class RolePermissionHelper
             'canViewCalendar' => true,
             // Ca trực của tôi: Chỉ dành cho CTV và Media (Admin và Giảng viên không có trang ca trực CTV)
             'canViewMyShifts' => in_array($role, ['CTV', 'MEDIA'], true),
-            // Hồ sơ hợp đồng: CTV xem hợp đồng của mình; GV xem ca của mình; Trưởng HC/Admin xem toàn bộ
-            'canViewContracts' => in_array($role, ['CTV', 'MEDIA', 'LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Nghiệm thu & Quyết toán: Dành cho Nhân viên Hành chính, Trưởng hành chính và Admin
-            'canViewAccounting' => in_array($role, ['STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Quản lý hồ sơ CTV: Giảng viên, Nhân viên Hành chính, Trưởng HC, Admin đối soát thông tin toàn trường
-            'canViewCtvProfiles' => in_array($role, ['LECTURER', 'STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Hồ sơ hợp đồng: CTV xem hợp đồng của mình; GV xem ca của mình; Cán bộ Hành chính & Admin xem toàn bộ
+            'canViewContracts' => in_array($role, ['CTV', 'MEDIA', 'LECTURER', 'STAFF', 'ADMIN'], true),
+            // Nghiệm thu & Quyết toán: Dành cho Cán bộ Hành chính và Admin
+            'canViewAccounting' => in_array($role, ['STAFF', 'ADMIN'], true),
+            // Quản lý hồ sơ CTV: Giảng viên, Cán bộ Hành chính, Admin đối soát thông tin toàn trường
+            'canViewCtvProfiles' => in_array($role, ['LECTURER', 'STAFF', 'ADMIN'], true),
             // Cài đặt tài khoản cá nhân: Toàn bộ người dùng đã đăng nhập đều có quyền
             'canViewProfileSettings' => true,
             // Cập nhật hồ sơ VNeID & STK cá nhân: CTV và Media
             'canViewMyProfile' => in_array($role, ['CTV', 'MEDIA'], true),
-            // Minh chứng Drive: Media, CTV nộp link; GV, Trưởng HC, Admin kiểm tra
-            'canViewSubmissions' => in_array($role, ['MEDIA', 'CTV', 'LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Quản lý sự kiện: GV, Staff, Trưởng HC, Admin, CTV, Media (xem danh sách tuyển dụng)
-            'canViewEvents' => in_array($role, ['LECTURER', 'STAFF', 'HEAD_ADMIN', 'ADMIN', 'CTV', 'MEDIA'], true),
+            // Minh chứng Drive: Media, CTV nộp link; GV, Hành chính, Admin kiểm tra
+            'canViewSubmissions' => in_array($role, ['MEDIA', 'CTV', 'LECTURER', 'STAFF', 'ADMIN'], true),
+            // Quản lý sự kiện: GV, Staff, Admin, CTV, Media (xem danh sách tuyển dụng)
+            'canViewEvents' => in_array($role, ['LECTURER', 'STAFF', 'ADMIN', 'CTV', 'MEDIA'], true),
             // Cấp quyền & Quản trị tài khoản: CHỈ Quản trị viên Admin
             'canViewAdminManagement' => ($role === 'ADMIN'),
-            // Xem nhật ký Audit log: Admin và Trưởng hành chính
-            'canViewAuditLogs' => in_array($role, ['ADMIN', 'HEAD_ADMIN'], true),
+            // Xem nhật ký Audit log: Admin và Cán bộ Hành chính
+            'canViewAuditLogs' => in_array($role, ['ADMIN', 'STAFF'], true),
 
             // 2. Phân quyền Thao tác Nghiệp vụ (Action Permissions)
-            // Đặt lịch ca / Tạo sự kiện: Giảng viên/BTC, Trưởng HC, Admin
-            'canCreateShift' => in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
-            'canCreateEvent' => in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Đặt lịch ca / Tạo sự kiện: Giảng viên/BTC, Cán bộ Hành chính, Admin
+            'canCreateShift' => in_array($role, ['LECTURER', 'STAFF', 'ADMIN'], true),
+            'canCreateEvent' => in_array($role, ['LECTURER', 'STAFF', 'ADMIN'], true),
             // Đăng ký ca trực: Chỉ sinh viên CTV và Media (và Admin demo)
             'canRegisterShift' => in_array($role, ['CTV', 'MEDIA', 'ADMIN'], true),
             // Nộp ảnh check-in hiện trường & link Drive: CTV, Media
             'canSubmitProof' => in_array($role, ['CTV', 'MEDIA'], true),
-            // Giảng viên nghiệm thu ca trực (Work Confirmation): Giảng viên/BTC, Trưởng HC, Admin
-            'canVerifyLecturer' => in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Kiểm tra CSVC / Trình trường ký duyệt: Giảng viên, Nhân viên hành chính, Trưởng HC, Admin
-            'canSubmitSchoolSigning' => in_array($role, ['LECTURER', 'STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Phê duyệt thanh toán / Quyết toán thù lao: Trưởng HC, Admin
-            'canApproveAccounting' => in_array($role, ['HEAD_ADMIN', 'ADMIN'], true),
-            // Quản lý hồ sơ CTV: Giảng viên, Trưởng HC, Admin
-            'canManageCtvProfiles' => in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Giảng viên nghiệm thu ca trực (Work Confirmation): Giảng viên/BTC, Hành chính, Admin
+            'canVerifyLecturer' => in_array($role, ['LECTURER', 'STAFF', 'ADMIN'], true),
+            // Kiểm tra CSVC / Ký duyệt hợp đồng: Cán bộ Hành chính, Admin
+            'canSubmitSchoolSigning' => in_array($role, ['STAFF', 'ADMIN'], true),
+            // Phê duyệt thanh toán / Quyết toán thù lao: Cán bộ Hành chính, Admin
+            'canApproveAccounting' => in_array($role, ['STAFF', 'ADMIN'], true),
+            // Quản lý hồ sơ CTV: Giảng viên, Cán bộ Hành chính, Admin
+            'canManageCtvProfiles' => in_array($role, ['LECTURER', 'STAFF', 'ADMIN'], true),
             // Xóa sự kiện: Cấp bậc từ Giảng viên trở lên
-            // - Head_Admin và Admin: Xóa được mọi sự kiện
+            // - Cán bộ Hành chính và Admin: Xóa được mọi sự kiện
             // - Giảng viên: Chỉ xóa được sự kiện do mình đặt
-            'canDeleteAnyEvent' => in_array($role, ['HEAD_ADMIN', 'ADMIN'], true),
-            'canDeleteOwnEvent' => in_array($role, ['LECTURER', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Thêm/Xóa Ghi chú lịch hẹn: Cán bộ, Giảng viên, Trưởng HC, Admin (CTV KHÔNG có quyền)
-            'canCreateNote' => in_array($role, ['LECTURER', 'STAFF', 'HEAD_ADMIN', 'ADMIN'], true),
+            'canDeleteAnyEvent' => in_array($role, ['STAFF', 'ADMIN'], true),
+            'canDeleteOwnEvent' => in_array($role, ['LECTURER', 'STAFF', 'ADMIN'], true),
+            // Thêm/Xóa Ghi chú lịch hẹn: Cán bộ Hành chính, Giảng viên, Admin (CTV KHÔNG có quyền)
+            'canCreateNote' => in_array($role, ['LECTURER', 'STAFF', 'ADMIN'], true),
             // Quản lý, thay đổi vai trò (cấp quyền): CHỈ Admin
             'canManageRoles' => ($role === 'ADMIN'),
         ];

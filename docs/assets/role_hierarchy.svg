@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 280" width="100%" height="100%" style="background:#FFFFFF; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 290" width="100%" height="100%" style="background:#FFFFFF; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
   <defs>
     <linearGradient id="rootGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#EA580C" />
@@ -13,85 +13,73 @@
   </defs>
 
   <!-- Root System Box -->
-  <g transform="translate(425, 20)">
-    <rect x="0" y="0" width="250" height="56" rx="12" fill="url(#rootGrad)" filter="url(#roleShadow)" />
-    <text x="125" y="27" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">HỆ THỐNG POLYMEE</text>
-    <text x="125" y="44" fill="#FFEDD5" font-size="11" font-weight="500" text-anchor="middle">FPT Polytechnic Cơ Sở Đồng Nai</text>
+  <g transform="translate(375, 20)">
+    <rect x="0" y="0" width="250" height="58" rx="12" fill="url(#rootGrad)" filter="url(#roleShadow)" />
+    <text x="125" y="28" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">HỆ THỐNG POLYMEE</text>
+    <text x="125" y="46" fill="#FFEDD5" font-size="11" font-weight="500" text-anchor="middle">FPT Polytechnic Cơ Sở Đồng Nai (5 Roles)</text>
   </g>
 
-  <!-- Lines from Root to Roles -->
-  <path d="M 550 76 L 550 115 M 115 115 L 985 115" stroke="#CBD5E1" stroke-width="2" fill="none" />
+  <!-- Lines from Root to 5 Roles -->
+  <path d="M 500 78 L 500 115 M 105 115 L 895 115" stroke="#CBD5E1" stroke-width="2" fill="none" />
   
-  <path d="M 115 115 L 115 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
-  <path d="M 285 115 L 285 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
-  <path d="M 460 115 L 460 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
-  <path d="M 635 115 L 635 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
-  <path d="M 810 115 L 810 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
-  <path d="M 985 115 L 985 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
+  <path d="M 105 115 L 105 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
+  <path d="M 302 115 L 302 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
+  <path d="M 500 115 L 500 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
+  <path d="M 698 115 L 698 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
+  <path d="M 895 115 L 895 140" stroke="#CBD5E1" stroke-width="2" marker-end="url(#roleArrow)" fill="none" />
 
   <!-- Role 1: Student -->
-  <g transform="translate(35, 140)">
-    <rect x="0" y="0" width="160" height="110" rx="10" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.8" filter="url(#roleShadow)" />
-    <rect x="0" y="0" width="160" height="28" rx="10" fill="#EFF6FF" />
-    <text x="80" y="19" fill="#1D4ED8" font-size="11.5" font-weight="700" text-anchor="middle">1. Sinh Viên CTV</text>
-    <text x="80" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Student</text>
-    <text x="80" y="68" fill="#64748B" font-size="10" text-anchor="middle">Đăng ký ca, QR 30s</text>
-    <text x="80" y="85" fill="#64748B" font-size="10" text-anchor="middle">Kê khai CCCD &amp; STK</text>
-    <text x="80" y="100" fill="#2563EB" font-size="9.5" font-style="italic" text-anchor="middle">Lê Đức Mạnh</text>
+  <g transform="translate(20, 140)">
+    <rect x="0" y="0" width="170" height="120" rx="10" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.8" filter="url(#roleShadow)" />
+    <rect x="0" y="0" width="170" height="28" rx="10" fill="#EFF6FF" />
+    <text x="85" y="19" fill="#1D4ED8" font-size="11.5" font-weight="700" text-anchor="middle">1. Sinh Viên CTV</text>
+    <text x="85" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Student (Role ID: 4)</text>
+    <text x="85" y="68" fill="#64748B" font-size="10" text-anchor="middle">Đăng ký ca trực sự kiện</text>
+    <text x="85" y="84" fill="#64748B" font-size="10" text-anchor="middle">Nộp ảnh minh chứng tại chỗ</text>
+    <text x="85" y="102" fill="#2563EB" font-size="9.5" font-style="italic" text-anchor="middle">Lê Đức Mạnh (PI03067)</text>
   </g>
 
   <!-- Role 2: Media -->
-  <g transform="translate(205, 140)">
-    <rect x="0" y="0" width="160" height="110" rx="10" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.8" filter="url(#roleShadow)" />
-    <rect x="0" y="0" width="160" height="28" rx="10" fill="#FFFBEB" />
-    <text x="80" y="19" fill="#B45309" font-size="11.5" font-weight="700" text-anchor="middle">2. CTV Media</text>
-    <text x="80" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Media</text>
-    <text x="80" y="68" fill="#64748B" font-size="10" text-anchor="middle">Quay chụp RAW</text>
-    <text x="80" y="85" fill="#64748B" font-size="10" text-anchor="middle">Nộp Google Drive</text>
-    <text x="80" y="100" fill="#D97706" font-size="9.5" font-style="italic" text-anchor="middle">Đinh N. P. Anh</text>
+  <g transform="translate(217, 140)">
+    <rect x="0" y="0" width="170" height="120" rx="10" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.8" filter="url(#roleShadow)" />
+    <rect x="0" y="0" width="170" height="28" rx="10" fill="#FFFBEB" />
+    <text x="85" y="19" fill="#B45309" font-size="11.5" font-weight="700" text-anchor="middle">2. CTV Media</text>
+    <text x="85" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Media (Role ID: 6)</text>
+    <text x="85" y="68" fill="#64748B" font-size="10" text-anchor="middle">Quay phim, chụp ảnh RAW</text>
+    <text x="85" y="84" fill="#64748B" font-size="10" text-anchor="middle">Nộp link Google Drive recap</text>
+    <text x="85" y="102" fill="#D97706" font-size="9.5" font-style="italic" text-anchor="middle">Đinh N. P. Anh (PI03084)</text>
   </g>
 
   <!-- Role 3: Organizer -->
-  <g transform="translate(380, 140)">
-    <rect x="0" y="0" width="160" height="110" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.8" filter="url(#roleShadow)" />
-    <rect x="0" y="0" width="160" height="28" rx="10" fill="#ECFDF5" />
-    <text x="80" y="19" fill="#047857" font-size="11.5" font-weight="700" text-anchor="middle">3. Giảng Viên / BTC</text>
-    <text x="80" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Organizer</text>
-    <text x="80" y="68" fill="#64748B" font-size="10" text-anchor="middle">Tạo sự kiện, rã ca</text>
-    <text x="80" y="85" fill="#64748B" font-size="10" text-anchor="middle">Duyệt nghiệm thu</text>
-    <text x="80" y="100" fill="#059669" font-size="9.5" font-style="italic" text-anchor="middle">Thầy Khải, Cô Trang</text>
+  <g transform="translate(415, 140)">
+    <rect x="0" y="0" width="170" height="120" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.8" filter="url(#roleShadow)" />
+    <rect x="0" y="0" width="170" height="28" rx="10" fill="#ECFDF5" />
+    <text x="85" y="19" fill="#047857" font-size="11.5" font-weight="700" text-anchor="middle">3. Giảng Viên / BTC</text>
+    <text x="85" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Organizer (Role ID: 2)</text>
+    <text x="85" y="68" fill="#64748B" font-size="10" text-anchor="middle">Tạo sự kiện, rã ca trực</text>
+    <text x="85" y="84" fill="#64748B" font-size="10" text-anchor="middle">Duyệt nghiệm thu minh chứng</text>
+    <text x="85" y="102" fill="#059669" font-size="9.5" font-style="italic" text-anchor="middle">Thầy Khải, Cô Trang</text>
   </g>
 
-  <!-- Role 4: Staff -->
-  <g transform="translate(555, 140)">
-    <rect x="0" y="0" width="160" height="110" rx="10" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="1.8" filter="url(#roleShadow)" />
-    <rect x="0" y="0" width="160" height="28" rx="10" fill="#F5F3FF" />
-    <text x="80" y="19" fill="#6D28D9" font-size="11.5" font-weight="700" text-anchor="middle">4. Cán Bộ CSVC</text>
-    <text x="80" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Staff</text>
-    <text x="80" y="68" fill="#64748B" font-size="10" text-anchor="middle">Bàn giao thiết bị</text>
-    <text x="80" y="85" fill="#64748B" font-size="10" text-anchor="middle">Ghi chú lịch hiện trường</text>
-    <text x="80" y="100" fill="#7C3AED" font-size="9.5" font-style="italic" text-anchor="middle">Lê Đình Tuấn</text>
+  <!-- Role 4: Staff (GỘP CSVC VÀ TRƯỞNG HC / BGH) -->
+  <g transform="translate(612, 140)">
+    <rect x="0" y="0" width="170" height="120" rx="10" fill="#FFFFFF" stroke="#0284C7" stroke-width="2" filter="url(#roleShadow)" />
+    <rect x="0" y="0" width="170" height="28" rx="10" fill="#F0F9FF" />
+    <text x="85" y="19" fill="#0369A1" font-size="11.5" font-weight="700" text-anchor="middle">4. Cán Bộ Hành Chính</text>
+    <text x="85" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Staff (Role ID: 3)</text>
+    <text x="85" y="68" fill="#64748B" font-size="10" text-anchor="middle">Quản lý CSVC &amp; Thiết bị</text>
+    <text x="85" y="84" fill="#0284C7" font-size="10" font-weight="600" text-anchor="middle">Ký duyệt số &amp; Chi trả thù lao</text>
+    <text x="85" y="102" fill="#0369A1" font-size="9.5" font-style="italic" text-anchor="middle">ThS. Hồng Sơn, Tuấn LD</text>
   </g>
 
-  <!-- Role 5: Head_Admin -->
-  <g transform="translate(730, 140)">
-    <rect x="0" y="0" width="160" height="110" rx="10" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.8" filter="url(#roleShadow)" />
-    <rect x="0" y="0" width="160" height="28" rx="10" fill="#F0F9FF" />
-    <text x="80" y="19" fill="#0369A1" font-size="11.5" font-weight="700" text-anchor="middle">5. Trưởng Ban HC / BGH</text>
-    <text x="80" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Head_Admin</text>
-    <text x="80" y="68" fill="#64748B" font-size="10" text-anchor="middle">Thẩm định hồ sơ</text>
-    <text x="80" y="85" fill="#64748B" font-size="10" text-anchor="middle">Ký duyệt chi thù lao</text>
-    <text x="80" y="100" fill="#0284C7" font-size="9.5" font-style="italic" text-anchor="middle">ThS. Phạm Hồng Sơn</text>
-  </g>
-
-  <!-- Role 6: Admin -->
-  <g transform="translate(905, 140)">
-    <rect x="0" y="0" width="160" height="110" rx="10" fill="#FFFFFF" stroke="#DC2626" stroke-width="1.8" filter="url(#roleShadow)" />
-    <rect x="0" y="0" width="160" height="28" rx="10" fill="#FEF2F2" />
-    <text x="80" y="19" fill="#B91C1C" font-size="11.5" font-weight="700" text-anchor="middle">6. Quản Trị Hệ Thống</text>
-    <text x="80" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Admin</text>
-    <text x="80" y="68" fill="#64748B" font-size="10" text-anchor="middle">Phân quyền RBAC</text>
-    <text x="80" y="85" fill="#64748B" font-size="10" text-anchor="middle">Giám sát Audit Trail</text>
-    <text x="80" y="100" fill="#DC2626" font-size="9.5" font-style="italic" text-anchor="middle">ADMIN001</text>
+  <!-- Role 5: Admin -->
+  <g transform="translate(810, 140)">
+    <rect x="0" y="0" width="170" height="120" rx="10" fill="#FFFFFF" stroke="#DC2626" stroke-width="1.8" filter="url(#roleShadow)" />
+    <rect x="0" y="0" width="170" height="28" rx="10" fill="#FEF2F2" />
+    <text x="85" y="19" fill="#B91C1C" font-size="11.5" font-weight="700" text-anchor="middle">5. Quản Trị Hệ Thống</text>
+    <text x="85" y="48" fill="#1E293B" font-size="11" font-weight="600" text-anchor="middle">Admin (Role ID: 1)</text>
+    <text x="85" y="68" fill="#64748B" font-size="10" text-anchor="middle">Phân quyền vai trò RBAC</text>
+    <text x="85" y="84" fill="#64748B" font-size="10" text-anchor="middle">Giám sát Audit Trail toàn diện</text>
+    <text x="85" y="102" fill="#DC2626" font-size="9.5" font-style="italic" text-anchor="middle">ADMIN001</text>
   </g>
 </svg>

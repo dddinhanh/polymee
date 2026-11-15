@@ -57,9 +57,9 @@ declare(strict_types=1);
             <i class="fa-solid fa-clipboard-check text-orange-500"></i>
             <span>Lịch trực hôm nay?</span>
         </button>
-        <button type="button" onclick="sendQuickPrompt('Hướng dẫn điểm danh Dynamic QR')" class="flex-shrink-0 px-2.5 py-1 rounded-full bg-white hover:bg-orange-50 text-slate-700 hover:text-orange-600 border border-slate-200 font-medium transition shadow-xs flex items-center gap-1">
-            <i class="fa-solid fa-qrcode text-blue-500"></i>
-            <span>Điểm danh QR?</span>
+        <button type="button" onclick="sendQuickPrompt('Hướng dẫn nộp ảnh minh chứng hiện trường')" class="flex-shrink-0 px-2.5 py-1 rounded-full bg-white hover:bg-orange-50 text-slate-700 hover:text-orange-600 border border-slate-200 font-medium transition shadow-xs flex items-center gap-1">
+            <i class="fa-solid fa-camera text-blue-500"></i>
+            <span>Nộp minh chứng?</span>
         </button>
         <button type="button" onclick="sendQuickPrompt('https://drive.google.com/drive/folders/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs')" class="flex-shrink-0 px-2.5 py-1 rounded-full bg-white hover:bg-orange-50 text-slate-700 hover:text-orange-600 border border-slate-200 font-medium transition shadow-xs flex items-center gap-1">
             <i class="fa-brands fa-google-drive text-emerald-600"></i>
@@ -81,7 +81,7 @@ declare(strict_types=1);
                 <ul class="list-disc list-inside space-y-1 text-slate-600 pl-1">
                     <li>Tra cứu nhiệm vụ và lịch trực trong ngày.</li>
                     <li>Tự động nhận diện và nộp link Google Drive nghiệm thu minh chứng media.</li>
-                    <li>Hướng dẫn sử dụng Dynamic QR 30s để điểm danh.</li>
+                    <li>Hướng dẫn nộp ảnh minh chứng hiện trường và link Google Drive để Giảng viên nghiệm thu.</li>
                 </ul>
             </div>
         </div>

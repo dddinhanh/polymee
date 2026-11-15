@@ -19,7 +19,7 @@ declare(strict_types=1);
                     <span class="font-extrabold text-[#1D1D1F] text-lg tracking-tight">Poly<span class="text-fpoly-primary">Mee</span></span>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed">
-                    Hệ thống số hóa quản trị sự kiện & điều phối cộng tác viên sinh viên FPT Polytechnic tích hợp Trợ lý Trí tuệ Nhân tạo và Điểm danh bảo mật Dynamic QR.
+                    Hệ thống số hóa quản trị sự kiện & điều phối cộng tác viên sinh viên FPT Polytechnic tích hợp Trợ lý Trí tuệ Nhân tạo và Nghiệm thu minh chứng điện tử.
                 </p>
                 <div class="mt-4 flex items-center gap-2 text-xs text-slate-500">
                     <span class="px-2 py-0.5 rounded bg-[#E5E5EA] text-[#1D1D1F] font-mono">PHP 8.2 MVC</span>
@@ -66,16 +66,16 @@ declare(strict_types=1);
                 <h4 class="text-[#1D1D1F] text-xs font-bold uppercase tracking-wider mb-3">Tính Năng Nổi Bật</h4>
                 <div class="flex flex-wrap gap-1.5">
                     <span class="px-2.5 py-1 rounded-md text-[11px] bg-[#E5E5EA] text-[#1D1D1F] border border-slate-700">Interval Collision</span>
-                    <span class="px-2.5 py-1 rounded-md text-[11px] bg-[#E5E5EA] text-[#1D1D1F] border border-slate-700">Dynamic QR 30s</span>
+                    <span class="px-2.5 py-1 rounded-md text-[11px] bg-[#E5E5EA] text-[#1D1D1F] border border-slate-700">Hợp Đồng Điện Tử HDNT</span>
                     <span class="px-2.5 py-1 rounded-md text-[11px] bg-[#E5E5EA] text-[#1D1D1F] border border-slate-700">AI Function Calling</span>
                     <span class="px-2.5 py-1 rounded-md text-[11px] bg-[#E5E5EA] text-[#1D1D1F] border border-slate-700">Google Drive Parser</span>
-                    <span class="px-2.5 py-1 rounded-md text-[11px] bg-[#E5E5EA] text-[#1D1D1F] border border-slate-700">HMAC-SHA256 Token</span>
+                    <span class="px-2.5 py-1 rounded-md text-[11px] bg-[#E5E5EA] text-[#1D1D1F] border border-slate-700">Audit Trail 100%</span>
                 </div>
             </div>
         </div>
 
         <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
-            <p>© <?= date('Y') ?> PolyMee. Dự án thực hành FPT Polytechnic TP.HCM. Bản quyền thuộc về Nhóm sinh viên thực hiện.</p>
+            <p>© <?= date('Y') ?> PolyMee. Dự án thực hành FPT Polytechnic cơ sở Đồng Nai. Bản quyền thuộc về Nhóm sinh viên thực hiện.</p>
             <div class="flex items-center gap-4">
                 <a href="/" class="hover:text-slate-300 transition">Trang chủ</a>
                 <span>•</span>

@@ -29,7 +29,7 @@ declare(strict_types=1);
                 </h1>
                 
                 <p class="text-base text-[#6E6E73] max-w-2xl leading-relaxed">
-                    Nền tảng chính thức hỗ trợ sinh viên FPT Polytechnic đăng ký ca trực sự kiện, tự động ngăn chặn trùng lặp thời gian thực bằng thuật toán phân đoạn thời gian (Interval Collision), điểm danh bảo mật Dynamic QR và Trợ lý AI PolyMee.
+                    Nền tảng chính thức hỗ trợ sinh viên FPT Polytechnic đăng ký ca trực sự kiện, tự động ngăn chặn trùng lặp thời gian thực bằng thuật toán phân đoạn thời gian (Interval Collision), nghiệm thu minh chứng số & Hợp đồng điện tử và Trợ lý AI PolyMee.
                 </p>
 
                 <!-- Action Buttons -->

@@ -1,7 +1,7 @@
 # POLYMEE - HỆ THỐNG QUẢN LÝ SỰ KIỆN & ĐIỀU PHỐI CỘNG TÁC VIÊN THÔNG MINH TÍCH HỢP AI
 
 > **HỌC PHẦN:** WEB212 – Phát triển dự án website với AI  
-> **ĐƠN VỊ ĐÀO TẠO:** Trường Cao đẳng FPT Polytechnic (Cơ sở TP. Hồ Chí Minh)  
+> **ĐƠN VỊ ĐÀO TẠO:** Trường Cao đẳng FPT Polytechnic (Cơ sở TP. Đồng Nai)  
 > **BÀI NỘP:** Báo cáo & Mã nguồn Assignment Giai đoạn 1 (Buổi 1 – 6)  
 > **TRỌNG SỐ ĐÁNH GIÁ:** 10% điểm môn học (Thang điểm 10.0 chuẩn Rubric Giảng viên)  
 > **GIẢNG VIÊN HƯỚNG DẪN:** Thầy Phan Hoàng Khải  
@@ -25,9 +25,9 @@
 
 | STT | Mã Sinh Viên | Họ và Tên | Vai Trò Trong Nhóm | Phần Việc Đảm Nhiệm Chi Tiết |
 |:---:|:---:|:---|:---:|:---|
-| 1 | **PI03084** | **Đinh Nguyễn Phương Anh** | **Trưởng nhóm** | Thiết kế UI/UX Apple Sonoma / iPadOS & Bento Grid 2.0; Thiết kế toàn bộ giao diện Responsive; Phân tích SRS & Viết tài liệu báo cáo; Kiến trúc MVC PHP OOP; Tích hợp AI Assistant Function Calling; Quản trị phân quyền RBAC & CollisionService; Xây dựng & Chuẩn hóa Mock Data thực tế FPT Polytechnic |
+| 1 | **PI03084** | **Đinh Nguyễn Phương Anh** | **Trưởng nhóm** | Phân tích SRS & Viết tài liệu báo cáo; Thiết kế UI/UX Apple Sonoma / iPadOS & Bento Grid 2.0; Thiết kế toàn bộ giao diện Responsive; Kiến trúc MVC PHP OOP; Tích hợp AI Assistant Function Calling; Quản trị phân quyền RBAC & CollisionService; Xây dựng & Chuẩn hóa Mock Data thực tế FPT Polytechnic |
 | 2 | **PI02895** | **Dương Ngọc Hân** | **Thành viên** | Thiết kế Cơ sở dữ liệu (ERD 3NF, Data Dictionary, DDL MySQL & SQLite); Thiết kế Slide thuyết trình bảo vệ dự án |
-| 3 | **PI03067** | **Lê Đức Mạnh** | **Thành viên** | Lập trình Backend (Controllers, Models, API JSON, Dynamic QR Code HMAC-SHA256) |
+| 3 | **PI03067** | **Lê Đức Mạnh** | **Thành viên** | Lập trình Backend (Controllers, Models, RESTful API JSON, Nghiệm Thu Minh Chứng & Quyết Toán) |
 | 4 | **PI03015** | **Hoàng Minh Luận** | **Thành viên** | Soạn thảo & Hoàn thiện Báo cáo dự án, Tài liệu kịch bản kiểm thử & Bảo vệ đề tài |
 
 ---
@@ -47,17 +47,16 @@ Tại **Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai** (Số 120/1
 
 ### 2.2. Xác định Người Dùng (Actors) & Ma Trận Phân Quyền (RBAC)
 
-Hệ thống thiết lập 6 vai trò rõ ràng theo mô hình phân quyền chuẩn doanh nghiệp:
+Hệ thống thiết lập 5 vai trò rõ ràng theo mô hình phân quyền chuẩn doanh nghiệp:
 
 <p align="center">
-  <img src="docs/assets/role_hierarchy.svg" alt="Sơ Đồ Phân Quyền 6 Vai Trò PolyMee FPT Polytechnic Đồng Nai" width="100%">
+  <img src="docs/assets/role_hierarchy.svg" alt="Sơ Đồ Phân Quyền 5 Vai Trò PolyMee FPT Polytechnic Đồng Nai" width="100%">
 </p>
 
 1. **Sinh viên / CTV Sự kiện (`Student` - Demo: Lê Đức Mạnh, Hoàng Minh Luận, Dương Ngọc Hân, Trần Quang Khải):**
    - Xem tổng quan lịch sự kiện và các ca trực theo định dạng Tháng / Tuần / Ngày.
    - Đăng ký ca trực theo nguyện vọng (tự động kiểm tra trùng giờ qua CollisionService).
-   - Điểm danh Check-in/out qua máy chiếu Dynamic QR Code xoay vòng 30 giây (HMAC-SHA256).
-   - Chụp & nộp ảnh hiện trường chứng minh có mặt trực tiếp tại sự kiện để Giảng viên nghiệm thu.
+   - Chụp & nộp ảnh hiện trường chứng minh có mặt trực tiếp tác nghiệp tại sự kiện để Giảng viên nghiệm thu.
    - Tra cứu Hợp đồng nghiệm thu điện tử và thù lao được quyết toán.
    - Quản lý hồ sơ nhận thù lao (Cập nhật số CCCD 12 số, tài khoản ngân hàng, ảnh chụp màn hình ứng dụng VNeID Mức 2).
 
@@ -68,49 +67,45 @@ Hệ thống thiết lập 6 vai trò rõ ràng theo mô hình phân quyền chu
 3. **Giảng viên / Ban Tổ Chức (`Organizer` - Demo: Thầy Phan Hoàng Khải, Cô Hoàng Thị Mai Trang):**
    - Đăng tải sự kiện, phân rã sự kiện thành các ca trực nhỏ (Setup, Lễ tân, Media, Hậu cần).
    - Thiết lập chỉ tiêu tuyển (`target_qty`), kỹ năng yêu cầu và định mức thù lao/Điểm Tích Cực (đánh giá uy tín & năng lực CTV).
-   - Thẩm định minh chứng hiện trường của CTV (ảnh hiện trường đối với CTV thường; link Google Drive đối với CTV Media), xác nhận duyệt đã đầy đủ minh chứng để nghiệm thu và lập Hợp đồng (`HDNT-2026-FPLY-xxx`).
+   - Thẩm định minh chứng hiện trường của CTV (ảnh hiện trường đối với CTV thường; link Google Drive đối với CTV Media), xác nhận duyệt đã đầy đủ minh chứng để nghiệm thu và tự động lập Hợp đồng điện tử (`HDNT-2026-FPLY-xxx`).
    - Thêm ghi chú/dặn dò lịch toàn trường (Apple Calendar Notes).
 
-4. **Cán bộ CSVC & Hiện trường (`Staff` - Demo: Lê Đình Tuấn):**
-   - Giám sát tình trạng sử dụng hội trường, phòng máy Lab tại FPoly Đồng Nai.
-   - Bàn giao trang thiết bị (âm thanh, ánh sáng, máy chiếu, micro không dây).
+4. **Cán bộ Hành chính (`Staff` - Demo: ThS. Phạm Hồng Sơn - Trưởng phòng, Lê Đình Tuấn - Chuyên viên):**
+   - *Gộp toàn diện 2 chức năng Hành chính & CSVC*: Quản lý, giám sát tình trạng sử dụng hội trường, phòng máy Lab tại FPoly Đồng Nai, bàn giao trang thiết bị sự kiện (âm thanh, ánh sáng, micro không dây).
    - Ghi chú nhắc nhở hiện trường lên bảng lịch trung tâm.
-
-5. **Trưởng Ban Hành Chính & Ban Giám Hiệu (`Head_Admin` - Demo: ThS. Phạm Hồng Sơn):**
    - Bảng điều phối nghiệm thu thù lao tập trung (`panelAccounting`).
-   - Thẩm định hồ sơ định danh: Đối soát số CCCD, tài khoản ngân hàng và ảnh chụp VNeID.
+   - Thẩm định hồ sơ định danh: Đối soát số CCCD 12 số, tài khoản ngân hàng thụ hưởng và ảnh chụp ứng dụng VNeID.
    - Ký duyệt số hợp đồng điện tử và phê duyệt lệnh chi trả thù lao (`Signed_Paid`).
-   - Xuất bảng quyết toán tài chính ra file CSV (chuẩn UTF-8 with BOM mở trực tiếp trên Excel).
+   - Xuất bảng quyết toán tài chính ra file CSV (chuẩn UTF-8 with BOM mở trực tiếp trên Excel) và bản in A4.
    - Giám sát nhật ký kiểm toán hệ thống (Audit Trail).
 
-6. **Quản trị viên Hệ thống (`Admin` - Demo: ADMIN001):**
-   - Toàn quyền cấu hình hệ thống, quản trị tài khoản, cấp quyền phân vai trò RBAC.
+5. **Quản trị viên Hệ thống (`Admin` - Demo: ADMIN001):**
+   - Toàn quyền cấu hình hệ thống, quản trị tài khoản, cấp quyền phân vai trò RBAC (5 roles).
    - Giám sát toàn bộ hồ sơ hợp đồng nghiệm thu toàn trường.
-   - Vận hành máy chiếu Dynamic QR Code điểm danh tự động.
+   - Giám sát toàn diện nhật ký kiểm toán hệ thống (Audit Trail).
 
 ---
 
 ### 2.3. Sơ Đồ Use Case Chuẩn Hệ Thống (UML Use Case Diagram)
 
-Sơ đồ Use Case tổng thể được mô hình hóa theo chuẩn quốc tế UML 2.5, phân định rõ ràng **6 Tác nhân (Actors)** tương tác trực tiếp với **3 Phân hệ cốt lõi** trong ranh giới hệ thống:
+Sơ đồ Use Case tổng thể được mô hình hóa theo chuẩn quốc tế UML 2.5, phân định rõ ràng **5 Tác nhân (Actors)** tương tác trực tiếp với **3 Phân hệ cốt lõi** trong ranh giới hệ thống:
 
 <p align="center">
   <img src="docs/assets/use_case_diagram.svg" alt="Sơ Đồ Use Case Chuẩn UML 2.5 Nền Tảng PolyMee" width="100%">
 </p>
 
 <details>
-<summary><b>🔍 Bấm để xem mã nguồn UML Use Case (Mermaid Specification)</b></summary>
+<summary><b>🔍 Bấm để xem mã nguồn cấu trúc UML Use Case (UML Specification)</b></summary>
 
-```mermaid
+```spec
 flowchart LR
-    subgraph ACTORS ["TAC NHAN HE THONG (6 ACTORS)"]
+    subgraph ACTORS ["TAC NHAN HE THONG (5 CANONICAL ACTORS)"]
         direction TB
         ACT_CTV["1. Sinh Vien CTV (Student)"]
         ACT_MED["2. CTV Media (Media)"]
         ACT_ORG["3. Giang Vien / BTC (Organizer)"]
-        ACT_STF["4. Can Bo CSVC (Staff)"]
-        ACT_BGH["5. Truong Ban HC / BGH (Head_Admin)"]
-        ACT_ADM["6. Quan Tri Vien (Admin)"]
+        ACT_STF["4. Can Bo Hanh Chinh (Staff - kiem CSVC & Ky Duyet)"]
+        ACT_ADM["5. Quan Tri Vien (Admin)"]
     end
 
     subgraph SYS_CAL ["1. PHAN HE QUAN TRI LICH & CA TRUC"]
@@ -118,23 +113,23 @@ flowchart LR
         UC_CAL(["UC01: Xem Lich Trung Tam (Thang/Tuan/Ngay)"])
         UC_REG(["UC02: Dang Ky Ca Truc"])
         UC_COL(["UC03: Kiem Tra Trung Gio (Collision)"])
-        UC_QR(["UC04: Diem Danh Dynamic QR 30s"])
-        UC_NOTE(["UC05: Ghi Chu Lich CSVC / Su Kien"])
-        UC_CREATE_EV(["UC06: Tao Su Kien & Dat Phong"])
-        UC_SPLIT_SH(["UC07: Phan Ra Ca & Dinh Thu Lao"])
+        UC_NOTE(["UC04: Ghi Chu Lich CSVC / Su Kien"])
+        UC_CREATE_EV(["UC05: Tao Su Kien & Dat Phong"])
+        UC_SPLIT_SH(["UC06: Phan Ra Ca & Dinh Mức Thu Lao"])
 
         UC_REG -.->|include| UC_COL
+        UC_SPLIT_SH -.->|extend| UC_CREATE_EV
     end
 
-    subgraph SYS_ACC ["2. PHAN HE NGHIEM THU & QUYET TOAN THU LAO"]
+    subgraph SYS_ACC ["2. PHAN HE NGHIEM THU MINH CHUNG & QUYET TOAN THU LAO (ZERO QR)"]
         direction TB
-        UC_PROOF_IMG(["UC08: Nop Anh Minh Chung Hien Truong"])
-        UC_PROOF_DRV(["UC09: Nop Link Drive (Anh/Video RAW)"])
-        UC_VERIFY(["UC10: Giang Vien Nghiem Thu Ca"])
-        UC_CONTRACT(["UC11: Lap Hop Dong Dien Tu (HDNT)"])
-        UC_PROFILE(["UC12: Ke Khai CCCD, VNeID, STK"])
-        UC_SIGN(["UC13: BGH Ky Duyet & Chi Tra"])
-        UC_EXPORT(["UC14: Xuat Báo Cáo CSV & In A4"])
+        UC_PROOF_IMG(["UC07: Nop Anh Minh Chung Hien Truong"])
+        UC_PROOF_DRV(["UC08: Nop Link Google Drive Ban Giao"])
+        UC_VERIFY(["UC09: Giang Vien Nghiem Thu Ca"])
+        UC_CONTRACT(["UC10: Tu Dong Khoi Tao Hop Dong Dien Tu (HDNT)"])
+        UC_PROFILE(["UC11: Ke Khai Ho So CCCD, VNeID, STK"])
+        UC_SIGN(["UC12: Hanh Chinh Ky Duyet So & Chi Tra"])
+        UC_EXPORT(["UC13: Xuat Bao Cao Quyet Toan CSV & In A4"])
 
         UC_VERIFY -.->|include| UC_CONTRACT
         UC_SIGN -.->|include| UC_PROFILE
@@ -142,17 +137,16 @@ flowchart LR
 
     subgraph SYS_ADM ["3. PHAN HE AI & QUAN TRI HE THONG"]
         direction TB
-        UC_AI(["UC15: Tro Ly AI Theo Vai Tro"])
-        UC_FUNC(["UC16: AI Function Calling"])
-        UC_RBAC(["UC17: Cap Quyen Vai Tro RBAC"])
-        UC_AUDIT(["UC18: Nhat Ky Kiem Toan (Audit Trail)"])
+        UC_AI(["UC14: Tro Ly AI Theo Vai Tro (Context-Aware)"])
+        UC_FUNC(["UC15: AI Function Calling (Tra Phong, Gui Mail)"])
+        UC_RBAC(["UC16: Cap Quyen Vai Tro RBAC (5 Roles)"])
+        UC_AUDIT(["UC17: Nhat Ky Kiem Toan Toan Dien (Audit Trail)"])
 
         UC_AI -.->|extend| UC_FUNC
     end
 
     ACT_CTV --> UC_CAL
     ACT_CTV --> UC_REG
-    ACT_CTV --> UC_QR
     ACT_CTV --> UC_PROOF_IMG
     ACT_CTV --> UC_PROFILE
     ACT_CTV --> UC_AI
@@ -161,10 +155,10 @@ flowchart LR
     ACT_MED --> UC_REG
     ACT_MED --> UC_PROOF_DRV
     ACT_MED --> UC_PROFILE
+    ACT_MED --> UC_AI
 
     ACT_ORG --> UC_CAL
     ACT_ORG --> UC_CREATE_EV
-    ACT_ORG --> UC_SPLIT_SH
     ACT_ORG --> UC_NOTE
     ACT_ORG --> UC_VERIFY
     ACT_ORG --> UC_EXPORT
@@ -172,37 +166,34 @@ flowchart LR
 
     ACT_STF --> UC_CAL
     ACT_STF --> UC_NOTE
+    ACT_STF --> UC_SIGN
+    ACT_STF --> UC_EXPORT
     ACT_STF --> UC_AI
+    ACT_STF --> UC_AUDIT
 
-    ACT_BGH --> UC_CAL
-    ACT_BGH --> UC_SIGN
-    ACT_BGH --> UC_EXPORT
-    ACT_BGH --> UC_AUDIT
-
-    ACT_ADM --> UC_CAL
+    ACT_ADM --> UC_AI
     ACT_ADM --> UC_RBAC
     ACT_ADM --> UC_AUDIT
-    ACT_ADM --> UC_AI
 ```
 </details>
 
-#### Bảng Ma Trận Phân Quyền Use Case (Use Case Traceability Matrix)
+#### Bảng Ma Trận Phân Quyền Use Case (Use Case Traceability Matrix - 5 Roles Chuẩn)
 
-| Mã Use Case | Tên Chức Năng (Use Case) | Sinh Viên CTV | CTV Media | Giảng Viên / BTC | Cán Bộ CSVC | Trưởng HC / BGH | Quản Trị Viên (Admin) |
-|:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **UC01** | Xem Bảng Lịch Trung Tâm (Tháng/Tuần/Ngày) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **UC02** | Đăng Ký Ca Trực (Kèm Check Trùng Lịch) | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ *(demo)* |
-| **UC03** | Điểm Danh Dynamic QR Code 30s | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ *(máy chiếu)* |
-| **UC04** | Nộp Ảnh Hiện Trường / Link Google Drive | ✅ *(ảnh)* | ✅ *(drive)* | ❌ | ❌ | ❌ | ❌ |
-| **UC05** | Cài Đặt Hồ Sơ Quyền Lợi (CCCD & VNeID & STK) | ✅ | ✅ | ❌ *(miễn nộp)* | ❌ *(miễn nộp)* | ❌ *(miễn nộp)* | ❌ *(miễn nộp)* |
-| **UC06** | Tạo Sự Kiện & Phân Rã Ca Trực | ❌ | ❌ | ✅ | ❌ | ✅ | ✅ |
-| **UC07** | Thêm Ghi Chú Lịch Lễ Hội / Bảo Trì | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
-| **UC08** | Giảng Viên Duyệt Nghiệm Thu Ca Trực | ❌ | ❌ | ✅ | ❌ | ✅ | ✅ |
-| **UC09** | Ký Duyệt Số Hợp Đồng & Quyết Toán Chi Trả | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **UC10** | Xuất Báo Cáo Quyết Toán & Bản In Hợp Đồng A4 | ❌ | ❌ | ✅ | ❌ | ✅ | ✅ |
-| **UC11** | Trợ Lý AI Assistant & Function Calling | ✅ *(cá nhân)* | ✅ *(cá nhân)* | ✅ *(soạn thư)* | ✅ *(tra cứu)* | ✅ *(báo cáo)* | ✅ *(toàn quyền)* |
-| **UC12** | Cấp Quyền Vai Trò RBAC & Quản Trị Tài Khoản | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **UC13** | Giám Sát Nhật Ký Kiểm Toán (Audit Trail) | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Mã Use Case | Tên Chức Năng (Use Case) | Sinh Viên CTV | CTV Media | Giảng Viên / BTC | Cán Bộ Hành Chính | Quản Trị Viên (Admin) |
+|:---|:---|:---:|:---:|:---:|:---:|:---:|
+| **UC01** | Xem Bảng Lịch Trung Tâm (Tháng/Tuần/Ngày) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **UC02** | Đăng Ký Ca Trực (Tự Động Check Trùng Lịch) | ✅ | ✅ | ❌ | ❌ | ✅ *(demo)* |
+| **UC03** | Nộp Ảnh Minh Chứng Hiện Trường (Tại Sự Kiện) | ✅ *(chụp ảnh)* | ❌ | ❌ | ❌ | ❌ |
+| **UC04** | Nộp Đường Link Google Drive (Ảnh/Video RAW & Recap) | ❌ | ✅ *(drive)* | ❌ | ❌ | ❌ |
+| **UC05** | Cài Đặt Hồ Sơ Quyền Lợi (CCCD & VNeID & STK) | ✅ | ✅ | ❌ *(biên chế)* | ❌ *(biên chế)* | ❌ *(biên chế)* |
+| **UC06** | Tạo Sự Kiện, Đặt Hội Trường & Phân Rã Ca | ❌ | ❌ | ✅ | ❌ | ✅ |
+| **UC07** | Thêm Ghi Chú Lịch CSVC / Sự Kiện Toàn Trường | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **UC08** | Giảng Viên Thẩm Định Minh Chứng & Nghiệm Thu Ca | ❌ | ❌ | ✅ | ❌ | ✅ |
+| **UC09** | Ký Duyệt Số Hợp Đồng & Phê Duyệt Chi Trả Thù Lao | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **UC10** | Xuất Báo Cáo Quyết Toán CSV & Bản In Hợp Đồng A4 | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **UC11** | Trợ Lý AI Assistant & Function Calling Theo Role | ✅ *(cá nhân)* | ✅ *(cá nhân)* | ✅ *(soạn thư)* | ✅ *(tra cứu)* | ✅ *(toàn quyền)* |
+| **UC12** | Cấp Quyền Vai Trò RBAC (5 Roles Chuẩn) | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **UC13** | Giám Sát Nhật Ký Kiểm Toán (Audit Trail) | ❌ | ❌ | ❌ | ✅ | ✅ |
 
 ---
 
@@ -213,12 +204,14 @@ Hệ thống loại bỏ hoàn toàn khả năng CTV đăng ký 2 ca trực trù
 $$\text{Collision} = (\text{Start}_{\text{New}} < \text{End}_{\text{Existing}}) \land (\text{End}_{\text{New}} > \text{Start}_{\text{Existing}})$$
 Khi phát hiện trùng lịch, hệ thống lập tức chặn giao dịch tại Controller, trả về mã HTTP `409 Conflict` và hiển thị cảnh báo chi tiết tên ca và khung giờ bị trùng.
 
-#### B. Quy trình Nghiệm thu Minh chứng Hiện trường & Hợp đồng Điện tử Trình Ký Nhà trường
-Nhằm khắc phục triệt để nhược điểm gian lận điểm danh từ xa, PolyMee chuyển đổi toàn diện sang quy trình nghiệm thu bằng ảnh chụp hiện trường thực tế theo chu trình 4 bước:
-1. **CTV nộp ảnh hiện trường có mặt:** Tại vị trí trực thực tế (Sảnh đón khách, Sân khấu, Bàn lễ tân), CTV chụp ảnh hiện trường chứng minh sự hiện diện và gửi kèm ghi chú công việc lên hệ thống.
-2. **Giảng viên giám sát xác nhận nghiệm thu:** Giảng viên kiểm tra đối soát ảnh hiện trường. Khi bấm *"Xác nhận nghiệm thu"*, hệ thống tự động sinh Mã Hợp đồng: `HDNT-2026-FPLY-xxx`.
-3. **Lập Hợp đồng & Biên bản Nghiệm thu Thông tin CTV:** Hệ thống tự động tổng hợp thông tin định danh (CCCD, đối chiếu ứng dụng VNeID), số tài khoản ngân hàng thụ hưởng, chi tiết ca trực, thù lao thỏa thuận và nhúng trực tiếp **Ảnh Hiện Trường Minh Chứng** vào văn bản chuẩn hành chính của Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai.
-4. **Trình Ban Giám Hiệu Ký Duyệt & Chuyển Tiền:** Giảng viên trình hồ sơ lên Ban Giám Hiệu ký duyệt chi, chuyển trạng thái sang `Signed_Paid` (Đã Ký & Đã Chi Tiền), đồng thời hỗ trợ xuất bản in A4 hoặc PDF tức thì (`window.print()`).
+#### B. Quy trình Nghiệm thu Minh chứng Thực tế & Hợp đồng Điện tử Trình Ký Nhà trường (Zero Fraud)
+Nhằm khắc phục triệt để nhược điểm gian lận điểm danh từ xa (như quét mã QR hộ qua mạng), PolyMee áp dụng quy trình kiểm soát nghiệm thu 2 lớp chặt chẽ:
+1. **CTV nộp minh chứng thực tế:**
+   - *CTV Sự kiện:* Chụp & nộp ảnh hiện trường tác nghiệp thực tế tại vị trí trực kèm báo cáo công việc.
+   - *CTV Media:* Nộp đường link thư mục Google Drive chứa ảnh chụp RAW, ảnh chỉnh sửa và video recap.
+2. **Giảng viên / Ban tổ chức thẩm định & nghiệm thu:** Giảng viên kiểm tra đối soát ảnh hiện trường hoặc sản phẩm Drive. Khi bấm *"Xác nhận nghiệm thu"*, hệ thống lập tức khóa ca và tự động sinh Mã Hợp đồng điện tử: `HDNT-2026-FPLY-xxx`.
+3. **Lập Hợp đồng & Biên bản Nghiệm thu Thông tin CTV:** Hệ thống tự động tổng hợp thông tin định danh (CCCD 12 số, đối chiếu ảnh chụp màn hình ứng dụng VNeID Mức 2), số tài khoản ngân hàng thụ hưởng, chi tiết ca trực, thù lao thỏa thuận và nhúng trực tiếp **Ảnh Hiện Trường Minh Chứng** vào văn bản chuẩn hành chính của Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai.
+4. **Cán bộ Hành chính Đối soát, Ký Duyệt & Chuyển Tiền:** Cán bộ Hành chính đối soát hồ sơ pháp lý, ký duyệt số hợp đồng và phê duyệt lệnh chi thù lao, chuyển trạng thái sang `Signed_Paid` (Đã Ký & Đã Chi Tiền), đồng thời hỗ trợ xuất bản in A4 hoặc PDF tức thì (`window.print()`).
 
 #### C. Thẩm định minh chứng Google Drive tự động
 Khi CTV Media gửi link bài nộp, hệ thống sử dụng Regex trích xuất thư mục Google Drive, gán với ca trực tương ứng, chuyển sang trạng thái chờ duyệt và thông báo cho Ban tổ chức thẩm định.
@@ -321,9 +314,9 @@ Toàn bộ các phân hệ danh sách và bảng biểu dữ liệu trong PolyMe
 </p>
 
 <details>
-<summary><b>🔍 Bấm để xem mã nguồn ERD (Mermaid Specification)</b></summary>
+<summary><b>🔍 Bấm để xem mã nguồn cấu trúc ERD (Data Specification)</b></summary>
 
-```mermaid
+```spec
 erDiagram
     ROLES ||--o{ USERS : "has"
     USERS ||--o{ EVENTS : "creates"
@@ -337,7 +330,7 @@ erDiagram
 
     ROLES {
         int id PK
-        varchar name "Admin, Organizer, Staff, Student, Media, Head_Admin"
+        varchar name "Admin, Organizer, Staff, Student, Media"
         varchar description
     }
 
@@ -407,7 +400,7 @@ erDiagram
         int assignment_id FK
         datetime check_in_time
         datetime check_out_time
-        varchar method "DynamicQR, Manual"
+        varchar method "ProofPhoto, DriveLink, Manual"
         varchar status "Present, Absent, Late"
     }
 
@@ -436,13 +429,13 @@ erDiagram
 
 ### 4.2. Từ Điển Dữ Liệu (Data Dictionary) Tóm Tắt
 
-1. **`roles`:** Bảng danh mục 6 vai trò người dùng trong hệ thống.
+1. **`roles`:** Bảng danh mục 5 vai trò người dùng trong hệ thống (Admin, Organizer, Staff, Student, Media).
 2. **`users`:** Bảng người dùng chứa thông tin sinh viên, email, mật khẩu băm, CCCD và thông tin ngân hàng nhận thù lao.
 3. **`locations`:** Danh mục hội trường và phòng lab của FPT Polytechnic cơ sở Đồng Nai.
 4. **`events`:** Quản lý các chiến dịch sự kiện của nhà trường.
 5. **`shifts`:** Phân rã sự kiện thành các ca làm việc độc lập kèm định mức thù lao và chỉ tiêu CTV.
 6. **`shift_assignments`:** Bảng trung gian liên kết Sinh viên với Ca trực, trạng thái duyệt và trạng thái thù lao.
-7. **`check_ins`:** Nhật ký quét mã QR động điểm danh.
+7. **`check_ins`:** Nhật ký có mặt và nhận bàn giao ca trực tại sự kiện.
 8. **`drive_submissions`:** Lưu trữ link thư mục Google Drive ảnh/video recap do CTV nộp.
 9. **`calendar_notes`:** Bảng dặn dò, hạn chót và lưu ý cơ sở vật chất hiển thị trên Bảng Lịch Apple Calendar.
 
@@ -527,12 +520,12 @@ Hệ thống đã tích hợp menu chuyển vai nhanh **(Role Switcher Dropdown)
 
 | STT | Họ và Tên | Mã Số | Vai Trò | Mật Khẩu | Phân Vùng Chuyên Biệt |
 |:---:|:---|:---:|:---:|:---:|:---|
-| 1 | **Đinh Nguyễn Phương Anh** | `PI03084` | **CTV Media** | `123456` | Lịch cá nhân, Nộp link Google Drive ảnh/video |
-| 2 | **Lê Đức Mạnh** | `PI03067` | **CTV Lễ Tân** | `123456` | Đăng ký ca, Check-in Dynamic QR, Hồ sơ VNeID |
-| 3 | **Thầy Phan Hoàng Khải** | `GV0102` | **Ban Tổ Chức** | `123456` | Đặt lịch ca trực mới, Thẩm định minh chứng Drive |
-| 4 | **Lê Đình Tuấn** | `HC0201` | **Hành Chính CSVC** | `123456` | Kiểm tra thiết bị âm thanh, ghi chú hội trường |
-| 5 | **ThS. Phạm Hồng Sơn** | `HC0001` | **Trưởng Ban Hành Chính / BGH** | `123456` | Ký duyệt số hợp đồng, quyết toán thù lao CTV, xem audit log |
-| 6 | **Quản Trị Viên** | `ADMIN001` | **Admin Hệ Thống** | `123456` | Vận hành Máy chiếu Dynamic QR Code xoay vòng 30s |
+| 1 | **Lê Đức Mạnh** | `PI03067` | **Sinh Viên CTV (Student)** | `123456` | Đăng ký ca trực, Chụp ảnh minh chứng hiện trường, Kê khai CCCD/VNeID |
+| 2 | **Đinh Nguyễn Phương Anh** | `PI03084` | **CTV Media (Media)** | `123456` | Tác nghiệp hình ảnh, Nộp link Google Drive ảnh RAW & Video recap |
+| 3 | **Thầy Phan Hoàng Khải** | `GV0102` | **Giảng Viên / BTC (Organizer)** | `123456` | Tạo sự kiện, rã ca, Thẩm định minh chứng & Tự động tạo HĐ điện tử |
+| 4 | **Lê Đình Tuấn** | `HC0201` | **Cán Bộ Hành Chính (Staff)** | `123456` | Quản lý thiết bị CSVC, ghi chú lịch, đối soát hồ sơ thù lao CTV |
+| 5 | **ThS. Phạm Hồng Sơn** | `HC0001` | **Cán Bộ Hành Chính (Staff - TP)** | `123456` | Ký duyệt số hợp đồng, phê duyệt chi trả thù lao, giám sát audit log |
+| 6 | **Quản Trị Viên** | `ADMIN001` | **Quản Trị Hệ Thống (Admin)** | `123456` | Cấp quyền phân vai trò RBAC 5 Roles, giám sát toàn diện hệ thống |
 
 ---
 
@@ -616,7 +609,7 @@ polymee/
 │   │   ├── HomeController.php      # Điều hướng trang chủ & Switch User
 │   │   ├── DashboardController.php # Bảng Lịch Trung Tâm, Quyết Toán Thù Lao & Lịch Notes
 │   │   ├── ShiftController.php     # Đăng ký ca, AJAX Collision Detection
-│   │   ├── AdminController.php     # Máy chiếu Dynamic QR & Quản trị
+│   │   ├── AdminController.php     # Quản trị viên & Phân quyền RBAC 5 Roles
 │   │   └── AiAssistantController.php # Trợ lý AI Function Calling
 │   ├── models/                 # Tầng Dữ Liệu (100% PDO Prepared Statements)
 │   │   ├── BaseModel.php           # CRUD Singleton trừu tượng
@@ -627,7 +620,7 @@ polymee/
 │   ├── services/               # Tầng Dịch Vụ Nghiệp Vụ
 │   │   └── CollisionService.php    # Thuật toán Interval Collision
 │   ├── helpers/                # Tiện Ích Trợ Giúp
-│   │   ├── DynamicQrHelper.php     # Thuật toán HMAC-SHA256 30s
+│   │   ├── RolePermissionHelper.php # Chuẩn hóa 5 Roles & Phân quyền ma trận
 │   │   └── SessionHelper.php       # Quản lý phiên, CSRF Token
 │   └── views/                  # Tầng Giao Diện (Bento Grid & Apple Design)
 │       ├── dashboard/index.php     # Single Page Central Hub hoàn chỉnh
@@ -635,7 +628,7 @@ polymee/
 │       │   ├── login.php           # Đăng nhập chuẩn giao diện
 │       │   └── register.php        # Đăng ký tài khoản sinh viên FPoly
 │       ├── layouts/                # Header & Footer dùng chung
-│       └── admin/qr_projector.php  # Màn hình máy chiếu Dynamic QR
+│       └── admin/qr_projector.php  # Thông báo chuyển đổi quy trình nghiệm thu minh chứng
 ├── config/                     # Cấu hình tập trung
 │   ├── config.php                  # Hằng số hệ thống, Secret Key, Timezone VN
 │   └── database.php                # Kết nối SQLite & MySQL linh hoạt
@@ -652,9 +645,9 @@ polymee/
 │   ├── .htaccess                   # Rewrite URL Clean
 │   └── assets/
 │       ├── css/style.css           # Machined Button Tokens & Glass Materials
-│       └── js/app.js               # Ajax, dynamic QR, date formatting
+│       └── js/app.js               # Ajax, SPA navigation, date formatting
 ├── tests/
-│   └── test_flow.php               # Kịch bản kiểm thử tự động 19 ca test
+│   └── test_flow.php               # Kịch bản kiểm thử tự động 29 ca test toàn diện (100% PASS)
 ├── docker-compose.yml          # Cấu hình Docker Web + MySQL
 ├── Dockerfile                  # Môi trường chạy PHP 8.2 Apache
 └── README.md                   # Báo cáo và hướng dẫn bảo vệ đề tài
@@ -667,7 +660,7 @@ polymee/
 1. **Phòng chống SQL Injection (100%):** Tuyệt đối không nối chuỗi câu lệnh SQL. Mọi truy vấn đều sử dụng `PDO::prepare()` và ràng buộc tham số qua `bindValue()`.
 2. **Phòng chống Cross-Site Scripting (XSS):** Toàn bộ dữ liệu hiển thị do người dùng nhập đều được xử lý qua hàm `htmlspecialchars(..., ENT_QUOTES, 'UTF-8')`.
 3. **Phòng chống CSRF:** Token ngẫu nhiên được kiểm tra ở mọi form gửi dữ liệu nhạy cảm.
-4. **Chống Gian Lận Điểm Danh:** Chữ ký số thời gian thực `HMAC-SHA256` xoay vòng mỗi 30 giây.
+4. **Chống Gian Lận Nghiệm Thu (Zero Fraud):** Kiểm soát 2 lớp qua ảnh hiện trường tác nghiệp và link Google Drive RAW/Recap; tự động lập Hợp đồng điện tử `HDNT-2026-FPLY-xxx` có đóng dấu đối soát và chữ ký đại diện nhà trường.
 5. **Chống Bỏ Ca & Trùng Lịch:** Thuật toán toán học `Interval Collision Detection` chặn ngay ở tầng Controller.
 
 ---
@@ -676,11 +669,11 @@ polymee/
 
 | Tiêu Chí Rubric (Theo Yêu Cầu Assignment Giai Đoạn 1) | Điểm Tối Đa | Mức Độ Hoàn Thiện Của Dự Án PolyMee | Điểm Tự Đánh Giá |
 |---|:---:|---|:---:|
-| **1. SRS, Actor và Use Case** | 2,0 | Đầy đủ 6 Actor, ma trận RBAC, sơ đồ Mermaid Use Case, mô tả 3 nghiệp vụ chuyên sâu. | **2,0 / 2,0** |
+| **1. SRS, Actor và Use Case** | 2,0 | Đầy đủ 5 Actor chuẩn, ma trận RBAC, sơ đồ Vector SVG Use Case chuẩn UML 2.5, mô tả 3 nghiệp vụ chuyên sâu. | **2,0 / 2,0** |
 | **2. UI/UX và Giao diện HTML/CSS Responsive** | 2,0 | Chuẩn Apple macOS Sonoma & iPadOS Materials, Lucian UX #040, Machined Button tokens, 100% Responsive. | **2,0 / 2,0** |
 | **3. ERD và Quan hệ Dữ liệu** | 1,5 | Sơ đồ ERD 9 bảng chuẩn 3NF, đầy đủ khóa chính/khóa ngoại, từ điển dữ liệu. | **1,5 / 1,5** |
 | **4. MySQL và Dữ liệu Mẫu** | 1,5 | File `schema_mysql.sql` chuẩn InnoDB utf8mb4 kèm seed data phong phú + Zero-config SQLite. | **1,5 / 1,5** |
-| **5. Prototype / Demo Chạy Thực Tế** | 2,5 | Website chạy mượt mà trên trình duyệt, có Role Switcher 6 vai trò, Dynamic QR, AI Chat. | **2,5 / 2,5** |
+| **5. Prototype / Demo Chạy Thực Tế** | 2,5 | Website chạy mượt mà trên trình duyệt, có Role Switcher 5 vai trò chuẩn, Nghiệm thu Minh chứng & HĐĐT, AI Chat. | **2,5 / 2,5** |
 | **6. Tính Nhất Quán Giữa Tài Liệu & Sản Phẩm** | 0,5 | Cấu trúc thư mục MVC rõ ràng, mã nguồn đồng nhất 100% với tài liệu và báo cáo. | **0,5 / 0,5** |
 | **TỔNG CỘNG** | **10,0** | **Dự án hoàn thành xuất sắc toàn bộ yêu cầu của Assignment Giai đoạn 1** | **10,0 / 10,0** |
 

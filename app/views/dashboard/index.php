@@ -28,8 +28,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- FontAwesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- QRCode.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <!-- PolyMee Design-Engineered Stylesheet (design-taste-frontend-v1) -->
     <link rel="stylesheet" href="/assets/css/style.css">
@@ -1958,7 +1956,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </li>
                     <?php if ($perms['canViewMyShifts']): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:1" data-page="my-shifts" onclick="navigateToPage('my-shifts')" title="Ca trực cá nhân đã đăng ký & Check-in QR">
+                        <button class="u040-it" type="button" style="--i:1" data-page="my-shifts" onclick="navigateToPage('my-shifts')" title="Ca trực cá nhân đã đăng ký & Nộp minh chứng">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>
                             <span>Ca Trực Của Tôi</span>
                         </button>
@@ -2766,7 +2764,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     $currUid = (int)($currentUser['id'] ?? 0);
                     $eventCreatorId = (int)($e['created_by'] ?? 0);
 
-                    if (in_array($userRole, ['HEAD_ADMIN', 'ADMIN'], true)) {
+                    if (in_array($userRole, ['STAFF', 'ADMIN'], true)) {
                         $canDeleteThisEvent = true;
                     } elseif ($userRole === 'LECTURER' && $eventCreatorId === $currUid) {
                         $canDeleteThisEvent = true;
@@ -3188,6 +3186,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 <?php 
                 $profRoleId = (int)($userProfile['role_id'] ?? 4);
                 $profRoleName = $userProfile['role_name'] ?? 'Student';
+                $profPerms = RolePermissionHelper::getPermissions($userProfile);
+                $profRoleDisplay = $profPerms['roleNameDisplay'] ?? $profRoleName;
                 // CHỈ CTV (Sinh viên, Media) mới có hồ sơ quyết toán thù lao (VNeID, CCCD, STK)
                 // Các role khác (Admin, Giảng viên, Hành chính...) bỏ hết các trường này
                 $isCtv = in_array($profRoleId, [4, 6], true) || in_array($profRoleName, ['Student', 'Media', 'CTV', 'Sinh viên'], true);
@@ -3205,7 +3205,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 17px; letter-spacing: -0.01em;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
                                         <span class="badge px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: rgba(234, 88, 12, 0.1); color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.25);">
-                                            <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
+                                            <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleDisplay) ?>
                                         </span>
                                     </div>
                                     <div class="small mt-1 d-flex align-items-center gap-2 flex-wrap" style="color: var(--ux-ink-3); font-size: 12px;">
@@ -3299,7 +3299,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                                         </span>
                                                     </div>
                                                     <p class="mb-0" style="line-height: 1.6; font-size: 12.5px; color: var(--ux-ink-2);">
-                                                        Tài khoản đang đăng nhập với vai trò <span class="fw-semibold text-primary"><?= htmlspecialchars($profRoleName) ?></span> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sinh viên theo ca nên hệ thống tự động lược bỏ các mục kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID.
+                                                        Tài khoản đang đăng nhập với vai trò <span class="fw-semibold text-primary"><?= htmlspecialchars($profRoleDisplay) ?></span>. Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sinh viên theo ca nên hệ thống tự động lược bỏ các mục kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID.
                                                     </p>
                                                 </div>
                                             </div>
@@ -3472,10 +3472,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     $roleBadgeColor = match($u['role_name']) {
                                         'Admin' => 'background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3);',
                                         'Organizer' => 'background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3);',
-                                        'Staff' => 'background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3);',
-                                        'Accountant' => 'background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3);',
+                                        'Staff' => 'background: rgba(14, 165, 233, 0.15); color: #0284C7; border: 1px solid rgba(14, 165, 233, 0.3);',
                                         'Media' => 'background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3);',
-                                        default => 'background: rgba(100, 116, 139, 0.15); color: #94A3B8; border: 1px solid rgba(100, 116, 139, 0.3);'
+                                        default => 'background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3);'
                                     };
                                     ?>
                                     <tr style="border-bottom: 1px solid var(--ux-line);">
@@ -4523,7 +4522,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                 <!-- Các Câu Hỏi Gợi Ý AI Được Phân Quyền Theo Role -->
                 <div class="d-flex flex-wrap gap-1.5 mb-3">
-                    <?php if (in_array($perms['role'], ['HEAD_ADMIN', 'ADMIN'], true)): ?>
+                    <?php if (in_array($perms['role'], ['STAFF', 'ADMIN'], true)): ?>
                     <button class="btn-fpt-ghost btn-fpt-sm" onclick="quickAskAi('Phòng nào đang trống?')">
                         <i class="bi bi-building-check me-1 text-success"></i> Phòng trống?
                     </button>
@@ -4691,7 +4690,6 @@ let submitProofModalInstance = null;
 let previewProofModalInstance = null;
 let contractModalInstance = null;
 let currentViewingAssignmentId = null;
-let qrCodeObj = null;
 
 // =========================================================
 // POLYMEE PROMAX THEME SYSTEM (Dark / Light)
@@ -6346,8 +6344,8 @@ function openContractModal(assignmentId) {
                 <i class="bi bi-hourglass-split me-1"></i> Đang Chờ Ký Duyệt
             </span>
         `;
-        // Phân quyền chặt chẽ: Chỉ Cán bộ, Giảng viên / Admin được thấy nút Trình Trường Ký, CTV tuyệt đối không thấy
-        const canSubmitSchool = userPermissions && (userPermissions.canSubmitSchoolSigning || ['HEAD_ADMIN', 'ADMIN', 'LECTURER'].includes(userPermissions.role));
+        // Phân quyền chặt chẽ: Chỉ Cán bộ Hành chính, Giảng viên / Admin được thấy nút Trình Trường Ký, CTV tuyệt đối không thấy
+        const canSubmitSchool = userPermissions && (userPermissions.canSubmitSchoolSigning || ['STAFF', 'ADMIN', 'LECTURER'].includes(userPermissions.role));
         if (submitBtn) {
             submitBtn.style.display = canSubmitSchool ? 'inline-block' : 'none';
         }
@@ -6356,7 +6354,7 @@ function openContractModal(assignmentId) {
     // Nút Duyệt Nghiệm Thu ngay trong Modal dành cho Giảng viên & Admin
     const verifyModalBtn = document.getElementById('btnVerifyInModal');
     const isVerifiedAcc = (parseInt(acc.lecturer_verified) === 1 || parseInt(acc.my_lecturer_verified) === 1);
-    const canVerifyAcc = userPermissions && (userPermissions.canVerifyLecturer || ['HEAD_ADMIN', 'ADMIN', 'LECTURER'].includes(userPermissions.role));
+    const canVerifyAcc = userPermissions && (userPermissions.canVerifyLecturer || ['STAFF', 'ADMIN', 'LECTURER'].includes(userPermissions.role));
     if (verifyModalBtn) {
         verifyModalBtn.style.display = (!isVerifiedAcc && canVerifyAcc) ? 'inline-block' : 'none';
     }

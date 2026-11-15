@@ -61,7 +61,7 @@ foreach ($shifts as $s) {
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-lg font-bold text-slate-900">Danh Sách Ca Làm Việc Được Phân Công</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Vui lòng có mặt đúng giờ và quét mã Dynamic QR tại bàn ban tổ chức</p>
+                <p class="text-xs text-slate-500 mt-0.5">Vui lòng có mặt đúng giờ và chụp ảnh minh chứng tại hiện trường để nộp nghiệm thu</p>
             </div>
             <a href="/" class="text-xs font-bold text-fpoly-primary hover:text-fpoly-hover flex items-center gap-1">
                 <span>Khám phá thêm ca mới</span>

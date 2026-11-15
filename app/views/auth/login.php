@@ -466,7 +466,7 @@
                 <div>
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span class="text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 0.05em; color: var(--ux-ink-3);">
-                            <i class="bi bi-stars text-warning me-1"></i> Chấm Điểm 1 Chạm (7 Demo Roles Chuẩn BA):
+                            <i class="bi bi-stars text-warning me-1"></i> Chấm Điểm 1 Chạm (5 Demo Roles Chuẩn BA):
                         </span>
                         <span class="badge num-tabular" style="font-size: 9.5px; background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.25);">Auto Login</span>
                     </div>
@@ -499,20 +499,20 @@
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
 
-                        <a href="/auth/quickLogin/8" class="demo-account-pill">
+                        <a href="/auth/quickLogin/13" class="demo-account-pill">
                             <div class="avatar-circle bg-info-subtle text-info-emphasis">HC</div>
                             <div class="flex-grow-1">
-                                <div class="fw-bold small lh-1">Lê Đình Tuấn</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">HC0201 • Role: <strong style="color: var(--ux-ink-2);">Nhân Viên Hành Chính CSVC</strong></small>
+                                <div class="fw-bold small lh-1">ThS. Phạm Hồng Sơn</div>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">HC0001 • Role: <strong style="color: var(--ux-ink-2);">Cán Bộ Hành Chính (Ký Duyệt & CSVC)</strong></small>
                             </div>
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>
 
-                        <a href="/auth/quickLogin/13" class="demo-account-pill">
-                            <div class="avatar-circle bg-dark-subtle text-dark">PS</div>
+                        <a href="/auth/quickLogin/8" class="demo-account-pill">
+                            <div class="avatar-circle bg-info-subtle text-info-emphasis">HC</div>
                             <div class="flex-grow-1">
-                                <div class="fw-bold small lh-1">ThS. Phạm Hồng Sơn</div>
-                                <small style="font-size: 11px; color: var(--ux-ink-3);">HC0001 • Role: <strong style="color: var(--ux-ink-2);">Trưởng Hành Chính / BGH</strong></small>
+                                <div class="fw-bold small lh-1">Lê Đình Tuấn</div>
+                                <small style="font-size: 11px; color: var(--ux-ink-3);">HC0201 • Role: <strong style="color: var(--ux-ink-2);">Cán Bộ Hành Chính (CSVC & Thiết Bị)</strong></small>
                             </div>
                             <i class="bi bi-chevron-right small" style="color: var(--ux-ink-3);"></i>
                         </a>

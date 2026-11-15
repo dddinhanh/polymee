@@ -169,29 +169,28 @@ CREATE TABLE `activity_logs` (
 -- DỮ LIỆU MẪU CHUẨN THỰC TẾ (FPT POLYTECHNIC ĐỒNG NAI)
 -- =====================================================================
 
--- 1. Roles (6 Roles)
+-- 1. Roles (5 Roles chuẩn - Gộp CSVC & Trưởng HC thành Hành chính)
 INSERT INTO `roles` (`id`, `name`, `description`) VALUES
 (1, 'Admin', 'Quản trị viên toàn quyền hệ thống'),
 (2, 'Organizer', 'Giảng viên và Ban tổ chức sự kiện'),
-(3, 'Staff', 'Cán bộ giám sát và điều phối hiện trường'),
+(3, 'Staff', 'Cán bộ Hành chính, Quản lý CSVC và Ký duyệt chi thù lao'),
 (4, 'Student', 'Sinh viên FPoly / Cộng tác viên sự kiện'),
-(6, 'Media', 'Cộng tác viên Media & Nhiếp ảnh bàn giao Drive'),
-(7, 'Head_Admin', 'Trưởng ban hành chính & Ban giám hiệu phê duyệt');
+(6, 'Media', 'Cộng tác viên Media & Nhiếp ảnh bàn giao Drive');
 
 -- 2. Users (Mật khẩu mặc định: '123456')
 INSERT INTO `users` (`id`, `student_code`, `full_name`, `email`, `password_hash`, `phone`, `role_id`, `skills`, `is_active`, `created_at`, `id_card_number`, `vneid_image_url`, `bank_name`, `bank_account_number`, `bank_account_name`, `department`) VALUES
 (1, 'ADMIN001', 'Quản Trị Viên Hệ Thống', 'admin@fpoly.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0901234567', 1, 'Quản trị hệ thống, Phân quyền RBAC', 1, '2026-11-01 08:00:00', NULL, NULL, NULL, NULL, NULL, 'Công tác Sinh viên Đồng Nai'),
 (2, 'GV0102', 'Thầy Phan Hoàng Khải', 'khai.phan@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0912345678', 2, 'Trưởng bộ môn phần mềm, Điều phối sự kiện TechDay FPoly Đồng Nai', 1, '2026-11-01 08:00:00', NULL, NULL, NULL, NULL, NULL, 'Công nghệ Thông tin'),
 (3, 'PI03084', 'Đinh Nguyễn Phương Anh', 'phuonganh.pi03084@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0923456789', 6, 'Media phóng sự, Chụp ảnh sự kiện, Hậu kỳ Premiere/Lightroom', 1, '2026-11-02 09:00:00', '079203014589', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&auto=format&fit=crop&q=80', 'MB Bank (Ngân hàng Quân Đội)', '098765432199', 'DINH NGUYEN PHUONG ANH', 'Thiết kế Đồ họa'),
-(4, 'PI03067', 'Lê Đức Mạnh', 'ducmanh.pi03067@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0934567890', 4, 'Hỗ trợ kỹ thuật Lab, Cài đặt phần mềm, Check-in đại biểu', 1, '2026-11-02 09:15:00', '079204018274', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', 'Techcombank', '19036812891012', 'LE DUC MANH', 'Ứng dụng Phần mềm'),
+(4, 'PI03067', 'Lê Đức Mạnh', 'ducmanh.pi03067@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0934567890', 4, 'Hỗ trợ kỹ thuật Lab, Cài đặt phần mềm, Hậu cần sự kiện', 1, '2026-11-02 09:15:00', '079204018274', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', 'Techcombank', '19036812891012', 'LE DUC MANH', 'Ứng dụng Phần mềm'),
 (5, 'PI03015', 'Hoàng Minh Luận', 'minhluan.pi03015@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0945678901', 4, 'Âm thanh ánh sáng, Setup sân khấu hội trường, Điều phối thiết bị', 1, '2026-11-02 09:30:00', '079202009182', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80', 'Vietcombank', '0071001298451', 'HOANG MINH LUAN', 'Lập trình Web'),
 (6, 'PI02895', 'Dương Ngọc Hân', 'ngochan.pi02895@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0956789012', 4, 'Lễ tân ngoại giao, Đón tiếp khách VIPs, Quản lý tài liệu hội thảo', 1, '2026-11-02 10:00:00', '079301018273', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&auto=format&fit=crop&q=80', 'TPBank (Ngân hàng Tiên Phong)', '04128918201', 'DUONG NGOC HAN', 'Digital Marketing'),
-(8, 'HC0201', 'Lê Đình Tuấn', 'tuan.ld@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0978901234', 3, 'Quản lý cơ sở vật chất, Giám sát mượn phòng & âm thanh ánh sáng FPoly Đồng Nai', 1, '2026-11-01 08:30:00', NULL, NULL, NULL, NULL, NULL, 'Phòng Cơ sở Vật chất'),
+(8, 'HC0201', 'Lê Đình Tuấn', 'tuan.ld@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0978901234', 3, 'Cán bộ Hành chính, Quản lý cơ sở vật chất & thiết bị FPoly Đồng Nai', 1, '2026-11-01 08:30:00', NULL, NULL, NULL, NULL, NULL, 'Phòng Hành chính - CSVC'),
 (9, 'GV0108', 'Cô Hoàng Thị Mai Trang', 'trang.htm@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0912333444', 2, 'Chủ nhiệm bộ môn Đồ họa, Trưởng BTC Triển lãm FPoly Creative Đồng Nai', 1, '2026-11-01 09:00:00', NULL, NULL, NULL, NULL, NULL, 'Thiết kế Đồ họa'),
 (10, 'PI03120', 'Trần Quang Khải', 'quangkhai.pi03120@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0922114455', 4, 'Hỗ trợ kỹ thuật mạng LAN/Wifi, Cài máy Lab, Setup máy chiếu', 1, '2026-11-03 08:00:00', '079201017721', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&auto=format&fit=crop&q=80', 'ACB (Ngân hàng Á Châu)', '289182741', 'TRAN QUANG KHAI', 'Công nghệ Thông tin'),
 (11, 'PI03255', 'Nguyễn Thảo My', 'thaomy.pi03255@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0933225566', 6, 'Nhiếp ảnh chân dung sự kiện, Quay clip TikTok/Reels truyền thông', 1, '2026-11-03 08:30:00', '079304008219', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80', 'VPBank', '19827364501', 'NGUYEN THAO MY', 'Truyền thông & Đa phương tiện'),
 (12, 'GV0205', 'ThS. Nguyễn Văn An', 'an.nv@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0903332211', 2, 'Phó chủ nhiệm Bộ môn Kinh tế, Điều phối Poly Biz Challenge Đồng Nai', 1, '2026-11-01 09:00:00', NULL, NULL, NULL, NULL, NULL, 'Kinh tế & Quản trị Kinh doanh'),
-(13, 'HC0001', 'ThS. Phạm Hồng Sơn', 'son.ph@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0908889999', 7, 'Trưởng ban Hành chính - Đào tạo, Đại diện Ban Giám Hiệu FPoly Đồng Nai ký duyệt số & quyết toán', 1, '2026-11-01 08:00:00', NULL, NULL, NULL, NULL, NULL, 'Ban Giám Hiệu'),
+(13, 'HC0001', 'ThS. Phạm Hồng Sơn', 'son.ph@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0908889999', 3, 'Trưởng phòng Hành chính, Quản lý CSVC và Ký duyệt chi trả thù lao FPoly Đồng Nai', 1, '2026-11-01 08:00:00', NULL, NULL, NULL, NULL, NULL, 'Phòng Hành chính'),
 (14, 'GV0301', 'ThS. Vũ Hoàng Yến', 'yen.vh@fpt.edu.vn', '$2y$10$h9RfZ18k19b91pEreGzHmejOcbGz4Z2u9y.2zVqZtq9Vz5a4F0Lte', '0907776655', 2, 'Giảng viên chuyên ngành Du lịch - Nhà hàng Khách sạn FPoly Đồng Nai', 1, '2026-11-01 09:00:00', NULL, NULL, NULL, NULL, NULL, 'Du lịch - Nhà hàng - Khách sạn');
 
 -- 3. Locations
@@ -265,6 +264,6 @@ INSERT INTO `activity_logs` (`id`, `user_id`, `user_name`, `user_role`, `action`
 (5, 3, 'Đinh Nguyễn Phương Anh', 'Media', 'ACCEPT_SHIFT', 'shift_assignments', 1, 'Đăng ký nhận ca Media TechDay 2026', '127.0.0.1', '2026-11-15 07:00:00'),
 (6, 3, 'Đinh Nguyễn Phương Anh', 'Media', 'SUBMIT_PROOF', 'drive_submissions', 1, 'Bàn giao link Drive chứa 450 ảnh RAW sự kiện', '127.0.0.1', '2026-11-15 12:30:00'),
 (7, 2, 'Thầy Phan Hoàng Khải', 'Organizer', 'VERIFY_ACCEPTANCE', 'shift_assignments', 1, 'Giảng viên nghiệm thu đạt chất lượng Media', '127.0.0.1', '2026-11-15 13:00:00'),
-(8, 13, 'ThS. Phạm Hồng Sơn', 'Head_Admin', 'SIGN_CONTRACT', 'shift_assignments', 1, 'Ký duyệt số hợp đồng chi trả thù lao điện tử HD-20261115-001', '127.0.0.1', '2026-11-15 15:30:00'),
-(9, 13, 'ThS. Phạm Hồng Sơn', 'Head_Admin', 'DISBURSE_PAYROLL', 'shift_assignments', 1, 'Đại diện BGH FPoly Đồng Nai phê duyệt lệnh chuyển khoản thù lao 200,000đ tới STK MB Bank', '127.0.0.1', '2026-11-15 15:35:00'),
+(8, 13, 'ThS. Phạm Hồng Sơn', 'Staff', 'SIGN_CONTRACT', 'shift_assignments', 1, 'Ký duyệt số hợp đồng chi trả thù lao điện tử HD-20261115-001', '127.0.0.1', '2026-11-15 15:30:00'),
+(9, 13, 'ThS. Phạm Hồng Sơn', 'Staff', 'DISBURSE_PAYROLL', 'shift_assignments', 1, 'Đại diện BGH FPoly Đồng Nai phê duyệt lệnh chuyển khoản thù lao 200,000đ tới STK MB Bank', '127.0.0.1', '2026-11-15 15:35:00'),
 (10, 9, 'Cô Hoàng Thị Mai Trang', 'Organizer', 'CREATE_EVENT', 'events', 4, 'Tạo sự kiện Triển lãm FPoly Creative tại Phòng 301 Tòa A FPoly Đồng Nai', '127.0.0.1', '2026-11-16 08:00:00');

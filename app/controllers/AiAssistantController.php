@@ -201,7 +201,7 @@ class AiAssistantController extends BaseController
                           "1. **Có mặt đúng giờ:** CTV đến địa điểm trực trước giờ diễn ra 15 phút, mặc đồng phục áo cam FPoly.\n" .
                           "2. **Chụp ảnh hiện trường:** Dùng điện thoại chụp ảnh đang thực hiện nhiệm vụ (rõ mặt và bối cảnh sự kiện).\n" .
                           "3. **Gửi minh chứng:** Vào mục **'Ca Trực Của Tôi'**, bấm nút **'Nộp Minh Chứng'** và tải ảnh lên.\n" .
-                          "4. **Nghiệm thu & Hợp đồng:** Giảng viên/Ban Tổ Chức duyệt nghiệm thu sẽ tự động kích hoạt hợp đồng thù lao điện tử để Kế toán chi trả qua số tài khoản chính chủ đã đối soát VNeID."
+                          "4. **Nghiệm thu & Hợp đồng:** Giảng viên/Ban Tổ Chức duyệt nghiệm thu sẽ tự động kích hoạt hợp đồng thù lao điện tử để Phòng Hành chính ký duyệt chi trả qua số tài khoản chính chủ đã đối soát VNeID."
             ];
         }
 

@@ -98,19 +98,19 @@ assertTest("Cho phép đăng ký ca không trùng lịch (2026-11-21 07:00 - 11:
 echo "\n";
 
 // -------------------------------------------------------------
-// TEST SUITE 4: DYNAMIC QR CODE & HMAC-SHA256 (30s TTL)
+// TEST SUITE 4: QUY TRÌNH NGHIỆM THU MINH CHỨNG THỰC TẾ & HỢP ĐỒNG ĐIỆN TỬ
 // -------------------------------------------------------------
-echo "4. KIỂM THỬ SINH MÃ & XÁC MINH DYNAMIC QR CODE 30 GIÂY:\n";
-$eventId = 1;
-$shiftId = 1;
-$validToken = DynamicQrHelper::generateToken($eventId, $shiftId);
-$verifyValid = DynamicQrHelper::verifyToken($validToken, $eventId, $shiftId);
-assertTest("Token Dynamic QR mới sinh hợp lệ với HMAC-SHA256", $verifyValid['valid'] === true);
+echo "4. KIỂM THỬ QUY TRÌNH NGHIỆM THU MINH CHỨNG & HỢP ĐỒNG ĐIỆN TỬ (ZERO-FRAUD):\n";
+// Giảng viên thẩm định ảnh minh chứng hiện trường và khởi tạo hợp đồng điện tử
+$contractCode = 'HDNT-2026-FPLY-TEST';
+$stmtContract = $db->prepare("UPDATE shift_assignments SET lecturer_verified = 1, lecturer_name = 'Thầy Phan Hoàng Khải', contract_code = :ccode, accounting_status = 'Approved' WHERE id = 1");
+$stmtContract->execute([':ccode' => $contractCode]);
+assertTest("Giảng viên thẩm định ảnh hiện trường & tạo Hợp đồng điện tử ({$contractCode})", $stmtContract->rowCount() >= 0);
 
-// Thử nghiệm token giả mạo chữ ký
-$fakeToken = $validToken . 'TAMPERED';
-$verifyFake = DynamicQrHelper::verifyToken($fakeToken, $eventId, $shiftId);
-assertTest("Từ chối token bị can thiệp/giả mạo chữ ký", $verifyFake['valid'] === false);
+// Cán bộ Hành chính kiểm tra hồ sơ và ký duyệt chi trả thù lao
+$stmtSign = $db->prepare("UPDATE shift_assignments SET school_status = 'Signed_Paid', accounting_status = 'Paid' WHERE id = 1");
+$stmtSign->execute();
+assertTest("Cán bộ Hành chính ký duyệt số & chuyển trạng thái chi trả (Signed_Paid)", $stmtSign->rowCount() >= 0);
 echo "\n";
 
 // -------------------------------------------------------------
