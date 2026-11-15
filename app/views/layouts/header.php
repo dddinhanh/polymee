@@ -116,10 +116,9 @@ declare(strict_types=1);
                 </nav>
             </div>
 
-            <!-- User Info & Demo Switcher Dropdown -->
+            <!-- User Profile & Auth Controls (Chỉ Login / Logout bên trong) -->
             <div class="flex items-center gap-3">
-                
-                <!-- Quick Demo Switcher -->
+                <?php if (!empty($currentUser['id']) && (int)$currentUser['id'] > 0 && ($currentUser['role_name'] ?? '') !== 'Guest'): ?>
                 <div class="relative" id="userSwitcherDropdown">
                     <button type="button" onclick="toggleDropdown('demoUserMenu')" class="flex items-center gap-2 pl-2 pr-3 py-1.5 bg-slate-100 hover:bg-slate-200/80 rounded-full text-xs font-semibold text-slate-700 transition border border-slate-200">
                         <span class="w-6 h-6 rounded-full bg-gradient-to-tr from-fpoly-primary to-orange-400 text-white flex items-center justify-center font-bold text-[11px]">
@@ -132,59 +131,41 @@ declare(strict_types=1);
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-1"></i>
                     </button>
 
-                    <!-- Dropdown Content -->
-                    <div id="demoUserMenu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in duration-150">
+                    <!-- Dropdown Content: Clean Account & Logout -->
+                    <div id="demoUserMenu" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in duration-150">
                         <div class="px-4 py-2 border-b border-slate-100">
-                            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Chuyển Tài Khoản Demo (Hội đồng)</p>
-                            <p class="text-xs text-[#C7C7CC] mt-0.5">Click để hoán đổi role tức thì không cần mật khẩu:</p>
+                            <p class="text-xs font-bold text-slate-800 leading-tight block"><?= htmlspecialchars($currentUser['full_name']) ?></p>
+                            <p class="text-[10px] text-slate-500 mt-0.5"><?= htmlspecialchars($currentUser['email'] ?? '') ?></p>
+                            <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-orange-100 text-orange-700">
+                                <?= htmlspecialchars($currentUser['role_name'] ?? 'CTV') ?>
+                            </span>
                         </div>
                         
                         <div class="py-1">
-                            <a href="/home/switchUser/3" class="flex items-center gap-3 px-4 py-2 text-xs hover:bg-orange-50 text-slate-700 <?= ($currentUser['id'] ?? 0) === 3 ? 'bg-orange-50/80 font-bold text-fpoly-primary' : '' ?>">
-                                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">PA</div>
-                                <div>
-                                    <div class="font-bold">Đinh Nguyễn Phương Anh</div>
-                                    <div class="text-[10px] text-slate-500">PI03084 • CTV Media / Sinh viên</div>
-                                </div>
+                            <a href="/dashboard" class="flex items-center gap-2.5 px-4 py-2 text-xs text-slate-700 hover:bg-orange-50 hover:text-fpoly-primary transition-colors">
+                                <i class="fa-solid fa-gauge text-slate-400"></i>
+                                <span>Bảng Điều Khiển</span>
                             </a>
-                            <a href="/home/switchUser/4" class="flex items-center gap-3 px-4 py-2 text-xs hover:bg-orange-50 text-slate-700 <?= ($currentUser['id'] ?? 0) === 4 ? 'bg-orange-50/80 font-bold text-fpoly-primary' : '' ?>">
-                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs">ĐM</div>
-                                <div>
-                                    <div class="font-bold">Lê Đức Mạnh</div>
-                                    <div class="text-[10px] text-slate-500">PI03067 • CTV Lễ tân / Sinh viên</div>
-                                </div>
-                            </a>
-                            <a href="/home/switchUser/1" class="flex items-center gap-3 px-4 py-2 text-xs hover:bg-orange-50 text-slate-700 <?= ($currentUser['id'] ?? 0) === 1 ? 'bg-orange-50/80 font-bold text-fpoly-primary' : '' ?>">
-                                <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xs">AD</div>
-                                <div>
-                                    <div class="font-bold">Quản Trị Viên (Admin)</div>
-                                    <div class="text-[10px] text-slate-500">ADMIN001 • Toàn quyền duyệt & QR</div>
-                                </div>
-                            </a>
-                            <a href="/home/switchUser/2" class="flex items-center gap-3 px-4 py-2 text-xs hover:bg-orange-50 text-slate-700 <?= ($currentUser['id'] ?? 0) === 2 ? 'bg-orange-50/80 font-bold text-fpoly-primary' : '' ?>">
-                                <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">GV</div>
-                                <div>
-                                    <div class="font-bold">Thầy Phan Hoàng Khải</div>
-                                    <div class="text-[10px] text-slate-500">GV0102 • Ban tổ chức (Organizer)</div>
-                                </div>
+                            <a href="/dashboard" onclick="localStorage.setItem('polymee_last_page', 'profile-settings')" class="flex items-center gap-2.5 px-4 py-2 text-xs text-slate-700 hover:bg-orange-50 hover:text-fpoly-primary transition-colors">
+                                <i class="fa-solid fa-user-gear text-slate-400"></i>
+                                <span>Cài Đặt Tài Khoản</span>
                             </a>
                         </div>
+                        
                         <div class="border-t border-slate-100 py-1">
-                            <a href="/auth/login" class="flex items-center gap-2 px-4 py-1.5 text-xs text-[#C7C7CC] hover:text-fpoly-primary hover:bg-orange-50">
-                                <i class="fa-solid fa-arrow-right-to-bracket text-slate-400"></i>
-                                <span>Trang Đăng Nhập</span>
-                            </a>
-                            <a href="/auth/register" class="flex items-center gap-2 px-4 py-1.5 text-xs text-[#C7C7CC] hover:text-emerald-600 hover:bg-emerald-50">
-                                <i class="fa-solid fa-user-plus text-slate-400"></i>
-                                <span>Đăng Ký CTV Mới</span>
-                            </a>
-                            <a href="/auth/logout" class="flex items-center gap-2 px-4 py-1.5 text-xs text-rose-600 hover:bg-rose-50 font-semibold">
+                            <a href="/auth/logout" class="flex items-center gap-2.5 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 font-bold transition-colors">
                                 <i class="fa-solid fa-power-off text-rose-500"></i>
                                 <span>Đăng Xuất</span>
                             </a>
                         </div>
                     </div>
                 </div>
+                <?php else: ?>
+                <a href="/auth/login" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-sm">
+                    <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i>
+                    <span>Đăng Nhập</span>
+                </a>
+                <?php endif; ?>
 
                 <!-- Open AI Assistant Button in Nav -->
                 <button type="button" onclick="toggleAiWidget()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-fpoly-hover text-white text-xs font-bold shadow-sm shadow-orange-500/20 transition-all">

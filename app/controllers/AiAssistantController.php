@@ -236,25 +236,28 @@ class AiAssistantController extends BaseController
             $slotText = "Sẵn sàng phục vụ toàn bộ khung giờ";
 
             if (!empty($evts)) {
-                $statusBadge = '<span class="badge px-2 py-1 rounded-pill" style="font-size: 10.5px; font-weight: 600; background: rgba(59, 130, 246, 0.12); color: #2563EB; border: 1px solid rgba(59, 130, 246, 0.25);"><i class="bi bi-calendar-event me-1"></i>' . count($evts) . ' Sự Kiện Đã Đặt</span>';
+                $statusBadge = '<span class="badge px-2.5 py-1 rounded-pill" style="font-size: 11px; font-weight: 600; background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE;"><i class="bi bi-calendar-event me-1"></i>' . count($evts) . ' Sự Kiện Đã Đặt</span>';
                 $occupied = [];
                 foreach ($evts as $e) {
                     $occupied[] = date('d/m (H:i', strtotime($e['start_time'])) . ' - ' . date('H:i)', strtotime($e['end_time']));
                 }
-                $slotText = "Đang bận: " . implode(', ', $occupied) . ". Trống các khung giờ còn lại.";
+                // Giới hạn hiển thị 2 khung giờ gần nhất để tránh tràn chữ làm vỡ box
+                $sample = array_slice($occupied, 0, 2);
+                $more = count($occupied) - 2;
+                $slotText = "Đang bận: " . implode(', ', $sample) . ($more > 0 ? " và <strong class=\"text-dark\">+$more khung giờ khác</strong>" : "") . ". Trống các khung giờ còn lại.";
             }
 
-            $html .= '<div class="p-2.5 mb-2 rounded-3 d-flex flex-wrap justify-content-between align-items-center gap-2" style="background: #FAFAFC; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 1px 2px rgba(0,0,0,0.02);">';
+            $html .= '<div class="p-3 mb-2.5 rounded-3 d-flex flex-wrap justify-content-between align-items-center gap-3" style="background: #FFFFFF; border: 1px solid #E5E7EB; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">';
             $html .= '<div style="min-width: 0; flex: 1;">';
-            $html .= '<div class="d-flex align-items-center gap-2 mb-1">';
-            $html .= '<strong style="font-size:13px; color: var(--ux-ink);">' . ($i + 1) . '. ' . htmlspecialchars($loc['name']) . '</strong>';
+            $html .= '<div class="d-flex align-items-center gap-2 mb-1.5 flex-wrap">';
+            $html .= '<strong style="font-size:13.5px; color: #111827;">' . ($i + 1) . '. ' . htmlspecialchars($loc['name']) . '</strong>';
             $html .= $statusBadge;
             $html .= '</div>';
-            $html .= '<div class="text-muted mb-0.5" style="font-size: 11.5px;"><i class="bi bi-geo-alt-fill me-1 text-danger"></i>' . htmlspecialchars($loc['address']) . ' <span class="mx-1">•</span> Sức chứa: <strong class="text-dark">' . $loc['capacity'] . ' chỗ</strong></div>';
-            $html .= '<div class="text-muted" style="font-size: 11px;"><i class="bi bi-clock-history me-1 text-info"></i>' . $slotText . '</div>';
+            $html .= '<div class="text-muted mb-1" style="font-size: 12px; line-height: 1.4;"><i class="bi bi-geo-alt-fill me-1 text-danger"></i>' . htmlspecialchars($loc['address']) . ' <span class="mx-1">•</span> Sức chứa: <strong class="text-dark">' . $loc['capacity'] . ' chỗ</strong></div>';
+            $html .= '<div class="text-muted" style="font-size: 11.5px; line-height: 1.45;"><i class="bi bi-clock-history me-1 text-info"></i>' . $slotText . '</div>';
             $html .= '</div>';
             $html .= '<div class="flex-shrink-0">';
-            $html .= '<button class="btn btn-sm btn-outline-primary px-2.5 py-1 rounded-pill" style="font-size:11px; font-weight:600;" onclick="quickAskAi(\'Đặt giúp lịch sự kiện tại ' . addslashes($loc['name']) . ', khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu\')"><i class="bi bi-calendar-plus me-1"></i> Đặt Sự Kiện</button>';
+            $html .= '<button class="btn btn-sm btn-fpt-secondary px-3 py-1.5 rounded-pill shadow-xs fw-semibold d-inline-flex align-items-center gap-1.5" style="font-size:11.5px;" onclick="quickAskAi(\'Đặt giúp lịch sự kiện tại ' . addslashes($loc['name']) . ', khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu\')"><i class="bi bi-calendar-plus-fill text-primary"></i> Đặt Sự Kiện</button>';
             $html .= '</div>';
             $html .= '</div>';
 
@@ -295,20 +298,20 @@ class AiAssistantController extends BaseController
 
         foreach ($ctvs as $i => $c) {
             $initial = mb_strtoupper(mb_substr($c['full_name'], 0, 1));
-            $html .= '<div class="p-2.5 mb-2 rounded-3 d-flex justify-content-between align-items-center gap-2.5" style="background: #FAFAFC; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 1px 2px rgba(0,0,0,0.02);">';
+            $html .= '<div class="p-3 mb-2.5 rounded-3 d-flex justify-content-between align-items-center gap-3" style="background: #FFFFFF; border: 1px solid #E5E7EB; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">';
             
-            $html .= '<div class="d-flex align-items-center gap-2.5" style="min-width: 0; flex: 1;">';
-            $html .= '<div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold flex-shrink-0 shadow-xs" style="width: 32px; height: 32px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 12px;">' . htmlspecialchars($initial) . '</div>';
-            $html .= '<div style="line-height: 1.35; min-width: 0;">';
-            $html .= '<div class="d-flex flex-wrap align-items-center gap-1.5 mb-0.5">';
-            $html .= '<strong style="font-size: 13px; color: var(--ux-ink);">' . htmlspecialchars($c['full_name']) . '</strong>';
-            $html .= '<span class="badge font-monospace px-1.5 py-0.5 rounded-pill" style="font-size: 10px; background: rgba(0,0,0,0.04); color: var(--ux-ink-2); border: 1px solid rgba(0,0,0,0.08);">' . htmlspecialchars($c['student_code']) . '</span>';
-            $html .= '<span class="badge rounded-pill" style="font-size: 10px; font-weight: 600; background: rgba(16, 185, 129, 0.12); color: #059669; border: 1px solid rgba(16, 185, 129, 0.25);"><i class="bi bi-check-circle-fill me-1"></i>Đang Rảnh</span>';
+            $html .= '<div class="d-flex align-items-center gap-3" style="min-width: 0; flex: 1;">';
+            $html .= '<div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold flex-shrink-0 shadow-xs" style="width: 38px; height: 38px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 13.5px;">' . htmlspecialchars($initial) . '</div>';
+            $html .= '<div style="line-height: 1.4; min-width: 0;">';
+            $html .= '<div class="d-flex flex-wrap align-items-center gap-2 mb-1">';
+            $html .= '<strong style="font-size: 13.5px; color: #111827;">' . htmlspecialchars($c['full_name']) . '</strong>';
+            $html .= '<span class="badge font-monospace px-2 py-0.5 rounded-pill" style="font-size: 10.5px; background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1;">' . htmlspecialchars($c['student_code']) . '</span>';
+            $html .= '<span class="badge rounded-pill px-2 py-0.5" style="font-size: 10.5px; font-weight: 600; background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0;"><i class="bi bi-check-circle-fill me-1"></i>Đang Rảnh</span>';
             $html .= '</div>';
-            $html .= '<div class="text-muted d-flex align-items-center gap-1 mb-0.5" style="font-size: 11.5px;">';
-            $html .= '<i class="bi bi-award-fill text-warning"></i><span style="color:var(--ux-ink-3);">Kỹ năng:</span> <span class="fw-medium text-dark text-truncate" style="max-width: 320px;">' . htmlspecialchars($c['skills'] ?? 'Đa năng') . '</span>';
+            $html .= '<div class="text-muted d-flex align-items-center gap-1.5 mb-1" style="font-size: 12px;">';
+            $html .= '<i class="bi bi-award-fill text-warning"></i><span style="color:#64748B;">Kỹ năng:</span> <span class="fw-semibold text-dark text-truncate" style="max-width: 320px;">' . htmlspecialchars($c['skills'] ?? 'Đa năng') . '</span>';
             $html .= '</div>';
-            $html .= '<div class="text-muted d-flex flex-wrap align-items-center gap-2" style="font-size: 10.5px;">';
+            $html .= '<div class="text-muted d-flex flex-wrap align-items-center gap-2.5" style="font-size: 11px;">';
             $html .= '<span><i class="bi bi-envelope me-1"></i>' . htmlspecialchars($c['email']) . '</span>';
             $html .= '<span style="opacity:0.3;">•</span>';
             $html .= '<span><i class="bi bi-telephone me-1"></i>' . htmlspecialchars($c['phone'] ?? '09xx') . '</span>';
@@ -316,8 +319,8 @@ class AiAssistantController extends BaseController
             $html .= '</div>';
             $html .= '</div>';
 
-            $html .= '<div class="flex-shrink-0 ms-1">';
-            $html .= '<button class="btn btn-sm btn-outline-warning rounded-pill px-2.5 py-1" style="font-size: 11px; font-weight: 600; white-space: nowrap;" onclick="quickAskAi(\'Gửi mail cho CTV ' . addslashes($c['full_name']) . ' đăng ký lịch ca trực sắp tới\')"><i class="bi bi-envelope-plus me-1"></i> Gửi Mail</button>';
+            $html .= '<div class="flex-shrink-0">';
+            $html .= '<button class="btn btn-sm btn-fpt-secondary rounded-pill px-3 py-1.5 shadow-xs fw-semibold d-inline-flex align-items-center gap-1.5" style="font-size: 11.5px; white-space: nowrap;" onclick="quickAskAi(\'Gửi mail cho CTV ' . addslashes($c['full_name']) . ' đăng ký lịch ca trực sắp tới\')"><i class="bi bi-envelope-fill text-warning"></i> Gửi Mail</button>';
             $html .= '</div>';
 
             $html .= '</div>';

@@ -133,10 +133,12 @@ class RolePermissionHelper
             'canViewMyShifts' => in_array($role, ['CTV', 'MEDIA'], true),
             // Hồ sơ hợp đồng: CTV xem hợp đồng của mình; GV xem ca của mình; Kế toán/Trưởng HC/Admin xem toàn bộ
             'canViewContracts' => in_array($role, ['CTV', 'MEDIA', 'LECTURER', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Nghiệm thu kế toán: CHỈ dành cho Kế toán, Trưởng hành chính và Admin! Tuyệt đối ẩn với CTV và Staff
-            'canViewAccounting' => in_array($role, ['ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
-            // Quản lý hồ sơ CTV: Giảng viên, Kế toán, Trưởng HC, Admin đối soát thông tin toàn trường
-            'canViewCtvProfiles' => in_array($role, ['LECTURER', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Nghiệm thu & Quyết toán: Dành cho Kế toán, Nhân viên Hành chính, Trưởng hành chính và Admin
+            'canViewAccounting' => in_array($role, ['STAFF', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Quản lý hồ sơ CTV: Giảng viên, Nhân viên Hành chính, Kế toán, Trưởng HC, Admin đối soát thông tin toàn trường
+            'canViewCtvProfiles' => in_array($role, ['LECTURER', 'STAFF', 'ACCOUNTANT', 'HEAD_ADMIN', 'ADMIN'], true),
+            // Cài đặt tài khoản cá nhân: Toàn bộ người dùng đã đăng nhập đều có quyền
+            'canViewProfileSettings' => true,
             // Cập nhật hồ sơ VNeID & STK cá nhân: CTV và Media
             'canViewMyProfile' => in_array($role, ['CTV', 'MEDIA'], true),
             // Minh chứng Drive: Media, CTV nộp link; GV, Trưởng HC, Admin kiểm tra

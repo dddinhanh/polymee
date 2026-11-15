@@ -43,8 +43,11 @@ class DashboardController extends BaseController
                        COALESCE(u_creator.department, e.department, 'Công nghệ Thông tin') as lecturer_department,
                        l.name as location_name, 
                        l.address as location_address,
+                       s.shift_type,
                        sa.id as my_assignment_id,
+                       COALESCE(sa.ctv_type, s.shift_type, 'FACILITY') as my_ctv_type,
                        sa.proof_image_url as my_proof_image_url,
+                       sa.proof_drive_url as my_proof_drive_url,
                        sa.proof_note as my_proof_note,
                        sa.proof_submitted_at as my_proof_submitted_at,
                        sa.lecturer_verified as my_lecturer_verified,
@@ -79,12 +82,14 @@ class DashboardController extends BaseController
 
         $sqlAccounting = "SELECT sa.id as assignment_id, sa.status as assignment_status, sa.assigned_at,
                                  sa.accounting_status, sa.accounting_note,
-                                 sa.proof_image_url, sa.proof_note, sa.proof_submitted_at,
+                                 COALESCE(sa.ctv_type, s.shift_type, 'FACILITY') as ctv_type,
+                                 sa.proof_image_url, sa.proof_drive_url, sa.proof_note, sa.proof_submitted_at,
                                  sa.lecturer_verified, sa.lecturer_name, sa.lecturer_verified_at,
                                  sa.contract_code, sa.school_status,
                                  u.id as user_id, u.student_code, u.full_name, u.email, u.phone,
+                                 COALESCE(u.department, 'Công nghệ Thông tin') as user_department,
                                  u.id_card_number, u.vneid_image_url, u.bank_name, u.bank_account_number, u.bank_account_name,
-                                 s.id as shift_id, s.name as shift_name, s.start_time, s.end_time,
+                                 s.id as shift_id, s.name as shift_name, s.shift_type, s.start_time, s.end_time,
                                  COALESCE(s.remuneration_amount, 150000) as remuneration_amount,
                                  s.points,
                                  e.id as event_id,
@@ -173,6 +178,9 @@ class DashboardController extends BaseController
         $points = (int)($_POST['points'] ?? 10);
         $remunerationAmount = (int)($_POST['remuneration_amount'] ?? 200000);
         $skillRequired = trim($_POST['skill_required'] ?? 'Kỹ năng làm việc nhóm & trách nhiệm');
+        $shiftType = in_array(strtoupper($_POST['shift_type'] ?? ''), ['MEDIA', 'FACILITY'], true) 
+                     ? strtoupper($_POST['shift_type']) 
+                     : (stripos($name, 'media') !== false || stripos($name, 'quay') !== false || stripos($name, 'chụp') !== false || stripos($name, 'ảnh') !== false ? 'MEDIA' : 'FACILITY');
 
         if (empty($name) || empty($startTime) || empty($endTime) || $eventId <= 0) {
             $this->json(['success' => false, 'message' => 'Vui lòng điền đầy đủ thông tin sự kiện, tên ca và thời gian.'], 400);
@@ -181,12 +189,13 @@ class DashboardController extends BaseController
 
         try {
             $db = Database::getInstance()->getConnection();
-            $sql = "INSERT INTO shifts (event_id, name, start_time, end_time, target_qty, approved_qty, points, remuneration_amount, skill_required)
-                    VALUES (:event_id, :name, :start_time, :end_time, :target_qty, 0, :points, :remuneration_amount, :skill_required)";
+            $sql = "INSERT INTO shifts (event_id, name, shift_type, start_time, end_time, target_qty, approved_qty, points, remuneration_amount, skill_required)
+                    VALUES (:event_id, :name, :shift_type, :start_time, :end_time, :target_qty, 0, :points, :remuneration_amount, :skill_required)";
             $stmt = $db->prepare($sql);
             $stmt->execute([
                 ':event_id' => $eventId,
                 ':name' => $name,
+                ':shift_type' => $shiftType,
                 ':start_time' => $startTime,
                 ':end_time' => $endTime,
                 ':target_qty' => $targetQty,
@@ -298,7 +307,9 @@ class DashboardController extends BaseController
     }
 
     /**
-     * API CTV nộp ảnh chụp hiện trường chứng minh có mặt nghiệm thu
+     * API CTV nộp minh chứng nghiệm thu sau sự kiện:
+     * - CTV Bàn ghế, máy móc: Upload/dán ảnh hiện trường bàn giao thiết bị
+     * - CTV Media quay chụp: Dán Link Google Drive sản phẩm
      */
     public function submitOnSiteProof(): void
     {
@@ -309,34 +320,61 @@ class DashboardController extends BaseController
 
         $assignmentId = (int)($_POST['assignment_id'] ?? 0);
         $proofImageUrl = trim($_POST['proof_image_url'] ?? '');
-        $proofNote = trim($_POST['proof_note'] ?? 'Có mặt đúng giờ tại địa điểm trực sự kiện');
+        $proofDriveUrl = trim($_POST['proof_drive_url'] ?? '');
+        $proofNote = trim($_POST['proof_note'] ?? 'Đã hoàn thành nhiệm vụ ca trực sự kiện');
+        $ctvType = strtoupper(trim($_POST['ctv_type'] ?? ''));
 
-        if ($assignmentId <= 0 || empty($proofImageUrl)) {
-            $this->json(['success' => false, 'message' => 'Vui lòng cung cấp đường dẫn ảnh hiện trường minh chứng.'], 400);
+        // Tự động phân loại nếu người dùng gửi link Google Drive
+        if (!empty($proofDriveUrl) || (stripos($proofImageUrl, 'drive.google.com') !== false)) {
+            if (empty($proofDriveUrl)) {
+                $proofDriveUrl = $proofImageUrl;
+            }
+            $ctvType = 'MEDIA';
+        }
+
+        if (empty($ctvType)) {
+            $ctvType = 'FACILITY';
+        }
+
+        if ($assignmentId <= 0 || (empty($proofImageUrl) && empty($proofDriveUrl))) {
+            $this->json(['success' => false, 'message' => 'Vui lòng cung cấp minh chứng nghiệm thu (Ảnh hiện trường hoặc Link Google Drive).'], 400);
             return;
         }
 
         $db = Database::getInstance()->getConnection();
         $stmt = $db->prepare("UPDATE shift_assignments SET 
                                 proof_image_url = :img, 
+                                proof_drive_url = :drive,
+                                ctv_type = :ctv_type,
                                 proof_note = :note, 
                                 proof_submitted_at = datetime('now', 'localtime') 
                               WHERE id = :id");
         $stmt->execute([
             ':img' => $proofImageUrl,
+            ':drive' => $proofDriveUrl,
+            ':ctv_type' => $ctvType,
             ':note' => $proofNote,
             ':id' => $assignmentId
         ]);
 
+        $this->logActivity(
+            'SUBMIT_PROOF',
+            'shift_assignment',
+            $assignmentId,
+            ($ctvType === 'MEDIA' ? 'CTV Media nộp link Google Drive: ' . $proofDriveUrl : 'CTV Bàn ghế máy móc nộp ảnh hiện trường: ' . $proofImageUrl)
+        );
+
         $this->json([
             'success' => true,
-            'message' => 'Đã gửi ảnh hiện trường minh chứng thành công! Đang chờ Giảng viên xác nhận nghiệm thu.',
-            'proof_image_url' => $proofImageUrl
+            'message' => ($ctvType === 'MEDIA' ? 'Đã gửi link Google Drive sản phẩm thành công!' : 'Đã gửi ảnh hiện trường minh chứng thành công!') . ' Đang chờ Giảng viên bộ môn xác nhận nghiệm thu.',
+            'proof_image_url' => $proofImageUrl,
+            'proof_drive_url' => $proofDriveUrl,
+            'ctv_type' => $ctvType
         ]);
     }
 
     /**
-     * API Giảng viên xác nhận nghiệm thu ảnh hiện trường & lập hợp đồng
+     * API Giảng viên xác nhận nghiệm thu (Ảnh hiện trường / Link Drive) & Lập hợp đồng điện tử
      */
     public function verifyLecturerAcceptance(): void
     {
@@ -368,7 +406,8 @@ class DashboardController extends BaseController
                                 lecturer_name = :lname, 
                                 lecturer_verified_at = datetime('now', 'localtime'),
                                 contract_code = :ccode,
-                                accounting_status = 'Approved'
+                                accounting_status = 'Approved',
+                                school_status = 'Pending'
                               WHERE id = :id");
         $stmt->execute([
             ':lname' => $lecturerName,
@@ -376,16 +415,23 @@ class DashboardController extends BaseController
             ':id' => $assignmentId
         ]);
 
+        $this->logActivity(
+            'VERIFY_PROOF',
+            'shift_assignment',
+            $assignmentId,
+            "Giảng viên {$lecturerName} đã nghiệm thu minh chứng và khởi tạo hợp đồng {$contractCode}"
+        );
+
         $this->json([
             'success' => true,
-            'message' => 'Giảng viên đã xác nhận nghiệm thu hiện trường và khởi tạo Hợp đồng ' . $contractCode . '!',
+            'message' => 'Giảng viên đã xác nhận nghiệm thu và khởi tạo Hợp đồng điện tử ' . $contractCode . '! Đã chuyển tiếp đến Nhà trường / Hành chính ký duyệt.',
             'contract_code' => $contractCode,
             'lecturer_name' => $lecturerName
         ]);
     }
 
     /**
-     * API Trình hồ sơ hợp đồng lên Trường ký xác nhận chuyển tiền
+     * API Nhân viên Hành chính / Nhà trường ký xác nhận hợp đồng & hoàn tất chuyển khoản
      */
     public function submitToSchoolForSigning(): void
     {
@@ -397,7 +443,7 @@ class DashboardController extends BaseController
         // Kiểm tra quyền RBAC: Nhân viên hành chính, Trưởng HC, Admin
         $permissions = RolePermissionHelper::getPermissions($this->currentUser);
         if (!$permissions['canSubmitSchoolSigning']) {
-            $this->json(['success' => false, 'message' => 'Bạn không có quyền trình trường ký duyệt. Quyền này dành cho Cán bộ Hành chính và Ban Giám hiệu.'], 403);
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền ký duyệt. Quyền này dành cho Cán bộ Hành chính và Ban Giám hiệu Nhà trường.'], 403);
             return;
         }
 
@@ -415,9 +461,17 @@ class DashboardController extends BaseController
                               WHERE id = :id");
         $stmt->execute([':id' => $assignmentId]);
 
+        $signerName = $this->currentUser['full_name'] ?? 'Phòng Hành Chính FPT';
+        $this->logActivity(
+            'APPROVE_PAYMENT',
+            'shift_assignment',
+            $assignmentId,
+            "Cán bộ {$signerName} đã ký duyệt hợp đồng nghiệm thu và phê duyệt chuyển khoản thù lao thành công"
+        );
+
         $this->json([
             'success' => true,
-            'message' => 'Hồ sơ nghiệm thu đã được Nhà trường ký duyệt và chuyển khoản thù lao thành công!'
+            'message' => 'Hồ sơ nghiệm thu đã được Nhà trường ký duyệt và xác nhận chuyển khoản thù lao thành công!'
         ]);
     }
 
@@ -607,8 +661,9 @@ class DashboardController extends BaseController
         $roleName = $this->currentUser['role_name'] ?? '';
         $roleId = (int)($this->currentUser['role_id'] ?? 0);
         
-        // Quản trị viên hệ thống (1) và Giảng viên (2) không có hồ sơ định danh nhận thù lao
-        $isStaffOrAdmin = in_array($roleId, [1, 2], true) || in_array($roleName, ['Admin', 'Organizer'], true);
+        // CHỈ CTV (Sinh viên, Media, CTV) mới có hồ sơ định danh nhận thù lao (VNeID, CCCD, STK)
+        // Các role khác (Admin, Giảng viên, Hành chính, Kế toán...) bỏ hết các trường này
+        $isCtv = in_array($roleId, [4, 6], true) || in_array($roleName, ['Student', 'Media', 'CTV', 'Sinh viên'], true);
 
         $fullName = trim($_POST['full_name'] ?? '');
         $phone = trim($_POST['phone'] ?? '');
@@ -631,8 +686,8 @@ class DashboardController extends BaseController
 
         $setSql = "full_name = :full_name, phone = :phone, skills = :skills";
 
-        // Với CTV (Student / Media / v.v.) thì cập nhật CCCD, ngân hàng, STK, VNeID
-        if (!$isStaffOrAdmin) {
+        // CHỈ CTV (Sinh viên, Media) mới cập nhật CCCD, ngân hàng, STK, VNeID
+        if ($isCtv) {
             $idCardNumber = trim($_POST['id_card_number'] ?? '');
             $bankName = trim($_POST['bank_name'] ?? '');
             $bankAccountNumber = trim($_POST['bank_account_number'] ?? '');

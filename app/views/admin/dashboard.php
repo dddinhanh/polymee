@@ -102,20 +102,20 @@ declare(strict_types=1);
                 <p>Hiện chưa có hồ sơ minh chứng nào được nộp.</p>
             </div>
         <?php else: ?>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                    <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200/70">
+            <div class="overflow-x-auto max-h-[450px] overflow-y-auto relative rounded-xl border border-slate-200">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead class="sticky top-0 z-10 bg-slate-100 text-slate-700 uppercase tracking-wider font-bold border-b border-slate-200 shadow-xs">
                         <tr>
-                            <th class="py-3 px-4">Mã HS</th>
-                            <th class="py-3 px-4">Sinh Viên Nộp</th>
-                            <th class="py-3 px-4">Sự Kiện & Ca Trực</th>
-                            <th class="py-3 px-4">Liên Kết Drive</th>
-                            <th class="py-3 px-4">Ghi Chú</th>
-                            <th class="py-3 px-4">Trạng Thái</th>
-                            <th class="py-3 px-4 text-right">Thao Tác Duyệt</th>
+                            <th class="py-3 px-4 bg-slate-100">Mã HS</th>
+                            <th class="py-3 px-4 bg-slate-100">Sinh Viên Nộp</th>
+                            <th class="py-3 px-4 bg-slate-100">Sự Kiện & Ca Trực</th>
+                            <th class="py-3 px-4 bg-slate-100">Liên Kết Drive</th>
+                            <th class="py-3 px-4 bg-slate-100">Ghi Chú</th>
+                            <th class="py-3 px-4 bg-slate-100">Trạng Thái</th>
+                            <th class="py-3 px-4 text-right bg-slate-100">Thao Tác Duyệt</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 text-slate-700">
+                    <tbody class="divide-y divide-slate-100 text-slate-700 bg-white">
                         <?php foreach ($submissions as $sub): ?>
                             <tr class="hover:bg-slate-50/80 transition">
                                 <td class="py-3.5 px-4 font-mono font-bold text-slate-500">

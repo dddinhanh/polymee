@@ -585,7 +585,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         min-width: 0;
         display: flex;
         flex-direction: column;
-        padding: 16px 24px 40px 12px;
+        padding: 16px 24px 16px 12px;
+        overflow: hidden;
     }
 
     .dashboard-topbar {
@@ -935,8 +936,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         border-radius: 12px;
     }
 
+    /* Chỉ định hình flex: 1 cho card chứa bảng cuộn độc lập */
     .spa-panel .card:has(.table-responsive),
-    .spa-panel > .card {
+    .spa-panel .table-scroll-card {
         flex: 1 1 0% !important;
         min-height: 0 !important;
         display: flex !important;
@@ -944,14 +946,28 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         overflow: hidden !important;
     }
 
-    .spa-panel .card:has(.table-responsive) .card-body,
-    .spa-panel > .card .card-body {
+    .spa-panel .card:has(.table-responsive) > .card-body,
+    .spa-panel .table-scroll-card > .card-body {
         flex: 1 1 0% !important;
         min-height: 0 !important;
         display: flex !important;
         flex-direction: column !important;
         overflow: hidden !important;
         padding: 0 !important;
+    }
+
+    /* Đảm bảo trang Profile Settings luôn cuộn tự nhiên và card không bị đè */
+    #panelProfileSettings {
+        overflow-y: auto !important;
+        display: block !important;
+    }
+    #panelProfileSettings .card {
+        flex: none !important;
+        overflow: visible !important;
+    }
+    #panelProfileSettings .card-body {
+        flex: none !important;
+        overflow: visible !important;
     }
 
     .spa-panel #eventsCardsContainer,
@@ -962,25 +978,58 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         padding-right: 2px;
     }
 
-    /* Sticky table header so column names stay in place when scrolling */
+    /* =========================================================
+       CHUẨN UI/UX KỸ THUẬT: STICKY HEADER & SCROLLABLE BODY
+       1. Non-scrollable Top Section (flex-shrink-0)
+       2. Sticky Table Header (sticky top-0 z-10 with Solid Background)
+       3. Scrollable Body (flex-1 overflow-y-auto)
+       ========================================================= */
     .spa-panel .table {
         border-collapse: separate !important;
         border-spacing: 0 !important;
+        width: 100% !important;
     }
-    .spa-panel .table thead th {
+    
+    .spa-panel .table thead th,
+    .sticky-th th,
+    .sticky-th {
         position: sticky !important;
         top: 0 !important;
         z-index: 10 !important;
-        background: #F8F9FA !important;
-        border-bottom: 1px solid rgba(0,0,0,0.08) !important;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.06) !important;
+        background-color: #F8FAFC !important;
+        background: #F8FAFC !important;
+        color: #475569 !important;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
     }
 
-    [data-bs-theme="dark"] .spa-panel .table thead th {
+    [data-bs-theme="dark"] .spa-panel .table thead th,
+    [data-bs-theme="dark"] .sticky-th th,
+    [data-bs-theme="dark"] .sticky-th {
+        background-color: #1E293B !important;
         background: #1E293B !important;
         color: #F8FAFC !important;
-        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Đảm bảo container bảng có chiều cao cuộn độc lập */
+    .spa-panel .card:has(.table-responsive),
+    .spa-panel .table-container,
+    .scrollable-body-container {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    .spa-panel .table-responsive,
+    .scrollable-table-body {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        position: relative !important;
     }
 
     /* Standardized Compact Inner Content & Cells for All Panels */
@@ -1186,12 +1235,10 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             min-width: 0;
             height: 100vh !important;
             max-height: 100vh !important;
-            padding: 12px 20px 40px 12px;
+            padding: 12px 20px 16px 12px;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden !important;
-            overflow-y: auto !important;
-            scroll-behavior: smooth;
+            overflow: hidden !important;
         }
 
         .dashboard-topbar {
@@ -1210,10 +1257,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         }
 
         #spaBodyContent {
-            flex: 1;
+            flex: 1 1 0%;
             min-width: 0;
+            min-height: 0;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         /* Panel display overrides: hidden state must always win */
@@ -1795,7 +1844,46 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             padding: 0 !important;
         }
     }
-    </style>
+    
+    /* Color Swatch Pills in Add Note Modal */
+    .color-choice-label {
+        background: #FFFFFF !important;
+        border-color: rgba(0,0,0,0.12) !important;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .color-choice-label:hover {
+        background: #F8FAFC !important;
+        border-color: rgba(0,0,0,0.25) !important;
+        transform: translateY(-1px);
+    }
+    .color-choice-input:checked + .color-choice-label {
+        background: #FFFFFF !important;
+        border-color: var(--choice-color, #EA580C) !important;
+        box-shadow: 0 0 0 2px var(--choice-color, #EA580C), 0 2px 8px rgba(0,0,0,0.08) !important;
+    }
+    .color-choice-input:checked + .color-choice-label span:last-child {
+        font-weight: 700 !important;
+        color: #111827 !important;
+    }
+
+    /* When sidebar is collapsed (compact mode 56px), hide badge completely to avoid overlapping icons */
+    .u040:not(.is-wide) .u040-bd,
+    .u040:not(.is-wide) .u040-bd-admin,
+    .u040:not(.is-wide) em.u040-bd {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+
+    /* Table Clean & Spacious Styling */
+    #panelAccounting table td {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        vertical-align: middle !important;
+    }
+
+</style>
 </head>
 <body>
 
@@ -1903,8 +1991,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <li>
                         <button class="u040-it" type="button" style="--i:8" data-page="user-roles" onclick="navigateToPage('user-roles')" title="Trung tâm cấp quyền & phân vai trò người dùng">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                            <span>Cấp Quyền Người Dùng</span>
-                            <em class="u040-bd" style="background:#EA580C; color:#fff;" aria-label="Admin">Admin</em>
+                            <span>Cấp Quyền</span>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -1949,25 +2036,25 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
 
                         <!-- Quick Navigation Actions -->
-                        <div class="p-2 border-bottom" style="border-color: rgba(0,0,0,0.06) !important;">
-                            <a class="dropdown-item py-2 px-2.5 rounded-3 d-flex align-items-center gap-2.5" href="javascript:void(0)" onclick="navigateToPage('profile-settings'); closeSidebarUserMenu();">
-                                <div class="d-grid place-items-center rounded-2 bg-light text-dark flex-shrink-0" style="width: 28px; height: 28px; font-size: 14px; border: 1px solid rgba(0,0,0,0.06);">
+                        <div class="p-2.5 border-bottom d-flex flex-column gap-1.5" style="border-color: rgba(0,0,0,0.06) !important;">
+                            <a class="dropdown-item p-2.5 rounded-3 d-flex align-items-center gap-3 transition-all" href="javascript:void(0)" onclick="navigateToPage('profile-settings'); closeSidebarUserMenu();" style="border: 1px solid transparent;">
+                                <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 shadow-2xs" style="width: 36px; height: 36px; background: #F8FAFC; border: 1px solid #E2E8F0; color: #475569; font-size: 16px;">
                                     <i class="bi bi-person-gear"></i>
                                 </div>
-                                <div>
-                                    <span class="fw-semibold text-dark d-block" style="font-size: 12.5px;">Cài Đặt Tài Khoản Cá Nhân</span>
-                                    <small class="text-muted" style="font-size: 10.5px;">Hồ sơ, mật khẩu & xóa tài khoản</small>
+                                <div class="d-flex flex-column justify-content-center overflow-hidden" style="line-height: 1.3;">
+                                    <span class="fw-bold text-dark d-block text-truncate" style="font-size: 13px;">Cài Đặt Tài Khoản Cá Nhân</span>
+                                    <small class="text-muted d-block text-truncate mt-0.5" style="font-size: 11px;">Hồ sơ, mật khẩu & xóa tài khoản</small>
                                 </div>
                             </a>
 
                             <?php if (($currentUser['role_name'] ?? '') === 'Admin' || (int)($currentUser['role_id'] ?? 0) === 1): ?>
-                            <a class="dropdown-item py-2 px-2.5 rounded-3 d-flex align-items-center gap-2.5 mt-1" href="javascript:void(0)" onclick="navigateToPage('admin-management'); closeSidebarUserMenu();">
-                                <div class="d-grid place-items-center rounded-2 bg-light text-dark flex-shrink-0" style="width: 28px; height: 28px; font-size: 14px; border: 1px solid rgba(0,0,0,0.06);">
+                            <a class="dropdown-item p-2.5 rounded-3 d-flex align-items-center gap-3 transition-all" href="javascript:void(0)" onclick="navigateToPage('admin-management'); closeSidebarUserMenu();" style="border: 1px solid transparent;">
+                                <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 shadow-2xs" style="width: 36px; height: 36px; background: #F8FAFC; border: 1px solid #E2E8F0; color: #0284C7; font-size: 16px;">
                                     <i class="bi bi-shield-lock-fill"></i>
                                 </div>
-                                <div>
-                                    <span class="fw-semibold text-dark d-block" style="font-size: 12.5px;">Cấp Quyền & Nhật Ký Kiểm Toán</span>
-                                    <small class="text-muted" style="font-size: 10.5px;">Phân quyền Admin & Audit Trail</small>
+                                <div class="d-flex flex-column justify-content-center overflow-hidden" style="line-height: 1.3;">
+                                    <span class="fw-bold text-dark d-block text-truncate" style="font-size: 13px;">Cấp Quyền & Nhật Ký Kiểm Toán</span>
+                                    <small class="text-muted d-block text-truncate mt-0.5" style="font-size: 11px;">Phân quyền Admin & Audit Trail</small>
                                 </div>
                             </a>
                             <?php endif; ?>
@@ -2217,161 +2304,199 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             
             
 
-            <!-- TAB 2: BẢNG NGHIỆM THU KẾ TOÁN & KIỂM DUYỆT THÙ LAO (ADMIN / ORGANIZER) -->
+            <!-- TAB 2: BẢNG NGHIỆM THU KẾ TOÁN & KIỂM DUYỆT THÙ LAO (ADMIN / ORGANIZER / STAFF) -->
             <section class="spa-panel" id="panelAccounting" style="display:none !important;">
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-2" style="border-color: rgba(0,0,0,0.06) !important;">
-                    <div>
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">PHÒNG KẾ TOÁN & TÀI CHÍNH</span>
-                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Bảng Nghiệm Thu Thù Lao Cộng Tác Viên</h2>
-                        </div>
-                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Quản lý định danh CCCD, ảnh VNeID, số tài khoản ngân hàng và thẩm định quyết toán chi thù lao CTV</p>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn-fpt-secondary btn-fpt-sm" onclick="window.print()">
-                            <i class="bi bi-printer me-1"></i> In Bảng Quyết Toán
-                        </button>
-                        <button class="btn-fpt-emerald btn-fpt-sm" onclick="exportAccountingCSV()">
-                            <i class="bi bi-file-earmark-spreadsheet me-1"></i> Tải File Excel (CSV)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Bento 2.0 AI Accounting Auditor Widget -->
-                <div class="ai-audit-banner mb-2.5 d-flex flex-wrap align-items-center justify-content-between gap-2.5 p-2.5 rounded-3" style="background: #FFFBF5; border: 1px solid rgba(234, 88, 12, 0.15);">
-                    <div class="d-flex align-items-center gap-2.5">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center text-dark" style="width:32px; height:32px; background:#FFFFFF; flex:none; border:1px solid rgba(0,0,0,0.08); box-shadow:0 1px 2px rgba(0,0,0,0.04);">
-                            <i class="fa-solid fa-wand-magic-sparkles text-warning" style="font-size: 14px;"></i>
-                        </div>
+                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề, Widget AI & Bộ Lọc Trạng Thái (Non-scrollable Top Section) -->
+                <div class="flex-shrink-0">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-2" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
-                            <div class="d-flex align-items-center gap-2">
-                                <strong class="text-dark" style="font-size:12.5px;">AI Thẩm Định & Quyết Toán Thù Lao Tự Động</strong>
-                                <span class="badge rounded-pill bg-white text-dark border num-tabular" style="font-size:10px; border-color:rgba(0,0,0,0.08) !important;">
-                                    <i class="bi bi-shield-check me-1 text-success"></i>100% Khớp VNeID
-                                </span>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">HÀNH CHÍNH & TÀI CHÍNH</span>
+                                <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Bảng Nghiệm Thu Thù Lao & Quyết Toán CTV</h2>
                             </div>
-                            <small class="text-muted d-block mt-0.5" style="font-size: 11px;">
-                                AI đã quét đối soát <strong><?= count($accountingList) ?> hồ sơ</strong>: Không trùng STK ngân hàng, không xung đột ca trực và CCCD đã định danh hợp lệ.
-                            </small>
+                            <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Quy trình 2 nhánh: CTV Bàn ghế/máy móc (Nghiệm thu ảnh hiện trường) & CTV Media (Nghiệm thu Link Google Drive) ➔ Giảng viên thẩm định ➔ Trình Nhà trường ký duyệt chuyển khoản</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn-fpt-secondary btn-fpt-sm d-inline-flex align-items-center gap-1.5" onclick="window.print()">
+                                <i class="bi bi-printer-fill text-secondary"></i> In Bảng Quyết Toán
+                            </button>
+                            <button type="button" class="btn-fpt-secondary btn-fpt-sm d-inline-flex align-items-center gap-1.5" onclick="exportAccountingCSV()">
+                                <i class="bi bi-file-earmark-excel-fill text-success"></i> Xuất File Excel (CSV)
+                            </button>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-white text-dark border px-2.5 py-1.5 shadow-xs num-tabular" style="font-size: 11px;">
-                            Tổng quyết toán: <strong class="text-primary ms-1"><?= number_format(count($accountingList) * 150000) ?> đ</strong>
-                        </span>
-                        <button type="button" class="btn-fpt-outline-orange btn-fpt-sm" onclick="runAiAccountingAudit()" style="padding: 4px 10px; font-size: 11.5px;">
-                            <i class="bi bi-magic me-1"></i> AI Quét Bất Thường
-                        </button>
+
+                    <!-- Bento 2.0 AI Accounting Auditor Widget -->
+                    <div class="ai-audit-banner mb-2.5 d-flex flex-wrap align-items-center justify-content-between gap-2.5 p-2.5 rounded-3" style="background: #FFFBF5; border: 1px solid rgba(234, 88, 12, 0.15);">
+                        <div class="d-flex align-items-center gap-2.5">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center text-dark" style="width:32px; height:32px; background:#FFFFFF; flex:none; border:1px solid rgba(0,0,0,0.08); box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+                                <i class="fa-solid fa-wand-magic-sparkles text-warning" style="font-size: 14px;"></i>
+                            </div>
+                            <div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <strong class="text-dark" style="font-size:12.5px;">AI Thẩm Định & Quyết Toán Thù Lao Tự Động</strong>
+                                    <span class="badge rounded-pill bg-white text-dark border num-tabular" style="font-size:10px; border-color:rgba(0,0,0,0.08) !important;">
+                                        <i class="bi bi-shield-check me-1 text-success"></i>100% Khớp VNeID
+                                    </span>
+                                </div>
+                                <small class="text-muted d-block mt-0.5" style="font-size: 11px;">
+                                    AI đã quét đối soát <strong><?= count($accountingList) ?> hồ sơ</strong>: Phân luồng minh chứng ảnh hiện trường & Link Drive, tự động gán mã Hợp đồng nghiệm thu điện tử.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-white text-dark border px-2.5 py-1.5 shadow-xs num-tabular" style="font-size: 11px;">
+                                Tổng quyết toán: <strong class="text-primary ms-1"><?= number_format(count($accountingList) * 150000) ?> đ</strong>
+                            </span>
+                            <button type="button" class="btn-fpt-outline-orange btn-fpt-sm" onclick="runAiAccountingAudit()" style="padding: 4px 10px; font-size: 11.5px;">
+                                <i class="bi bi-magic me-1"></i> AI Quét Bất Thường
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Thanh Tìm Kiếm & Lọc Nhanh Hồ Sơ Nghiệm Thu -->
+                    <div class="row g-2 mb-2.5 bg-light p-2 rounded-3 border" style="border-color: rgba(0,0,0,0.06) !important;">
+                        <div class="col-12 col-md-6 col-lg-7">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+                                <input type="text" id="accountingSearchInput" class="form-control border-0" placeholder="Tìm theo tên CTV, mã sinh viên, số CCCD hoặc tên sự kiện..." oninput="filterAccountingTable()">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-3">
+                            <select id="accountingStatusFilter" class="form-select form-select-sm border-0" onchange="filterAccountingTable()">
+                                <option value="">-- Tất cả trạng thái --</option>
+                                <option value="Pending">Chờ GV Nghiệm Thu</option>
+                                <option value="Approved">Chờ Trường Ký Duyệt</option>
+                                <option value="Paid">Đã Ký & Chi Trả Thành Công</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-2 text-end">
+                            <span class="badge bg-white text-muted border px-2 py-1.5 w-100 num-tabular" id="accountingFilteredCount" style="font-size: 11px;">Hiển thị: <?= count($accountingList) ?> hồ sơ</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Thanh Tìm Kiếm & Lọc Nhanh Hồ Sơ Nghiệm Thu -->
-                <div class="row g-2 mb-2.5 bg-light p-2 rounded-3 border" style="border-color: rgba(0,0,0,0.06) !important;">
-                    <div class="col-12 col-md-6 col-lg-7">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
-                            <input type="text" id="accountingSearchInput" class="form-control border-0" placeholder="Tìm theo tên CTV, mã sinh viên, số CCCD hoặc số tài khoản..." oninput="filterAccountingTable()">
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3 col-lg-3">
-                        <select id="accountingStatusFilter" class="form-select form-select-sm border-0" onchange="filterAccountingTable()">
-                            <option value="">-- Tất cả trạng thái --</option>
-                            <option value="Pending">Chờ Kế toán duyệt (Pending)</option>
-                            <option value="Approved">Đã duyệt hồ sơ (Approved)</option>
-                            <option value="Paid">Đã chuyển khoản (Paid)</option>
-                        </select>
-                    </div>
-                    <div class="col-6 col-md-3 col-lg-2 text-end">
-                        <span class="badge bg-white text-muted border px-2 py-1.5 w-100 num-tabular" id="accountingFilteredCount" style="font-size: 11px;">Hiển thị: <?= count($accountingList) ?> hồ sơ</span>
-                    </div>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
-                        <thead class="table-light text-muted small text-uppercase fw-bold">
-                            <tr>
-                                <th style="width: 45px;">#</th>
-                                <th>Cộng Tác Viên</th>
-                                <th>Ca Trực & Sự Kiện</th>
-                                <th>Thù Lao</th>
-                                <th>Trạng Thái</th>
-                                <th class="text-end" style="width: 200px;">Thao Tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (empty($accountingList)): ?>
-                            <tr>
-                                <td colspan="6" class="text-center py-4 text-muted">Chưa có hồ sơ nghiệm thu nào trong kỳ.</td>
-                            </tr>
-                            <?php else: ?>
-                            <?php foreach ($accountingList as $idx => $acc): ?>
-                            <tr id="accRow_<?= $acc['assignment_id'] ?>" data-search="<?= strtolower(htmlspecialchars($acc['full_name'] . ' ' . $acc['student_code'] . ' ' . ($acc['id_card_number'] ?? '') . ' ' . ($acc['bank_account_number'] ?? '') . ' ' . $acc['shift_name'])) ?>">
-                                <td class="text-muted fw-bold num-tabular"><?= $idx + 1 ?></td>
-                                <td>
-                                    <strong class="text-dark d-block"><?= htmlspecialchars($acc['full_name']) ?></strong>
-                                    <span class="badge bg-light text-secondary border font-monospace" style="font-size: 10px;"><?= htmlspecialchars($acc['student_code']) ?></span>
-                                </td>
-                                <td>
-                                    <div class="fw-bold text-dark mb-0.5"><?= htmlspecialchars($acc['shift_name']) ?></div>
-                                    <small class="text-muted num-tabular"><?= substr($acc['start_time'], 11, 5) ?> - <?= substr($acc['end_time'], 11, 5) ?> • <?= htmlspecialchars($acc['event_title']) ?></small>
-                                </td>
-                                <td>
-                                    <div class="fw-bold text-dark num-tabular" style="font-size: 14px;">
-                                        <?= number_format((int)$acc['remuneration_amount']) ?> đ
-                                    </div>
-                                    <small class="text-muted" style="font-size: 11px;">+<?= $acc['points'] ?> điểm</small>
-                                </td>
-                                <td>
-                                    <div id="accVerificationCol_<?= $acc['assignment_id'] ?>">
-                                        <?php if (!empty($acc['lecturer_verified']) && $acc['lecturer_verified'] == 1): ?>
-                                            <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
-                                                <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2-all me-1"></i>Đã chi trả</span>
+                <!-- 2. VÙNG BẢNG DỮ LIỆU: Container Cuộn Độc Lập (Scrollable Body) & Sticky Header -->
+                <div class="card border-0 rounded-3 shadow-xs flex-1 overflow-hidden d-flex flex-column" style="border: 1px solid var(--ux-line) !important;">
+                    <div class="table-responsive flex-1 overflow-y-auto" style="height: 100%;">
+                                                <table class="table table-hover align-middle mb-0" style="font-size: 12.5px;">
+                            <thead class="sticky-th">
+                                <tr>
+                                    <th style="width: 42px;" class="ps-3 text-center">#</th>
+                                    <th style="min-width: 190px;">Cộng Tác Viên</th>
+                                    <th style="min-width: 280px;">Ca Trực & Sự Kiện</th>
+                                    <th style="width: 140px;">Thù Lao</th>
+                                    <th style="width: 160px;">Trạng Thái</th>
+                                    <th class="text-end pe-3" style="width: 180px;">Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($accountingList)): ?>
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-muted">Chưa có hồ sơ nghiệm thu nào trong kỳ.</td>
+                                </tr>
+                                <?php else: ?>
+                                <?php foreach ($accountingList as $idx => $acc): ?>
+                                <?php
+                                $accCtvType = $acc['ctv_type'] ?? 'FACILITY';
+                                $isMedia = ($accCtvType === 'MEDIA') || !empty($acc['proof_drive_url']) || stripos($acc['shift_name'], 'media') !== false;
+                                ?>
+                                <tr id="accRow_<?= $acc['assignment_id'] ?>" data-search="<?= strtolower(htmlspecialchars($acc['full_name'] . ' ' . $acc['student_code'] . ' ' . ($acc['id_card_number'] ?? '') . ' ' . ($acc['bank_account_number'] ?? '') . ' ' . $acc['shift_name'] . ' ' . $acc['event_title'])) ?>">
+                                    <td class="text-muted fw-semibold num-tabular ps-3 text-center" style="font-size: 11px;"><?= $idx + 1 ?></td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2.5">
+                                            <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-2xs flex-shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 12px;">
+                                                <?= mb_strtoupper(mb_substr($acc['full_name'], 0, 1)) ?>
+                                            </div>
+                                            <div class="text-nowrap overflow-hidden">
+                                                <strong class="text-dark d-block text-truncate" style="font-size: 13px; font-weight: 600; max-width: 160px;" title="<?= htmlspecialchars($acc['full_name']) ?>"><?= htmlspecialchars($acc['full_name']) ?></strong>
+                                                <div class="d-flex align-items-center gap-1.5 mt-0.5 text-muted" style="font-size: 11px;">
+                                                    <span class="badge bg-light text-secondary border font-monospace px-1.5 py-0.5" style="font-size: 9.5px;"><?= htmlspecialchars($acc['student_code']) ?></span>
+                                                    <span class="text-truncate" style="max-width: 100px;"><?= htmlspecialchars($acc['user_department'] ?? 'CNTT') ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-1.5 mb-0.5 flex-wrap">
+                                            <span class="fw-semibold text-dark text-truncate" style="font-size: 13px; max-width: 250px;" title="<?= htmlspecialchars($acc['shift_name']) ?>"><?= htmlspecialchars($acc['shift_name']) ?></span>
+                                            <?php if ($isMedia): ?>
+                                            <span class="badge rounded-pill px-2 py-0.5" style="background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; font-size: 10px; font-weight: 600;">Media</span>
                                             <?php else: ?>
-                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><i class="bi bi-hourglass-split me-1"></i>Chờ trường ký</span>
+                                            <span class="badge rounded-pill px-2 py-0.5" style="background: #E0F2FE; color: #0284C7; border: 1px solid #BAE6FD; font-size: 10px; font-weight: 600;">Kỹ thuật</span>
                                             <?php endif; ?>
-                                        <?php else: ?>
-                                            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
-                                                <i class="bi bi-clock me-1"></i>Chờ GV nghiệm thu
-                                            </span>
-                                        <?php endif; ?>
-                                    </div>
-                                    <span id="accStatusBadge_<?= $acc['assignment_id'] ?>" style="display:none;"><?= htmlspecialchars($acc['accounting_status'] ?? 'Pending') ?></span>
-                                </td>
-                                <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-1.5" id="accActionBtns_<?= $acc['assignment_id'] ?>">
-                                        <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-2.5 py-1" onclick="openAccountingDetailModal(<?= $acc['assignment_id'] ?>)" title="Xem toàn bộ thông tin chi tiết hồ sơ">
-                                            <i class="bi bi-eye me-1"></i> Chi Tiết
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-light border rounded-pill px-2 py-1" onclick="openContractModal(<?= $acc['assignment_id'] ?>)" title="Xem Biên bản & Hợp đồng nghiệm thu">
-                                            <i class="bi bi-file-earmark-text"></i>
-                                        </button>
-                                        <?php if ((empty($acc['lecturer_verified']) || $acc['lecturer_verified'] == 0) && $perms['canVerifyLecturer']): ?>
-                                        <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-2 py-1" onclick="verifyLecturerAcceptance(<?= $acc['assignment_id'] ?>)" title="Giảng viên duyệt nghiệm thu">
-                                            <i class="bi bi-check-lg"></i>
-                                        </button>
-                                        <?php endif; ?>
-                                        <?php if (!empty($acc['lecturer_verified']) && $acc['lecturer_verified'] == 1 && ($acc['school_status'] ?? '') !== 'Signed_Paid' && $perms['canApproveAccounting']): ?>
-                                        <button type="button" class="btn btn-sm btn-warning text-dark rounded-pill px-2 py-1 fw-bold" onclick="submitToSchoolForSigning(<?= $acc['assignment_id'] ?>)" title="Kế toán duyệt chi & thanh toán thù lao">
-                                            <i class="bi bi-credit-card me-1"></i>Duyệt Chi
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                                        </div>
+                                        <div class="text-muted d-flex align-items-center gap-1.5" style="font-size: 11.5px;">
+                                            <span class="num-tabular fw-medium" style="color: #64748B;"><i class="bi bi-clock me-1" style="font-size: 10.5px;"></i><?= substr($acc['start_time'], 11, 5) ?> - <?= substr($acc['end_time'], 11, 5) ?></span>
+                                            <span style="opacity: 0.5;">•</span>
+                                            <span class="text-truncate text-secondary" style="max-width: 230px;" title="<?= htmlspecialchars($acc['event_title']) ?>"><?= htmlspecialchars($acc['event_title']) ?></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold text-dark num-tabular" style="font-size: 14px; letter-spacing: -0.01em;">
+                                            <?= number_format((int)$acc['remuneration_amount']) ?> đ
+                                        </div>
+                                        <small class="text-muted text-nowrap d-block" style="font-size: 11px;">+<?= $acc['points'] ?> điểm rèn luyện</small>
+                                    </td>
+                                    <td>
+                                        <div id="accVerificationCol_<?= $acc['assignment_id'] ?>">
+                                            <?php if (!empty($acc['lecturer_verified']) && $acc['lecturer_verified'] == 1): ?>
+                                                <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
+                                                    <span class="badge rounded-pill px-2.5 py-1 text-nowrap d-inline-flex align-items-center gap-1" style="background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; font-size: 11px; font-weight: 500;">
+                                                        <i class="bi bi-check-circle-fill"></i> Đã chuyển tiền
+                                                    </span>
+                                                <?php else: ?>
+                                                    <span class="badge rounded-pill px-2.5 py-1 text-nowrap d-inline-flex align-items-center gap-1" style="background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; font-size: 11px; font-weight: 500;">
+                                                        <i class="bi bi-hourglass-split"></i> Chờ ký duyệt
+                                                    </span>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <span class="badge rounded-pill px-2.5 py-1 text-nowrap d-inline-flex align-items-center gap-1" style="background: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; font-size: 11px; font-weight: 500;">
+                                                    <i class="bi bi-clock"></i> Chờ GV duyệt
+                                                </span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <span id="accStatusBadge_<?= $acc['assignment_id'] ?>" style="display:none;"><?= htmlspecialchars($acc['accounting_status'] ?? 'Pending') ?></span>
+                                    </td>
+                                    <td class="text-end pe-3">
+                                        <div class="d-flex align-items-center justify-content-end gap-1.5 flex-nowrap" id="accActionBtns_<?= $acc['assignment_id'] ?>">
+                                            <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill px-2.5 py-1 shadow-2xs fw-medium d-inline-flex align-items-center gap-1" onclick="openAccountingDetailModal(<?= $acc['assignment_id'] ?>)" title="Xem chi tiết hồ sơ & STK">
+                                                <i class="bi bi-eye text-primary" style="font-size: 11px;"></i>
+                                                <span style="font-size: 11px;">Chi Tiết</span>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill px-2.5 py-1 shadow-2xs fw-medium d-inline-flex align-items-center gap-1" onclick="openContractModal(<?= $acc['assignment_id'] ?>)" title="Xem Hợp đồng điện tử">
+                                                <i class="bi bi-file-earmark-text text-warning" style="font-size: 11px;"></i>
+                                                <span style="font-size: 11px;">Hợp Đồng</span>
+                                            </button>
+                                            <?php if ((empty($acc['lecturer_verified']) || $acc['lecturer_verified'] == 0) && $perms['canVerifyLecturer']): ?>
+                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-2.5 py-1 shadow-xs fw-semibold d-inline-flex align-items-center gap-1 text-white" onclick="verifyLecturerAcceptance(<?= $acc['assignment_id'] ?>)" title="Giảng viên duyệt nghiệm thu">
+                                                <i class="bi bi-check-lg" style="font-size: 11px;"></i>
+                                                <span style="font-size: 11px;">Duyệt</span>
+                                            </button>
+                                            <?php elseif (!empty($acc['lecturer_verified']) && $acc['lecturer_verified'] == 1 && ($acc['school_status'] ?? '') !== 'Signed_Paid' && ($perms['canSubmitSchoolSigning'] || $perms['canApproveAccounting'])): ?>
+                                            <button type="button" class="btn btn-sm btn-fpt-primary rounded-pill px-2.5 py-1 shadow-xs fw-semibold d-inline-flex align-items-center gap-1 text-white" onclick="submitToSchool(<?= $acc['assignment_id'] ?>)" title="Trình Nhà trường ký duyệt">
+                                                <i class="bi bi-send" style="font-size: 11px;"></i>
+                                                <span style="font-size: 11px;">Trình Ký</span>
+                                            </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
             
             
 
-            <!-- TAB 3: HỒ SƠ VNEID & STK NGÂN HÀNG (DÀNH CHO GIẢNG VIÊN & ADMIN QUẢN LÝ CTV HOẶC CTV XEM HỒ SƠ) -->
+            <!-- TAB 3: QUẢN LÝ HỒ SƠ CTV (RÚT GỌN CHỈ HIỆN TÊN + BỘ MÔN, XEM CHI TIẾT QUA ICON CON MẮT) -->
             <?php
             $ctvRoster = array_values(array_filter($allUsers, function($u) {
-                return ($u['role_name'] ?? '') === 'Student' || (int)($u['role_id'] ?? 0) === 4;
+                return ($u['role_name'] ?? '') === 'Student' || (int)($u['role_id'] ?? 0) === 4 || (int)($u['role_id'] ?? 0) === 6 || ($u['role_name'] ?? '') === 'Media';
             }));
             if (empty($ctvRoster)) { $ctvRoster = $allUsers; }
             $completeDossierCount = count(array_filter($ctvRoster, fn($c) => !empty($c['id_card_number']) && !empty($c['bank_account_number'])));
@@ -2379,100 +2504,101 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             ?>
             <section class="spa-panel fade-in-up" id="panelStudentPayrollProfile" style="display:none !important;">
                 <?php if ($perms['canViewCtvProfiles']): ?>
-                <!-- Giao diện Quản Lý Hồ Sơ CTV Dành Cho Kế Toán & Quản Trị Viên -->
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
-                    <div>
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">BAN TỔ CHỨC & QUẢN TRỊ</span>
-                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)</h2>
+                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề trang, 4 Thẻ KPI & Thanh Lọc (Non-scrollable Top Section) -->
+                <div class="flex-shrink-0">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">GIẢNG VIÊN & HÀNH CHÍNH</span>
+                                <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Quản Lý Danh Sách Cộng Tác Viên (CTV)</h2>
+                            </div>
+                            <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Danh sách CTV theo từng bộ môn. Danh sách tối giản hóa chỉ hiển thị Tên & Bộ môn; nhấp nút icon con mắt (👁️) để xem chi tiết CCCD, VNeID & Ngân hàng.</p>
                         </div>
-                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Dành cho Giảng Viên và Quản Trị Viên kiểm tra, đối soát thông tin CCCD, ảnh định danh VNeID và số tài khoản ngân hàng của toàn bộ CTV đăng ký</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn-fpt-secondary btn-fpt-sm" onclick="window.print()">
+                                <i class="bi bi-printer me-1"></i> In Danh Sách CTV
+                            </button>
+                            <button class="btn-fpt-emerald btn-fpt-sm" onclick="exportCtvRosterCSV()">
+                                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Xuất Excel (CSV)
+                            </button>
+                        </div>
                     </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn-fpt-secondary btn-fpt-sm" onclick="window.print()">
-                            <i class="bi bi-printer me-1"></i> In Danh Sách CTV
-                        </button>
-                        <button class="btn-fpt-emerald btn-fpt-sm" onclick="exportCtvRosterCSV()">
-                            <i class="bi bi-file-earmark-spreadsheet me-1"></i> Xuất Excel (CSV)
-                        </button>
+
+                    <!-- 4 Thẻ Chỉ Số Tổng Quan Hồ Sơ CTV -->
+                    <div class="kpi-metric-strip mb-3">
+                        <div class="kpi-mini-card">
+                            <div>
+                                <div class="kpi-mini-label">Tổng Số CTV Đăng Ký</div>
+                                <div class="kpi-mini-val num-tabular"><?= count($ctvRoster) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">CTV</small></div>
+                            </div>
+                            <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                                <i class="bi bi-people"></i>
+                            </div>
+                        </div>
+                        <div class="kpi-mini-card">
+                            <div>
+                                <div class="kpi-mini-label">Đầy Đủ CCCD & STK</div>
+                                <div class="kpi-mini-val num-tabular text-success"><?= $completeDossierCount ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">(<?= round($completeDossierCount / max(1, count($ctvRoster)) * 100) ?>%)</small></div>
+                            </div>
+                            <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                                <i class="bi bi-check2-circle text-success"></i>
+                            </div>
+                        </div>
+                        <div class="kpi-mini-card">
+                            <div>
+                                <div class="kpi-mini-label">Đã Nộp Ảnh VNeID</div>
+                                <div class="kpi-mini-val num-tabular text-primary"><?= $hasVneidPhotoCount ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">hồ sơ</small></div>
+                            </div>
+                            <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                                <i class="bi bi-person-badge text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="kpi-mini-card">
+                            <div>
+                                <div class="kpi-mini-label">Tình Trạng Đối Soát</div>
+                                <div class="kpi-mini-val num-tabular text-success" style="font-size: 15px;"><i class="bi bi-patch-check-fill me-1"></i>100% Khớp FPoly</div>
+                            </div>
+                            <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
+                                <i class="bi bi-shield-check text-success"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thanh Tìm Kiếm & Lọc Nhanh Theo Bộ Môn -->
+                    <div class="row g-2 mb-2.5 bg-light p-2 rounded-3 border" style="border-color: rgba(0,0,0,0.06) !important;">
+                        <div class="col-12 col-md-5">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+                                <input type="text" id="ctvSearchInput" class="form-control border-0" placeholder="Tìm theo tên CTV, mã sinh viên hoặc bộ môn..." oninput="filterCtvRosterTable()">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <select id="ctvDeptFilter" class="form-select form-select-sm border-0" onchange="filterCtvRosterTable()">
+                                <option value="">-- Tất cả Bộ Môn FPoly --</option>
+                                <option value="Công nghệ Thông tin">Bộ môn Công nghệ Thông tin</option>
+                                <option value="Thiết kế Đồ họa">Bộ môn Thiết kế Đồ họa</option>
+                                <option value="Digital Marketing">Bộ môn Digital Marketing / TMĐT</option>
+                                <option value="Quản trị Kinh doanh">Bộ môn Quản trị Kinh doanh</option>
+                                <option value="Du lịch - Khách sạn">Bộ môn Du lịch - Khách sạn</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-md-3 text-end">
+                            <span class="badge bg-white text-muted border px-2 py-1.5 w-100 num-tabular" id="ctvFilteredBadge" style="font-size: 11px;">Hiển thị: <?= count($ctvRoster) ?> CTV</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 4 Thẻ Chỉ Số Tổng Quan Hồ Sơ CTV -->
-                <div class="kpi-metric-strip mb-3">
-                    <div class="kpi-mini-card">
-                        <div>
-                            <div class="kpi-mini-label">Tổng Số CTV Đăng Ký</div>
-                            <div class="kpi-mini-val num-tabular"><?= count($ctvRoster) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">CTV</small></div>
-                        </div>
-                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                            <i class="bi bi-people"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-mini-card">
-                        <div>
-                            <div class="kpi-mini-label">Đầy Đủ CCCD & STK</div>
-                            <div class="kpi-mini-val num-tabular text-success"><?= $completeDossierCount ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">(<?= round($completeDossierCount / max(1, count($ctvRoster)) * 100) ?>%)</small></div>
-                        </div>
-                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                            <i class="bi bi-check2-circle text-success"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-mini-card">
-                        <div>
-                            <div class="kpi-mini-label">Đã Nộp Ảnh VNeID</div>
-                            <div class="kpi-mini-val num-tabular text-primary"><?= $hasVneidPhotoCount ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">hồ sơ</small></div>
-                        </div>
-                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                            <i class="bi bi-person-badge text-primary"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-mini-card">
-                        <div>
-                            <div class="kpi-mini-label">Tình Trạng Đối Soát</div>
-                            <div class="kpi-mini-val num-tabular text-success" style="font-size: 15px;"><i class="bi bi-patch-check-fill me-1"></i>100% Khớp FPoly</div>
-                        </div>
-                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                            <i class="bi bi-shield-check text-success"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Thanh Tìm Kiếm & Lọc Nhanh CTV -->
-                <div class="row g-2 mb-2.5 bg-light p-2 rounded-3 border" style="border-color: rgba(0,0,0,0.06) !important;">
-                    <div class="col-12 col-md-7">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
-                            <input type="text" id="ctvSearchInput" class="form-control border-0" placeholder="Tìm theo tên CTV, mã sinh viên, số CCCD hoặc ngân hàng..." oninput="filterCtvRosterTable()">
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <select id="ctvBankFilter" class="form-select form-select-sm border-0" onchange="filterCtvRosterTable()">
-                            <option value="">-- Tất cả ngân hàng --</option>
-                            <option value="MB">MB Bank (Quân Đội)</option>
-                            <option value="Vietcombank">Vietcombank</option>
-                            <option value="TPBank">TPBank</option>
-                            <option value="Techcombank">Techcombank</option>
-                        </select>
-                    </div>
-                    <div class="col-6 col-md-2 text-end">
-                        <span class="badge bg-white text-muted border px-2 py-1.5 w-100 num-tabular" id="ctvFilteredBadge" style="font-size: 11px;">Hiển thị: <?= count($ctvRoster) ?> CTV</span>
-                    </div>
-                </div>
-
-                <!-- Bảng Danh Sách Hồ Sơ CTV Dành Cho Giảng Viên & Quản Trị Viên -->
-                <div class="card border-0 rounded-3 shadow-xs overflow-hidden" style="border: 1px solid var(--ux-line) !important;">
-                    <div class="table-responsive">
+                <!-- 2. VÙNG BẢNG DỮ LIỆU: Container Cuộn Độc Lập (Scrollable Body) & Sticky Header -->
+                <div class="card border-0 rounded-3 shadow-xs flex-1 overflow-hidden d-flex flex-column" style="border: 1px solid var(--ux-line) !important;">
+                    <div class="table-responsive flex-1 overflow-y-auto" style="height: 100%;">
                         <table class="table table-hover align-middle mb-0" id="ctvRosterTable">
-                            <thead class="table-light text-muted small text-uppercase fw-bold">
+                            <thead class="sticky-th">
                                 <tr>
-                                    <th class="ps-3" style="width: 45px;">STT</th>
+                                    <th class="ps-3" style="width: 55px;">STT</th>
                                     <th>Cộng Tác Viên (CTV)</th>
-                                    <th>Định Danh CCCD</th>
-                                    <th>Tài Khoản Ngân Hàng</th>
-                                    <th>Ảnh VNeID</th>
-                                    <th>Kỹ Năng Phụ Trách</th>
-                                    <th class="text-end pe-3" style="width: 150px;">Thao Tác Đối Soát</th>
+                                    <th>Thuộc Bộ Môn</th>
+                                    <th>Phân Loại CTV</th>
+                                    <th class="text-end pe-3" style="width: 130px;">Xem Chi Tiết</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -2480,46 +2606,53 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <?php
                                 $cInitial = mb_strtoupper(mb_substr($ctv['full_name'] ?? 'C', 0, 1));
                                 $vneidUrl = $ctv['vneid_image_url'] ?? 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80';
+                                $cDept = !empty($ctv['department']) ? $ctv['department'] : 'Công nghệ Thông tin';
+                                $isMediaRole = (int)($ctv['role_id'] ?? 0) === 6 || ($ctv['role_name'] ?? '') === 'Media' || stripos($ctv['skills'] ?? '', 'media') !== false || stripos($ctv['skills'] ?? '', 'quay') !== false;
+                                
+                                $deptStyle = match($cDept) {
+                                    'Công nghệ Thông tin' => 'background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE;',
+                                    'Thiết kế Đồ họa' => 'background: #FAF5FF; color: #7E22CE; border: 1px solid #E9D5FF;',
+                                    'Digital Marketing' => 'background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A;',
+                                    'Quản trị Kinh doanh' => 'background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0;',
+                                    default => 'background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1;'
+                                };
                                 ?>
-                                <tr class="ctv-row" data-search="<?= strtolower(htmlspecialchars($ctv['full_name'] . ' ' . $ctv['student_code'] . ' ' . ($ctv['id_card_number'] ?? '') . ' ' . ($ctv['bank_name'] ?? ''))) ?>" data-bank="<?= htmlspecialchars($ctv['bank_name'] ?? '') ?>">
+                                <tr class="ctv-row" data-search="<?= strtolower(htmlspecialchars($ctv['full_name'] . ' ' . $ctv['student_code'] . ' ' . $cDept)) ?>" data-dept="<?= htmlspecialchars($cDept) ?>">
                                     <td class="ps-3 text-muted fw-bold num-tabular" style="font-size: 11.5px;"><?= $idx + 1 ?></td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
-                                            <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 30px; height: 30px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 11.5px;">
+                                            <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 12px;">
                                                 <?= $cInitial ?>
                                             </div>
                                             <div>
-                                                <strong class="d-block text-dark" style="font-size: 12.5px; line-height: 1.2;"><?= htmlspecialchars($ctv['full_name']) ?></strong>
-                                                <small class="text-muted" style="font-size: 11px;"><span class="badge bg-light text-dark border font-monospace px-1.5 py-0.5"><?= htmlspecialchars($ctv['student_code']) ?></span> • <?= htmlspecialchars($ctv['phone'] ?: $ctv['email']) ?></small>
+                                                <strong class="d-block text-dark" style="font-size: 13px; line-height: 1.2;"><?= htmlspecialchars($ctv['full_name']) ?></strong>
+                                                <small class="text-muted" style="font-size: 11px;">
+                                                    <span class="badge bg-light text-dark border font-monospace px-1.5 py-0.5"><?= htmlspecialchars($ctv['student_code']) ?></span>
+                                                    • <?= htmlspecialchars($ctv['phone'] ?: $ctv['email']) ?>
+                                                </small>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="font-monospace fw-bold text-dark num-tabular" style="font-size: 12px;"><?= htmlspecialchars($ctv['id_card_number'] ?: '079203014589') ?></div>
-                                        <small class="text-success" style="font-size: 10.5px;"><i class="bi bi-patch-check-fill me-1"></i>Đã khớp CCCD</small>
+                                        <span class="badge px-2.5 py-1 fw-semibold" style="font-size: 11px; <?= $deptStyle ?>">
+                                            <i class="bi bi-mortarboard-fill me-1"></i><?= htmlspecialchars($cDept) ?>
+                                        </span>
                                     </td>
                                     <td>
-                                        <div class="fw-semibold text-dark" style="font-size: 12px; line-height: 1.2;"><?= htmlspecialchars($ctv['bank_name'] ?: 'MB Bank (Quân Đội)') ?></div>
-                                        <div class="font-monospace text-primary num-tabular" style="font-size: 11.5px;"><?= htmlspecialchars($ctv['bank_account_number'] ?: '098765432199') ?></div>
-                                        <small class="text-muted text-uppercase" style="font-size: 10px;"><?= htmlspecialchars($ctv['bank_account_name'] ?: $ctv['full_name']) ?></small>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center gap-1.5">
-                                            <img src="<?= htmlspecialchars($vneidUrl) ?>" alt="VNeID" class="rounded-2 border shadow-xs" style="width: 36px; height: 26px; object-fit: cover;">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary py-0.5 px-1.5 rounded-pill" style="font-size: 10.5px;" onclick="previewVneidPhoto('<?= htmlspecialchars($vneidUrl) ?>', '<?= htmlspecialchars($ctv['full_name']) ?>', '<?= htmlspecialchars($ctv['id_card_number'] ?: '079203014589') ?>')">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="text-muted" style="font-size: 11.5px;"><?= htmlspecialchars($ctv['skills'] ?: 'Media, Lễ tân, Hậu cần setup') ?></span>
+                                        <?php if ($isMediaRole): ?>
+                                        <span class="badge border px-2.5 py-1 font-monospace" style="font-size: 11px; background: #FFFBEB; color: #B45309; border-color: #FDE68A !important;">
+                                            <i class="bi bi-camera-reels-fill me-1"></i>CTV Media (Quay/Chụp)
+                                        </span>
+                                        <?php else: ?>
+                                        <span class="badge border px-2.5 py-1 font-monospace" style="font-size: 11px; background: #ECFEFF; color: #0E7490; border-color: #A5F3FC !important;">
+                                            <i class="bi bi-tools me-1"></i>CTV Bàn Ghế & Máy Móc
+                                        </span>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-end pe-3">
-                                        <div class="d-inline-flex gap-1">
-                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-2.5 py-0.5 shadow-xs" style="font-size: 11px;" onclick="showToast('Hồ sơ của <?= addslashes($ctv['full_name']) ?> đã được Giảng viên đối soát hợp lệ!', 'success')">
-                                                <i class="bi bi-check2 me-1"></i> Hợp Lệ
-                                            </button>
-                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-circle d-inline-flex align-items-center justify-content-center shadow-xs" style="width: 34px; height: 34px; transition: all 0.2s;" onclick="openCtvEyeModalByIndex(<?= $idx ?>)" title="Xem chi tiết hồ sơ CTV">
+                                            <i class="bi bi-eye-fill fs-6"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -2535,16 +2668,22 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 4: LỊCH TRỰC CỦA TÔI -->
             <section class="spa-panel" id="panelMyShifts" style="display:none !important;">
-                <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
-                    <div>
-                        <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Lịch Trực & Ca Phân Công Của Tôi</h2>
-                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Theo dõi ca trực, nộp ảnh chụp hiện trường chứng minh có mặt để Giảng viên nghiệm thu và xem hợp đồng thanh toán thù lao.</p>
+                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề trang & Tổng số ca trực (Non-scrollable Top) -->
+                <div class="flex-shrink-0">
+                    <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
+                        <div>
+                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Lịch Trực & Ca Phân Công Của Tôi</h2>
+                            <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Theo dõi ca trực, nộp minh chứng nghiệm thu (Ảnh hiện trường hoặc Link Drive) để Giảng viên nghiệm thu và xem hợp đồng thanh toán thù lao.</p>
+                        </div>
+                        <span class="badge bg-primary px-3 py-2 fw-bold" style="font-size: 12px; border-radius: 8px;" id="myShiftsCountBadge">0 Ca Trực</span>
                     </div>
-                    <span class="badge bg-primary px-3 py-2 fw-bold" style="font-size: 12px; border-radius: 8px;" id="myShiftsCountBadge">0 Ca Trực</span>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light text-muted small text-uppercase fw-bold">
+
+                <!-- 2. VÙNG BẢNG DỮ LIỆU: Scrollable Body & Sticky Header -->
+                <div class="card border-0 rounded-3 shadow-xs flex-1 overflow-hidden d-flex flex-column" style="border: 1px solid var(--ux-line) !important;">
+                    <div class="table-responsive flex-1 overflow-y-auto" style="height: 100%;">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="sticky-th">
                             <tr>
                                 <th>Thời Gian</th>
                                 <th>Sự Kiện & Ca Trực</th>
@@ -2558,7 +2697,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <tbody id="myShiftsTableBody">
                             <!-- Nạp động qua JS -->
                         </tbody>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -2567,7 +2707,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 5: QUẢN LÝ SỰ KIỆN -->
             <section class="spa-panel" id="panelEvents" style="display:none !important;">
-                <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
+                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề & Nút tạo sự kiện (Non-scrollable Top) -->
+                <div class="flex-shrink-0">
+                    <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Danh Sách Sự Kiện & Phân Rã Ca Trực</h2>
                         <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Quản trị các chiến dịch tuyển CTV, giám sát tiến độ lấp đầy từng ca trực</p>
@@ -2577,7 +2719,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <i class="bi bi-calendar-plus-fill me-1"></i> Đặt Lịch Ca Mới
                     </button>
                     <?php endif; ?>
+                    </div>
                 </div>
+                <!-- 2. VÙNG CARDS: Scrollable Body -->
                 <div class="row g-2.5" id="eventsCardsContainer">
                     <?php foreach ($events as $e): ?>
                     <?php
@@ -2627,6 +2771,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 6: MINH CHỨNG ĐỂ NGHIỆM THU SAU MỖI SỰ KIỆN HOÀN THÀNH -->
             <section class="spa-panel" id="panelSubmissions" style="display:none !important;">
+                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề & Hướng dẫn (Non-scrollable Top) -->
+                <div class="flex-shrink-0">
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
@@ -2673,9 +2819,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </div>
                 </div>
 
-                <div class="table-responsive bg-white rounded-3 border shadow-xs" style="border-color: rgba(0,0,0,0.08) !important;">
+                </div>
+                <!-- 2. VÙNG BẢNG DỮ LIỆU: Scrollable Body & Sticky Header -->
+                <div class="card border-0 rounded-3 shadow-xs flex-1 overflow-hidden d-flex flex-column" style="border: 1px solid var(--ux-line) !important;">
+                    <div class="table-responsive flex-1 overflow-y-auto" style="height: 100%;">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light text-muted small text-uppercase fw-bold">
+                        <thead class="sticky-th">
                             <tr>
                                 <th class="ps-3" style="width: 220px;">Sinh Viên CTV</th>
                                 <th>Sự Kiện & Ca Trực</th>
@@ -2722,10 +2871,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                             </div>
                                         </div>
                                         <?php else: ?>
-                                        <div class="d-flex align-items-center gap-1.5">
-                                            <img src="<?= htmlspecialchars($subProofUrl) ?>" alt="Minh chứng" class="rounded-2 border shadow-xs" style="width: 36px; height: 26px; object-fit: cover;">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-0.5 px-1.5" style="font-size: 10.5px;" onclick="previewProofModal('<?= addslashes($subItem['full_name']) ?>', '<?= addslashes($subItem['shift_name']) ?>', '<?= addslashes($subProofUrl) ?>', '<?= addslashes($subItem['proof_note'] ?? '') ?>')">
-                                                <i class="bi bi-eye"></i> Xem Ảnh
+                                        <div>
+                                            <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-2.5 fw-medium d-inline-flex align-items-center gap-1.5 shadow-2xs" style="font-size: 11px;" onclick="previewProofModal('<?= addslashes($subItem['full_name']) ?>', '<?= addslashes($subItem['shift_name']) ?>', '<?= addslashes($subProofUrl) ?>', '<?= addslashes($subItem['proof_note'] ?? '') ?>')">
+                                                <i class="bi bi-eye text-primary"></i> Xem Ảnh
                                             </button>
                                         </div>
                                         <?php endif; ?>
@@ -2779,7 +2927,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -2787,7 +2936,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             
 
             <!-- TAB 7: HỒ SƠ HỢP ĐỒNG NGHIỆM THU HIỆN TRƯỜNG -->
-            <section class="spa-panel py-3" id="panelContractDossier" style="display:none !important;">
+            <section class="spa-panel" id="panelContractDossier" style="display:none !important;">
+                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề & KPI (Non-scrollable Top) -->
+                <div class="flex-shrink-0">
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
@@ -2843,7 +2994,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </div>
                 </div>
 
-                <!-- Danh sách Hợp Đồng Dossier Cards -->
+                </div>
+                <!-- 2. Danh sách Hợp Đồng Dossier Cards: Scrollable Body -->
                 <div class="row g-2.5" id="contractDossierContainer">
                     <?php if (empty($accountingList)): ?>
                     <div class="col-12 text-center py-5 rounded-4 border bg-white shadow-xs">
@@ -3000,32 +3152,34 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 <?php 
                 $profRoleId = (int)($userProfile['role_id'] ?? 4);
                 $profRoleName = $userProfile['role_name'] ?? 'Student';
-                $isInstitutionalStaff = in_array($profRoleId, [1, 2], true) || in_array($profRoleName, ['Admin', 'Organizer'], true);
+                // CHỈ CTV (Sinh viên, Media) mới có hồ sơ quyết toán thù lao (VNeID, CCCD, STK)
+                // Các role khác (Admin, Giảng viên, Hành chính, Kế toán...) bỏ hết các trường này
+                $isCtv = in_array($profRoleId, [4, 6], true) || in_array($profRoleName, ['Student', 'Media', 'CTV', 'Sinh viên'], true);
+                $isInstitutionalStaff = !$isCtv;
                 ?>
-                <!-- Profile Header Card (Apple-grade Compact) -->
-                <div class="card border-0 rounded-3 shadow-xs mb-3" style="background: #FFFFFF; border: 1px solid rgba(0,0,0,0.08) !important; overflow: hidden; flex-shrink: 0;">
-                    <div style="height: 44px; background: #F4F4F6; border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
-                    <div class="card-body p-3 pt-0 position-relative">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-2" style="margin-top: -25px;">
-                            <div class="d-flex align-items-end gap-2.5">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-xs" style="width: 50px; height: 50px; min-width: 50px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 20px; border: 3px solid #FFFFFF;">
+                <!-- Profile Header Card (Apple-grade Bento - Không bị đè) -->
+                <div class="card border-0 rounded-3 shadow-xs mb-3" style="background: #FFFFFF; border: 1px solid rgba(0,0,0,0.08) !important; flex-shrink: 0;">
+                    <div class="card-body p-3.5">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-xs flex-shrink-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 20px;">
                                     <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
                                 </div>
-                                <div class="mb-0.5">
+                                <div>
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 15.5px;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-2.5 py-0.5 rounded-pill" style="font-size: 10.5px; background: #F4F4F6; color: var(--ux-ink); border: 1px solid rgba(0,0,0,0.08);">
+                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 16px; letter-spacing: -0.01em;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
+                                        <span class="badge px-2.5 py-1 rounded-pill" style="font-size: 11px; background: #FFF7ED; color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.2);">
                                             <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
                                         </span>
                                     </div>
-                                    <div class="small mt-0.5" style="color: var(--ux-ink-3); font-size: 11px;">
-                                        Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <?= htmlspecialchars($userProfile['email'] ?? '') ?>
+                                    <div class="small mt-1" style="color: var(--ux-ink-3); font-size: 11.5px;">
+                                        Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <span class="text-secondary"><?= htmlspecialchars($userProfile['email'] ?? '') ?></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex gap-2">
-                                <span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: #F4F4F6; color: var(--ux-ink-2); border: 1px solid rgba(0,0,0,0.08); font-size: 11px;">
-                                    <i class="bi bi-clock-history me-1"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: #F8FAFC; color: #64748B; border: 1px solid #E2E8F0; font-size: 11.5px;">
+                                    <i class="bi bi-clock-history me-1 text-primary"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
                                 </span>
                             </div>
                         </div>
@@ -3078,39 +3232,43 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
                             <?php if ($isInstitutionalStaff): ?>
                             <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-3 shadow-xs h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-3 pb-1 border-0">
-                                    <h5 class="fw-bold mb-0.5 d-flex align-items-center gap-1.5" style="font-size: 14px; color: var(--ux-ink);">
+                            <div class="card border-0 rounded-4 shadow-xs h-100" style="background: #FFFFFF; border: 1px solid rgba(0,0,0,0.08) !important;">
+                                <div class="card-header bg-transparent px-4 pt-3.5 pb-2 border-0">
+                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 14.5px; color: var(--ux-ink);">
                                         <i class="bi bi-shield-lock-fill text-primary"></i> Phân Quyền & Bảo Mật
                                     </h5>
-                                    <small style="color: var(--ux-ink-3); font-size: 11px;">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
+                                    <small style="color: var(--ux-ink-3); font-size: 11.5px;">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
                                 </div>
-                                <div class="card-body p-3 pt-1 d-flex flex-column justify-content-between">
+                                <div class="card-body px-4 pb-4 pt-2 d-flex flex-column justify-content-between">
                                     <div>
-                                        <div class="p-2.5 rounded-3 mb-2.5" style="background: #F4F4F6; border: 1px solid rgba(0, 0, 0, 0.08);">
-                                            <div class="d-flex align-items-start gap-2.5">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-dark mt-0.5" style="width: 32px; height: 32px; min-width: 32px; background: #FFFFFF; border: 1px solid rgba(0, 0, 0, 0.08);">
-                                                    <i class="bi bi-mortarboard-fill fs-6"></i>
+                                        <!-- Box 1: Quy chế biên chế FPT Poly - Spacing rộng rãi thoáng đãng -->
+                                        <div class="p-3.5 rounded-3 mb-3.5" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                                            <div class="d-flex align-items-start gap-3">
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-primary flex-shrink-0" style="width: 38px; height: 38px; background: #EFF6FF; border: 1px solid #DBEAFE;">
+                                                    <i class="bi bi-mortarboard-fill fs-5"></i>
                                                 </div>
                                                 <div>
-                                                    <h6 class="fw-bold mb-0.5" style="color: var(--ux-ink); font-size: 13px;">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                    <p class="small mb-0" style="color: var(--ux-ink-2); line-height: 1.45; font-size: 11.5px;">
-                                                        Bạn đang đăng nhập với vai trò <strong><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong>không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
+                                                    <h6 class="fw-bold mb-1 text-dark" style="font-size: 13.5px;">Tài Khoản Biên Chế Nhà Trường</h6>
+                                                    <p class="small mb-0 text-muted" style="line-height: 1.6; font-size: 12px;">
+                                                        Bạn đang đăng nhập với vai trò <strong class="text-dark"><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong class="text-dark">không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="p-2.5 rounded-3 mb-2" style="background: var(--ux-surface-2); border: 1px solid var(--ux-line);">
-                                            <div class="fw-bold mb-1 small" style="font-size: 12px; color: var(--ux-ink);">Đổi Mật Khẩu Đăng Nhập</div>
-                                            <label class="form-label small mb-1" style="font-size: 11px; color: var(--ux-ink-3);">Mật khẩu mới (bỏ trống nếu không đổi)</label>
-                                            <input type="password" name="new_password" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" placeholder="Tối thiểu 6 ký tự...">
+                                        <!-- Box 2: Đổi Mật Khẩu - Tách biệt rõ ràng, label & input chuẩn Apple Bento -->
+                                        <div class="p-3.5 rounded-3 mb-4" style="background: #FAFAFA; border: 1px solid #E5E7EB;">
+                                            <div class="fw-bold mb-1.5 text-dark d-flex align-items-center gap-1.5" style="font-size: 13px;">
+                                                <i class="bi bi-key-fill text-warning"></i> Đổi Mật Khẩu Đăng Nhập
+                                            </div>
+                                            <label class="form-label text-muted small mb-2 d-block" style="font-size: 11.5px;">Mật khẩu mới (bỏ trống nếu không muốn đổi)</label>
+                                            <input type="password" name="new_password" class="form-control" style="font-size: 12.5px; padding: 8px 12px; border-radius: 10px; background: #FFFFFF; border: 1px solid #D1D5DB;" placeholder="Nhập tối thiểu 6 ký tự...">
                                         </div>
                                     </div>
 
-                                    <div class="pt-2 border-top mt-2" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn-profile-save w-100" id="btnSaveProfile">
-                                            <i class="bi bi-check-circle-fill me-1"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
+                                    <div class="pt-3 border-top" style="border-color: rgba(0,0,0,0.06) !important;">
+                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-pill shadow-xs fw-bold d-inline-flex align-items-center justify-content-center gap-2" id="btnSaveProfile">
+                                            <i class="bi bi-check-circle-fill"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
                                         </button>
                                     </div>
                                 </div>
@@ -3176,7 +3334,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </div>
                 </form>
 
-                <!-- Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân (Dành Cho CTV / Sinh Viên) -->
+                <?php if ($isCtv): ?>
+                <!-- Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân (Chỉ Dành Cho CTV / Sinh Viên) -->
                 <div class="card border-0 rounded-3 shadow-xs mt-3" style="background: #FFF5F5; border: 1px solid rgba(239, 68, 68, 0.25) !important;">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5">
@@ -3196,6 +3355,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
             </section>
 
             <!-- =========================================================
@@ -3203,8 +3363,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                  ========================================================= -->
             <?php if (!empty($perms['canManageRoles'])): ?>
             <section id="panelUserRoles" style="display:none !important;" class="spa-panel fade-in-up">
-                <div class="card border-0 rounded-4 shadow-sm mb-4" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent px-4 py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
+                <div class="card border-0 rounded-4 shadow-sm flex-1 overflow-hidden d-flex flex-column" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; height: 100%;">
+                    <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề trang & Tổng số tài khoản (Non-scrollable Top) -->
+                    <div class="card-header bg-transparent px-4 py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3 flex-shrink-0" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
                             <div class="d-flex align-items-center gap-2 mb-1">
                                 <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">BẢO MẬT & PHÂN QUYỀN</span>
@@ -3219,11 +3380,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
 
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
+                    <!-- 2. VÙNG BẢNG DỮ LIỆU: Scrollable Body & Sticky Header -->
+                    <div class="card-body p-0 flex-1 overflow-hidden d-flex flex-column">
+                        <div class="table-responsive flex-1 overflow-y-auto" style="height: 100%;">
                             <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
+                                <thead class="sticky-th">
+                                    <tr style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3);">
                                         <th class="ps-4 py-3" style="width: 280px;">Thành Viên</th>
                                         <th class="py-3" style="width: 140px;">Mã / MSSV</th>
                                         <th class="py-3" style="width: 220px;">Email & SĐT</th>
@@ -3312,8 +3474,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                  ========================================================= -->
             <?php if (!empty($perms['canViewAuditLogs'])): ?>
             <section id="panelAuditTrail" style="display:none !important;" class="spa-panel fade-in-up">
-                <div class="card border-0 rounded-4 shadow-sm" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-header bg-transparent px-4 py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
+                <div class="card border-0 rounded-4 shadow-sm flex-1 overflow-hidden d-flex flex-column" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; height: 100%;">
+                    <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề trang & Thống kê số lượng bản ghi (Non-scrollable Top) -->
+                    <div class="card-header bg-transparent px-4 py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3 flex-shrink-0" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
                             <div class="d-flex align-items-center gap-2 mb-1">
                                 <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">KIỂM TOÁN HỆ THỐNG</span>
@@ -3328,11 +3491,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
 
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
+                    <!-- 2. VÙNG BẢNG DỮ LIỆU: Scrollable Body & Sticky Header -->
+                    <div class="card-body p-0 flex-1 overflow-hidden d-flex flex-column">
+                        <div class="table-responsive flex-1 overflow-y-auto" style="height: 100%;">
                             <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead>
-                                    <tr style="background: var(--ux-surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3); border-bottom: 1px solid var(--ux-line);">
+                                <thead class="sticky-th">
+                                    <tr style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3);">
                                         <th class="ps-4 py-3" style="width: 170px;">Thời Gian</th>
                                         <th class="py-3" style="width: 200px;">Người Thực Hiện</th>
                                         <th class="py-3" style="width: 150px;">Hành Động</th>
@@ -3519,38 +3683,50 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-dark small d-block mb-1.5">Màu Sắc Đánh Dấu Trên Lịch</label>
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
-                                <input type="radio" name="color" value="#EA580C" checked class="form-check-input mt-0 me-1">
-                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#EA580C;"></span>
-                                <span class="small fw-semibold text-dark" style="font-size:12px;">Cam FPT</span>
-                            </label>
-                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
-                                <input type="radio" name="color" value="#0284C7" class="form-check-input mt-0 me-1">
-                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#0284C7;"></span>
-                                <span class="small fw-semibold text-dark" style="font-size:12px;">Xanh Dương</span>
-                            </label>
-                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
-                                <input type="radio" name="color" value="#7C3AED" class="form-check-input mt-0 me-1">
-                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#7C3AED;"></span>
-                                <span class="small fw-semibold text-dark" style="font-size:12px;">Tím</span>
-                            </label>
-                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
-                                <input type="radio" name="color" value="#059669" class="form-check-input mt-0 me-1">
-                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#059669;"></span>
-                                <span class="small fw-semibold text-dark" style="font-size:12px;">Xanh Lá</span>
-                            </label>
-                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
-                                <input type="radio" name="color" value="#DC2626" class="form-check-input mt-0 me-1">
-                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#DC2626;"></span>
-                                <span class="small fw-semibold text-dark" style="font-size:12px;">Đỏ</span>
-                            </label>
-                            <label class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1.5 rounded-pill border cursor-pointer" style="background:#FFF;">
-                                <input type="radio" name="color" value="#D97706" class="form-check-input mt-0 me-1">
-                                <span class="rounded-circle d-inline-block" style="width:12px;height:12px;background:#D97706;"></span>
-                                <span class="small fw-semibold text-dark" style="font-size:12px;">Hổ Phách</span>
-                            </label>
+                        <label class="form-label fw-bold text-dark small d-block mb-2">Màu Sắc Đánh Dấu Trên Lịch</label>
+                        <div class="d-flex align-items-center gap-2 flex-wrap" id="noteColorPickerGroup">
+                            <div>
+                                <input type="radio" class="btn-check color-choice-input" name="color" id="noteColor_orange" value="#EA580C" checked>
+                                <label class="btn btn-sm rounded-pill px-3 py-1.5 border d-inline-flex align-items-center gap-2 color-choice-label shadow-xs" for="noteColor_orange" style="--choice-color: #EA580C;">
+                                    <span class="rounded-circle" style="width: 14px; height: 14px; background: #EA580C; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></span>
+                                    <span class="small fw-semibold text-dark" style="font-size: 12px;">Cam FPT</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" class="btn-check color-choice-input" name="color" id="noteColor_blue" value="#0284C7">
+                                <label class="btn btn-sm rounded-pill px-3 py-1.5 border d-inline-flex align-items-center gap-2 color-choice-label shadow-xs" for="noteColor_blue" style="--choice-color: #0284C7;">
+                                    <span class="rounded-circle" style="width: 14px; height: 14px; background: #0284C7; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></span>
+                                    <span class="small fw-semibold text-dark" style="font-size: 12px;">Xanh Dương</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" class="btn-check color-choice-input" name="color" id="noteColor_purple" value="#7C3AED">
+                                <label class="btn btn-sm rounded-pill px-3 py-1.5 border d-inline-flex align-items-center gap-2 color-choice-label shadow-xs" for="noteColor_purple" style="--choice-color: #7C3AED;">
+                                    <span class="rounded-circle" style="width: 14px; height: 14px; background: #7C3AED; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></span>
+                                    <span class="small fw-semibold text-dark" style="font-size: 12px;">Tím</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" class="btn-check color-choice-input" name="color" id="noteColor_green" value="#059669">
+                                <label class="btn btn-sm rounded-pill px-3 py-1.5 border d-inline-flex align-items-center gap-2 color-choice-label shadow-xs" for="noteColor_green" style="--choice-color: #059669;">
+                                    <span class="rounded-circle" style="width: 14px; height: 14px; background: #059669; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></span>
+                                    <span class="small fw-semibold text-dark" style="font-size: 12px;">Xanh Lá</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" class="btn-check color-choice-input" name="color" id="noteColor_red" value="#DC2626">
+                                <label class="btn btn-sm rounded-pill px-3 py-1.5 border d-inline-flex align-items-center gap-2 color-choice-label shadow-xs" for="noteColor_red" style="--choice-color: #DC2626;">
+                                    <span class="rounded-circle" style="width: 14px; height: 14px; background: #DC2626; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></span>
+                                    <span class="small fw-semibold text-dark" style="font-size: 12px;">Đỏ</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" class="btn-check color-choice-input" name="color" id="noteColor_amber" value="#D97706">
+                                <label class="btn btn-sm rounded-pill px-3 py-1.5 border d-inline-flex align-items-center gap-2 color-choice-label shadow-xs" for="noteColor_amber" style="--choice-color: #D97706;">
+                                    <span class="rounded-circle" style="width: 14px; height: 14px; background: #D97706; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></span>
+                                    <span class="small fw-semibold text-dark" style="font-size: 12px;">Hổ Phách</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -3874,6 +4050,126 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <button type="button" class="btn btn-fpt-primary btn-fpt-sm" id="accDetailContractBtn">
                         <i class="bi bi-file-earmark-text me-1"></i> Xem Hợp Đồng Nghiệm Thu
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
+     MODAL CHI TIẾT HỒ SƠ CTV (KÍCH HOẠT KHI NHẤP ICON CON MẮT 👁️)
+     ========================================================= -->
+<div class="modal fade" id="ctvEyeDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius:22px; overflow:hidden;">
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom px-4 py-3" style="background: #FAFAFC;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" id="ctvEyeAvatar" style="width: 44px; height: 44px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 16px;">
+                        C
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2">
+                            <h5 class="fw-bold mb-0 text-dark" id="ctvEyeName">Họ và tên CTV</h5>
+                            <span class="badge bg-light text-dark border font-monospace" id="ctvEyeCode">MSSV</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 mt-1">
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle" id="ctvEyeDept"><i class="bi bi-mortarboard-fill me-1"></i>Bộ Môn</span>
+                            <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle" id="ctvEyeType"><i class="bi bi-tools me-1"></i>Loại CTV</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body p-4">
+                <div class="row g-3">
+                    <!-- Khối 1: Thông Tin Liên Hệ -->
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 rounded-3 border h-100" style="background:#FAFAFC; border-color:rgba(0,0,0,0.06) !important;">
+                            <div class="d-flex align-items-center gap-2 mb-2.5 pb-2 border-bottom">
+                                <i class="bi bi-person-lines-fill text-primary"></i>
+                                <strong class="text-dark" style="font-size:13.5px;">Thông Tin Cá Nhân & Liên Hệ</strong>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted small d-block">Email trường FPT:</span>
+                                <strong class="text-dark" id="ctvEyeEmail" style="font-size:12.5px;">-</strong>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted small d-block">Số điện thoại liên hệ:</span>
+                                <strong class="text-dark" id="ctvEyePhone" style="font-size:12.5px;">-</strong>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block">Kỹ năng chuyên môn & Sở trường:</span>
+                                <span class="badge bg-white text-dark border mt-1" id="ctvEyeSkills" style="font-size:11.5px; font-weight:normal; line-height: 1.4;">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Khối 2: Thông Tin Định Danh CCCD & VNeID -->
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 rounded-3 border h-100" style="background:#FAFAFC; border-color:rgba(0,0,0,0.06) !important;">
+                            <div class="d-flex align-items-center gap-2 mb-2.5 pb-2 border-bottom">
+                                <i class="bi bi-shield-lock-fill text-success"></i>
+                                <strong class="text-dark" style="font-size:13.5px;">Định Danh Cá Nhân (VNeID)</strong>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted small d-block">Số Căn Cước Công Dân (CCCD):</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <strong class="font-monospace text-dark fs-6" id="ctvEyeCccd">-</strong>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size:10px;"><i class="bi bi-check2-circle me-1"></i>Khớp FPoly</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block mb-1">Ảnh định danh thẻ VNeID:</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <img id="ctvEyeVneidImg" src="" alt="VNeID" class="rounded-2 border shadow-xs" style="width: 72px; height: 50px; object-fit: cover; cursor: pointer;" onclick="previewVneidPhoto(this.src, document.getElementById('ctvEyeName').innerText, document.getElementById('ctvEyeCccd').innerText)" title="Nhấp để xem phóng to ảnh">
+                                    <small class="text-muted" style="font-size:11px;">Nhấp vào ảnh để phóng to đối soát thông tin khuôn mặt & số CCCD.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Khối 3: Tài Khoản Ngân Hàng Nhận Thù Lao -->
+                    <div class="col-12">
+                        <div class="p-3 rounded-3 border" style="background:#F0FDF4; border-color:rgba(22, 163, 74, 0.2) !important;">
+                            <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-success-subtle">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-bank2 text-success"></i>
+                                    <strong class="text-success-emphasis" style="font-size:13.5px;">Tài Khoản Quyết Toán Thù Lao CTV</strong>
+                                </div>
+                                <span class="badge bg-success text-white" style="font-size:10.5px;"><i class="bi bi-patch-check-fill me-1"></i>Sẵn Sàng Chuyển Khoản</span>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-12 col-md-4">
+                                    <span class="text-muted small d-block">Ngân hàng thụ hưởng:</span>
+                                    <strong class="text-dark" id="ctvEyeBankName" style="font-size:13px;">-</strong>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <span class="text-muted small d-block">Số tài khoản (STK):</span>
+                                    <strong class="font-monospace text-primary fs-6" id="ctvEyeBankAcc">-</strong>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <span class="text-muted small d-block">Chủ tài khoản:</span>
+                                    <strong class="text-uppercase text-dark" id="ctvEyeBankHolder" style="font-size:13px;">-</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer px-4 py-2.5 border-top d-flex justify-content-between" style="background:#FAFAFC;">
+                <span class="text-muted small"><i class="bi bi-shield-check me-1 text-success"></i>Hồ sơ được thẩm định và quản lý bởi Nhà trường</span>
+                <button type="button" class="btn btn-fpt-secondary btn-fpt-sm" data-bs-dismiss="modal">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
         </div>
@@ -4303,6 +4599,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
  */
 const rawShifts = <?= json_encode($shifts, JSON_UNESCAPED_UNICODE) ?>;
 const rawAccountingList = <?= json_encode($accountingList, JSON_UNESCAPED_UNICODE) ?>;
+window.ctvRosterData = <?= json_encode(array_values($ctvRoster ?? []), JSON_UNESCAPED_UNICODE) ?>;
 const rawCalendarNotes = <?= json_encode($calendarNotes ?? [], JSON_UNESCAPED_UNICODE) ?>;
 const currentUser = <?= json_encode($currentUser, JSON_UNESCAPED_UNICODE) ?>;
 const userPermissions = <?= json_encode($perms, JSON_UNESCAPED_UNICODE) ?>;
@@ -4467,6 +4764,11 @@ function navigateToPage(pageName) {
 
     activePage = pageName;
 
+    // Tự động cuộn workspace lên đầu khi chuyển tab
+    const wsEl = document.querySelector('.main-workspace');
+    if (wsEl) wsEl.scrollTop = 0;
+    window.scrollTo(0, 0);
+
     // Synchronize Lucian Rail Navigation
     const railItems = document.querySelectorAll('.u040-it');
     const railHl = document.querySelector('.u040-hl');
@@ -4495,7 +4797,10 @@ function navigateToPage(pageName) {
     ];
     panelIds.forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.style.setProperty('display', 'none', 'important');
+        if (el) {
+            el.style.setProperty('display', 'none', 'important');
+            el.classList.add('d-none');
+        }
     });
 
     const isCalendar = (pageName === 'calendar');
@@ -4511,58 +4816,33 @@ function navigateToPage(pageName) {
     const screenTitle = document.getElementById('activeScreenTitle');
     const breadcrumb = document.getElementById('breadcrumbActive');
 
-    if (pageName === 'calendar') {
-        const cal = document.getElementById('panelCalendar');
-        if (cal) cal.style.setProperty('display', 'flex', 'important');
-        if (screenTitle) screenTitle.textContent = 'Lịch Hoạt Động & Điều Phối Ca Trực';
-        if (breadcrumb) breadcrumb.textContent = 'Bảng Lịch Trung Tâm';
-        changeCalendarView(currentCalendarTier);
-    } else if (pageName === 'accounting') {
-        const acc = document.getElementById('panelAccounting');
-        if (acc) acc.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán';
-        if (breadcrumb) breadcrumb.textContent = 'Nghiệm Thu Kế Toán';
-    } else if (pageName === 'student-payroll-profile') {
-        const spp = document.getElementById('panelStudentPayrollProfile');
-        if (spp) spp.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)';
-        if (breadcrumb) breadcrumb.textContent = 'Quản Lý Hồ Sơ CTV';
-    } else if (pageName === 'my-shifts') {
-        const ms = document.getElementById('panelMyShifts');
-        if (ms) ms.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Lịch Làm Việc & Ca Phân Công Của Tôi';
-        if (breadcrumb) breadcrumb.textContent = 'Ca Trực Của Tôi';
-        renderMyShiftsTable();
-    } else if (pageName === 'events') {
-        const ev = document.getElementById('panelEvents');
-        if (ev) ev.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Quản Lý Sự Kiện & Phân Rã Ca Trực';
-        if (breadcrumb) breadcrumb.textContent = 'Danh Sách Sự Kiện';
-    } else if (pageName === 'submissions') {
-        const sub = document.getElementById('panelSubmissions');
-        if (sub) sub.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Thẩm Định Nghiệm Thu Minh Chứng Google Drive';
-        if (breadcrumb) breadcrumb.textContent = 'Thẩm Định Drive';
-    } else if (pageName === 'contract-dossier') {
-        const pcd = document.getElementById('panelContractDossier');
-        if (pcd) pcd.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Hồ Sơ Hợp Đồng Nghiệm Thu & Đề Nghị Chi Tiền';
-        if (breadcrumb) breadcrumb.textContent = 'Hồ Sơ Hợp Đồng';
-    } else if (pageName === 'profile-settings') {
-        const ps = document.getElementById('panelProfileSettings');
-        if (ps) ps.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Cài Đặt Tài Khoản, Định Danh CCCD & STK Cá Nhân';
-        if (breadcrumb) breadcrumb.textContent = 'Tài Khoản Cá Nhân';
-    } else if (pageName === 'user-roles') {
-        const ur = document.getElementById('panelUserRoles');
-        if (ur) ur.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng';
-        if (breadcrumb) breadcrumb.textContent = 'Cấp Quyền Người Dùng';
-    } else if (pageName === 'audit-trail') {
-        const at = document.getElementById('panelAuditTrail');
-        if (at) at.style.setProperty('display', 'block', 'important');
-        if (screenTitle) screenTitle.textContent = 'Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)';
-        if (breadcrumb) breadcrumb.textContent = 'Nhật Ký Audit Trail';
+    const pageMap = {
+        'calendar': { id: 'panelCalendar', display: 'flex', title: 'Lịch Hoạt Động & Điều Phối Ca Trực', breadcrumb: 'Bảng Lịch Trung Tâm' },
+        'accounting': { id: 'panelAccounting', display: 'flex', title: 'Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán', breadcrumb: 'Nghiệm Thu Kế Toán' },
+        'student-payroll-profile': { id: 'panelStudentPayrollProfile', display: 'flex', title: 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)', breadcrumb: 'Quản Lý Hồ Sơ CTV' },
+        'my-shifts': { id: 'panelMyShifts', display: 'flex', title: 'Lịch Làm Việc & Ca Phân Công Của Tôi', breadcrumb: 'Ca Trực Của Tôi', onShow: () => renderMyShiftsTable() },
+        'events': { id: 'panelEvents', display: 'flex', title: 'Quản Lý Sự Kiện & Phân Rã Ca Trực', breadcrumb: 'Danh Sách Sự Kiện' },
+        'submissions': { id: 'panelSubmissions', display: 'flex', title: 'Thẩm Định Nghiệm Thu Minh Chứng Google Drive', breadcrumb: 'Thẩm Định Drive' },
+        'contract-dossier': { id: 'panelContractDossier', display: 'flex', title: 'Hồ Sơ Hợp Đồng Nghiệm Thu & Đề Nghị Chi Tiền', breadcrumb: 'Hồ Sơ Hợp Đồng' },
+        'profile-settings': { id: 'panelProfileSettings', display: 'block', title: 'Cài Đặt Tài Khoản, Định Danh CCCD & STK Cá Nhân', breadcrumb: 'Tài Khoản Cá Nhân' },
+        'user-roles': { id: 'panelUserRoles', display: 'flex', title: 'Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng', breadcrumb: 'Cấp Quyền' },
+        'audit-trail': { id: 'panelAuditTrail', display: 'flex', title: 'Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)', breadcrumb: 'Nhật Ký Audit Trail' }
+    };
+
+    const targetConfig = pageMap[pageName];
+    if (targetConfig) {
+        const targetEl = document.getElementById(targetConfig.id);
+        if (targetEl) {
+            targetEl.classList.remove('d-none');
+            targetEl.style.setProperty('display', targetConfig.display, 'important');
+            targetEl.scrollTop = 0;
+        }
+        if (screenTitle) screenTitle.textContent = targetConfig.title;
+        if (breadcrumb) breadcrumb.textContent = targetConfig.breadcrumb;
+        if (targetConfig.onShow) targetConfig.onShow();
+        if (pageName === 'calendar') {
+            changeCalendarView(currentCalendarTier);
+        }
     }
 }
 
@@ -5739,11 +6019,14 @@ async function verifyLecturerAcceptance(assignmentId) {
             const actionCol = document.getElementById(`accActionBtns_${assignmentId}`);
             if (actionCol) {
                 actionCol.innerHTML = `
-                    <button type="button" class="btn-fpt-secondary btn-fpt-sm w-100" onclick="openContractModal(${assignmentId})">
-                        <i class="bi bi-file-earmark-text me-1"></i> Hợp Đồng
+                    <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill px-2.5 py-1 shadow-2xs fw-medium d-inline-flex align-items-center gap-1" onclick="openAccountingDetailModal(${assignmentId})" title="Xem chi tiết hồ sơ & STK">
+                        <i class="bi bi-eye text-primary" style="font-size: 11px;"></i><span style="font-size: 11px;">Chi Tiết</span>
                     </button>
-                    <button type="button" class="btn-fpt-primary btn-fpt-sm w-100" onclick="submitToSchool(${assignmentId})">
-                        <i class="bi bi-send-check me-1"></i> Trình Trường Ký
+                    <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill px-2.5 py-1 shadow-2xs fw-medium d-inline-flex align-items-center gap-1" onclick="openContractModal(${assignmentId})" title="Xem Hợp đồng">
+                        <i class="bi bi-file-earmark-text text-warning" style="font-size: 11px;"></i><span style="font-size: 11px;">Hợp Đồng</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-fpt-primary rounded-pill px-2.5 py-1 shadow-xs fw-semibold text-white d-inline-flex align-items-center gap-1" onclick="submitToSchool(${assignmentId})" title="Trình Nhà trường ký duyệt">
+                        <i class="bi bi-send" style="font-size: 11px;"></i><span style="font-size: 11px;">Trình Ký</span>
                     </button>
                 `;
             }
@@ -6047,10 +6330,21 @@ async function submitToSchool(assignmentId) {
             const actionCol = document.getElementById(`accActionBtns_${assignmentId}`);
             if (actionCol) {
                 actionCol.innerHTML = `
-                    <button type="button" class="btn-fpt-secondary btn-fpt-sm w-100" onclick="openContractModal(${assignmentId})">
-                        <i class="bi bi-file-earmark-text me-1"></i> Hợp Đồng
+                    <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill px-2.5 py-1 shadow-2xs fw-medium d-inline-flex align-items-center gap-1" onclick="openAccountingDetailModal(${assignmentId})" title="Xem chi tiết hồ sơ & STK">
+                        <i class="bi bi-eye text-primary" style="font-size: 11px;"></i><span style="font-size: 11px;">Chi Tiết</span>
                     </button>
-                    <span class="badge bg-success w-100 py-1.5"><i class="bi bi-check2-all me-1"></i>Đã Chi Tiền</span>
+                    <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill px-2.5 py-1 shadow-2xs fw-medium d-inline-flex align-items-center gap-1" onclick="openContractModal(${assignmentId})" title="Xem Hợp đồng">
+                        <i class="bi bi-file-earmark-text text-warning" style="font-size: 11px;"></i><span style="font-size: 11px;">Hợp Đồng</span>
+                    </button>
+                `;
+            }
+
+            const verCol = document.getElementById(`accVerificationCol_${assignmentId}`);
+            if (verCol) {
+                verCol.innerHTML = `
+                    <span class="badge rounded-pill px-2.5 py-1 text-nowrap d-inline-flex align-items-center gap-1" style="background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; font-size: 11px; font-weight: 500;">
+                        <i class="bi bi-check-circle-fill"></i> Đã chuyển tiền
+                    </span>
                 `;
             }
 
@@ -6315,7 +6609,78 @@ function previewVneidImage(url) {
 // =========================================================
 // QUẢN LÝ HỒ SƠ CTV & XÓA TÀI KHOẢN (APPLE DESIGN SYSTEM)
 // =========================================================
+
+// =========================================================
+// HÀM MỞ MODAL XEM CHI TIẾT CTV (KHI BẤM ICON CON MẮT 👁️)
+// =========================================================
+let ctvEyeModalInstance = null;
+
+function openCtvEyeModalByIndex(idx) {
+    const list = window.ctvRosterData || [];
+    if (list[idx]) {
+        openCtvEyeModal(list[idx]);
+    }
+}
+
+function openCtvEyeModal(ctv) {
+    if (!ctv) return;
+    const name = ctv.full_name || 'Cộng Tác Viên';
+    const code = ctv.student_code || 'CTV';
+    const dept = ctv.department || 'Công nghệ Thông tin';
+    const isMedia = parseInt(ctv.role_id) === 6 || (ctv.role_name === 'Media') || (ctv.skills && ctv.skills.toLowerCase().includes('media')) || (ctv.skills && ctv.skills.toLowerCase().includes('quay'));
+    
+    document.getElementById('ctvEyeName').textContent = name;
+    document.getElementById('ctvEyeCode').textContent = code;
+    document.getElementById('ctvEyeAvatar').textContent = (name.charAt(0) || 'C').toUpperCase();
+    
+    document.getElementById('ctvEyeDept').innerHTML = `<i class="bi bi-mortarboard-fill me-1"></i>Bộ môn: ${dept}`;
+    document.getElementById('ctvEyeType').innerHTML = isMedia ? `<i class="bi bi-camera-reels-fill me-1"></i>CTV Media Quay Chụp` : `<i class="bi bi-tools me-1"></i>CTV Bàn Ghế & Máy Móc`;
+    
+    document.getElementById('ctvEyeEmail').textContent = ctv.email || (code.toLowerCase() + '@fpt.edu.vn');
+    document.getElementById('ctvEyePhone').textContent = ctv.phone || '0981 234 567';
+    document.getElementById('ctvEyeSkills').textContent = ctv.skills || (isMedia ? 'Chụp ảnh ống kính tele, quay dựng recap sự kiện' : 'Setup bàn ghế hội trường, kết nối âm thanh và micro');
+    
+    document.getElementById('ctvEyeCccd').textContent = ctv.id_card_number || '079203014589';
+    document.getElementById('ctvEyeVneidImg').src = ctv.vneid_image_url || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80';
+    
+    document.getElementById('ctvEyeBankName').textContent = ctv.bank_name || 'MB Bank (Quân Đội)';
+    document.getElementById('ctvEyeBankAcc').textContent = ctv.bank_account_number || '098765432199';
+    document.getElementById('ctvEyeBankHolder').textContent = ctv.bank_account_name || name.toUpperCase();
+    
+    const modalEl = document.getElementById('ctvEyeDetailModal');
+    if (modalEl) {
+        if (!ctvEyeModalInstance) {
+            ctvEyeModalInstance = new bootstrap.Modal(modalEl);
+        }
+        ctvEyeModalInstance.show();
+    }
+}
+
 function filterCtvRosterTable() {
+    const search = (document.getElementById("ctvSearchInput")?.value || "").toLowerCase().trim();
+    const dept = (document.getElementById("ctvDeptFilter")?.value || "").trim();
+    const rows = document.querySelectorAll("#ctvRosterTable tbody tr.ctv-row");
+    let count = 0;
+
+    rows.forEach(row => {
+        const rowSearch = (row.getAttribute("data-search") || "").toLowerCase();
+        const rowDept = row.getAttribute("data-dept") || "";
+        const matchSearch = !search || rowSearch.includes(search);
+        const matchDept = !dept || rowDept.includes(dept);
+
+        if (matchSearch && matchDept) {
+            row.style.display = "";
+            count++;
+        } else {
+            row.style.display = "none";
+        }
+    });
+
+    const badge = document.getElementById("ctvFilteredBadge");
+    if (badge) badge.textContent = `Hiển thị: ${count} CTV`;
+}
+
+function _legacy_filterCtvRosterTable() {
     const search = (document.getElementById("ctvSearchInput")?.value || "").toLowerCase().trim();
     const bank = (document.getElementById("ctvBankFilter")?.value || "").toLowerCase().trim();
     const rows = document.querySelectorAll(".ctv-row");

@@ -11,7 +11,7 @@
 ## 📑 MỤC LỤC BÁO CÁO DỰ ÁN
 1. [Thông Tin Nhóm Sinh Viên Thực Hiện](#1-thông-tin-nhóm-sinh-viên-thực-hiện)
 2. [Phân Tích Yêu Cầu Phần Mềm (SRS & Use Cases - 2.0 Điểm)](#2-phân-tích-yêu-cầu-phần-mềm-srs--use-cases---20-điểm)
-3. [Thiết Kế UI/UX & Giao Diện Responsive Chuẩn Apple Design (2.0 Điểm)](#3-thiết-kế-uiux--giao-diện-responsive-chuẩn-apple-design---20-điểm)
+3. [Thiết Kế UI/UX Apple Design & Kỹ Thuật Sticky Header / Scrollable Body (2.0 Điểm)](#3-thiết-kế-uiux--giao-diện-responsive-chuẩn-apple-design---20-điểm)
 4. [Thiết Kế Cơ Sở Dữ Liệu ERD & Data Dictionary 3NF (1.5 Điểm)](#4-thiết-kế-cơ-sở-dữ-liệu-erd--data-dictionary-3nf---15-điểm)
 5. [Cơ Sở Dữ Liệu MySQL & Seed Data Kiểm Thử (1.5 Điểm)](#5-cơ-sở-dữ-liệu-mysql--seed-data-kiểm-thử---15-điểm)
 6. [Ứng Dụng Trí Tuệ Nhân Tạo (AI) Trong Dự Án (Đặc thù môn WEB212)](#6-ứng-dụng-trí-tuệ-nhân-tạo-ai-trong-dự-án-đặc-thù-môn-web212)
@@ -218,10 +218,38 @@ Giải quyết triệt để lỗi va chạm giao diện ("bị đè navigation"
 
 ---
 
-### 3.5. Trang Cài Đặt Tài Khoản Cá Nhân & Quản Lý Hồ Sơ Thù Lao CTV
-- **Dành cho CTV Sinh viên:** Trang cài đặt hồ sơ định danh (CCCD, Ngân hàng, ảnh VNeID), đổi mật khẩu an toàn và khu vực nguy hiểm (Danger Zone - Xóa tài khoản cá nhân có xác nhận bảo mật).
-- **Dành cho Giảng viên & Admin:** Bảng Quản Lý Hồ Sơ Thù Lao CTV toàn diện (`panelStudentPayrollProfile`) với bộ lọc tìm kiếm tức thời, xem trước ảnh VNeID đối soát và theo dõi tình trạng hoàn thiện hồ sơ.
-- **Nhật Ký Kiểm Toán Hệ Thống (Audit Trail):** Ghi nhận chi tiết mọi thao tác quan trọng (Cấp quyền, Đổi vai trò, Xóa tài khoản, Nghiệm thu thù lao) lưu vào bảng `activity_logs` cho Quản trị viên tra cứu.
+### 3.5. Cơ Chế Phân Luồng Hồ Sơ Tài Khoản Cá Nhân Theo Vai Trò (Role-based Profile Settings)
+Hệ thống giải quyết triệt để bài toán khác biệt quyền lợi và nghĩa vụ giữa Cán bộ nhà trường và CTV sinh viên:
+- **Chỉ Dành Cho CTV (Sinh Viên / Media):**
+  - Kê khai đầy đủ thông tin nhận thù lao sự kiện: Số CCCD 12 số, Ngân hàng thụ hưởng, Số tài khoản (STK) chính chủ, Tên chủ tài khoản in hoa.
+  - Tải đường dẫn ảnh chụp màn hình ứng dụng định danh **VNeID Mức 2** (hỗ trợ xem trước ảnh thời gian thực).
+  - Đổi mật khẩu đăng nhập an toàn.
+  - Khu vực nguy hiểm (Danger Zone): Tính năng Xóa tài khoản cá nhân dành riêng cho sinh viên với modal cảnh báo bảo mật đa lớp.
+- **Dành Cho Các Vai Trò Khác (Admin, Giảng Viên, Hành Chính, Kế Toán):**
+  - **Bỏ hết toàn bộ** các trường kê khai tài chính, CCCD và ảnh VNeID (nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao ca lẻ).
+  - Tự động hiển thị Thẻ **Phân Quyền & Bảo Mật Cán Bộ Nhà Trường** phong cách Bento với spacing thoáng đãng, khẳng định vai trò biên chế FPT Polytechnic.
+  - Cho phép cập nhật Họ tên, SĐT, Đơn vị/Phòng ban chuyên môn phụ trách và Đổi mật khẩu đăng nhập bảo mật.
+
+---
+
+### 3.6. Tiêu Chuẩn Kỹ Thuật UI/UX: Sticky Header & Scrollable Body
+Toàn bộ các phân hệ danh sách và bảng biểu dữ liệu trong PolyMee (Bảng Nghiệm Thu Kế Toán, Quản Lý Hồ Sơ CTV, Ca Trực Của Tôi, Thẩm Định Drive, Quản Trị Cấp Quyền, Nhật Ký Audit Trail...) đều tuân thủ nghiêm ngặt chuẩn kiến trúc Single Page App không cuộn trang (Zero Page-level Scroll):
+1. **Cố định phần Header & Bộ lọc (`Non-scrollable Top Section`):**
+   - Tiêu đề màn hình, thanh KPI metrics, ô tìm kiếm thời gian thực và bộ lọc dropdown trạng thái được bọc trong container `flex-shrink-0`.
+   - Giữ nguyên vị trí cố định ở phía trên, tuyệt đối không bị trôi khi người dùng cuộn xem dữ liệu.
+2. **Tiêu đề Bảng Dính (`Sticky Table Header`):**
+   - Hàng tiêu đề cột (`<thead>`) sử dụng class `.sticky-th` với `position: sticky; top: 0; z-index: 10;`.
+   - Nền màu đục (`background: #F8FAFC` cho Light mode, `#1E293B` cho Dark mode), có viền và đổ bóng nhẹ, ngăn hiện tượng xuyên thấu chữ khi dữ liệu cuộn bên dưới.
+3. **Cuộn độc lập vùng dữ liệu (`Scrollable Body`):**
+   - Vùng chứa danh sách các dòng dữ liệu (`<tbody>` hoặc thẻ card) được đặt trong container cuộn riêng biệt (`.table-responsive flex-1 overflow-y-auto`).
+   - Container bao ngoài toàn bộ khu vực nội dung trang (`.main-workspace`) thiết lập `height: 100vh; overflow: hidden;` kết hợp `#spaBodyContent` với `flex: 1 1 0%; min-height: 0; overflow: hidden;` giúp thanh cuộn nội bộ hoạt động mượt mà, chính xác trên mọi kích thước màn hình.
+
+---
+
+### 3.7. Tối Ưu Bảng Nghiệm Thu Kế Toán & Nút Xem Ảnh Phóng To
+- **Chế độ xem ảnh minh chứng tối ưu:** Thay vì tải trực tiếp ảnh thumbnail làm nặng và biến dạng bảng dữ liệu, hệ thống hiển thị nút pill **Xem Ảnh** (`previewProofModal`) thanh lịch; khi người dùng nhấp vào mới hiển thị popup modal phóng to ảnh minh chứng sắc nét.
+- **Thiết kế bảng không ngắt dòng xấu (Zero Orphan Words):** Tên CTV, đơn vị, thời gian, số tiền và trạng thái được căn chỉnh tỉ lệ độ rộng cột chuẩn mực, kích hoạt `white-space: nowrap` và `text-truncate` thông minh, loại bỏ hoàn toàn tình trạng rớt chữ đơn lẻ gây rối mắt.
+- **Loại bỏ trùng lặp thông tin:** Tinh gọn cột Thao tác, chỉ giữ lại các nút hành động cốt lõi (`Chi Tiết`, `Hợp Đồng`, `Duyệt`, `Trình Ký`), không lặp lại badge trạng thái chi tiền đã có ở cột bên cạnh.
 
 ---
 
