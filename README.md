@@ -23,25 +23,95 @@
 
 ## 1. THÔNG TIN NHÓM SINH VIÊN THỰC HIỆN
 
+### 1.1. Bảng Phân Công Nhiệm Vụ Thành Viên
+
 | STT | Mã Sinh Viên | Họ và Tên | Vai Trò Trong Nhóm | Phần Việc Đảm Nhiệm Chi Tiết |
 |:---:|:---:|:---|:---:|:---|
-| 1 | **PI03084** | **Đinh Nguyễn Phương Anh** | **Trưởng nhóm** | Phân tích SRS & Viết tài liệu báo cáo; Thiết kế UI/UX Apple Sonoma / iPadOS & Bento Grid 2.0; Thiết kế toàn bộ giao diện Responsive; Kiến trúc MVC PHP OOP; Tích hợp AI Assistant Function Calling; Quản trị phân quyền RBAC & CollisionService; Xây dựng & Chuẩn hóa Mock Data thực tế FPT Polytechnic |
-| 2 | **PI02895** | **Dương Ngọc Hân** | **Thành viên** | Thiết kế Cơ sở dữ liệu (ERD 3NF, Data Dictionary, DDL MySQL & SQLite); Thiết kế Slide thuyết trình bảo vệ dự án |
-| 3 | **PI03067** | **Lê Đức Mạnh** | **Thành viên** | Lập trình Backend (Controllers, Models, RESTful API JSON, Nghiệm Thu Minh Chứng & Quyết Toán) |
-| 4 | **PI03015** | **Hoàng Minh Luận** | **Thành viên** | Soạn thảo & Hoàn thiện Báo cáo dự án, Tài liệu kịch bản kiểm thử & Bảo vệ đề tài |
+| 1 | **PI03084** | **Đinh Nguyễn Phương Anh** | **Trưởng nhóm** | **Chủ nhiệm kiến trúc & Thiết kế chính:**<br>• Thiết kế toàn bộ UI/UX chuẩn Apple macOS Sonoma & iPadOS Materials, Bento Grid 2.0, Lucian UX #040 Design System.<br>• Thiết kế giao diện 100% Responsive (Mobile, Tablet, Desktop, Bản in Hợp đồng A4).<br>• Xây dựng Kiến trúc mã nguồn MVC PHP OOP, PSR-4, Singleton Pattern.<br>• Phân tích đặc tả yêu cầu SRS & Thiết kế hệ thống mô hình hóa UML 2.5 Use Case & ERD 3NF.<br>• Tích hợp Trí tuệ nhân tạo AI Assistant Function Calling (4 nghiệp vụ điều phối tự động).<br>• Lập trình thuật toán chống trùng giờ `Interval Collision Detection` & Quản trị phân quyền RBAC Matrix 5 vai trò.<br>• Thiết kế, chuẩn hóa & nạp bộ Mock Data sạch, phong phú, chuẩn thực tế FPT Polytechnic Đồng Nai.<br>• Soạn thảo tài liệu báo cáo toàn diện & Đạo diễn kịch bản nghiệm thu đề tài. |
+| 2 | **PI02895** | **Dương Ngọc Hân** | **Thành viên** | Phụ trách Cơ sở dữ liệu (Thiết kế ERD 3NF, Data Dictionary chi tiết, DDL MySQL & SQLite); Tài liệu kịch bản kiểm thử; Thiết kế bộ Slide thuyết trình bảo vệ dự án chuẩn thương hiệu FPT Edu. |
+| 3 | **PI03067** | **Lê Đức Mạnh** | **Thành viên** | Lập trình Backend (Controllers, Models, RESTful API JSON, Tích hợp quy trình Nghiệm thu minh chứng & Quyết toán thù lao). |
+| 4 | **PI03015** | **Hoàng Minh Luận** | **Thành viên** | Soạn thảo & Hoàn thiện Báo cáo dự án, Tổng hợp tài liệu kịch bản kiểm thử tự động & Hỗ trợ kỹ thuật bảo vệ đề tài. |
+
+---
+
+### 1.2. Hồ Sơ Năng Lực & Kỹ Năng Kỹ Thuật (Technical Skills) Của Trưởng Nhóm (Đinh Nguyễn Phương Anh - PI03084)
+
+Để hiện thực hóa một nền tảng web điều phối sự kiện có độ phức tạp cao, trưởng nhóm đã trực tiếp nghiên cứu, làm chủ và vận dụng toàn diện 6 nhóm kỹ năng công nghệ chuyên sâu:
+
+1. **Kỹ năng Thiết Kế UI/UX Cao Cấp (Apple Design & Bento Grid 2.0 Engineering):**
+   - **Triết lý Apple Human Interface Guidelines (HIG):** Áp dụng chuẩn xác tỉ lệ bo cong Squircle (14px - 18px), độ tương phản văn bản theo chuẩn WCAG AAA, phông chữ hệ thống SF Pro / Inter với kỹ thuật `font-variant-numeric: tabular-nums` ngăn hiện tượng rung lắc số liệu khi render thời gian thực.
+   - **Vật liệu thủy tinh lỏng (Liquid Frosted Glass):** Kết hợp `backdrop-filter: blur(24px) saturate(190%)` và specular highlight đường viền siêu mỏng `rgba(255, 255, 255, 0.15)` tạo chiều sâu thị giác sang trọng, đẳng cấp như macOS Sonoma và iPadOS.
+   - **Hệ thống bố cục Bento Grid 2.0:** Tổ chức thông tin theo các khối Bento đa tầng (Calendar Hub, Reminders Callout, Contract Dossier, KPI Metrics) giúp người dùng tiếp nhận khối lượng dữ liệu khổng lồ mà không hề bị choáng ngợp.
+   - **Hệ thống phím bấm cơ học Machined Button Token Hierarchy:** Phân cấp rõ nét 5 cấp độ nút bấm (`.btn-fpt-primary`, `.btn-fpt-secondary`, `.btn-fpt-emerald`, `.btn-fpt-sky`, `.btn-fpt-ghost`) tích hợp phản hồi xúc giác cơ học đàn hồi `:active scale(0.97)`.
+   - **Kiến trúc SPA không cuộn trang ngoài (Sticky Header & Scrollable Body):** Cố định thanh tiêu đề, bộ lọc và navigation, giải phóng hoàn toàn hiện tượng "cuộn lồng cuộn" (double scrollbar) bằng các vùng cuộn nội bộ mượt mà.
+   - **Thiết kế Responsive Đa Nền Tảng & Tối Ưu In Ấn A4:** Tương thích hoàn hảo từ màn hình lớn (1920x1080, 2K/4K), Laptop (1280x800), iPad Split View (768px - 1024px), Mobile Phone (375px - 430px) và tối ưu hóa CSS `@media print` cho bản in Hợp đồng nghiệm thu A4 chuẩn hành chính nhà trường.
+
+2. **Kỹ năng Kiến Trúc Phần Mềm Backend (PHP OOP MVC Clean Architecture):**
+   - Tự tay xây dựng toàn bộ khung MVC PHP thuần tuân thủ chuẩn PSR-4, phân tách rành mạch Controller - Model - View - Service - Helper mà không lạm dụng các framework cồng kềnh, mang lại tốc độ phản hồi cực nhanh (< 50ms).
+   - Đóng gói hướng đối tượng (OOP): Kế thừa `BaseController`, `BaseModel`, trừu tượng hóa các thao tác cơ sở dữ liệu qua Singleton Pattern.
+   - Ràng buộc an toàn 100% Prepared Statements qua PDO, loại bỏ hoàn toàn nguy cơ SQL Injection.
+   - Cơ chế xác thực & bảo mật phiên chuẩn OWASP: CSRF Protection với Token ngẫu nhiên, băm mật khẩu BCrypt an toàn (`password_hash`), ngăn chặn Session Fixation (`session_regenerate_id`).
+
+3. **Kỹ năng Thuật Toán & Xử Lý Logic Nghiệp Vụ Chuyên Sâu:**
+   - **Thuật toán Interval Collision Detection Algorithm:** Lập trình giải thuật toán học phát hiện xung đột thời gian:
+     $$\text{Collision} = (\text{Start}_{\text{New}} < \text{End}_{\text{Existing}}) \land (\text{End}_{\text{New}} > \text{Start}_{\text{Existing}})$$
+     Chặn đứng triệt để tình trạng sinh viên đăng ký trùng lịch ca trực hoặc giao thoa thời gian tác nghiệp ngay tại tầng Controller trước khi lưu vào CSDL.
+   - **Quản trị phân quyền ma trận (RBAC Matrix):** Thiết kế bảng kiểm soát đặc quyền cho 5 vai trò riêng biệt, ngăn chặn hoàn toàn nguy cơ leo thang đặc quyền (Privilege Escalation).
+
+4. **Kỹ năng Trí Tuệ Nhân Tạo (AI Engineering & Function Calling):**
+   - Tích hợp Trợ lý AI PolyMee Assistant với khả năng **Function Calling** 4 nghiệp vụ tự động hóa chuyên biệt:
+     - `check_room_availability`: Tự động quét và tìm kiếm hội trường/phòng máy đang trống.
+     - `get_available_ctv`: Lọc danh sách sinh viên CTV đang rảnh theo đúng kỹ năng yêu cầu.
+     - `dispatch_ctv_email`: Tự động soạn và phát tán email mời đăng ký ca trực FPoly.
+     - `create_event_and_shifts`: Tự động lên lịch sự kiện VIP và phân rã ca trực chuẩn mực.
+   - **Cơ chế Dynamic Context Awareness theo vai trò:** Trợ lý AI tự động nhận biết người đang trò chuyện là Sinh viên, Giảng viên, Cán bộ Hành chính hay Quản trị viên để đưa ra câu trả lời cá nhân hóa theo đúng thẩm quyền.
+   - **Trích xuất thông minh Regex NLP:** Tự động phân tích và nhận diện liên kết Google Drive bàn giao sản phẩm của CTV Media để liên kết vào hồ sơ nghiệm thu.
+   - **Giao diện thẻ phản hồi thông minh (Rich Interactive Cards):** Đóng gói dữ liệu trả lời của AI thành các card tương tác có nút bấm thao tác 1-click.
+
+5. **Kỹ năng Kỹ Thuật Dữ Liệu (Data Engineering & Mock Data Curation):**
+   - Thiết kế lược đồ CSDL chuẩn hóa 3NF gồm 9 bảng quan hệ chặt chẽ, tối ưu hóa chỉ mục (Indexes) và khóa ngoại (Foreign Keys).
+   - Xây dựng và chuẩn hóa bộ **Mock Data thực tế, sạch sẽ 100%** phản ánh chính xác đời sống sinh viên tại **Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai**: Đầy đủ mã sinh viên (`PI0xxxx`), email trường FPT (`@fpt.edu.vn`), cán bộ giảng viên thực tế, địa điểm hội trường có thật, các sự kiện tiêu biểu (*FPoly TechDay 2026, Poly Champion, Lễ Tốt Nghiệp, Workshop AI...*).
+
+6. **Kỹ năng Phân Tích Nghiệp Vụ SRS & Viết Tài Liệu Kỹ Thuật:**
+   - Trực tiếp khảo sát quy trình thực tế tại FPT Polytechnic Đồng Nai, phát hiện đúng điểm nghẽn và chuyển đổi thành tài liệu đặc tả yêu cầu SRS chuyên nghiệp.
+   - Thiết kế mô hình hóa toàn diện bằng chuẩn quốc tế UML 2.5 (Use Case Diagram, Sequence Flow, ERD 3NF) và biên soạn bộ tài liệu nghiệm thu đạt điểm số tối đa.
 
 ---
 
 ## 2. PHÂN TÍCH YÊU CẦU PHẦN MỀM (SRS & USE CASES - 2.0 ĐIỂM)
 
 ### 2.1. Giới thiệu đề tài & Tính cấp thiết
-Tại **Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai** (Số 120/1 đường Trương Định, Khu phố 2, Phường Tân Mai, TP. Biên Hòa, Tỉnh Đồng Nai), mỗi học kỳ diễn ra hàng chục sự kiện lớn nhỏ: *TechDay, Lễ Khai giảng & Tốt nghiệp, Workshop công nghệ, Giải thể thao sinh viên Poly Champion, Triển lãm FPoly Creative...* Quá trình điều phối lực lượng Cộng tác viên (CTV) sinh viên hiện nay còn gặp các hạn chế:
-- **Trùng lịch học / trùng ca trực:** Sinh viên đăng ký nhiều ca cùng lúc dẫn đến bỏ ca đột xuất.
-- **Gian lận điểm danh:** CTV chụp ảnh mã QR tĩnh gửi qua Zalo/Messenger cho bạn bè điểm danh hộ.
-- **Thất lạc minh chứng nghiệm thu:** Nhóm truyền thông (Media) nộp ảnh/video recap qua tin nhắn rời rạc, ban tổ chức khó quản lý tập trung.
-- **Chậm trễ quyết toán thù lao:** Bộ phận quản lý thiếu công cụ đối soát ảnh VNeID/CCCD và số tài khoản ngân hàng, phải rà soát thủ công qua bảng tính Excel rời rạc.
 
-**PolyMee** ra đời như một giải pháp nền tảng web hiện đại, giải quyết triệt để 100% bài toán trên với sự hỗ trợ của **Trí tuệ nhân tạo (AI)** và các thuật toán chuyên sâu tại cơ sở Đồng Nai.
+Tại **Trường Cao đẳng FPT Polytechnic cơ sở Đồng Nai** (Toà nhà FPT Polytechnic, Đường số 1, KCN Biên Hoà 2, TP. Biên Hoà, Tỉnh Đồng Nai), mỗi học kỳ diễn ra hàng chục sự kiện lớn nhỏ: *FPoly TechDay, Lễ Khai giảng & Tốt nghiệp, Workshop công nghệ, Giải thể thao sinh viên Poly Champion, Triển lãm FPoly Creative, Ngày hội Doanh nghiệp Tuyển dụng...* Mỗi sự kiện đòi hỏi lực lượng Cộng tác viên (CTV) sinh viên tham gia hỗ trợ rất đông đảo (từ 20 đến hơn 100 sinh viên cho các vị trí: Lễ tân đón tiếp, Hậu cần setup bàn ghế, Kỹ thuật âm thanh ánh sáng, MC điều phối và Media quay chụp).
+
+Tuy nhiên, quá trình điều phối lực lượng CTV hiện nay còn gặp phải **4 rào cản và khó khăn nhức nhối thực tế**:
+
+1. **Mất nhiều thời gian tìm kiếm và liên hệ CTV cho mỗi sự kiện:**
+   - Trước đây, mỗi khi nhà trường tổ chức sự kiện, Ban tổ chức và Giảng viên phải tự đăng bài thủ công lên các nhóm chat Zalo sinh viên, fanpage hoặc group Facebook.
+   - Việc liên hệ diễn ra rời rạc, chờ đợi sinh viên phản hồi phân tán, cán bộ phải gọi điện nhắn tin riêng lẻ cho từng bạn để hỏi lịch rảnh, tiêu tốn hàng giờ, thậm chí nhiều ngày làm việc.
+   - Khi có sinh viên báo bận hoặc hủy ca đột xuất vào sát giờ diễn ra sự kiện, ban tổ chức rơi vào thế bị động vì không có một cơ sở dữ liệu tập trung để tra cứu xem sinh viên nào đang rảnh và có kỹ năng phù hợp (MC, Media ống kính tele, điều khiển mixer âm thanh) để liên hệ thay thế kịp thời.
+
+2. **Mất thời gian thu thập, tổng hợp thông tin CTV để tạo bản hợp đồng nghiệm thu:**
+   - Sau khi sự kiện kết thúc, để thanh toán thù lao cho sinh viên, bộ phận quản lý phải lập bản **Hợp đồng & Biên bản Nghiệm thu (`HDNT`)**. Việc này đòi hỏi thu thập hàng loạt thông tin nhạy cảm của từng CTV: Họ và tên, Mã số sinh viên, Số CCCD 12 số, Tên ngân hàng, Số tài khoản chính chủ và hình ảnh thẻ định danh điện tử VNeID Mức 2.
+   - Việc thu thập qua Google Form hoặc nhắn tin riêng lẻ thường xuyên xảy ra sai sót: sinh viên gõ nhầm số tài khoản ngân hàng, tên chủ thẻ không trùng khớp với họ tên, nộp ảnh CCCD mờ hoặc chưa kích hoạt VNeID.
+   - Cán bộ Hành chính phải đối soát thủ công từng dòng trên bảng tính Excel, gọi điện xác minh lại từng sinh viên, khiến quy trình lập hợp đồng bị đình trệ, kéo dài thời gian chi trả thù lao từ 2 đến 3 tuần lễ, gây bức xúc cho sinh viên.
+
+3. **Trùng lịch học / trùng ca trực (Collision):**
+   - Sinh viên không có công cụ xem lịch tổng thể, đăng ký chồng chéo nhiều ca trực cùng giờ hoặc trùng với lịch học/lịch thi trên giảng đường, dẫn đến tình trạng bỏ ca hoặc tác nghiệp nửa vời.
+
+4. **Gian lận điểm danh & thất lạc minh chứng nghiệm thu:**
+   - Các phương thức điểm danh trước đây (ký giấy hoặc quét mã QR tĩnh) bộc lộ lỗ hổng gian lận lớn: sinh viên chụp ảnh mã QR gửi qua Zalo/Messenger cho bạn bè ở nhà quét hộ mà không có mặt tác nghiệp thực tế.
+   - CTV Media nộp ảnh RAW và video recap qua tin nhắn Zalo, Telegram cá nhân bị trôi tin nhắn, giảm chất lượng hình ảnh và thất lạc bài nộp, gây khó khăn cho Giảng viên khi thẩm định nghiệm thu.
+
+---
+
+#### 💡 Giải Pháp Đột Phá Của Hệ Thống PolyMee
+
+Nhận diện sâu sắc các khó khăn trên, **PolyMee** ra đời như một giải pháp nền tảng web điều phối thông minh, tự động hóa toàn diện quy trình sự kiện tại FPT Polytechnic Đồng Nai:
+- **Tự động hóa tìm kiếm & phát tán thư mời CTV bằng AI Function Calling:** Ban tổ chức chỉ cần một câu lệnh tự nhiên: *"Tìm CTV rảnh và gửi mail mời ca trực"*, Trợ lý AI sẽ tự động truy vấn CSDL, lọc danh sách sinh viên đang rảnh theo đúng kỹ năng và phát tán email mời nhận ca tức thì trong 1 click.
+- **Tự động hóa lập Hợp đồng điện tử (Zero-Friction Contract Generation):** CTV chỉ cần cập nhật hồ sơ định danh (CCCD 12 số, VNeID Mức 2, STK) một lần duy nhất vào hệ thống. Ngay khi Giảng viên duyệt nghiệm thu minh chứng, hệ thống tự động sinh Mã Hợp đồng điện tử `HDNT-2026-FPLY-xxx`, tự động nhúng ảnh hiện trường, chuẩn hóa định dạng in ấn A4 và chuyển sang Cán bộ Hành chính ký duyệt chi tiền tức thì.
+- **Loại bỏ 100% gian lận với Cơ chế Nghiệm thu Minh chứng Thực tế:** Xóa bỏ hoàn toàn quét mã QR từ xa; chỉ nghiệm thu dựa trên ảnh hiện trường tác nghiệp thực tế tại nơi làm việc và đường dẫn Google Drive sản phẩm Media.
+- **Thuật toán Interval Collision Detection:** Tự động chặn trùng giờ trực ngay ở tầng Controller với độ phức tạp tối ưu.
 
 ---
 
@@ -265,7 +335,7 @@ Tích hợp thanh Side-rail co giãn mượt mà theo bản quyền mã nguồn 
 ### 3.4. Menu Tài Khoản & Chuyển Vai Trò Nổi Bên Cạnh (Apple Side Flyout)
 Giải quyết triệt để lỗi va chạm giao diện ("bị đè navigation"):
 - **Vị trí thông minh:** Menu tài khoản không bung thẳng lên trên (`dropup`) che khuất thanh điều hướng, mà mở sang phải dạng **Side Flyout** tại `left: calc(var(--rw) + 24px)` và `bottom: 16px` ngay trên canvas chính.
-- **Lưới Chuyển Đổi 6 Role Demo (2-Column Grid):** Tinh gọn danh sách 6 tài khoản mẫu (`PA`, `ĐM`, `GV`, `HC`, `KT`, `AD`) thành dạng lưới 2 cột siêu trực quan, chuyển đổi tức thì chỉ với 1 click.
+- **Lưới Chuyển Đổi Tài Khoản Demo (2-Column Grid):** Tinh gọn danh sách tài khoản mẫu đại diện cho 5 vai trò chuẩn mực (`PA` - Media, `ĐM` - Student, `GV` - Organizer, `HC` - Staff Tuấn LD, `HC` - Staff Sơn PH, `AD` - Admin) thành dạng lưới 2 cột siêu trực quan, chuyển đổi tức thì chỉ với 1 click.
 - **Tích Hợp Tác Vụ Cá Nhân:** Truy cập nhanh Trang Cài Đặt Tài Khoản Cá Nhân, Phân Quyền & Nhật Ký Kiểm Toán (Admin), Đăng nhập/Đăng ký và Đăng xuất.
 
 ---
@@ -277,7 +347,7 @@ Hệ thống giải quyết triệt để bài toán khác biệt quyền lợi 
   - Tải đường dẫn ảnh chụp màn hình ứng dụng định danh **VNeID Mức 2** (hỗ trợ xem trước ảnh thời gian thực).
   - Đổi mật khẩu đăng nhập an toàn.
   - Khu vực nguy hiểm (Danger Zone): Tính năng Xóa tài khoản cá nhân dành riêng cho sinh viên với modal cảnh báo bảo mật đa lớp.
-- **Dành Cho Các Vai Trò Khác (Admin, Giảng Viên, Hành Chính, BGH):**
+- **Dành Cho Các Vai Trò Khác (Admin, Giảng Viên, Hành Chính):**
   - **Bỏ hết toàn bộ** các trường kê khai tài chính, CCCD và ảnh VNeID (nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao ca lẻ).
   - Tự động hiển thị Thẻ **Phân Quyền & Bảo Mật Cán Bộ Nhà Trường** phong cách Bento với spacing thoáng đãng, khẳng định vai trò biên chế FPT Polytechnic cơ sở Đồng Nai.
   - Cho phép cập nhật Họ tên, SĐT, Đơn vị/Phòng ban chuyên môn phụ trách và Đổi mật khẩu đăng nhập bảo mật.
@@ -465,26 +535,56 @@ Mã nguồn nộp bài đi kèm tệp DDL chuẩn được tối ưu hóa cho My
 
 ## 6. ỨNG DỤNG TRÍ TUỆ NHÂN TẠO (AI) TRONG DỰ ÁN (ĐẶC THÙ MÔN WEB212)
 
-Dự án không dừng lại ở mức website tĩnh mà ứng dụng AI sâu sắc vào 5 năng lực tự động hóa chuyên biệt:
+Dự án không dừng lại ở mức giao diện tĩnh mà ứng dụng AI sâu sắc vào 5 năng lực tự động hóa chuyên biệt:
 
-1. **Trợ Lý AI Function Calling Điều Phối Tự Động (Admin & Ban Tổ Chức Automation):**
-   - **Tra cứu phòng trống:** Admin hỏi *"Phòng nào đang trống?"* $\rightarrow$ AI quét toàn bộ danh mục hội trường, phòng lab, kiểm tra lịch sự kiện trùng lặp và phản hồi danh sách phòng khả dụng kèm sức chứa và nút 1-click đặt chỗ.
-   - **Tra cứu CTV đang trống:** Admin hỏi *"CTV nào đang trống?"* $\rightarrow$ AI truy vấn danh sách sinh viên CTV rảnh, hiển thị kỹ năng (Media, Lễ tân, Âm thanh ánh sáng), email, SĐT và nút gửi thư mời ngay.
-   - **Tự động gửi email mời đăng ký ca:** Admin yêu cầu *"Bạn gửi mail cho CTV đăng ký lịch ca trực"* $\rightarrow$ AI tự động phân tích sự kiện, tạo mã gửi `DISPATCH-xxxx`, soạn nội dung chuẩn FPT Polytechnic và mô phỏng phát tán email đến toàn bộ CTV rảnh với tỷ lệ 100% Delivered.
-   - **Tự động đặt lịch sự kiện kèm khách mời VIPs:** Admin yêu cầu *"Đặt giúp lịch sự kiện Hội Thảo AI ngày 22/11, khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu, Đại Diện FPT Telecom"* $\rightarrow$ AI trích xuất thực thể (Tên, ngày, khách mời), lưu vào CSDL `events`, tự động giữ chỗ phòng và **phân rã ngay 2 ca trực chuẩn** (Đón tiếp VIPs & Kỹ thuật/Media) với chỉ tiêu 10 CTV.
+### 6.1. Trợ Lý AI Function Calling Điều Phối Tự Động (Admin & Ban Tổ Chức Automation)
 
-2. **Trợ Lý Cá Nhân Sinh Viên (Student Assistant):**
-   - Hỏi *"Tôi có ca trực nào sắp tới?"* $\rightarrow$ AI tự động truy xuất ca trực, địa điểm, thời gian và hướng dẫn đồng phục áo cam FPoly.
-   - Hỏi *"Tìm ca trực Media hoặc Lễ tân"* $\rightarrow$ AI quét CSDL ca trực mở phù hợp với kỹ năng sinh viên.
+Hệ thống tích hợp bộ định tuyến Intent & Function Calling định dạng JSON Schema chuẩn công nghiệp:
 
-3. **Tự Động Bóc Tách & Nhận Diện Minh Chứng Google Drive Bằng AI:**
-   - Khi sinh viên dán link Google Drive kèm lời nhắn, AI dùng biểu thức chính quy (Regex) và phân tích ý định để liên kết mã hồ sơ ca trực gần nhất, tự động sinh bản ghi `#SUB-XXXX` chuyển đến Ban tổ chức thẩm định.
+```json
+{
+  "functions": [
+    {
+      "name": "check_room_availability",
+      "description": "Tra cứu hội trường và phòng máy Lab còn trống tại FPT Polytechnic Đồng Nai",
+      "parameters": {"target_date": "string (YYYY-MM-DD)", "shift_time": "string"}
+    },
+    {
+      "name": "get_available_ctv",
+      "description": "Truy vấn danh sách sinh viên CTV đang rảnh chưa có ca trực trùng giờ",
+      "parameters": {"event_id": "integer", "required_skill": "string"}
+    },
+    {
+      "name": "dispatch_ctv_email",
+      "description": "Tự động phát tán thư mời đăng ký ca trực FPoly qua email hệ thống",
+      "parameters": {"event_title": "string", "ctv_count": "integer", "template_type": "string"}
+    },
+    {
+      "name": "create_event_and_shifts",
+      "description": "Tạo sự kiện mới, lưu danh sách khách mời VIPs và tự động phân rã ca trực",
+      "parameters": {"title": "string", "date": "string", "vip_guests": "array", "location": "string"}
+    }
+  ]
+}
+```
 
-4. **Phân Tích Cảnh Báo Trùng Lịch & Dự Đoán Tải Sự Kiện:**
-   - Trợ lý AI có khả năng đọc trước lịch học và lịch ca trực, cảnh báo sinh viên nếu thời gian di chuyển giữa 2 cơ sở quá ngắn (< 30 phút).
+- **Tra cứu phòng trống:** Admin hỏi *"Phòng nào đang trống?"* $\rightarrow$ AI quét toàn bộ danh mục hội trường, phòng lab, kiểm tra lịch sự kiện trùng lặp và phản hồi danh sách phòng khả dụng kèm sức chứa và nút 1-click đặt chỗ.
+- **Tra cứu CTV đang trống:** Admin hỏi *"CTV nào đang trống?"* $\rightarrow$ AI truy vấn danh sách sinh viên CTV rảnh, hiển thị kỹ năng (Media, Lễ tân, Âm thanh ánh sáng), email, SĐT và nút gửi thư mời ngay.
+- **Tự động gửi email mời đăng ký ca:** Admin yêu cầu *"Bạn gửi mail cho CTV đăng ký lịch ca trực"* $\rightarrow$ AI tự động phân tích sự kiện, tạo mã gửi `DISPATCH-xxxx`, soạn nội dung chuẩn FPT Polytechnic và mô phỏng phát tán email đến toàn bộ CTV rảnh với tỷ lệ 100% Delivered.
+- **Tự động đặt lịch sự kiện kèm khách mời VIPs:** Admin yêu cầu *"Đặt giúp lịch sự kiện Hội Thảo AI ngày 22/11, khách mời gồm: Thầy Hiệu Trưởng, Ban Giám Hiệu, Đại Diện FPT Telecom"* $\rightarrow$ AI trích xuất thực thể (Tên, ngày, khách mời), lưu vào CSDL `events`, tự động giữ chỗ phòng và **phân rã ngay 2 ca trực chuẩn** (Đón tiếp VIPs & Kỹ thuật/Media) với chỉ tiêu 10 CTV.
 
-5. **Bộ Thẻ Giao Diện Tương Tác AI (Rich Interactive Cards):**
-   - Từng phản hồi của AI được đóng gói thành các thẻ tương tác bắt mắt (Event Confirmation Card, Dispatch Email Card, Room Availability Card, CTV Roster Card) kèm các nút bấm tắt thao tác nhanh không cần tải lại trang.
+### 6.2. Trợ Lý Cá Nhân Sinh Viên (Student Assistant)
+- Hỏi *"Tôi có ca trực nào sắp tới?"* $\rightarrow$ AI tự động truy xuất ca trực, địa điểm, thời gian và hướng dẫn đồng phục áo cam FPoly.
+- Hỏi *"Tìm ca trực Media hoặc Lễ tân"* $\rightarrow$ AI quét CSDL ca trực mở phù hợp với kỹ năng sinh viên.
+
+### 6.3. Tự Động Bóc Tách & Nhận Diện Minh Chứng Google Drive Bằng AI
+- Khi sinh viên dán link Google Drive kèm lời nhắn, AI dùng biểu thức chính quy (Regex NLP) và phân tích ý định để liên kết mã hồ sơ ca trực gần nhất, tự động sinh bản ghi `#SUB-XXXX` chuyển đến Ban tổ chức thẩm định.
+
+### 6.4. Phân Tích Cảnh Báo Trùng Lịch & Dự Đoán Tải Sự Kiện
+- Trợ lý AI có khả năng đọc trước lịch học và lịch ca trực, cảnh báo sinh viên nếu thời gian di chuyển giữa 2 cơ sở quá ngắn (< 30 phút).
+
+### 6.5. Bộ Thẻ Giao Diện Tương Tác AI (Rich Interactive Cards)
+- Từng phản hồi của AI được đóng gói thành các thẻ tương tác bắt mắt (Event Confirmation Card, Dispatch Email Card, Room Availability Card, CTV Roster Card) kèm các nút bấm tắt thao tác nhanh không cần tải lại trang.
 
 ---
 
@@ -573,16 +673,18 @@ Khi giảng viên yêu cầu mở demo sản phẩm trực tiếp, nhóm sinh vi
 
 ---
 
-### 🔹 Bước 5: Hồ Sơ Hợp Đồng Nghiệm Thu & Trình Trường Ký Duyệt Chuyển Tiền
+### 🔹 Bước 5: Hồ Sơ Hợp Đồng Nghiệm Thu & Cán Bộ Hành Chính Ký Duyệt Chi Tiền
 1. Mở tab **"Hồ Sơ Hợp Đồng"** (`panelContractDossier`) hoặc **"Nghiệm Thu Thù Lao"** (`panelAccounting`).
-2. Bấm nút **"Xem Hợp Đồng"**: Modal chuẩn văn bản **Trường Cao Đẳng FPT Polytechnic** hiện ra đầy đủ:
-   - Quốc hiệu, đơn vị đại diện, mã số hồ sơ điện tử.
+2. Bấm nút **"Xem Hợp Đồng"**: Modal chuẩn văn bản **Trường Cao Đẳng FPT Polytechnic cơ sở Đồng Nai** hiện ra đầy đủ:
+   - Quốc hiệu, đơn vị đại diện, mã số hồ sơ điện tử (`HDNT-2026-FPLY-xxx`).
    - Bảng kê chi tiết thông tin CTV, sự kiện, ca trực, số tiền thù lao, số CCCD và STK ngân hàng.
-   - Ảnh chụp minh chứng hiện trường trực tiếp.
+   - Ảnh chụp minh chứng hiện trường trực tiếp tác nghiệp.
    - Khung 3 chữ ký: Giảng viên phụ trách, Cộng tác viên, Đại diện Nhà trường.
-3. Bấm **"Trình Trường Ký Duyệt"**: Trạng thái chuyển sang `Đã Ký & Quyết Toán (Signed_Paid)`.
+3. Chuyển vai sang **Cán Bộ Hành Chính (ThS. Phạm Hồng Sơn - HC0001)**:
+   - Tại tab **"Nghiệm Thu Thù Lao"** (`panelAccounting`), đối soát số CCCD 12 số, tài khoản ngân hàng và ảnh thẻ VNeID Mức 2 của CTV.
+   - Bấm nút **"Ký Duyệt & Chi Tiền"**: Trạng thái tức thì chuyển sang `Đã Ký & Quyết Toán (Signed_Paid)` và ghi vết vào Audit Trail.
 4. Bấm **"In Hợp Đồng (PDF)"**: Khổ giấy A4 tối ưu `@media print` sẵn sàng trình ký và lưu trữ văn thư.
-5. Bấm **"Tải File Excel (CSV)"**: Xuất bảng kê thù lao UTF-8 BOM hiển thị tiếng Việt chuẩn 100%.
+5. Bấm **"Tải File Excel (CSV)"**: Xuất bảng kê thù lao UTF-8 BOM hiển thị tiếng Việt chuẩn 100% mở trực tiếp trên Excel.
 
 ---
 
