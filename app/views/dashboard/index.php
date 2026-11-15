@@ -964,10 +964,46 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     #panelProfileSettings .card {
         flex: none !important;
         overflow: visible !important;
+        background: var(--ux-surface) !important;
+        border: 1px solid var(--ux-line) !important;
+        border-radius: 14px !important;
+    }
+    #panelProfileSettings .card-header {
+        padding: 16px 20px 8px 20px !important;
+        background: transparent !important;
+        border-bottom: 0 !important;
     }
     #panelProfileSettings .card-body {
         flex: none !important;
         overflow: visible !important;
+        padding: 14px 20px 20px 20px !important;
+    }
+    #panelProfileSettings .form-label {
+        font-size: 12.5px !important;
+        font-weight: 600 !important;
+        color: var(--ux-ink) !important;
+        margin-bottom: 6px !important;
+    }
+    #panelProfileSettings .form-control,
+    #panelProfileSettings .form-select {
+        font-size: 13px !important;
+        padding: 9px 13px !important;
+        border-radius: 9px !important;
+        border: 1px solid var(--ux-line-2) !important;
+        background: var(--ux-surface-2) !important;
+        color: var(--ux-ink) !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+    }
+    #panelProfileSettings .form-control:focus {
+        border-color: var(--ux-accent) !important;
+        box-shadow: 0 0 0 3px var(--ux-accent-soft) !important;
+        background: var(--ux-surface) !important;
+    }
+    #panelProfileSettings .form-control[readonly] {
+        background: var(--ux-surface-3) !important;
+        cursor: not-allowed !important;
+        opacity: 0.9 !important;
+        color: var(--ux-ink) !important;
     }
 
     .spa-panel #eventsCardsContainer,
@@ -3153,32 +3189,34 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 $profRoleId = (int)($userProfile['role_id'] ?? 4);
                 $profRoleName = $userProfile['role_name'] ?? 'Student';
                 // CHỈ CTV (Sinh viên, Media) mới có hồ sơ quyết toán thù lao (VNeID, CCCD, STK)
-                // Các role khác (Admin, Giảng viên, Hành chính, Kế toán...) bỏ hết các trường này
+                // Các role khác (Admin, Giảng viên, Hành chính...) bỏ hết các trường này
                 $isCtv = in_array($profRoleId, [4, 6], true) || in_array($profRoleName, ['Student', 'Media', 'CTV', 'Sinh viên'], true);
                 $isInstitutionalStaff = !$isCtv;
                 ?>
-                <!-- Profile Header Card (Apple-grade Bento - Không bị đè) -->
-                <div class="card border-0 rounded-3 shadow-xs mb-3" style="background: #FFFFFF; border: 1px solid rgba(0,0,0,0.08) !important; flex-shrink: 0;">
-                    <div class="card-body p-3.5">
+                <!-- Profile Header Card (Apple-grade Bento Canvas) -->
+                <div class="card border-0 rounded-3 shadow-xs mb-3 flex-shrink-0" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
+                    <div class="card-body p-3 p-md-4">
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                             <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-xs flex-shrink-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 20px;">
+                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-xs flex-shrink-0" style="width: 54px; height: 54px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 22px;">
                                     <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
                                 </div>
                                 <div>
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 16px; letter-spacing: -0.01em;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-2.5 py-1 rounded-pill" style="font-size: 11px; background: #FFF7ED; color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.2);">
+                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 17px; letter-spacing: -0.01em;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
+                                        <span class="badge px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: rgba(234, 88, 12, 0.1); color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.25);">
                                             <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleName) ?>
                                         </span>
                                     </div>
-                                    <div class="small mt-1" style="color: var(--ux-ink-3); font-size: 11.5px;">
-                                        Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong> • Email: <span class="text-secondary"><?= htmlspecialchars($userProfile['email'] ?? '') ?></span>
+                                    <div class="small mt-1 d-flex align-items-center gap-2 flex-wrap" style="color: var(--ux-ink-3); font-size: 12px;">
+                                        <span>Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong></span>
+                                        <span style="opacity: 0.35;">•</span>
+                                        <span>Email: <span style="color: var(--ux-ink-2); font-weight: 500;"><?= htmlspecialchars($userProfile['email'] ?? '') ?></span></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: #F8FAFC; color: #64748B; border: 1px solid #E2E8F0; font-size: 11.5px;">
+                                <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11.5px;">
                                     <i class="bi bi-clock-history me-1 text-primary"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
                                 </span>
                             </div>
@@ -3188,40 +3226,46 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                 <!-- Profile Edit Form -->
                 <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
-                    <div class="row g-2.5">
+                    <div class="row g-3 g-lg-4">
                         <!-- Left Column: Thông Tin Định Danh & Liên Hệ -->
                         <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-7' : 'col-lg-6' ?>">
-                            <div class="card border-0 rounded-3 shadow-xs h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-3 pb-1 border-0">
-                                    <h5 class="fw-bold mb-0.5 d-flex align-items-center gap-1.5" style="font-size: 14px; color: var(--ux-ink);">
-                                        <i class="bi bi-person-lines-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
+                            <div class="card border-0 rounded-3 shadow-xs h-100">
+                                <div class="card-header bg-transparent border-0 pb-1">
+                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 15px; color: var(--ux-ink);">
+                                        <i class="bi bi-person-badge-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
                                     </h5>
-                                    <small style="color: var(--ux-ink-3); font-size: 11px;">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</small>
+                                    <div style="color: var(--ux-ink-3); font-size: 12px;">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</div>
                                 </div>
-                                <div class="card-body p-3 pt-1">
-                                    <div class="row g-2">
+                                <div class="card-body pt-1">
+                                    <div class="row g-3">
                                         <div class="col-12">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Họ và Tên <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" required>
+                                            <label class="form-label">Họ và Tên <span class="text-danger">*</span></label>
+                                            <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" placeholder="Nhập đầy đủ họ và tên..." required>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Mã Định Danh / MSSV</label>
-                                            <input type="text" class="form-control form-control-sm font-monospace" style="font-size: 12px; padding: 6px 10px; opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly>
-                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Mã sinh viên / Mã cán bộ do Nhà trường cấp cố định</div>
+                                            <label class="form-label d-flex align-items-center justify-content-between">
+                                                <span>Mã Định Danh / MSSV</span>
+                                                <span class="badge bg-secondary-subtle text-secondary" style="font-size: 10px; font-weight: normal;"><i class="bi bi-lock-fill me-0.5"></i>Cố định</span>
+                                            </label>
+                                            <input type="text" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly>
+                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Mã sinh viên / Cán bộ do Nhà trường cấp cố định</div>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Email FPT Education</label>
-                                            <input type="email" class="form-control form-control-sm font-monospace" style="font-size: 12px; padding: 6px 10px; opacity: 0.75; cursor: not-allowed; background: var(--ux-surface-3);" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly>
-                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
+                                            <label class="form-label d-flex align-items-center justify-content-between">
+                                                <span>Email FPT Education</span>
+                                                <span class="badge bg-secondary-subtle text-secondary" style="font-size: 10px; font-weight: normal;"><i class="bi bi-lock-fill me-0.5"></i>Cố định</span>
+                                            </label>
+                                            <input type="email" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly>
+                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
-                                            <input type="tel" name="phone" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
+                                            <label class="form-label">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
+                                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
-                                            <textarea name="skills" class="form-control form-control-sm" rows="2" style="font-size: 12px; padding: 6px 10px;" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
-                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để gợi ý bạn vào các ca trực phù hợp</div>
+                                            <label class="form-label">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
+                                            <textarea name="skills" class="form-control" rows="3" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
+                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để phân tích và gợi ý bạn vào các ca trực sự kiện phù hợp nhất</div>
                                         </div>
                                     </div>
                                 </div>
@@ -3232,42 +3276,58 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
                             <?php if ($isInstitutionalStaff): ?>
                             <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-4 shadow-xs h-100" style="background: #FFFFFF; border: 1px solid rgba(0,0,0,0.08) !important;">
-                                <div class="card-header bg-transparent px-4 pt-3.5 pb-2 border-0">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 14.5px; color: var(--ux-ink);">
-                                        <i class="bi bi-shield-lock-fill text-primary"></i> Phân Quyền & Bảo Mật
+                            <div class="card border-0 rounded-3 shadow-xs h-100 d-flex flex-column">
+                                <div class="card-header bg-transparent border-0 pb-1">
+                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 15px; color: var(--ux-ink);">
+                                        <i class="bi bi-shield-check text-primary"></i> Phân Quyền & Bảo Mật
                                     </h5>
-                                    <small style="color: var(--ux-ink-3); font-size: 11.5px;">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</small>
+                                    <div style="color: var(--ux-ink-3); font-size: 12px;">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</div>
                                 </div>
-                                <div class="card-body px-4 pb-4 pt-2 d-flex flex-column justify-content-between">
+                                <div class="card-body pt-1 d-flex flex-column justify-content-between">
                                     <div>
-                                        <!-- Box 1: Quy chế biên chế FPT Poly - Spacing rộng rãi thoáng đãng -->
-                                        <div class="p-3.5 rounded-3 mb-3.5" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                                        <!-- Callout Box: Quy chế biên chế FPT Poly - Bento Apple HIG Thoáng Đãng -->
+                                        <div class="rounded-3 p-3 mb-4" style="background: rgba(2, 132, 199, 0.05); border: 1px solid rgba(2, 132, 199, 0.18);">
                                             <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-primary flex-shrink-0" style="width: 38px; height: 38px; background: #EFF6FF; border: 1px solid #DBEAFE;">
-                                                    <i class="bi bi-mortarboard-fill fs-5"></i>
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: rgba(2, 132, 199, 0.12); color: #0284C7; font-size: 20px;">
+                                                    <i class="bi bi-mortarboard-fill"></i>
                                                 </div>
-                                                <div>
-                                                    <h6 class="fw-bold mb-1 text-dark" style="font-size: 13.5px;">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                    <p class="small mb-0 text-muted" style="line-height: 1.6; font-size: 12px;">
-                                                        Bạn đang đăng nhập với vai trò <strong class="text-dark"><?= htmlspecialchars($profRoleName) ?></strong> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sự kiện sinh viên theo ca nên <strong class="text-dark">không cần kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID</strong>.
+                                                <div style="flex: 1;">
+                                                    <div class="d-flex align-items-center gap-2 flex-wrap mb-1.5">
+                                                        <h6 class="fw-bold mb-0" style="font-size: 14px; color: var(--ux-ink);">Tài Khoản Biên Chế Nhà Trường</h6>
+                                                        <span class="badge rounded-pill" style="font-size: 11px; background: rgba(2, 132, 199, 0.12); color: #0284C7; border: 1px solid rgba(2, 132, 199, 0.25);">
+                                                            <i class="bi bi-patch-check-fill me-1"></i>Chính Thức
+                                                        </span>
+                                                    </div>
+                                                    <p class="mb-0" style="line-height: 1.6; font-size: 12.5px; color: var(--ux-ink-2);">
+                                                        Tài khoản đang đăng nhập với vai trò <span class="fw-semibold text-primary"><?= htmlspecialchars($profRoleName) ?></span> (Cán bộ / Giảng viên). Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sinh viên theo ca nên hệ thống tự động lược bỏ các mục kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID.
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Box 2: Đổi Mật Khẩu - Tách biệt rõ ràng, label & input chuẩn Apple Bento -->
-                                        <div class="p-3.5 rounded-3 mb-4" style="background: #FAFAFA; border: 1px solid #E5E7EB;">
-                                            <div class="fw-bold mb-1.5 text-dark d-flex align-items-center gap-1.5" style="font-size: 13px;">
-                                                <i class="bi bi-key-fill text-warning"></i> Đổi Mật Khẩu Đăng Nhập
+                                        <!-- Form Group: Đổi Mật Khẩu Đăng Nhập - Sạch sẽ, không box lồng box, có nút ẩn/hiện -->
+                                        <div class="mb-4">
+                                            <label class="form-label d-flex align-items-center justify-content-between mb-1.5">
+                                                <span class="d-flex align-items-center gap-1.5 fw-bold" style="font-size: 13px; color: var(--ux-ink);">
+                                                    <i class="bi bi-key-fill text-warning"></i> Đổi Mật Khẩu Đăng Nhập
+                                                </span>
+                                                <span class="badge bg-light text-muted border" style="font-size: 10.5px; font-weight: normal;">Không bắt buộc</span>
+                                            </label>
+                                            <div class="position-relative">
+                                                <input type="password" name="new_password" id="inputNewPasswordStaff" class="form-control" style="padding-right: 42px;" placeholder="Nhập mật khẩu mới (bỏ trống nếu giữ nguyên)..." autocomplete="new-password">
+                                                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted text-decoration-none pe-3" onclick="togglePasswordVisibility('inputNewPasswordStaff', this)" style="border: none; background: transparent; z-index: 5;" title="Hiện / Ẩn mật khẩu">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
                                             </div>
-                                            <label class="form-label text-muted small mb-2 d-block" style="font-size: 11.5px;">Mật khẩu mới (bỏ trống nếu không muốn đổi)</label>
-                                            <input type="password" name="new_password" class="form-control" style="font-size: 12.5px; padding: 8px 12px; border-radius: 10px; background: #FFFFFF; border: 1px solid #D1D5DB;" placeholder="Nhập tối thiểu 6 ký tự...">
+                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3); margin-top: 5px;">
+                                                Mật khẩu mới yêu cầu tối thiểu 6 ký tự. Hãy sử dụng mật khẩu mạnh để bảo vệ tài khoản.
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="pt-3 border-top" style="border-color: rgba(0,0,0,0.06) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 py-2.5 rounded-pill shadow-xs fw-bold d-inline-flex align-items-center justify-content-center gap-2" id="btnSaveProfile">
+                                    <!-- Footer Action Button -->
+                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
+                                        <button type="submit" class="btn btn-fpt-primary w-100 rounded-pill shadow-xs fw-bold d-inline-flex align-items-center justify-content-center gap-2" id="btnSaveProfile" style="padding: 11px 20px; font-size: 13.5px;">
                                             <i class="bi bi-check-circle-fill"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
                                         </button>
                                     </div>
@@ -3275,56 +3335,68 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </div>
                             <?php else: ?>
                             <!-- Trường hợp CTV (Sinh Viên / Media): Có đầy đủ hồ sơ CCCD, STK, VNeID -->
-                            <div class="card border-0 rounded-3 shadow-xs h-100" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                                <div class="card-header bg-transparent p-3 pb-1 border-0">
-                                    <h5 class="fw-bold mb-0.5 d-flex align-items-center gap-1.5" style="font-size: 14px; color: var(--ux-ink);">
+                            <div class="card border-0 rounded-3 shadow-xs h-100 d-flex flex-column">
+                                <div class="card-header bg-transparent border-0 pb-1">
+                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 15px; color: var(--ux-ink);">
                                         <i class="bi bi-wallet2 text-success"></i> Hồ Sơ Quyết Toán & Thù Lao CTV
                                     </h5>
-                                    <small style="color: var(--ux-ink-3); font-size: 11px;">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</small>
+                                    <div style="color: var(--ux-ink-3); font-size: 12px;">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</div>
                                 </div>
-                                <div class="card-body p-3 pt-1 d-flex flex-column justify-content-between">
-                                    <div class="row g-2">
+                                <div class="card-body pt-1 d-flex flex-column justify-content-between">
+                                    <div class="row g-3">
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Số CCCD (12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control form-control-sm font-monospace" style="font-size: 12px; padding: 6px 10px;" placeholder="12 chữ số CCCD chính chủ..." value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
-                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Nhập chính xác 12 chữ số CCCD hiển thị trên VNeID</div>
+                                            <label class="form-label">Số CCCD (12 số) <span class="text-danger">*</span></label>
+                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="12 chữ số CCCD chính chủ..." value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
+                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Nhập chính xác 12 chữ số hiển thị trên app VNeID</div>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_name" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" placeholder="Ví dụ: MB Bank, Vietcombank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
+                                            <label class="form-label">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
+                                            <input type="text" name="bank_name" class="form-control" placeholder="Ví dụ: MB Bank, TPBank, Vietcombank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_number" class="form-control form-control-sm font-monospace" style="font-size: 12px; padding: 6px 10px;" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
+                                            <label class="form-label">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
+                                            <input type="text" name="bank_account_number" class="form-control font-monospace" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_name" class="form-control form-control-sm text-uppercase font-monospace" style="font-size: 12px; padding: 6px 10px;" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
+                                            <label class="form-label">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
+                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Ảnh Chụp Màn Hình Ứng Dụng VNeID (Mức 2)</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" placeholder="https://... (URL ảnh chụp màn hình app VNeID)" value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 10.5px; color: var(--ux-ink-3);">Dán URL ảnh chụp màn hình app VNeID đã kích hoạt định danh Mức 2 (không cần chụp thẻ CCCD vật lý)</div>
+                                            <label class="form-label">Ảnh Chụp Màn Hình Ứng Dụng VNeID (Mức 2)</label>
+                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://... (URL ảnh chụp màn hình app VNeID)" value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
+                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp màn hình app VNeID đã kích hoạt Mức 2 (không cần chụp thẻ vật lý)</div>
                                             
-                                            <!-- Image Preview -->
-                                            <div class="mt-1.5 p-1.5 rounded-3 border text-center" style="background: var(--ux-surface-2); border-color: var(--ux-line) !important; max-height: 90px; overflow: hidden;" id="vneidPreviewBox">
+                                            <!-- Image Preview Box -->
+                                            <div class="mt-2 p-2 rounded-3 text-center d-flex align-items-center justify-content-center" style="background: var(--ux-surface-2); border: 1px dashed var(--ux-line-2); min-height: 90px; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
                                                 <?php if (!empty($userProfile['vneid_image_url'])): ?>
-                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 75px; width: auto; object-fit: contain; border-radius: 6px;" id="vneidPreviewImg">
+                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 8px;" id="vneidPreviewImg">
+                                                    <span class="small text-muted" id="vneidPlaceholder" style="font-size: 11.5px; display: none;"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
                                                 <?php else: ?>
-                                                    <span class="small text-muted" id="vneidPlaceholder" style="font-size: 11px;"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                    <img src="" alt="VNeID Preview" style="max-height: 75px; width: auto; object-fit: contain; border-radius: 6px; display: none;" id="vneidPreviewImg">
+                                                    <span class="small text-muted" id="vneidPlaceholder" style="font-size: 11.5px;"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
+                                                    <img src="" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 8px; display: none;" id="vneidPreviewImg">
                                                 <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-bold mb-1" style="font-size: 11.5px; color: var(--ux-ink);">Mật Khẩu Mới</label>
-                                            <input type="password" name="new_password" class="form-control form-control-sm" style="font-size: 12px; padding: 6px 10px;" placeholder="Để trống nếu giữ nguyên mật khẩu cũ...">
+                                            <label class="form-label d-flex align-items-center justify-content-between mb-1.5">
+                                                <span class="d-flex align-items-center gap-1.5 fw-bold" style="font-size: 13px; color: var(--ux-ink);">
+                                                    <i class="bi bi-key-fill text-warning"></i> Đổi Mật Khẩu Đăng Nhập
+                                                </span>
+                                                <span class="badge bg-light text-muted border" style="font-size: 10.5px; font-weight: normal;">Không bắt buộc</span>
+                                            </label>
+                                            <div class="position-relative">
+                                                <input type="password" name="new_password" id="inputNewPasswordCtv" class="form-control" style="padding-right: 42px;" placeholder="Nhập mật khẩu mới (bỏ trống nếu giữ nguyên)..." autocomplete="new-password">
+                                                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted text-decoration-none pe-3" onclick="togglePasswordVisibility('inputNewPasswordCtv', this)" style="border: none; background: transparent; z-index: 5;" title="Hiện / Ẩn mật khẩu">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="pt-2 border-top mt-2" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn-profile-save w-100" id="btnSaveProfile">
-                                            <i class="bi bi-save2-fill me-1"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
+                                    <!-- Footer Action Button -->
+                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
+                                        <button type="submit" class="btn btn-fpt-primary w-100 rounded-pill shadow-xs fw-bold d-inline-flex align-items-center justify-content-center gap-2" id="btnSaveProfile" style="padding: 11px 20px; font-size: 13.5px;">
+                                            <i class="bi bi-save2-fill"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
                                         </button>
                                     </div>
                                 </div>
@@ -3336,19 +3408,19 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                 <?php if ($isCtv): ?>
                 <!-- Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân (Chỉ Dành Cho CTV / Sinh Viên) -->
-                <div class="card border-0 rounded-3 shadow-xs mt-3" style="background: #FFF5F5; border: 1px solid rgba(239, 68, 68, 0.25) !important;">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5">
+                <div class="card border-0 rounded-3 shadow-xs mt-3" style="background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.2) !important;">
+                    <div class="card-body p-3 p-md-4">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                             <div>
-                                <h6 class="fw-bold mb-1 text-danger d-flex align-items-center gap-1.5" style="font-size: 13px;">
+                                <h6 class="fw-bold mb-1 text-danger d-flex align-items-center gap-1.5" style="font-size: 13.5px;">
                                     <i class="bi bi-exclamation-triangle-fill"></i> Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân
                                 </h6>
-                                <p class="small mb-0 text-muted" style="max-width: 650px; font-size: 11.5px; line-height: 1.45;">
+                                <p class="small mb-0 text-muted" style="max-width: 650px; font-size: 12px; line-height: 1.5;">
                                     Khi thực hiện xóa tài khoản, toàn bộ hồ sơ sinh viên, thông tin định danh và lịch phân công chưa hoàn thành sẽ bị vô hiệu hóa khỏi hệ thống PolyMee. Các hợp đồng đã quyết toán chi trả sẽ được lưu trữ phục vụ đối soát kế toán theo quy chế nhà trường.
                                 </p>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3.5 py-1.5 fw-bold" onclick="openDeleteAccountModal()" style="font-size: 11.5px;">
+                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3.5 py-2 fw-bold" onclick="openDeleteAccountModal()" style="font-size: 12px;">
                                     <i class="bi bi-trash3-fill me-1.5"></i> Xóa Tài Khoản
                                 </button>
                             </div>
@@ -6603,6 +6675,25 @@ function previewVneidImage(url) {
     } else {
         img.style.display = 'none';
         if (placeholder) placeholder.style.display = 'inline-block';
+    }
+}
+
+function togglePasswordVisibility(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) {
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        }
+    } else {
+        input.type = 'password';
+        if (icon) {
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
     }
 }
 
