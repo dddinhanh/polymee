@@ -34,7 +34,7 @@
 
 ---
 
-### 1.2. Hồ Sơ Năng Lực & Kỹ Năng Kỹ Thuật (Technical Skills) Của Trưởng Nhóm (Đinh Nguyễn Phương Anh - PI03084)
+### 1.2. Hồ Sơ Năng Lực & Kỹ Năng Kỹ Thuật (Technical Skills)
 
 Để hiện thực hóa một nền tảng web điều phối sự kiện có độ phức tạp cao, trưởng nhóm đã trực tiếp nghiên cứu, làm chủ và vận dụng toàn diện 6 nhóm kỹ năng công nghệ chuyên sâu:
 
