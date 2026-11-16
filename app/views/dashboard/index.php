@@ -603,7 +603,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         background: rgba(255, 255, 255, 0.94) !important;
         border: 1px solid var(--ux-line);
         border-radius: 20px;
-        padding: 10px 20px;
+        padding: 12px 20px;
         margin-bottom: 16px;
         display: flex;
         flex-wrap: nowrap !important;
@@ -613,11 +613,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        overflow-x: auto;
-        scrollbar-width: none;
-    }
-    .dashboard-topbar::-webkit-scrollbar {
-        display: none;
+        overflow: visible !important;
     }
 
     [data-bs-theme="dark"] .dashboard-topbar {
@@ -628,7 +624,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
     .dashboard-topbar .dropdown {
         position: relative;
-        z-index: 105;
+        z-index: 1050;
     }
 
     .dashboard-topbar .dropdown-menu {
@@ -681,6 +677,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         padding: 0;
         flex-shrink: 0;
         position: relative;
+        overflow: visible !important;
     }
     .btn-topbar-bell:hover {
         background: #F4F4F6;
@@ -697,23 +694,24 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
     .topbar-bell-badge {
         position: absolute;
-        top: -3px;
-        right: -3px;
+        top: 0px;
+        right: 0px;
         min-width: 17px;
         height: 17px;
-        padding: 0 4.5px;
+        padding: 0 3.5px;
         border-radius: 999px;
         background: #0284C7;
         color: #FFFFFF;
-        font-size: 9.5px;
+        font-size: 9px;
         font-weight: 800;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border: none;
-        box-shadow: 0 0 0 2px var(--ux-surface, #FFFFFF);
+        border: 2px solid var(--ux-surface, #FFFFFF);
+        box-sizing: border-box;
         line-height: 1;
         pointer-events: none;
+        z-index: 10;
     }
 
     /* Bento Google Drive Proof Pill (Linear / Apple HIG Standard) */
@@ -812,7 +810,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         color: #E5E5EA;
     }
     [data-bs-theme="dark"] .topbar-bell-badge {
-        box-shadow: 0 0 0 2px #1C1C1E;
+        border-color: #2C2C2E !important;
     }
     [data-bs-theme="dark"] .btn-drive-pill {
         background: rgba(2, 132, 199, 0.15);
@@ -1481,13 +1479,14 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             z-index: 1020 !important;
             background: rgba(255, 255, 255, 0.94) !important;
             flex-shrink: 0;
-            padding: 8px 16px;
+            padding: 10px 18px;
             margin-bottom: 12px;
-            min-height: 48px;
+            min-height: 52px;
             border-radius: 16px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
+            overflow: visible !important;
         }
 
         #spaBodyContent {
