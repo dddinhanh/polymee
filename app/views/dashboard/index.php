@@ -2619,12 +2619,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </div>
                 </div>
 
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-2" style="border-color: rgba(0,0,0,0.06) !important;">
-                    <div>
-                        <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;" id="calendarViewHeading">Lịch Tổng Quan Theo Tháng</h2>
-                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;" id="calendarViewSub">Nhấp vào ô ngày bất kỳ để vào thẳng Lịch Ngày xem chi tiết các ca trực</p>
-                    </div>
-
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-2.5" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div class="d-flex align-items-center gap-2.5 flex-wrap">
                         <!-- VIEW SWITCHER: THÁNG / TUẦN / NGÀY -->
                         <div class="view-switcher-group btn-group shadow-xs" id="calendarViewSwitcher" role="group">
@@ -2639,22 +2634,21 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             <button class="btn-fpt-secondary btn-fpt-sm fw-bold px-3 num-tabular" type="button" id="currentCalendarHeader" onclick="goToday()">Tháng 11/2026</button>
                             <button class="btn-fpt-secondary btn-fpt-sm" type="button" onclick="navigateCalendar(1)" title="Tháng sau"><i class="bi bi-chevron-right"></i></button>
                         </div>
+                    </div>
 
-                        <div class="vr mx-1 d-none d-lg-block" style="height: 20px; opacity: 0.2;"></div>
-
-                        <div class="d-flex align-items-center gap-2.5" style="font-size: 12px; font-weight: 600; color: #48484A;">
-                            <div class="d-flex align-items-center gap-1.5">
-                                <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-accent);"></span>
-                                <span>Đang tuyển</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-1.5">
-                                <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-mint);"></span>
-                                <span>Ca của tôi</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-1.5">
-                                <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-danger);"></span>
-                                <span>Đủ CTV</span>
-                            </div>
+                    <!-- CHÚ THÍCH TRẠNG THÁI CA TRỰC -->
+                    <div class="d-flex align-items-center gap-3 ms-auto" style="font-size: 12px; font-weight: 600; color: #48484A;">
+                        <div class="d-flex align-items-center gap-1.5">
+                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-accent);"></span>
+                            <span>Đang tuyển</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-1.5">
+                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-mint);"></span>
+                            <span>Ca của tôi</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-1.5">
+                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-danger);"></span>
+                            <span>Đủ CTV</span>
                         </div>
                     </div>
                 </div>
