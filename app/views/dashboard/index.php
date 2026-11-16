@@ -792,6 +792,45 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         color: #9CA3AF !important;
     }
 
+    /* Refined & Streamlined Button System (Apple HIG / Linear Standard) */
+    .btn-fpt-primary,
+    .btn-fpt-secondary,
+    .btn-fpt-emerald,
+    .btn-fpt-sky,
+    .btn-fpt-outline-orange {
+        padding: 6.5px 14px !important;
+        font-size: 12.5px !important;
+        border-radius: 9px !important;
+        gap: 6px !important;
+        line-height: 1.35 !important;
+    }
+    .btn-fpt-sm,
+    .btn-sm.btn-fpt-primary,
+    .btn-sm.btn-fpt-secondary,
+    .btn-sm.btn-fpt-emerald,
+    .btn-sm.btn-fpt-sky,
+    .btn-sm.btn-fpt-outline-orange {
+        padding: 4.5px 10px !important;
+        font-size: 11.5px !important;
+        font-weight: 600 !important;
+        border-radius: 7px !important;
+        gap: 5px !important;
+        line-height: 1.3 !important;
+        white-space: nowrap !important;
+    }
+    /* Compact Table Action Buttons */
+    table td .btn-fpt-primary,
+    table td .btn-fpt-secondary,
+    table td .btn-fpt-emerald,
+    table td .btn-fpt-sky,
+    table td .btn-fpt-outline-orange,
+    table td .btn-fpt-sm {
+        display: inline-flex !important;
+        width: auto !important;
+        white-space: nowrap !important;
+        margin-bottom: 0 !important;
+    }
+
     /* Modern AI Bento Suggestion Cards (Apple Intelligence & ChatGPT Standard) */
     .ai-option-card {
         display: flex;
@@ -6298,20 +6337,20 @@ function renderMyShiftsTable() {
         let actionHtml = '';
         if (isVerified) {
             actionHtml = `
-                <button class="btn-fpt-primary btn-fpt-sm w-100 mb-1" onclick="openContractModal(${assignmentId})">
+                <button class="btn-fpt-primary btn-fpt-sm text-nowrap shadow-2xs" onclick="openContractModal(${assignmentId})" title="Xem Hợp đồng nghiệm thu điện tử">
                     <i class="bi bi-file-earmark-text me-1"></i> Xem Hợp Đồng
                 </button>
             `;
         } else if (hasProof) {
             actionHtml = `
-                <button class="btn-fpt-secondary btn-fpt-sm w-100" onclick="openSubmitProofModal(${assignmentId}, '${s.name}', '${s.start_time}')">
-                    <i class="bi bi-camera me-1"></i> Chụp / Đổi Ảnh
+                <button class="btn-fpt-secondary btn-fpt-sm text-nowrap shadow-2xs" onclick="openSubmitProofModal(${assignmentId}, '${s.name}', '${s.start_time}')" title="Cập nhật hoặc đổi ảnh minh chứng mới">
+                    <i class="bi bi-camera me-1 text-primary"></i> Đổi Minh Chứng
                 </button>
             `;
         } else {
             actionHtml = `
-                <button class="btn-fpt-primary btn-fpt-sm w-100" onclick="openSubmitProofModal(${assignmentId}, '${s.name}', '${s.start_time}')">
-                    <i class="bi bi-camera-fill me-1"></i> Chụp Ảnh Nghiệm Thu
+                <button class="btn-fpt-primary btn-fpt-sm text-nowrap shadow-2xs" onclick="openSubmitProofModal(${assignmentId}, '${s.name}', '${s.start_time}')" title="Chụp ảnh hiện trường hoặc nộp minh chứng">
+                    <i class="bi bi-camera-fill me-1"></i> Nộp Minh Chứng
                 </button>
             `;
         }
@@ -6332,7 +6371,7 @@ function renderMyShiftsTable() {
                 <strong class="text-success num-tabular">${allowance}</strong><br>
                 <small class="text-muted">+${s.points || 10} Điểm Tích Cực (Uy tín)</small>
             </td>
-            <td class="text-end" style="min-width: 150px;">
+            <td class="text-end" style="white-space: nowrap;">
                 ${actionHtml}
             </td>
         `;

@@ -86,26 +86,27 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6.5px;
     background: var(--fpt-primary);
     color: #FFFFFF !important;
-    font-weight: 650;
-    font-size: 13.5px;
-    padding: 8px 18px;
-    border-radius: 12px;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 6.5px 14px;
+    border-radius: 9px;
     border: 1px solid rgba(194, 65, 12, 0.35);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 8px rgba(234, 88, 12, 0.22);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(234, 88, 12, 0.2);
     cursor: pointer;
     text-decoration: none;
     transition: all 0.18s var(--fpt-ease);
     user-select: none;
+    line-height: 1.35;
 }
 
 .btn-fpt-primary:hover {
     background: var(--fpt-primary-hover);
     color: #FFFFFF !important;
     transform: translateY(-1px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(234, 88, 12, 0.3);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 5px 14px rgba(234, 88, 12, 0.28);
 }
 
 .btn-fpt-primary:active {
@@ -119,19 +120,20 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6.5px;
     background: var(--fpt-slate-card);
     color: var(--fpt-text-main) !important;
     font-weight: 600;
-    font-size: 13.5px;
-    padding: 8px 16px;
-    border-radius: 12px;
+    font-size: 12.5px;
+    padding: 6.5px 14px;
+    border-radius: 9px;
     border: 1px solid var(--fpt-slate-border-focus);
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
     cursor: pointer;
     text-decoration: none;
     transition: all 0.18s var(--fpt-ease);
     user-select: none;
+    line-height: 1.35;
 }
 
 .btn-fpt-secondary:hover {
@@ -139,7 +141,7 @@ body {
     border-color: #94A3B8;
     color: var(--fpt-text-main) !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.06);
 }
 
 .btn-fpt-secondary:active {
@@ -153,25 +155,26 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6.5px;
     background: var(--fpt-primary-soft);
     color: var(--fpt-primary) !important;
-    font-weight: 650;
-    font-size: 13px;
-    padding: 8px 16px;
-    border-radius: 12px;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 6.5px 14px;
+    border-radius: 9px;
     border: 1.5px solid var(--fpt-primary);
     cursor: pointer;
     text-decoration: none;
     transition: all 0.18s var(--fpt-ease);
     user-select: none;
+    line-height: 1.35;
 }
 
 .btn-fpt-outline-orange:hover {
     background: var(--fpt-primary);
     color: #FFFFFF !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.25);
+    box-shadow: 0 3px 10px rgba(234, 88, 12, 0.22);
 }
 
 .btn-fpt-outline-orange:active {
@@ -183,26 +186,27 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6.5px;
     background: var(--fpt-emerald);
     color: #FFFFFF !important;
-    font-weight: 650;
-    font-size: 13px;
-    padding: 8px 16px;
-    border-radius: 12px;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 6.5px 14px;
+    border-radius: 9px;
     border: 1px solid rgba(4, 120, 87, 0.35);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(5, 150, 105, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 5px rgba(5, 150, 105, 0.18);
     cursor: pointer;
     text-decoration: none;
     transition: all 0.18s var(--fpt-ease);
     user-select: none;
+    line-height: 1.35;
 }
 
 .btn-fpt-emerald:hover {
     background: var(--fpt-emerald-hover);
     color: #FFFFFF !important;
     transform: translateY(-1px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 14px rgba(5, 150, 105, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 12px rgba(5, 150, 105, 0.24);
 }
 
 .btn-fpt-emerald:active {
@@ -215,26 +219,27 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6.5px;
     background: var(--fpt-sky);
     color: #FFFFFF !important;
-    font-weight: 650;
-    font-size: 13px;
-    padding: 8px 16px;
-    border-radius: 12px;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 6.5px 14px;
+    border-radius: 9px;
     border: 1px solid rgba(3, 105, 161, 0.35);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 6px rgba(2, 132, 199, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(2, 132, 199, 0.18);
     cursor: pointer;
     text-decoration: none;
     transition: all 0.18s var(--fpt-ease);
     user-select: none;
+    line-height: 1.35;
 }
 
 .btn-fpt-sky:hover {
     background: var(--fpt-sky-hover);
     color: #FFFFFF !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    box-shadow: 0 3px 10px rgba(2, 132, 199, 0.22);
 }
 
 .btn-fpt-sky:active {
@@ -246,17 +251,18 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
     background: transparent;
     color: var(--fpt-text-muted);
     font-weight: 600;
-    font-size: 13px;
-    padding: 6px 12px;
-    border-radius: 10px;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 8px;
     border: 1px solid transparent;
     cursor: pointer;
     text-decoration: none;
     transition: all 0.18s var(--fpt-ease);
+    line-height: 1.35;
 }
 
 .btn-fpt-ghost:hover {
@@ -270,17 +276,33 @@ body {
 
 /* Sizing Modifiers */
 .btn-fpt-sm {
-    padding: 6px 12px;
-    font-size: 12px;
-    border-radius: 9px;
-    gap: 6px;
+    padding: 4.5px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    border-radius: 7px;
+    gap: 5px;
+    line-height: 1.3;
+    white-space: nowrap;
 }
 
 .btn-fpt-lg {
-    padding: 12px 24px;
-    font-size: 15px;
-    border-radius: 14px;
-    gap: 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 11px;
+    gap: 8px;
+}
+
+/* Table Action Buttons: Always compact & inline-flex, never bloated */
+table td .btn-fpt-primary,
+table td .btn-fpt-secondary,
+table td .btn-fpt-emerald,
+table td .btn-fpt-sky,
+table td .btn-fpt-outline-orange,
+table td .btn-fpt-sm {
+    display: inline-flex;
+    width: auto;
+    white-space: nowrap;
+    margin-bottom: 0;
 }
 
 /* =========================================================
