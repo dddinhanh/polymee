@@ -603,16 +603,21 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         background: rgba(255, 255, 255, 0.94) !important;
         border: 1px solid var(--ux-line);
         border-radius: 20px;
-        padding: 12px 20px;
+        padding: 10px 20px;
         margin-bottom: 16px;
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap !important;
         align-items: center;
         justify-content: space-between;
         gap: 14px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+    .dashboard-topbar::-webkit-scrollbar {
+        display: none;
     }
 
     [data-bs-theme="dark"] .dashboard-topbar {
@@ -632,6 +637,192 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         border: 1px solid var(--ux-line-2) !important;
         box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35) !important;
         border-radius: 16px;
+    }
+
+    /* Topbar Controls: AI Pill, Notification Bell & Badges */
+    .btn-topbar-ai {
+        height: 36px;
+        padding: 0 14px;
+        border-radius: 999px;
+        background: rgba(2, 132, 199, 0.08);
+        border: 1px solid rgba(2, 132, 199, 0.22);
+        color: #0284C7;
+        font-size: 12.5px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s var(--ux-ease);
+        white-space: nowrap;
+    }
+    .btn-topbar-ai:hover {
+        background: rgba(2, 132, 199, 0.16);
+        border-color: rgba(2, 132, 199, 0.4);
+        color: #0369A1;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.18);
+    }
+    .btn-topbar-ai i {
+        color: #F59E0B;
+        font-size: 13.5px;
+        transition: transform 0.3s var(--ux-spring);
+    }
+    .btn-topbar-ai:hover i {
+        transform: rotate(15deg) scale(1.15);
+    }
+
+    .btn-topbar-bell {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #FAFAFC;
+        border: 1px solid var(--ux-line);
+        color: #48484A;
+        cursor: pointer;
+        transition: all 0.2s var(--ux-ease);
+        padding: 0;
+        flex-shrink: 0;
+        position: relative;
+    }
+    .btn-topbar-bell:hover {
+        background: #F4F4F6;
+        color: #1D1D1F;
+        border-color: rgba(0, 0, 0, 0.16);
+        transform: translateY(-1px);
+    }
+    .btn-topbar-bell i {
+        font-size: 15px;
+        color: #48484A;
+    }
+    .btn-topbar-bell:hover i {
+        color: #0284C7;
+    }
+    .topbar-bell-badge {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        min-width: 17px;
+        height: 17px;
+        padding: 0 4.5px;
+        border-radius: 999px;
+        background: #0284C7;
+        color: #FFFFFF;
+        font-size: 9.5px;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        box-shadow: 0 0 0 2px var(--ux-surface, #FFFFFF);
+        line-height: 1;
+        pointer-events: none;
+    }
+
+    /* Bento Google Drive Proof Pill (Linear / Apple HIG Standard) */
+    .btn-drive-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 28px;
+        padding: 0 11px;
+        border-radius: 999px;
+        background: #F0F9FF;
+        border: 1px solid #BAE6FD;
+        color: #0284C7 !important;
+        font-size: 11.5px;
+        font-weight: 650;
+        text-decoration: none !important;
+        transition: all 0.2s var(--ux-ease);
+        box-shadow: 0 1px 2px rgba(2, 132, 199, 0.08);
+        white-space: nowrap;
+    }
+    .btn-drive-pill:hover {
+        background: #E0F2FE;
+        border-color: #7DD3FC;
+        color: #0369A1 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(2, 132, 199, 0.16);
+    }
+    .btn-drive-pill i.fa-google-drive {
+        font-size: 13.5px;
+        color: #0284C7;
+    }
+    .btn-drive-pill i.bi-arrow-up-right {
+        font-size: 10px;
+        opacity: 0.75;
+        transition: transform 0.2s;
+    }
+    .btn-drive-pill:hover i.bi-arrow-up-right {
+        transform: translate(1px, -1px);
+    }
+
+    /* Proof Verified Post-Production Badge */
+    .proof-verified-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4.5px;
+        height: 23px;
+        padding: 0 8.5px;
+        border-radius: 999px;
+        background: #ECFDF5;
+        border: 1px solid #A7F3D0;
+        color: #059669;
+        font-size: 10.5px;
+        font-weight: 600;
+        white-space: nowrap;
+        line-height: 1;
+    }
+    .proof-verified-pill i {
+        font-size: 11.5px;
+        color: #10B981;
+    }
+
+    /* Machined Button Disabled State - Fix White-on-White Ghost Button Bug */
+    .btn-fpt-primary:disabled,
+    .btn-fpt-primary.disabled,
+    .btn-fpt-emerald:disabled,
+    .btn-fpt-emerald.disabled {
+        background: #F3F4F6 !important;
+        border: 1px solid #E5E7EB !important;
+        color: #9CA3AF !important;
+        box-shadow: none !important;
+        cursor: not-allowed !important;
+        pointer-events: none !important;
+        opacity: 0.75 !important;
+        transform: none !important;
+    }
+    .btn-fpt-primary:disabled i,
+    .btn-fpt-emerald:disabled i {
+        color: #9CA3AF !important;
+    }
+
+    [data-bs-theme="dark"] .btn-topbar-ai {
+        background: rgba(2, 132, 199, 0.18);
+        border-color: rgba(2, 132, 199, 0.35);
+        color: #38BDF8;
+    }
+    [data-bs-theme="dark"] .btn-topbar-bell {
+        background: #2C2C2E;
+        border-color: rgba(255, 255, 255, 0.12);
+        color: #E5E5EA;
+    }
+    [data-bs-theme="dark"] .btn-topbar-bell:hover {
+        background: #3A3A3C;
+        color: #FFFFFF;
+    }
+    [data-bs-theme="dark"] .btn-topbar-bell i {
+        color: #E5E5EA;
+    }
+    [data-bs-theme="dark"] .topbar-bell-badge {
+        box-shadow: 0 0 0 2px #1C1C1E;
+    }
+    [data-bs-theme="dark"] .btn-drive-pill {
+        background: rgba(2, 132, 199, 0.15);
+        border-color: rgba(2, 132, 199, 0.35);
+        color: #38BDF8 !important;
+    }
+    [data-bs-theme="dark"] .proof-verified-pill {
+        background: rgba(16, 185, 129, 0.15);
+        border-color: rgba(16, 185, 129, 0.3);
+        color: #34D399;
     }
 
     /* Modal Backdrop & Dialog Must ALWAYS Float Above Topbar (Zero Collision) */
@@ -2233,35 +2424,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
             </div>
 
-            <!-- Center: View Switcher (Month | Week | Day) & Month Navigator -->
-            <div class="d-flex align-items-center gap-2">
-                <div class="view-switcher-group btn-group shadow-xs" id="calendarViewSwitcher" role="group">
-                    <button type="button" class="btn active" id="btnViewMonth" onclick="changeCalendarView('month')">
-                        <i class="bi bi-grid-3x3 me-1"></i> Tháng
-                    </button>
-                    <button type="button" class="btn" id="btnViewWeek" onclick="changeCalendarView('week')">
-                        <i class="bi bi-calendar-week me-1"></i> Tuần
-                    </button>
-                    <button type="button" class="btn" id="btnViewDay" onclick="changeCalendarView('day')">
-                        <i class="bi bi-calendar-day me-1"></i> Ngày
-                    </button>
-                </div>
-
-                <div class="btn-group btn-group-sm" id="calendarMonthNav">
-                    <button class="btn-fpt-secondary btn-fpt-sm" type="button" onclick="navigateCalendar(-1)" title="Tháng trước">
-                        <i class="bi bi-chevron-left"></i>
-                    </button>
-                    <button class="btn-fpt-secondary btn-fpt-sm fw-bold px-3 num-tabular" type="button" id="currentCalendarHeader" onclick="goToday()">
-                        Tháng 11/2026
-                    </button>
-                    <button class="btn-fpt-secondary btn-fpt-sm" type="button" onclick="navigateCalendar(1)" title="Tháng sau">
-                        <i class="bi bi-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Right: Action Controls (Clean, Minimalist Apple Design) -->
-            <div class="d-flex align-items-center gap-2">
+            <!-- Right: Action Controls (Apple macOS Menubar Standard - AI & Notifications On Top) -->
+            <div class="d-flex align-items-center gap-2 ms-auto flex-nowrap flex-shrink-0">
                 <!-- ROLE SWITCHER DROPDOWN (1-Click Chuyển Đổi Nhanh Tài Khoản Demo Cho Hội Đồng Chấm Thi) -->
                 <div class="dropdown">
                     <button class="btn btn-fpt-secondary btn-fpt-sm dropdown-toggle d-flex align-items-center gap-1.5 shadow-xs" type="button" id="topbarRoleSwitcher" data-bs-toggle="dropdown" aria-expanded="false" title="Chuyển đổi nhanh vai trò tài khoản demo (1-Click)">
@@ -2342,13 +2506,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                 <!-- NÚT THÔNG BÁO HỆ THỐNG (Apple HIG Bell Notification Center - Nền Xanh Dịu Mắt #0284C7) -->
                 <div class="dropdown">
-                    <button class="btn btn-fpt-secondary btn-fpt-sm position-relative d-flex align-items-center justify-content-center shadow-xs" type="button" id="topbarNotificationBtn" data-bs-toggle="dropdown" aria-expanded="false" title="Trung tâm thông báo hệ thống" style="width: 36px; height: 32px; padding: 0;">
-                        <i class="bi bi-bell-fill" style="color: #0284C7; font-size: 14px;"></i>
-                        <span class="position-absolute badge rounded-pill" style="top: -4px; right: -4px; background: #0284C7; color: #FFFFFF; font-size: 9px; padding: 2px 4.5px; font-weight: 800; border: none; box-shadow: 0 0 0 2px var(--ux-surface, #FFFFFF); line-height: 1;">
+                    <button class="btn-topbar-bell position-relative d-inline-flex align-items-center justify-content-center shadow-2xs" type="button" id="topbarNotificationBtn" data-bs-toggle="dropdown" aria-expanded="false" title="Trung tâm thông báo hệ thống">
+                        <i class="bi bi-bell-fill"></i>
+                        <span class="topbar-bell-badge">
                             <?= count($accountingList ?? []) ?>
                         </span>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 p-2" aria-labelledby="topbarNotificationBtn" style="min-width: 310px; border-radius: 16px; background: var(--ux-surface); border: 1px solid var(--ux-line) !important; z-index: 1060;">
+                    <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 p-2" aria-labelledby="topbarNotificationBtn" style="min-width: 320px; border-radius: 16px; background: var(--ux-surface); border: 1px solid var(--ux-line) !important; z-index: 1060;">
                         <div class="px-2.5 py-1.5 border-bottom d-flex align-items-center justify-content-between mb-1" style="border-color: var(--ux-line) !important;">
                             <div class="fw-bold d-flex align-items-center gap-1.5" style="font-size: 12px; color: var(--ux-ink);">
                                 <i class="bi bi-bell-fill" style="color: #0284C7;"></i> Trung Tâm Thông Báo
@@ -2387,22 +2551,23 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                 </div>
+                <!-- TRỢ LÝ AI: Đặt Lên Trên Nổi Bật -->
+                <button type="button" class="btn-topbar-ai d-inline-flex align-items-center gap-1.5 shadow-2xs" onclick="toggleAiModal()" title="Trợ lý AI PolyMee (Khảo sát, tra cứu & tạo ca tự động)">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Trợ lý AI</span>
+                </button>
                 <?php if (!empty($perms['canCreateShift'])): ?>
-                <button type="button" class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
-                    <i class="bi bi-calendar-plus-fill me-1"></i>
-                    <span>Đặt Lịch Ca</span>
+                <button type="button" class="btn-fpt-primary btn-fpt-sm d-inline-flex align-items-center gap-1.5 shadow-xs" onclick="openCreateShiftModal()" style="white-space: nowrap;">
+                    <i class="bi bi-calendar-plus-fill"></i>
+                    <span class="d-none d-sm-inline">Đặt Lịch Ca</span>
                 </button>
                 <?php endif; ?>
                 <?php if (!empty($perms['canCreateNote'])): ?>
-                <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="openAddNoteModal()" title="Thêm ghi chú / lịch hẹn toàn trường">
-                    <i class="fa-solid fa-note-sticky text-warning me-1"></i>
-                    <span>Ghi Chú</span>
+                <button type="button" class="btn-fpt-secondary btn-fpt-sm d-inline-flex align-items-center gap-1.5" onclick="openAddNoteModal()" title="Thêm ghi chú / lịch hẹn toàn trường" style="white-space: nowrap;">
+                    <i class="fa-solid fa-note-sticky text-warning"></i>
+                    <span class="d-none d-sm-inline">Ghi Chú</span>
                 </button>
                 <?php endif; ?>
-                <button type="button" class="btn-fpt-ghost btn-fpt-sm" onclick="toggleAiModal()" title="Trợ lý AI PolyMee">
-                    <i class="fa-solid fa-wand-magic-sparkles text-warning me-1"></i>
-                    <span>Trợ lý AI</span>
-                </button>
             </div>
         </header>
 
@@ -2459,18 +2624,37 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;" id="calendarViewHeading">Lịch Tổng Quan Theo Tháng</h2>
                         <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;" id="calendarViewSub">Nhấp vào ô ngày bất kỳ để vào thẳng Lịch Ngày xem chi tiết các ca trực</p>
                     </div>
-                    <div class="d-flex align-items-center gap-3" style="font-size: 12px; font-weight: 600; color: #48484A;">
-                        <div class="d-flex align-items-center gap-1.5">
-                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-accent);"></span>
-                            <span>Ca đang tuyển</span>
+
+                    <div class="d-flex align-items-center gap-2.5 flex-wrap">
+                        <!-- VIEW SWITCHER: THÁNG / TUẦN / NGÀY -->
+                        <div class="view-switcher-group btn-group shadow-xs" id="calendarViewSwitcher" role="group">
+                            <button type="button" class="btn active" id="btnViewMonth" onclick="changeCalendarView('month')"><i class="bi bi-grid-3x3 me-1"></i> Tháng</button>
+                            <button type="button" class="btn" id="btnViewWeek" onclick="changeCalendarView('week')"><i class="bi bi-calendar-week me-1"></i> Tuần</button>
+                            <button type="button" class="btn" id="btnViewDay" onclick="changeCalendarView('day')"><i class="bi bi-calendar-day me-1"></i> Ngày</button>
                         </div>
-                        <div class="d-flex align-items-center gap-1.5">
-                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-mint);"></span>
-                            <span>Ca của tôi</span>
+
+                        <!-- ĐIỀU HƯỚNG THÁNG -->
+                        <div class="btn-group btn-group-sm" id="calendarMonthNav">
+                            <button class="btn-fpt-secondary btn-fpt-sm" type="button" onclick="navigateCalendar(-1)" title="Tháng trước"><i class="bi bi-chevron-left"></i></button>
+                            <button class="btn-fpt-secondary btn-fpt-sm fw-bold px-3 num-tabular" type="button" id="currentCalendarHeader" onclick="goToday()">Tháng 11/2026</button>
+                            <button class="btn-fpt-secondary btn-fpt-sm" type="button" onclick="navigateCalendar(1)" title="Tháng sau"><i class="bi bi-chevron-right"></i></button>
                         </div>
-                        <div class="d-flex align-items-center gap-1.5">
-                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-danger);"></span>
-                            <span>Đã đủ CTV</span>
+
+                        <div class="vr mx-1 d-none d-lg-block" style="height: 20px; opacity: 0.2;"></div>
+
+                        <div class="d-flex align-items-center gap-2.5" style="font-size: 12px; font-weight: 600; color: #48484A;">
+                            <div class="d-flex align-items-center gap-1.5">
+                                <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-accent);"></span>
+                                <span>Đang tuyển</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-1.5">
+                                <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-mint);"></span>
+                                <span>Ca của tôi</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-1.5">
+                                <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:var(--ux-danger);"></span>
+                                <span>Đủ CTV</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3086,13 +3270,16 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <td>
                                     <?php if ($hasProof): ?>
                                         <?php if ($isDriveLink): ?>
-                                        <div>
-                                            <a href="<?= htmlspecialchars($subProofUrl) ?>" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill py-0.5 px-2 fw-semibold" style="font-size:11px;">
-                                                <i class="fa-brands fa-google-drive me-1 text-primary"></i> Mở Drive Media
+                                        <div class="d-inline-flex flex-column gap-1 align-items-start">
+                                            <a href="<?= htmlspecialchars($subProofUrl) ?>" target="_blank" class="btn-drive-pill" title="Mở thư mục Google Drive bộ ảnh sự kiện">
+                                                <i class="fa-brands fa-google-drive"></i>
+                                                <span>Mở Drive Media</span>
+                                                <i class="bi bi-arrow-up-right"></i>
                                             </a>
-                                            <div class="text-success fw-semibold mt-0.5" style="font-size:10.5px;">
-                                                <i class="bi bi-check-circle-fill me-1"></i>Đã gắn Logo & Sáng
-                                            </div>
+                                            <span class="proof-verified-pill">
+                                                <i class="bi bi-patch-check-fill"></i>
+                                                <span>Đã gắn Logo & Chỉnh sáng</span>
+                                            </span>
                                         </div>
                                         <?php else: ?>
                                         <div>
@@ -3355,9 +3542,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                         <?php endif; ?>
                                     <?php endif; ?>
 
-                                    <!-- Nút Trình Trường Ký: CHỈ Cán bộ Hành chính & Quản trị viên (CTV TUYỆT ĐỐI KHÔNG CÓ) -->
-                                    <?php if (!empty($perms['canSubmitSchoolSigning']) && ($acc['school_status'] ?? '') !== 'Signed_Paid'): ?>
-                                    <button type="button" class="btn btn-sm btn-fpt-primary text-truncate" <?= $isReadyToExport ? '' : 'disabled title="Cần nghiệm thu đầy đủ trước khi trình ký"' ?> onclick="submitToSchool(<?= $acc['assignment_id'] ?>)" style="font-size: 11.5px; padding: 5px 8px; border-radius: 8px;">
+                                    <!-- Nút Trình Trường Ký: CHỈ Cán bộ Hành chính & Quản trị viên khi ca ĐÃ ĐƯỢC NGHIỆM THU (CTV TUYỆT ĐỐI KHÔNG CÓ) -->
+                                    <?php if ($isVerified && !empty($perms['canSubmitSchoolSigning']) && ($acc['school_status'] ?? '') !== 'Signed_Paid'): ?>
+                                    <button type="button" class="btn btn-sm btn-fpt-primary text-truncate" <?= $isReadyToExport ? '' : 'disabled title="Cần hoàn thiện đủ CCCD & STK trước khi trình ký"' ?> onclick="submitToSchool(<?= $acc['assignment_id'] ?>)" style="font-size: 11.5px; padding: 5px 8px; border-radius: 8px;">
                                         <i class="bi bi-send-check me-1"></i> Trình Trường Ký
                                     </button>
                                     <?php endif; ?>
@@ -5990,13 +6177,16 @@ function renderMyShiftsTable() {
             const isDrive = s.my_proof_image_url.includes('drive.google.com') || s.my_proof_image_url.includes('docs.google.com');
             if (isDrive) {
                 proofHtml = `
-                    <div>
-                        <a href="${s.my_proof_image_url}" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill py-0.5 px-2 fw-semibold" style="font-size: 11px;">
-                            <i class="fa-brands fa-google-drive me-1 text-primary"></i> Link Drive Media
+                    <div class="d-inline-flex flex-column gap-1 align-items-start">
+                        <a href="${s.my_proof_image_url}" target="_blank" class="btn-drive-pill" title="Mở thư mục Google Drive bộ ảnh sự kiện">
+                            <i class="fa-brands fa-google-drive"></i>
+                            <span>Mở Drive Media</span>
+                            <i class="bi bi-arrow-up-right"></i>
                         </a>
-                        <small class="text-success d-block fw-semibold mt-0.5" style="font-size: 10.5px;">
-                            <i class="bi bi-check-circle-fill me-1"></i>Đã kèm Logo & Chỉnh sáng
-                        </small>
+                        <span class="proof-verified-pill">
+                            <i class="bi bi-patch-check-fill"></i>
+                            <span>Đã gắn Logo & Chỉnh sáng</span>
+                        </span>
                     </div>
                 `;
             } else {
@@ -6698,6 +6888,81 @@ function quickAskAi(prompt) {
     sendPromptToAi(prompt);
 }
 
+/**
+ * Render Markdown & Clean Typography cho Trợ Lý AI PolyMee
+ * Chuyển đổi ký hiệu raw markdown (**bold**, *italic*, • list, - sublist, -> arrow)
+ * thành cấu trúc HTML sắc nét, tinh gọn theo chuẩn Bento UI Apple HIG
+ */
+function renderAiMarkdown(rawText) {
+    if (!rawText) return '';
+
+    const lines = rawText.split('\n');
+    let out = [];
+    let inList = false;
+
+    lines.forEach(line => {
+        let trimmed = line.trim();
+        if (!trimmed) {
+            if (inList) { out.push('</div>'); inList = false; }
+            out.push('<div class="my-1.5"></div>');
+            return;
+        }
+
+        // 1. Bold (**text**)
+        let formatted = trimmed.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: #0F172A; font-weight: 700;">$1</strong>');
+        // 2. Italic (*text*)
+        formatted = formatted.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="color: #475569;">$1</em>');
+        // 3. Arrow (-> hoặc -->)
+        formatted = formatted.replace(/(?:-->|->)/g, '<span style="color: #0284C7; font-weight: 800; margin: 0 4px;">→</span>');
+
+        // 4. Tiêu đề / Header nổi bật (bắt đầu bằng emoji hoặc dạng **TIÊU ĐỀ:**)
+        if (/^[💳📌🎯📋🔍✨🔔📊⚡]/.test(trimmed) || (trimmed.startsWith('**') && trimmed.endsWith('**') && trimmed.length < 60)) {
+            if (inList) { out.push('</div>'); inList = false; }
+            out.push(`
+                <div class="p-2 rounded-3 mb-2 mt-1 border" style="background: rgba(2, 132, 199, 0.05); border-color: rgba(2, 132, 199, 0.16) !important;">
+                    <div style="font-size: 13px; font-weight: 750; color: #0284C7; letter-spacing: -0.01em;">${formatted}</div>
+                </div>
+            `);
+            return;
+        }
+
+        // 5. Bullet chính (bắt đầu bằng • hoặc *)
+        if (/^[•*]\s+/.test(trimmed)) {
+            let itemContent = formatted.replace(/^[•*]\s+/, '');
+            if (!inList) {
+                out.push('<div class="d-flex flex-column gap-2 my-1">');
+                inList = true;
+            }
+            out.push(`
+                <div class="d-flex align-items-start gap-2">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 17px; height: 17px; background: #E0F2FE; color: #0284C7; font-size: 8.5px; font-weight: 800; margin-top: 1px;">•</span>
+                    <div style="font-size: 13px; line-height: 1.5; color: #1E293B; flex-grow: 1;">${itemContent}</div>
+                </div>
+            `);
+            return;
+        }
+
+        // 6. Sub-bullet phụ (bắt đầu bằng -)
+        if (/^-\s+/.test(trimmed)) {
+            let subContent = formatted.replace(/^-\s+/, '');
+            out.push(`
+                <div class="d-flex align-items-start gap-2 ms-3.5 my-0.5">
+                    <i class="bi bi-arrow-return-right text-muted flex-shrink-0" style="font-size: 11px; margin-top: 2px;"></i>
+                    <div style="font-size: 12.5px; line-height: 1.45; color: #334155;">${subContent}</div>
+                </div>
+            `);
+            return;
+        }
+
+        // 7. Dòng thông thường
+        if (inList) { out.push('</div>'); inList = false; }
+        out.push(`<div style="font-size: 13px; line-height: 1.55; color: #1E293B;">${formatted}</div>`);
+    });
+
+    if (inList) { out.push('</div>'); }
+    return out.join('');
+}
+
 async function sendPromptToAi(message) {
     const history = document.getElementById('aiChatHistory');
     const userMsg = document.createElement('div');
@@ -6709,7 +6974,7 @@ async function sendPromptToAi(message) {
     const loadingMsg = document.createElement('div');
     loadingMsg.className = 'd-flex gap-2';
     loadingMsg.id = 'aiLoadingBubble';
-    loadingMsg.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#FFFFFF; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border text-muted" style="font-size:13px;"><i class="fa-solid fa-spinner fa-spin me-1"></i> Trợ lý AI đang phân tích dữ liệu...</div>`;
+    loadingMsg.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; min-width:34px; flex:none; background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%); color:#FFFFFF;"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:14px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border text-muted" style="font-size:13px;"><i class="fa-solid fa-spinner fa-spin me-1"></i> Trợ lý AI đang phân tích dữ liệu...</div>`;
     history.appendChild(loadingMsg);
     history.scrollTop = history.scrollHeight;
 
@@ -6723,10 +6988,10 @@ async function sendPromptToAi(message) {
         const loader = document.getElementById('aiLoadingBubble');
         if (loader) loader.remove();
 
-        const replyHtml = data.reply_html || (data.reply ? data.reply.replace(/\n/g, '<br>') : 'PolyMee AI đã xử lý yêu cầu của bạn.');
+        const replyHtml = data.reply_html || (data.reply ? renderAiMarkdown(data.reply) : 'PolyMee AI đã xử lý yêu cầu của bạn.');
         const aiReply = document.createElement('div');
         aiReply.className = 'd-flex gap-2';
-        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px; flex:none; background:#F59E0B; color:#FFFFFF; box-shadow:0 2px 6px rgba(245,158,11,0.3);"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:15px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13.5px; max-width:85%; line-height:1.5;">${replyHtml}</div>`;
+        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; min-width:34px; flex:none; background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%); color:#FFFFFF;"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:14px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13px; max-width:88%; line-height:1.55;">${replyHtml}</div>`;
         history.appendChild(aiReply);
         history.scrollTop = history.scrollHeight;
 
