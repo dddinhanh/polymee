@@ -6974,7 +6974,7 @@ function renderAiMarkdown(rawText) {
         let trimmed = line.trim();
         if (!trimmed) {
             if (inList) { out.push('</div>'); inList = false; }
-            out.push('<div class="my-1.5"></div>');
+            out.push('<div class="my-2"></div>');
             return;
         }
 
@@ -6985,48 +6985,61 @@ function renderAiMarkdown(rawText) {
         // 3. Arrow (-> hoặc -->)
         formatted = formatted.replace(/(?:-->|->)/g, '<span style="color: #0284C7; font-weight: 800; margin: 0 4px;">→</span>');
 
-        // 4. Tiêu đề / Header nổi bật (bắt đầu bằng emoji hoặc dạng **TIÊU ĐỀ:**)
-        if (/^[💳📌🎯📋🔍✨🔔📊⚡]/.test(trimmed) || (trimmed.startsWith('**') && trimmed.endsWith('**') && trimmed.length < 60)) {
+        // A. Tiêu đề mục (bắt đầu bằng emoji như 🌟, 💳, 🎯, 📊, ⚡ hoặc kết thúc bằng dấu hai chấm)
+        if (/^[🌟💳⚡🎯📋🔍✨🔔📊].*[:：]$/.test(trimmed) || (trimmed.startsWith('**') && trimmed.endsWith(':**') && trimmed.length < 80)) {
             if (inList) { out.push('</div>'); inList = false; }
             out.push(`
-                <div class="p-2 rounded-3 mb-2 mt-1 border" style="background: rgba(2, 132, 199, 0.05); border-color: rgba(2, 132, 199, 0.16) !important;">
-                    <div style="font-size: 13px; font-weight: 750; color: #0284C7; letter-spacing: -0.01em;">${formatted}</div>
+                <div class="fw-bold d-flex align-items-center gap-2 mt-1 mb-3 text-dark" style="font-size: 14.5px; letter-spacing: -0.01em;">
+                    ${formatted}
                 </div>
             `);
             return;
         }
 
-        // 5. Bullet chính (bắt đầu bằng • hoặc *)
+        // B. Khung Ghi Chú / Quy Chế / Lưu Ý Callout Box (Có khoảng đệm rộng rãi p-3.5 và cách xa các phần khác my-3)
+        if (/^[📌💡ℹ️⚠️👉]/.test(trimmed)) {
+            if (inList) { out.push('</div>'); inList = false; }
+            out.push(`
+                <div class="rounded-3 my-3 p-3.5 border" style="background: rgba(2, 132, 199, 0.04); border-color: rgba(2, 132, 199, 0.18) !important;">
+                    <div style="font-size: 12.5px; line-height: 1.65; color: #334155;">
+                        ${formatted}
+                    </div>
+                </div>
+            `);
+            return;
+        }
+
+        // C. Bullet chính (bắt đầu bằng • hoặc *)
         if (/^[•*]\s+/.test(trimmed)) {
             let itemContent = formatted.replace(/^[•*]\s+/, '');
             if (!inList) {
-                out.push('<div class="d-flex flex-column gap-2 my-1">');
+                out.push('<div class="d-flex flex-column gap-2.5 my-2.5">');
                 inList = true;
             }
             out.push(`
-                <div class="d-flex align-items-start gap-2">
-                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 17px; height: 17px; background: #E0F2FE; color: #0284C7; font-size: 8.5px; font-weight: 800; margin-top: 1px;">•</span>
-                    <div style="font-size: 13px; line-height: 1.5; color: #1E293B; flex-grow: 1;">${itemContent}</div>
+                <div class="d-flex align-items-start gap-2.5" style="padding: 1px 0;">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 19px; height: 19px; background: #E0F2FE; color: #0284C7; font-size: 9px; font-weight: 800; margin-top: 2px;">•</span>
+                    <div style="font-size: 13px; line-height: 1.6; color: #1E293B; flex-grow: 1;">${itemContent}</div>
                 </div>
             `);
             return;
         }
 
-        // 6. Sub-bullet phụ (bắt đầu bằng -)
+        // D. Sub-bullet phụ (bắt đầu bằng -)
         if (/^-\s+/.test(trimmed)) {
             let subContent = formatted.replace(/^-\s+/, '');
             out.push(`
-                <div class="d-flex align-items-start gap-2 ms-3.5 my-0.5">
-                    <i class="bi bi-arrow-return-right text-muted flex-shrink-0" style="font-size: 11px; margin-top: 2px;"></i>
-                    <div style="font-size: 12.5px; line-height: 1.45; color: #334155;">${subContent}</div>
+                <div class="d-flex align-items-start gap-2 ms-4 my-1">
+                    <i class="bi bi-arrow-return-right text-muted flex-shrink-0" style="font-size: 11px; margin-top: 3px;"></i>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #475569;">${subContent}</div>
                 </div>
             `);
             return;
         }
 
-        // 7. Dòng thông thường
+        // E. Dòng thông thường
         if (inList) { out.push('</div>'); inList = false; }
-        out.push(`<div style="font-size: 13px; line-height: 1.55; color: #1E293B;">${formatted}</div>`);
+        out.push(`<div class="my-1.5" style="font-size: 13px; line-height: 1.6; color: #1E293B;">${formatted}</div>`);
     });
 
     if (inList) { out.push('</div>'); }
@@ -7060,8 +7073,8 @@ async function sendPromptToAi(message) {
 
         const replyHtml = data.reply_html || (data.reply ? renderAiMarkdown(data.reply) : 'PolyMee AI đã xử lý yêu cầu của bạn.');
         const aiReply = document.createElement('div');
-        aiReply.className = 'd-flex gap-2';
-        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; min-width:34px; flex:none; background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%); color:#FFFFFF;"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:14px; line-height:1;"></i></div><div class="bg-white p-3.5 rounded-4 shadow-xs border flex-grow-1" style="font-size:13px; max-width:94%; line-height:1.55;">${replyHtml}</div>`;
+        aiReply.className = 'd-flex gap-2.5';
+        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; min-width:34px; flex:none; background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%); color:#FFFFFF;"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:14px; line-height:1;"></i></div><div class="bg-white p-4 rounded-4 shadow-xs border flex-grow-1" style="font-size:13px; max-width:92%; line-height:1.6; box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;">${replyHtml}</div>`;
         history.appendChild(aiReply);
         history.scrollTop = history.scrollHeight;
 
