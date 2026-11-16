@@ -749,7 +749,7 @@ class AiAssistantController extends BaseController
     }
 
     /**
-     * Phản hồi mặc định có phân quyền theo Role
+     * Phản hồi mặc định có phân quyền theo Role (Chuẩn Bento AI Suggestion Cards)
      */
     private function buildRoleBasedDefaultResponse(array $user, array $perms): array
     {
@@ -760,14 +760,60 @@ class AiAssistantController extends BaseController
         $defaultHtml = '<div class="ai-card p-3.5 rounded-4 bg-light-subtle border mb-2 w-100">';
         $defaultHtml .= '<div class="fw-bold text-dark mb-1.5 d-flex align-items-center gap-2" style="font-size: 14.5px;"><i class="fa-solid fa-wand-magic-sparkles text-warning fs-6"></i> Chào ' . $name . ' (' . $roleName . ')!</div>';
         $defaultHtml .= '<p class="text-secondary mb-3" style="font-size: 13px; line-height: 1.5;">Trợ lý AI PolyMee sẵn sàng phục vụ theo đúng phân quyền của bạn. Bạn có thể chọn nhanh nghiệp vụ bên dưới:</p>';
-        $defaultHtml .= '<div class="d-flex flex-column gap-2.5">';
+        $defaultHtml .= '<div class="d-flex flex-column gap-3 mt-2">';
 
         if (in_array($role, ['HEAD_ADMIN', 'ADMIN'], true)) {
-            $defaultHtml .= '<button type="button" class="btn btn-outline-success text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Phòng nào đang trống?\')"><i class="bi bi-building-check fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Tra cứu phòng trống:</strong> <span class="opacity-90">Xem danh sách hội trường, lab khả dụng.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-warning text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'CTV nào đang trống?\')"><i class="bi bi-people-fill fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Tra cứu CTV rảnh:</strong> <span class="opacity-90">Lọc danh sách sinh viên sẵn sàng nhận ca.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-primary text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Bạn gửi mail cho CTV đăng ký lịch ca trực sắp tới\')"><i class="bi bi-envelope-fill fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Gửi mail tự động:</strong> <span class="opacity-90">Phân phát thư mời nhận ca đến hộp thư FPT Edu.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-danger text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Đặt giúp lịch sự kiện Hội Thảo AI ngày 22/11, khách mời gồm: Ban Giám Hiệu, Thầy Hiệu Trưởng, Diễn Giả AI Google\')"><i class="bi bi-calendar-plus-fill fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Đặt lịch sự kiện VIPs:</strong> <span class="opacity-90">Tạo sự kiện, ghi nhận khách mời & tự phân rã ca.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-secondary text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Báo cáo xung đột lịch và Audit Trail\')"><i class="bi bi-shield-check fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Audit Trail:</strong> <span class="opacity-90">Kiểm tra nhật ký và thuật toán chống xung đột ca.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
+            $defaultHtml .= '
+            <div class="ai-option-card" onclick="quickAskAi(\'Phòng nào đang trống?\')">
+                <div class="ai-option-icon" style="background: #ECFDF5; color: #059669;">
+                    <i class="bi bi-building-check"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Tra cứu phòng trống</div>
+                    <div class="ai-option-desc">Xem danh sách hội trường và phòng máy Lab khả dụng.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'CTV nào đang trống?\')">
+                <div class="ai-option-icon" style="background: #FEF3C7; color: #D97706;">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Tra cứu CTV rảnh</div>
+                    <div class="ai-option-desc">Lọc danh sách sinh viên sẵn sàng nhận ca theo lịch.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Bạn gửi mail cho CTV đăng ký lịch ca trực sắp tới\')">
+                <div class="ai-option-icon" style="background: #E0F2FE; color: #0284C7;">
+                    <i class="bi bi-envelope-fill"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Gửi mail tự động</div>
+                    <div class="ai-option-desc">Phân phát thư mời nhận ca đến hộp thư FPT Edu.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Đặt giúp lịch sự kiện Hội Thảo AI ngày 22/11, khách mời gồm: Ban Giám Hiệu, Thầy Hiệu Trưởng, Diễn Giả AI Google\')">
+                <div class="ai-option-icon" style="background: #FEE2E2; color: #DC2626;">
+                    <i class="bi bi-calendar-plus-fill"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Đặt lịch sự kiện VIPs</div>
+                    <div class="ai-option-desc">Tạo sự kiện, ghi nhận khách mời & tự phân rã ca.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Báo cáo xung đột lịch và Audit Trail\')">
+                <div class="ai-option-icon" style="background: #F1F5F9; color: #475569;">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Audit Trail & Collision</div>
+                    <div class="ai-option-desc">Kiểm tra nhật ký kiểm toán và chống xung đột ca.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>';
             $plain = "Chào Quản Trị Viên **{$name}**! Tôi là **PolyMee AI Assistant**.\n\n" .
                      "Bạn có quyền thực hiện các lệnh quản trị cao cấp:\n" .
                      "1. Tra cứu phòng / hội trường trống: *'Phòng nào đang trống?'*\n" .
@@ -776,10 +822,47 @@ class AiAssistantController extends BaseController
                      "4. Đặt lịch sự kiện kèm khách mời VIPs: *'Đặt giúp lịch sự kiện [Tên], khách mời gồm [Tên khách]...'*\n" .
                      "5. Báo cáo xung đột và nhật ký: *'Kiểm tra xung đột lịch và audit trail'*";
         } elseif (in_array($role, ['LECTURER', 'STAFF'], true)) {
-            $defaultHtml .= '<button type="button" class="btn btn-outline-success text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Phòng nào đang trống?\')"><i class="bi bi-building-check fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Tra cứu phòng trống:</strong> <span class="opacity-90">Xem hội trường, phòng học bộ môn.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-warning text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Tìm CTV có kỹ năng Media quay chụp\')"><i class="bi bi-people-fill fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Tìm CTV theo kỹ năng:</strong> <span class="opacity-90">Lọc CTV Media, Lễ tân hoặc Hậu cần.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-primary text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Đặt giúp lịch sự kiện Workshop Bộ Môn CNTT ngày 22/11, khách mời gồm: Thầy Trưởng Bộ Môn\')"><i class="bi bi-calendar-plus-fill fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Đặt lịch Workshop:</strong> <span class="opacity-90">AI tạo sự kiện & phân bổ ca trực theo bộ môn.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-info text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Quy trình duyệt nghiệm thu minh chứng và xuất hợp đồng thù lao\')"><i class="bi bi-patch-check-fill fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Duyệt nghiệm thu minh chứng:</strong> <span class="opacity-90">Kiểm tra ảnh hiện trường & Drive Media.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
+            $defaultHtml .= '
+            <div class="ai-option-card" onclick="quickAskAi(\'Phòng nào đang trống?\')">
+                <div class="ai-option-icon" style="background: #ECFDF5; color: #059669;">
+                    <i class="bi bi-building-check"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Tra cứu phòng trống</div>
+                    <div class="ai-option-desc">Xem hội trường và phòng học bộ môn khả dụng.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Tìm CTV có kỹ năng Media quay chụp\')">
+                <div class="ai-option-icon" style="background: #FEF3C7; color: #D97706;">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Tìm CTV theo kỹ năng</div>
+                    <div class="ai-option-desc">Lọc sinh viên chuyên môn Media, Lễ tân hoặc Hậu cần.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Đặt giúp lịch sự kiện Workshop Bộ Môn CNTT ngày 22/11, khách mời gồm: Thầy Trưởng Bộ Môn\')">
+                <div class="ai-option-icon" style="background: #E0F2FE; color: #0284C7;">
+                    <i class="bi bi-calendar-plus-fill"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Đặt lịch Workshop bộ môn</div>
+                    <div class="ai-option-desc">AI tạo sự kiện & phân bổ ca trực theo bộ môn.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Quy trình duyệt nghiệm thu minh chứng và xuất hợp đồng thù lao\')">
+                <div class="ai-option-icon" style="background: #F0FDF4; color: #0D9488;">
+                    <i class="bi bi-patch-check-fill"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Duyệt nghiệm thu minh chứng</div>
+                    <div class="ai-option-desc">Kiểm tra ảnh hiện trường & thư mục Drive Media.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>';
             $plain = "Kính chào Thầy/Cô **{$name}**! Tôi là trợ lý AI PolyMee.\n\n" .
                      "Thầy/Cô có thể yêu cầu tôi hỗ trợ công tác tổ chức sự kiện:\n" .
                      "1. Tra cứu phòng / hội trường trống: *'Phòng nào đang trống?'*\n" .
@@ -787,20 +870,85 @@ class AiAssistantController extends BaseController
                      "3. Đặt lịch Workshop bộ môn: *'Đặt giúp lịch sự kiện [Tên], khách mời gồm...'*.\n" .
                      "4. Duyệt đầy đủ minh chứng nghiệm thu để xuất hợp đồng thù lao cho CTV.";
         } elseif ($role === 'ACCOUNTANT') {
-            $defaultHtml .= '<button type="button" class="btn btn-outline-success text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Tổng hợp quyết toán thù lao đợt này\')"><i class="bi bi-cash-stack fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Tổng hợp quyết toán:</strong> <span class="opacity-90">Thống kê thù lao các ca trực đã nghiệm thu.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-warning text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Hồ sơ CTV nào chưa có số CCCD hoặc chưa có ảnh chụp màn hình VNeID?\')"><i class="bi bi-person-exclamation fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Đối soát định danh:</strong> <span class="opacity-90">Rà soát số CCCD & ảnh chụp VNeID.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-info text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Phòng nào đang tổ chức sự kiện hôm nay?\')"><i class="bi bi-building fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Sự kiện hôm nay:</strong> <span class="opacity-90">Xem lịch tổ chức toàn trường.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
+            $defaultHtml .= '
+            <div class="ai-option-card" onclick="quickAskAi(\'Tổng hợp quyết toán thù lao đợt này\')">
+                <div class="ai-option-icon" style="background: #ECFDF5; color: #059669;">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Tổng hợp quyết toán</div>
+                    <div class="ai-option-desc">Thống kê thù lao các ca trực đã được nghiệm thu.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Hồ sơ CTV nào chưa có số CCCD hoặc chưa có ảnh chụp màn hình VNeID?\')">
+                <div class="ai-option-icon" style="background: #FEF3C7; color: #D97706;">
+                    <i class="bi bi-person-exclamation"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Đối soát định danh</div>
+                    <div class="ai-option-desc">Rà soát số CCCD 12 số & ảnh chụp màn hình VNeID.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Phòng nào đang tổ chức sự kiện hôm nay?\')">
+                <div class="ai-option-icon" style="background: #E0F2FE; color: #0284C7;">
+                    <i class="bi bi-building"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Sự kiện hôm nay</div>
+                    <div class="ai-option-desc">Xem lịch tổ chức và địa điểm hoạt động toàn trường.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>';
             $plain = "Kính chào Cán bộ Kế toán **{$name}**! Tôi là trợ lý AI PolyMee.\n\n" .
                      "Tôi hỗ trợ bạn công tác kế toán & quyết toán thù lao:\n" .
                      "1. Tổng hợp quyết toán thù lao: *'Tổng hợp quyết toán thù lao đợt này'*.\n" .
                      "2. Đối soát hồ sơ: *'Hồ sơ CTV nào chưa có số CCCD hoặc thiếu ảnh chụp VNeID?'*.\n" .
                      "3. Tra cứu lịch sự kiện và phòng trực toàn trường.";
         } else {
-            // CTV & MEDIA
-            $defaultHtml .= '<button type="button" class="btn btn-outline-primary text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Tôi có ca trực nào sắp tới không?\')"><i class="bi bi-clock-history fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Ca trực của tôi:</strong> <span class="opacity-90">Xem lịch trực và nhiệm vụ được phân công.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-warning text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Điểm tích cực và đánh giá uy tín của tôi là bao nhiêu?\')"><i class="bi bi-star-fill fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Điểm Tích Cực & Uy tín:</strong> <span class="opacity-90">Xem điểm số và năng lực hoàn thành ca.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-success text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Hướng dẫn nộp minh chứng nghiệm thu sau mỗi sự kiện hoàn thành\')"><i class="bi bi-camera-fill fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Nộp minh chứng nghiệm thu:</strong> <span class="opacity-90">Hướng dẫn up ảnh hiện trường hoặc link Drive.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
-            $defaultHtml .= '<button type="button" class="btn btn-outline-info text-start rounded-3 py-2.5 px-3.5 d-flex align-items-center gap-2.5 shadow-2xs w-100" style="font-size: 13px; border-width: 1.5px; transition: all 0.2s ease;" onclick="quickAskAi(\'Hồ sơ số CCCD và ảnh chụp màn hình VNeID của tôi đã hợp lệ chưa?\')"><i class="bi bi-shield-check fs-6 flex-shrink-0"></i><div class="flex-grow-1"><strong>Kiểm tra định danh:</strong> <span class="opacity-90">Xem trạng thái số CCCD & ảnh VNeID.</span></div><i class="bi bi-arrow-right opacity-50 ms-auto flex-shrink-0" style="font-size: 12px;"></i></button>';
+            // CTV & MEDIA (Sinh viên & Media)
+            $defaultHtml .= '
+            <div class="ai-option-card" onclick="quickAskAi(\'Tôi có ca trực nào sắp tới không?\')">
+                <div class="ai-option-icon" style="background: #E0F2FE; color: #0284C7;">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Ca trực của tôi</div>
+                    <div class="ai-option-desc">Xem lịch trực và các nhiệm vụ được phân công chi tiết.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Điểm tích cực và đánh giá uy tín của tôi là bao nhiêu?\')">
+                <div class="ai-option-icon" style="background: #FEF3C7; color: #D97706;">
+                    <i class="bi bi-star-fill"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Điểm Tích Cực & Uy tín</div>
+                    <div class="ai-option-desc">Xem điểm số tích lũy và năng lực hoàn thành ca thực tế.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Hướng dẫn nộp minh chứng nghiệm thu sau mỗi sự kiện hoàn thành\')">
+                <div class="ai-option-icon" style="background: #ECFDF5; color: #059669;">
+                    <i class="bi bi-camera-fill"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Nộp minh chứng nghiệm thu</div>
+                    <div class="ai-option-desc">Hướng dẫn tải ảnh hiện trường hoặc đường dẫn Google Drive.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>
+            <div class="ai-option-card" onclick="quickAskAi(\'Hồ sơ số CCCD và ảnh chụp màn hình VNeID của tôi đã hợp lệ chưa?\')">
+                <div class="ai-option-icon" style="background: #EFF6FF; color: #2563EB;">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="ai-option-title">Kiểm tra định danh</div>
+                    <div class="ai-option-desc">Xem trạng thái số CCCD 12 số & ảnh chụp ứng dụng VNeID Mức 2.</div>
+                </div>
+                <i class="bi bi-chevron-right ai-option-arrow"></i>
+            </div>';
             $plain = "Xin chào **{$name}** ({$roleName})! Tôi là trợ lý AI PolyMee.\n\n" .
                      "Bạn có thể hỏi tôi:\n" .
                      "1. Ca trực của tôi: *'Tôi có ca trực nào sắp tới không?'*\n" .

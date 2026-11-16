@@ -792,6 +792,83 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         color: #9CA3AF !important;
     }
 
+    /* Modern AI Bento Suggestion Cards (Apple Intelligence & ChatGPT Standard) */
+    .ai-option-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        padding: 13px 18px;
+        border-radius: 14px;
+        background: #FFFFFF;
+        border: 1px solid var(--ux-line, #E2E8F0);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        color: inherit;
+        user-select: none;
+    }
+    .ai-option-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        border-color: #0284C7;
+        background: #F8FAFC;
+    }
+    .ai-option-card:active {
+        transform: translateY(0);
+    }
+    .ai-option-card .ai-option-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+    }
+    .ai-option-card .ai-option-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #0F172A;
+        line-height: 1.3;
+    }
+    .ai-option-card .ai-option-desc {
+        font-size: 12px;
+        color: #64748B;
+        line-height: 1.4;
+        margin-top: 2px;
+    }
+    .ai-option-card .ai-option-arrow {
+        margin-left: auto;
+        color: #94A3B8;
+        font-size: 14px;
+        transition: transform 0.2s;
+        flex-shrink: 0;
+    }
+    .ai-option-card:hover .ai-option-arrow {
+        color: #0284C7;
+        transform: translateX(3px);
+    }
+
+    [data-bs-theme="dark"] .ai-option-card {
+        background: #1E293B;
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+    [data-bs-theme="dark"] .ai-option-card:hover {
+        background: #273549;
+        border-color: #38BDF8;
+    }
+    [data-bs-theme="dark"] .ai-option-card .ai-option-title {
+        color: #F8FAFC;
+    }
+    [data-bs-theme="dark"] .ai-option-card .ai-option-desc {
+        color: #94A3B8;
+    }
+
     [data-bs-theme="dark"] .btn-topbar-ai {
         background: rgba(2, 132, 199, 0.18);
         border-color: rgba(2, 132, 199, 0.35);
