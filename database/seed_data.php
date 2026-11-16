@@ -383,15 +383,16 @@ $events = [
     [3, 'Lễ Khai Mạc Giải Thể Thao FPoly Vô Địch 2026', 'Chuỗi giải đấu thể thao sinh viên Poly Champion với các môn bóng đá, bóng bàn và cờ vua tạo sân chơi gắn kết rèn luyện thể chất tại Sân Central Yard FPoly Đồng Nai.', 3, '2026-11-20 07:00:00', '2026-11-20 11:30:00', 'Published', 1, 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&auto=format&fit=crop&q=60', '2026-11-03 10:00:00', 'Công tác Sinh viên'],
     [4, 'Triển Lãm Đồ Họa & Thiết Kế Đa Phương Tiện FPoly Creative', 'Không gian trưng bày hơn 100 tác phẩm đồ họa xuất sắc, sản phẩm bao bì thương hiệu và phim ngắn hoạt hình của sinh viên ngành Thiết kế đồ họa FPT Polytechnic Đồng Nai.', 2, '2026-11-22 08:00:00', '2026-11-22 17:00:00', 'Published', 9, 'https://images.unsplash.com/photo-1558655146-d09347e92766?w=800&auto=format&fit=crop&q=60', '2026-11-04 11:00:00', 'Thiết kế Đồ họa'],
     [5, 'Chung Kết Cuộc Thi Khởi Nghiệp Trẻ FPoly Biz Challenge 2026', 'Đấu trường tranh tài các dự án Startup đổi mới sáng tạo, nhận vốn đầu tư thiên thần từ các quỹ đầu tư mạo hiểm và doanh nghiệp đối tác tại Hội trường FPoly Đồng Nai.', 1, '2026-11-25 13:00:00', '2026-11-25 18:00:00', 'Published', 12, 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop&q=60', '2026-11-05 14:00:00', 'Kinh tế & Quản trị Kinh doanh'],
-    [6, 'Ngày Hội Văn Hóa Ẩm Thực & Du Lịch Poly Hospitality Day', 'Không gian trải nghiệm văn hóa đa quốc gia, nghệ thuật pha chế Bartender và kỹ năng buồng phòng chuyên nghiệp ngành Nhà hàng - Khách sạn FPoly Đồng Nai.', 3, '2026-11-28 08:00:00', '2026-11-28 15:30:00', 'Published', 14, 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=60', '2026-11-06 15:00:00', 'Du lịch - Nhà hàng - Khách sạn']
+    [6, 'Ngày Hội Văn Hóa Ẩm Thực & Du Lịch Poly Hospitality Day', 'Không gian trải nghiệm văn hóa đa quốc gia, nghệ thuật pha chế Bartender và kỹ năng buồng phòng chuyên nghiệp ngành Nhà hàng - Khách sạn FPoly Đồng Nai.', 3, '2026-11-28 08:00:00', '2026-11-28 15:30:00', 'Published', 14, 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=60', '2026-11-06 15:00:00', 'Du lịch - Nhà hàng - Khách sạn'],
+    [7, 'Workshop Bộ môn CNTT: Đổi Mới Đào Tạo & AI 2026', 'Buổi tọa đàm chuyên môn giảng viên và sinh viên về ứng dụng AI trong giảng dạy và nghiên cứu thực chiến tại FPoly.', 1, '2026-11-22 13:30:00', '2026-11-22 17:30:00', 'Published', 2, 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=60', '2026-11-04 14:00:00', 'Công nghệ Thông tin']
 ];
 $stmt = $db->prepare("INSERT INTO events (id, title, description, location_id, start_time, end_time, status, created_by, banner_url, created_at, department) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 foreach ($events as $ev) {
     $stmt->execute($ev);
 }
-echo "✓ Đã nạp 6 sự kiện chính thức FPoly Đồng Nai.\n";
+echo "✓ Đã nạp 7 sự kiện chính thức FPoly Đồng Nai.\n";
 
-// 6. Shifts (14 Shifts)
+// 6. Shifts (16 Shifts)
 $shifts = [
     [1, 1, 'Ca 1: Setup Sân Khấu & Âm Thanh Ánh Sáng', '2026-11-15 06:30:00', '2026-11-15 09:30:00', 4, 3, 'Kỹ thuật, Thể lực', 15, 150000, 'FACILITY'],
     [2, 1, 'Ca 2: Lễ Tân Đón Khách & Check-in Doanh Nghiệp', '2026-11-15 07:30:00', '2026-11-15 11:30:00', 6, 5, 'Giao tiếp, Lễ tân', 20, 150000, 'FACILITY'],
@@ -406,13 +407,15 @@ $shifts = [
     [11, 5, 'Ca 1: Đón Tiếp Ban Giám Khảo & Quỹ Đầu Tư', '2026-11-25 12:30:00', '2026-11-25 18:00:00', 4, 2, 'Lễ tân, Giao tiếp', 20, 180000, 'FACILITY'],
     [12, 5, 'Ca 2: Kỹ Thuật Trình Chiếu Pitching & Micro', '2026-11-25 12:30:00', '2026-11-25 18:00:00', 2, 1, 'Kỹ thuật, Âm thanh', 20, 180000, 'FACILITY'],
     [13, 6, 'Ca 1: Hỗ Trợ Gian Hàng Ẩm Thực Vùng Miền', '2026-11-28 07:30:00', '2026-11-28 12:00:00', 6, 2, 'Hậu cần, Ẩm thực', 15, 150000, 'FACILITY'],
-    [14, 6, 'Ca 2: Media Ghi Hình Hội Thi Bartender', '2026-11-28 09:00:00', '2026-11-28 14:00:00', 2, 1, 'Media, Video', 20, 200000, 'MEDIA']
+    [14, 6, 'Ca 2: Media Ghi Hình Hội Thi Bartender', '2026-11-28 09:00:00', '2026-11-28 14:00:00', 2, 1, 'Media, Video', 20, 200000, 'MEDIA'],
+    [15, 7, 'Ca 1: Setup Hội Trường & Hệ Thống Trình Chiếu', '2026-11-22 13:00:00', '2026-11-22 15:30:00', 4, 2, 'Kỹ thuật, Máy chiếu', 15, 150000, 'FACILITY'],
+    [16, 7, 'Ca 2: Lễ Tân Đón Khách & Tổng Kết Hội Thảo', '2026-11-22 15:00:00', '2026-11-22 17:30:00', 3, 1, 'Lễ tân, Giao tiếp', 15, 150000, 'FACILITY']
 ];
 $stmt = $db->prepare("INSERT INTO shifts (id, event_id, name, start_time, end_time, target_qty, approved_qty, skill_required, points, remuneration_amount, shift_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 foreach ($shifts as $sh) {
     $stmt->execute($sh);
 }
-echo "✓ Đã nạp 14 ca trực phân rã.\n";
+echo "✓ Đã nạp 16 ca trực phân rã.\n";
 
 // 7. Shift Assignments (8 Assignments)
 $assignments = [

@@ -831,6 +831,187 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         margin-bottom: 0 !important;
     }
 
+    /* =========================================================
+       EVENT & SHIFT MANAGEMENT REDESIGN (Bento 2.0 / Linear Standard)
+       ========================================================= */
+    .event-tab-btn {
+        background: transparent;
+        border: none;
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748B;
+        padding: 6px 2px 10px 2px;
+        position: relative;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: color 0.18s;
+        text-decoration: none;
+    }
+    .event-tab-btn:hover {
+        color: #0F172A;
+    }
+    .event-tab-btn.active {
+        color: #0F172A;
+        font-weight: 700;
+    }
+    .event-tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2.5px;
+        background: #EA580C;
+        border-radius: 4px;
+    }
+    .event-tab-btn .tab-count-pill {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 1px 6.5px;
+        border-radius: 999px;
+        background: #F1F5F9;
+        color: #475569;
+        line-height: 1.3;
+    }
+    .event-tab-btn.active .tab-count-pill {
+        background: #FFEDD5;
+        color: #C2410C;
+    }
+
+    /* Event Row Card */
+    .event-row-card {
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        transition: all 0.18s var(--ux-ease);
+        cursor: pointer;
+        user-select: none;
+    }
+    .event-row-card:hover {
+        border-color: #CBD5E1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transform: translateY(-1px);
+    }
+    .event-row-card.active,
+    .event-row-card.selected {
+        background: #FFF9F6 !important;
+        border-color: #FDBA74 !important;
+        box-shadow: 0 4px 16px rgba(234, 88, 12, 0.09) !important;
+    }
+    .event-row-card.active .event-date-day,
+    .event-row-card.selected .event-date-day {
+        color: #EA580C !important;
+    }
+    .event-row-card.active .event-date-box,
+    .event-row-card.selected .event-date-box {
+        background: #FFF0E6;
+        border-radius: 8px;
+    }
+
+    /* Published Badge */
+    .badge-status-published {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2.5px 8px;
+        border-radius: 999px;
+        background: #ECFDF5;
+        border: 1px solid #A7F3D0;
+        color: #059669;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+        line-height: 1.25;
+    }
+    .badge-status-published i {
+        font-size: 10.5px;
+        color: #10B981;
+    }
+
+    /* Mini Calendar Grid */
+    .mini-cal-day {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+        border-radius: 50%;
+        font-size: 11.5px;
+        font-weight: 550;
+        color: #334155;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.15s ease;
+        user-select: none;
+    }
+    .mini-cal-day:hover {
+        background: #F1F5F9;
+        color: #0F172A;
+    }
+    .mini-cal-day.has-event::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        width: 3.5px;
+        height: 3.5px;
+        border-radius: 50%;
+        background: #EA580C;
+    }
+    .mini-cal-day.active {
+        background: #EA580C !important;
+        color: #FFFFFF !important;
+        font-weight: 700;
+    }
+    .mini-cal-day.active.has-event::after {
+        background: #FFFFFF !important;
+    }
+    .mini-cal-day.other-month {
+        color: #CBD5E1;
+        pointer-events: none;
+    }
+
+    /* Dark Mode Overrides for Event Management */
+    [data-bs-theme="dark"] .event-row-card {
+        background: #1E293B;
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+    [data-bs-theme="dark"] .event-row-card:hover {
+        background: #243248;
+        border-color: rgba(255, 255, 255, 0.16);
+    }
+    [data-bs-theme="dark"] .event-row-card.active,
+    [data-bs-theme="dark"] .event-row-card.selected {
+        background: rgba(234, 88, 12, 0.15) !important;
+        border-color: rgba(234, 88, 12, 0.5) !important;
+    }
+    [data-bs-theme="dark"] .event-title-text {
+        color: #F8FAFC !important;
+    }
+    [data-bs-theme="dark"] .event-date-divider {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+    [data-bs-theme="dark"] .mini-cal-day {
+        color: #CBD5E1;
+    }
+    [data-bs-theme="dark"] .mini-cal-day:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+    [data-bs-theme="dark"] .event-tab-btn {
+        color: #94A3B8;
+    }
+    [data-bs-theme="dark"] .event-tab-btn:hover,
+    [data-bs-theme="dark"] .event-tab-btn.active {
+        color: #F8FAFC;
+    }
+    [data-bs-theme="dark"] .event-tab-btn .tab-count-pill {
+        background: rgba(255, 255, 255, 0.1);
+        color: #E2E8F0;
+    }
+
     /* Modern AI Bento Suggestion Cards (Apple Intelligence & ChatGPT Standard) */
     .ai-option-card {
         display: flex;
@@ -3222,64 +3403,219 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             
             
 
-            <!-- TAB 5: QUẢN LÝ SỰ KIỆN -->
-            <section class="spa-panel" id="panelEvents" style="display:none !important;">
-                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề & Nút tạo sự kiện (Non-scrollable Top) -->
-                <div class="flex-shrink-0">
-                    <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
-                    <div>
-                        <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Danh Sách Sự Kiện & Phân Rã Ca Trực</h2>
-                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Quản trị các chiến dịch tuyển CTV, giám sát tiến độ lấp đầy từng ca trực</p>
+            <!-- TAB 5: QUẢN LÝ SỰ KIỆN & CA TRỰC (Thiết kế chuẩn Linear / Bento 2.0 theo Mockup) -->
+            <section class="spa-panel" id="panelEvents" style="display:none !important; flex-direction: column;">
+                <!-- 1. HEADER & BREADCRUMB & NÚT TẠO SỰ KIỆN -->
+                <div class="flex-shrink-0 mb-3">
+                    <div class="text-muted small mb-1" style="font-size: 11.5px; font-weight: 500;">
+                        <span>Không gian làm việc</span> <span class="mx-1 text-muted">/</span> <span class="text-dark fw-semibold">Sự kiện</span>
                     </div>
-                    <?php if (!empty($perms['canCreateShift'])): ?>
-                    <button class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
-                        <i class="bi bi-calendar-plus-fill me-1"></i> Đặt Lịch Ca Mới
-                    </button>
-                    <?php endif; ?>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                        <div>
+                            <h1 class="fw-bold mb-1 text-dark" style="font-size: 24px; letter-spacing: -0.02em;">Sự kiện & ca trực</h1>
+                            <p class="text-muted mb-0" style="font-size: 13px;">Quản lý hoạt động, kết nối cộng tác viên.</p>
+                        </div>
+                        <?php if (!empty($perms['canCreateShift'])): ?>
+                        <div>
+                            <button type="button" class="btn btn-fpt-primary shadow-xs d-inline-flex align-items-center gap-1.5" onclick="openCreateShiftModal()" style="padding: 7px 16px; border-radius: 9px; font-size: 13px; font-weight: 600;">
+                                <i class="bi bi-plus-lg"></i>
+                                <span>Tạo sự kiện</span>
+                            </button>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
-                <!-- 2. VÙNG CARDS: Scrollable Body -->
-                <div class="row g-2.5" id="eventsCardsContainer">
-                    <?php foreach ($events as $e): ?>
-                    <?php
-                    $canDeleteThisEvent = false;
-                    $userRole = $perms['role'] ?? 'GUEST';
-                    $currUid = (int)($currentUser['id'] ?? 0);
-                    $eventCreatorId = (int)($e['created_by'] ?? 0);
 
-                    if (in_array($userRole, ['STAFF', 'ADMIN'], true)) {
-                        $canDeleteThisEvent = true;
-                    } elseif ($userRole === 'LECTURER' && $eventCreatorId === $currUid) {
-                        $canDeleteThisEvent = true;
-                    }
-                    ?>
-                    <div class="col-12 col-md-6 col-xl-4" id="eventCardCol_<?= $e['id'] ?>">
-                        <div class="card h-100 border rounded-3 shadow-xs overflow-hidden" style="border-color: rgba(0,0,0,0.08) !important;">
-                            <div class="card-body p-3 d-flex flex-column">
-                                <div class="d-flex justify-content-between align-items-start mb-1.5">
-                                    <div class="d-flex align-items-center gap-1 flex-wrap">
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold" style="font-size: 10px; padding: 2px 6px;"><?= htmlspecialchars($e['status']) ?></span>
-                                        <span class="badge bg-light text-primary border font-monospace" style="font-size: 10px; padding: 2px 6px;"><?= htmlspecialchars($e['department'] ?? 'CNTT') ?></span>
-                                    </div>
-                                    <small class="text-muted fw-bold num-tabular" style="font-size: 11px;"><i class="bi bi-clock me-1"></i><?= substr($e['start_time'], 0, 10) ?></small>
+                <!-- 2. 2-COLUMN MAIN CONTENT (LEFT: EVENT LIST, RIGHT: CALENDAR & OVERVIEW) -->
+                <div class="row g-3 flex-1 overflow-hidden" style="min-height: 0;">
+                    
+                    <!-- CỘT TRÁI: DANH SÁCH SỰ KIỆN & BỘ LỌC -->
+                    <div class="col-12 col-xl-8 col-lg-7 d-flex flex-column h-100 overflow-hidden">
+                        
+                        <!-- Toolbar Bộ lọc & Tìm kiếm -->
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5 pb-2.5 border-bottom mb-2.5 flex-shrink-0" style="border-color: rgba(0,0,0,0.06) !important;">
+                            <!-- Tabs Lọc -->
+                            <div class="d-flex align-items-center gap-3">
+                                <button type="button" class="event-tab-btn active" id="tabEvAll" onclick="filterEventsByTab('all')">
+                                    <span>Tất cả</span>
+                                    <span class="tab-count-pill" id="badgeCountAll"><?= count($events) ?></span>
+                                </button>
+                                <button type="button" class="event-tab-btn" id="tabEvUpcoming" onclick="filterEventsByTab('upcoming')">
+                                    <span>Sắp diễn ra</span>
+                                </button>
+                                <button type="button" class="event-tab-btn" id="tabEvEnded" onclick="filterEventsByTab('ended')">
+                                    <span>Đã kết thúc</span>
+                                </button>
+                            </div>
+
+                            <!-- Search & Dropdown Bộ môn -->
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="input-group input-group-sm" style="width: 200px;">
+                                    <span class="input-group-text bg-white border-end-0 text-muted" style="border-radius: 8px 0 0 8px; padding-left: 9px; padding-right: 4px;">
+                                        <i class="bi bi-search" style="font-size: 11.5px;"></i>
+                                    </span>
+                                    <input type="text" class="form-control form-control-sm border-start-0 ps-1" id="eventSearchInput" placeholder="Tìm tên sự kiện..." oninput="handleEventFilterChange()" style="border-radius: 0 8px 8px 0; font-size: 12px;">
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="font-size: 13.5px; line-height: 1.3;"><?= htmlspecialchars($e['title']) ?></h6>
-                                <p class="text-muted text-truncate-2 mb-2" style="font-size: 11.5px; line-height: 1.4;"><?= htmlspecialchars($e['description'] ?? 'Không có mô tả') ?></p>
-                                <div class="mt-auto pt-2 border-top d-flex justify-content-between align-items-center text-muted" style="font-size: 11px; border-color: rgba(0,0,0,0.06) !important;">
-                                    <span><i class="bi bi-geo-alt me-1 text-danger"></i><?= htmlspecialchars($e['location_name'] ?? 'Hội trường') ?></span>
-                                    <div class="d-flex align-items-center gap-1.5">
-                                        <span class="badge bg-light text-dark border" style="font-size: 10px;"><?= $e['total_shifts'] ?> Ca trực</span>
-                                        <?php if ($canDeleteThisEvent): ?>
-                                        <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 28px; height: 28px; padding: 0; background: rgba(220, 38, 38, 0.08); color: #DC2626;" onclick="confirmDeleteEvent(<?= $e['id'] ?>, '<?= htmlspecialchars(addslashes($e['title'])) ?>')" title="Xóa sự kiện này">
-                                            <i class="bi bi-trash3" style="font-size: 13px;"></i>
-                                        </button>
-                                        <?php endif; ?>
+                                <select class="form-select form-select-sm" id="eventDeptSelect" onchange="handleEventFilterChange()" style="width: 140px; border-radius: 8px; font-size: 12px; cursor: pointer;">
+                                    <option value="">Bộ môn</option>
+                                    <option value="Công nghệ Thông tin">Công nghệ thông tin</option>
+                                    <option value="Ứng dụng Phần mềm">Ứng dụng phần mềm</option>
+                                    <option value="Công tác Sinh viên">Công tác sinh viên</option>
+                                    <option value="Thiết kế Đồ họa">Thiết kế đồ họa</option>
+                                    <option value="Kinh tế & Quản trị">Kinh tế & Quản trị</option>
+                                    <option value="Du lịch - Nhà hàng">Du lịch & Nhà hàng</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Danh sách Event Cards dạng hàng Bento chuẩn Apple / Notion -->
+                        <div class="flex-1 overflow-y-auto pe-1" id="eventsListScrollArea" style="min-height: 0;">
+                            <div class="d-flex flex-column gap-2" id="eventsListContainer">
+                                <?php foreach ($events as $e): ?>
+                                <?php
+                                $eventDate = substr($e['start_time'], 0, 10);
+                                $dayNum = date('d', strtotime($e['start_time']));
+                                $monthNum = date('m', strtotime($e['start_time']));
+                                $dept = $e['department'] ?? 'Chung';
+                                $isEventEnded = strtotime($e['end_time']) < time();
+                                
+                                // Phân màu Bộ môn chuẩn FPoly
+                                $deptColor = '#0284C7'; // Mặc định Sky
+                                if (stripos($dept, 'Công nghệ') !== false || stripos($dept, 'CNTT') !== false) $deptColor = '#0284C7';
+                                elseif (stripos($dept, 'Ứng dụng') !== false || stripos($dept, 'Phần mềm') !== false) $deptColor = '#7C3AED';
+                                elseif (stripos($dept, 'Sinh viên') !== false) $deptColor = '#059669';
+                                elseif (stripos($dept, 'Thiết kế') !== false || stripos($dept, 'Đồ họa') !== false) $deptColor = '#4F46E5';
+                                elseif (stripos($dept, 'Kinh tế') !== false || stripos($dept, 'Quản trị') !== false) $deptColor = '#D97706';
+                                elseif (stripos($dept, 'Du lịch') !== false || stripos($dept, 'Nhà hàng') !== false || stripos($dept, 'Khách sạn') !== false) $deptColor = '#E11D48';
+                                
+                                $isHighlighted = ($dayNum === '18'); // Ngày 18 được highlight sẵn như trong mockup
+                                ?>
+                                <div class="event-row-card d-flex align-items-center justify-content-between p-2.5 px-3 rounded-3 border bg-white shadow-2xs <?= $isHighlighted ? 'active' : '' ?>" 
+                                     id="eventRow_<?= $e['id'] ?>" 
+                                     data-event-id="<?= $e['id'] ?>"
+                                     data-date="<?= $eventDate ?>"
+                                     data-day="<?= (int)$dayNum ?>"
+                                     data-dept="<?= htmlspecialchars($dept) ?>"
+                                     data-title="<?= htmlspecialchars(mb_strtolower($e['title'])) ?>"
+                                     data-ended="<?= $isEventEnded ? '1' : '0' ?>"
+                                     onclick="handleEventCardClick(<?= $e['id'] ?>, '<?= $eventDate ?>')">
+                                    
+                                    <!-- Cột Trái: Ô Ngày Tháng & Tên Sự Kiện -->
+                                    <div class="d-flex align-items-center gap-3 min-w-0">
+                                        <!-- Ô Ngày Tháng -->
+                                        <div class="event-date-box text-center py-1 px-1.5" style="min-width: 48px;">
+                                            <div class="event-date-day fw-bold num-tabular" style="font-size: 19px; line-height: 1;"><?= $dayNum ?></div>
+                                            <div class="event-date-month fw-semibold text-muted text-uppercase" style="font-size: 10px; margin-top: 2px;">TH<?= $monthNum ?></div>
+                                        </div>
+
+                                        <!-- Đường kẻ dọc ngăn cách -->
+                                        <div class="event-date-divider" style="width: 1px; height: 34px; background: #E2E8F0;"></div>
+
+                                        <!-- Thông tin Bộ môn, Tiêu đề, Địa điểm -->
+                                        <div class="event-info-box min-w-0">
+                                            <div class="event-dept-tag fw-semibold text-truncate" style="font-size: 11px; color: <?= $deptColor ?>; line-height: 1.2;">
+                                                <?= htmlspecialchars($dept) ?>
+                                            </div>
+                                            <h6 class="event-title-text fw-bold text-dark mb-0.5 text-truncate" style="font-size: 13.5px; line-height: 1.3;">
+                                                <?= htmlspecialchars($e['title']) ?>
+                                            </h6>
+                                            <div class="event-loc-text text-muted text-truncate" style="font-size: 11.5px; line-height: 1.2;">
+                                                <i class="bi bi-geo-alt me-1 text-danger"></i><?= htmlspecialchars($e['location_name'] ?? 'Hội trường') ?>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <!-- Cột Phải: Badge Đã công bố, Ca trực, Mũi tên -->
+                                    <div class="d-flex align-items-center gap-2.5 flex-shrink-0 ms-2">
+                                        <span class="badge-status-published">
+                                            <i class="bi bi-check-circle-fill"></i> Đã công bố
+                                        </span>
+
+                                        <div style="width: 1px; height: 16px; background: #E2E8F0;"></div>
+
+                                        <span class="event-shift-count fw-medium" style="font-size: 12px; color: #334155; white-space: nowrap;">
+                                            <?= $e['total_shifts'] ?> ca trực
+                                        </span>
+
+                                        <i class="bi bi-chevron-right text-muted" style="font-size: 11px;"></i>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <!-- Footer đếm tổng số sự kiện hiển thị -->
+                            <div class="text-muted small mt-2.5 px-1 num-tabular" id="eventListFooterText" style="font-size: 11.5px;">
+                                Hiển thị <?= count($events) ?> sự kiện trong tháng 11
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- CỘT PHẢI: LỊCH MINI, TỔNG QUAN THÁNG, TRỢ LÝ AI -->
+                    <div class="col-12 col-xl-4 col-lg-5 d-flex flex-column gap-2.5 h-100 overflow-y-auto pe-1">
+                        
+                        <!-- 1. Mini Calendar Widget -->
+                        <div class="card border rounded-3 p-3 bg-white shadow-2xs" style="border-color: rgba(0,0,0,0.08) !important;">
+                            <div class="d-flex align-items-center justify-content-between mb-2.5 px-1">
+                                <button type="button" class="btn btn-sm btn-light border-0 p-1 d-flex align-items-center justify-content-center" onclick="navMiniCalendar(-1)" style="width: 24px; height: 24px; border-radius: 6px;" title="Tháng trước">
+                                    <i class="bi bi-chevron-left" style="font-size: 11px;"></i>
+                                </button>
+                                <strong class="text-dark num-tabular" id="miniCalTitle" style="font-size: 13.5px; font-weight: 700;">Tháng 11, 2026</strong>
+                                <button type="button" class="btn btn-sm btn-light border-0 p-1 d-flex align-items-center justify-content-center" onclick="navMiniCalendar(1)" style="width: 24px; height: 24px; border-radius: 6px;" title="Tháng sau">
+                                    <i class="bi bi-chevron-right" style="font-size: 11px;"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Tiêu đề Thứ -->
+                            <div class="d-grid text-center mb-1 text-muted fw-semibold" style="grid-template-columns: repeat(7, 1fr); font-size: 11px;">
+                                <span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span>
+                            </div>
+
+                            <!-- Lưới Ngày Trong Tháng -->
+                            <div class="d-grid text-center" id="miniCalGrid" style="grid-template-columns: repeat(7, 1fr); gap: 2px;">
+                                <!-- Rendered dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- 2. Thẻ Tổng Quan Tháng -->
+                        <div class="card border rounded-3 p-3 bg-white shadow-2xs" style="border-color: rgba(0,0,0,0.08) !important;">
+                            <h6 class="fw-bold text-dark mb-2" style="font-size: 12.5px;">Tổng quan tháng</h6>
+                            <div class="d-flex align-items-center justify-content-around py-1">
+                                <div class="text-center flex-fill">
+                                    <div class="fw-bolder text-dark num-tabular" style="font-size: 24px; line-height: 1.1;" id="statTotalEventsCount"><?= count($events) ?></div>
+                                    <div class="text-muted fw-medium" style="font-size: 11px; margin-top: 3px;">Sự kiện</div>
+                                </div>
+                                <div style="width: 1px; height: 32px; background: #E2E8F0;"></div>
+                                <div class="text-center flex-fill">
+                                    <?php 
+                                    $totalShiftsSum = array_sum(array_column($events, 'total_shifts'));
+                                    if ($totalShiftsSum === 0) $totalShiftsSum = count($shifts);
+                                    ?>
+                                    <div class="fw-bolder num-tabular" style="font-size: 24px; line-height: 1.1; color: #EA580C;" id="statTotalShiftsCount"><?= $totalShiftsSum ?></div>
+                                    <div class="text-muted fw-medium" style="font-size: 11px; margin-top: 3px;">Ca trực</div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- 3. Thẻ Trợ Lý PolyMee (AI Bento) -->
+                        <div class="card border rounded-3 p-3 shadow-2xs" style="background: linear-gradient(135deg, #FFF9F5 0%, #FFF3EA 100%); border: 1px solid #FFE4D3 !important;">
+                            <div class="d-flex align-items-center gap-1.5 mb-1">
+                                <span style="font-size: 15px;">✨</span>
+                                <strong class="text-dark" style="font-size: 13px; font-weight: 700;">Trợ lý PolyMee</strong>
+                            </div>
+                            <p class="text-muted mb-2.5" style="font-size: 11.5px; line-height: 1.45;">
+                                Hỗ trợ tìm sự kiện và sắp xếp ca trực.
+                            </p>
+                            <div>
+                                <button type="button" class="btn btn-sm bg-white border fw-semibold d-inline-flex align-items-center gap-1.5 shadow-2xs" onclick="quickAskAi('Hỗ trợ tìm sự kiện và sắp xếp ca trực')" style="padding: 4.5px 13px; border-radius: 999px; font-size: 11.5px; color: #1E293B; border-color: rgba(0,0,0,0.1) !important;">
+                                    <span>Mở trợ lý</span>
+                                    <i class="bi bi-arrow-right" style="font-size: 10.5px;"></i>
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
-                    <?php endforeach; ?>
+
                 </div>
             </section>
 
@@ -5134,6 +5470,53 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     </div>
 </div>
 
+<!-- =========================================================
+     MODAL CHI TIẾT SỰ KIỆN & PHÂN RÃ CA TRỰC CTV
+     ========================================================= -->
+<div class="modal fade" id="eventShiftsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-bottom p-3.5 px-4" style="background: #FAFAFC;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="p-2.5 rounded-3 text-white" style="background: linear-gradient(135deg, #EA580C 0%, #C2410C 100%);">
+                        <i class="bi bi-calendar-event fs-5"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-0.5">
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-semibold" id="evModalDept">Bộ môn</span>
+                            <span class="badge-status-published"><i class="bi bi-check-circle-fill"></i> Đã công bố</span>
+                        </div>
+                        <h5 class="fw-bold mb-0 text-dark" id="evModalTitle">Chi Tiết Sự Kiện</h5>
+                        <small class="text-muted num-tabular" id="evModalTimeLoc"><i class="bi bi-clock me-1"></i>08:00 - 17:00 • <i class="bi bi-geo-alt me-1 text-danger"></i>Hội trường</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="text-muted small mb-3" id="evModalDesc" style="line-height: 1.5;"></p>
+                <div class="d-flex align-items-center justify-content-between mb-2.5 pb-2 border-bottom">
+                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-list-task me-1.5 text-primary"></i>Danh Sách Phân Rã Ca Trực CTV</h6>
+                    <span class="badge bg-light text-dark border num-tabular" id="evModalShiftCount">0 ca trực</span>
+                </div>
+                <div class="d-flex flex-column gap-2" id="evModalShiftsList">
+                    <!-- Dynamic Shifts List -->
+                </div>
+            </div>
+            <div class="modal-footer border-top p-3 px-4 bg-light d-flex justify-content-between align-items-center">
+                <div id="evModalOrganizerActions">
+                    <!-- Delete event button if authorized -->
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn-fpt-secondary btn-fpt-sm" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn-fpt-primary btn-fpt-sm" id="evModalAddShiftBtn" onclick="openCreateShiftModal()" style="display:none;">
+                        <i class="bi bi-plus-lg me-1"></i> Thêm Ca Trực
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Toast Container -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1090;">
     <div id="liveToast" class="toast align-items-center text-white border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
@@ -5155,6 +5538,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
  * Dữ liệu State từ PHP
  */
 const rawShifts = <?= json_encode($shifts, JSON_UNESCAPED_UNICODE) ?>;
+const rawEvents = <?= json_encode($events, JSON_UNESCAPED_UNICODE) ?>;
 const rawAccountingList = <?= json_encode($accountingList, JSON_UNESCAPED_UNICODE) ?>;
 window.ctvRosterData = <?= json_encode(array_values($ctvRoster ?? []), JSON_UNESCAPED_UNICODE) ?>;
 const rawCalendarNotes = <?= json_encode($calendarNotes ?? [], JSON_UNESCAPED_UNICODE) ?>;
@@ -5219,6 +5603,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initLucianSideRail();
     renderMonthGrid(currentYear, currentMonth);
     renderMyShiftsTable();
+    initEventsPage();
 
     // Hỗ trợ Deep Link qua URL Query Parameters (?tab=accounting hoặc ?view=day&date=2026-11-15)
     const urlParams = new URLSearchParams(window.location.search);
@@ -5377,7 +5762,7 @@ function navigateToPage(pageName) {
         'accounting': { id: 'panelAccounting', display: 'flex', title: 'Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán', breadcrumb: 'Nghiệm Thu Kế Toán' },
         'student-payroll-profile': { id: 'panelStudentPayrollProfile', display: 'flex', title: 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)', breadcrumb: 'Quản Lý Hồ Sơ CTV' },
         'my-shifts': { id: 'panelMyShifts', display: 'flex', title: 'Lịch Làm Việc & Ca Phân Công Của Tôi', breadcrumb: 'Ca Trực Của Tôi', onShow: () => renderMyShiftsTable() },
-        'events': { id: 'panelEvents', display: 'flex', title: 'Quản Lý Sự Kiện & Phân Rã Ca Trực', breadcrumb: 'Danh Sách Sự Kiện' },
+        'events': { id: 'panelEvents', display: 'flex', title: 'Sự kiện & ca trực', breadcrumb: 'Không gian làm việc / Sự kiện', onShow: () => initEventsPage() },
         'submissions': { id: 'panelSubmissions', display: 'flex', title: 'Thẩm Định Nghiệm Thu Minh Chứng Google Drive', breadcrumb: 'Thẩm Định Drive' },
         'contract-dossier': { id: 'panelContractDossier', display: 'flex', title: 'Hồ Sơ Hợp Đồng Nghiệm Thu & Đề Nghị Chi Tiền', breadcrumb: 'Hồ Sơ Hợp Đồng' },
         'profile-settings': { id: 'panelProfileSettings', display: 'block', title: 'Cài Đặt Tài Khoản, Định Danh CCCD & STK Cá Nhân', breadcrumb: 'Tài Khoản Cá Nhân' },
@@ -5952,6 +6337,308 @@ function openShiftDetail(shiftId) {
 }
 
 /**
+ * =========================================================
+ * QUẢN LÝ SỰ KIỆN & CA TRỰC (BENTO 2.0 / LINEAR REDESIGN)
+ * =========================================================
+ */
+let miniCalYear = 2026;
+let miniCalMonth = 10; // Tháng 11 (0-indexed)
+let activeEventFilterTab = 'all';
+let selectedMiniCalDay = 18; // Mặc định chọn ngày 18 như trong ảnh mẫu mockup
+
+function initEventsPage() {
+    renderMiniCalendar(miniCalYear, miniCalMonth);
+    updateEventsTabCounts();
+    handleEventFilterChange();
+}
+
+function navMiniCalendar(delta) {
+    miniCalMonth += delta;
+    if (miniCalMonth < 0) {
+        miniCalMonth = 11;
+        miniCalYear--;
+    } else if (miniCalMonth > 11) {
+        miniCalMonth = 0;
+        miniCalYear++;
+    }
+    renderMiniCalendar(miniCalYear, miniCalMonth);
+}
+
+function renderMiniCalendar(year, month) {
+    const monthNames = [
+        'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+        'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+    ];
+    const titleEl = document.getElementById('miniCalTitle');
+    if (titleEl) {
+        titleEl.textContent = `${monthNames[month]}, ${year}`;
+    }
+
+    const gridEl = document.getElementById('miniCalGrid');
+    if (!gridEl) return;
+    gridEl.innerHTML = '';
+
+    // Lấy ngày đầu tiên của tháng (chuyển sang Monday-based: 0=T2 ... 6=CN)
+    const firstDay = new Date(year, month, 1).getDay();
+    const mondayFirstCol = (firstDay + 6) % 7; 
+
+    // Số ngày trong tháng
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+    // Tập hợp các ngày có sự kiện trong tháng này
+    const eventDays = new Set();
+    const monthStr = String(month + 1).padStart(2, '0');
+    const prefix = `${year}-${monthStr}-`;
+    
+    if (typeof rawEvents !== 'undefined') {
+        rawEvents.forEach(e => {
+            if (e.start_time && e.start_time.startsWith(prefix)) {
+                const day = parseInt(e.start_time.substring(8, 10));
+                eventDays.add(day);
+            }
+        });
+    }
+
+    // Ô trống tháng trước
+    for (let i = mondayFirstCol - 1; i >= 0; i--) {
+        const d = daysInPrevMonth - i;
+        const cell = document.createElement('div');
+        cell.className = 'mini-cal-day other-month';
+        cell.textContent = d;
+        gridEl.appendChild(cell);
+    }
+
+    // Các ngày trong tháng này
+    for (let d = 1; d <= daysInMonth; d++) {
+        const cell = document.createElement('div');
+        const hasEvent = eventDays.has(d);
+        const isActive = (d === selectedMiniCalDay && month === 10 && year === 2026);
+        
+        cell.className = `mini-cal-day ${hasEvent ? 'has-event' : ''} ${isActive ? 'active' : ''}`;
+        cell.textContent = d;
+        cell.onclick = () => onSelectMiniCalDay(d);
+        gridEl.appendChild(cell);
+    }
+}
+
+function onSelectMiniCalDay(day) {
+    if (selectedMiniCalDay === day) {
+        selectedMiniCalDay = null;
+    } else {
+        selectedMiniCalDay = day;
+    }
+    renderMiniCalendar(miniCalYear, miniCalMonth);
+    
+    // Highlight hoặc cuộn đến sự kiện tương ứng
+    const rows = document.querySelectorAll('#eventsListContainer .event-row-card');
+    let matchedRow = null;
+    
+    rows.forEach(r => {
+        const rowDay = parseInt(r.getAttribute('data-day') || '0');
+        if (selectedMiniCalDay && rowDay === selectedMiniCalDay) {
+            r.classList.add('active');
+            if (!matchedRow) matchedRow = r;
+        } else {
+            r.classList.remove('active');
+        }
+    });
+
+    if (matchedRow) {
+        matchedRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function filterEventsByTab(tab) {
+    activeEventFilterTab = tab;
+    document.querySelectorAll('.event-tab-btn').forEach(btn => btn.classList.remove('active'));
+    
+    if (tab === 'all') {
+        const tabAll = document.getElementById('tabEvAll');
+        if (tabAll) tabAll.classList.add('active');
+    } else if (tab === 'upcoming') {
+        const tabUp = document.getElementById('tabEvUpcoming');
+        if (tabUp) tabUp.classList.add('active');
+    } else if (tab === 'ended') {
+        const tabEnd = document.getElementById('tabEvEnded');
+        if (tabEnd) tabEnd.classList.add('active');
+    }
+    handleEventFilterChange();
+}
+
+function handleEventFilterChange() {
+    const searchVal = (document.getElementById('eventSearchInput')?.value || '').trim().toLowerCase();
+    const deptVal = (document.getElementById('eventDeptSelect')?.value || '').trim();
+
+    const rows = document.querySelectorAll('#eventsListContainer .event-row-card');
+    let visibleCount = 0;
+
+    rows.forEach(r => {
+        const title = r.getAttribute('data-title') || '';
+        const dept = r.getAttribute('data-dept') || '';
+        const isEnded = r.getAttribute('data-ended') === '1';
+
+        let matchesTab = true;
+        if (activeEventFilterTab === 'upcoming' && isEnded) matchesTab = false;
+        if (activeEventFilterTab === 'ended' && !isEnded) matchesTab = false;
+
+        let matchesSearch = true;
+        if (searchVal && !title.includes(searchVal) && !dept.toLowerCase().includes(searchVal)) {
+            matchesSearch = false;
+        }
+
+        let matchesDept = true;
+        if (deptVal && !dept.includes(deptVal)) {
+            matchesDept = false;
+        }
+
+        if (matchesTab && matchesSearch && matchesDept) {
+            r.style.display = 'flex';
+            visibleCount++;
+        } else {
+            r.style.display = 'none';
+        }
+    });
+
+    const footerText = document.getElementById('eventListFooterText');
+    if (footerText) {
+        footerText.textContent = `Hiển thị ${visibleCount} sự kiện trong tháng 11`;
+    }
+}
+
+function updateEventsTabCounts() {
+    const badgeAll = document.getElementById('badgeCountAll');
+    if (badgeAll && typeof rawEvents !== 'undefined') {
+        badgeAll.textContent = rawEvents.length;
+    }
+
+    const statTotal = document.getElementById('statTotalEventsCount');
+    if (statTotal && typeof rawEvents !== 'undefined') {
+        statTotal.textContent = rawEvents.length;
+    }
+
+    const statShifts = document.getElementById('statTotalShiftsCount');
+    if (statShifts && typeof rawShifts !== 'undefined') {
+        statShifts.textContent = rawShifts.length;
+    }
+}
+
+function handleEventCardClick(eventId, eventDate) {
+    // 1. Cập nhật ngày đang active trên Mini Calendar
+    const parts = eventDate.split('-');
+    if (parts.length >= 3) {
+        selectedMiniCalDay = parseInt(parts[2]);
+        renderMiniCalendar(miniCalYear, miniCalMonth);
+    }
+
+    // 2. Highlight card
+    document.querySelectorAll('#eventsListContainer .event-row-card').forEach(r => {
+        if (parseInt(r.getAttribute('data-event-id')) === eventId) {
+            r.classList.add('active');
+        } else {
+            r.classList.remove('active');
+        }
+    });
+
+    // 3. Mở Modal phân rã ca trực của sự kiện
+    openEventShiftsModal(eventId);
+}
+
+function openEventShiftsModal(eventId) {
+    const ev = (typeof rawEvents !== 'undefined') ? rawEvents.find(e => parseInt(e.id) === parseInt(eventId)) : null;
+    if (!ev) return;
+
+    const titleEl = document.getElementById('evModalTitle');
+    const deptEl = document.getElementById('evModalDept');
+    const descEl = document.getElementById('evModalDesc');
+    const timeLocEl = document.getElementById('evModalTimeLoc');
+
+    if (titleEl) titleEl.textContent = ev.title;
+    if (deptEl) deptEl.textContent = ev.department || 'Bộ môn';
+    if (descEl) descEl.textContent = ev.description || 'Không có mô tả chi tiết.';
+    
+    if (timeLocEl && ev.start_time) {
+        const timeFormatted = `${ev.start_time.substring(11, 16)} - ${ev.end_time.substring(11, 16)} • ${ev.start_time.substring(8, 10)}/${ev.start_time.substring(5, 7)}/${ev.start_time.substring(0, 4)}`;
+        timeLocEl.innerHTML = `<i class="bi bi-clock me-1 text-primary"></i>${timeFormatted} &nbsp;•&nbsp; <i class="bi bi-geo-alt me-1 text-danger"></i>${ev.location_name || 'Hội trường'}`;
+    }
+
+    // Lọc các ca trực thuộc sự kiện này
+    const evShifts = (typeof rawShifts !== 'undefined') ? rawShifts.filter(s => parseInt(s.event_id) === parseInt(eventId)) : [];
+    const countEl = document.getElementById('evModalShiftCount');
+    if (countEl) countEl.textContent = `${evShifts.length} ca trực`;
+
+    const container = document.getElementById('evModalShiftsList');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (evShifts.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-4 text-muted">
+                <i class="bi bi-calendar-x fs-2 d-block mb-2 text-slate-300"></i>
+                <div class="fw-semibold">Chưa có ca trực nào được phân rã cho sự kiện này</div>
+                <small>Nhấp "Thêm Ca Trực" để bắt đầu mở đợt tuyển CTV.</small>
+            </div>
+        `;
+    } else {
+        evShifts.forEach(s => {
+            const isFull = parseInt(s.approved_qty) >= parseInt(s.target_qty);
+            const isMine = parseInt(s.is_registered_by_me) > 0;
+            const allowance = s.remuneration_amount ? Number(s.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150,000 đ';
+
+            const card = document.createElement('div');
+            card.className = 'd-flex align-items-center justify-content-between p-3 rounded-3 border bg-white shadow-2xs';
+            card.innerHTML = `
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="badge bg-light text-dark border font-monospace" style="font-size: 11px;">${s.start_time.substring(11, 16)} - ${s.end_time.substring(11, 16)}</span>
+                        <strong class="text-dark" style="font-size: 13.5px;">${s.name}</strong>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center gap-3 text-muted" style="font-size: 12px;">
+                        <span><i class="bi bi-people me-1 text-info"></i>Đã tuyển: <strong>${s.approved_qty}/${s.target_qty} CTV</strong></span>
+                        <span class="text-success fw-semibold"><i class="bi bi-cash me-1"></i>Thù lao: ${allowance}</span>
+                        <span><i class="bi bi-stars me-1 text-warning"></i>${s.skill_required || 'Hậu cần'}</span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    ${isMine 
+                        ? `<span class="badge bg-success px-2.5 py-1.5 fw-semibold"><i class="bi bi-check2 me-1"></i>Bạn đã đăng ký</span>` 
+                        : (userPermissions.canRegisterShift 
+                            ? `<button type="button" class="btn btn-sm btn-fpt-primary shadow-2xs" onclick="event.stopPropagation(); openShiftDetail(${s.id})">${isFull ? 'Đăng Ký Dự Phòng' : 'Đăng Ký'}</button>` 
+                            : `<button type="button" class="btn btn-sm btn-fpt-secondary shadow-2xs" onclick="event.stopPropagation(); openShiftDetail(${s.id})"><i class="bi bi-eye me-1"></i>Chi tiết</button>`)}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // Quyền thêm ca hoặc xóa sự kiện
+    const addShiftBtn = document.getElementById('evModalAddShiftBtn');
+    if (addShiftBtn) {
+        addShiftBtn.style.display = userPermissions.canCreateShift ? 'inline-flex' : 'none';
+    }
+
+    const orgActions = document.getElementById('evModalOrganizerActions');
+    if (orgActions) {
+        const canDelete = userPermissions.role === 'ADMIN' || userPermissions.role === 'STAFF' || (userPermissions.role === 'LECTURER' && parseInt(ev.created_by) === parseInt(currentUser.id));
+        if (canDelete) {
+            orgActions.innerHTML = `
+                <button type="button" class="btn btn-sm btn-outline-danger border-0 d-inline-flex align-items-center gap-1.5" onclick="confirmDeleteEvent(${ev.id}, '${ev.title.replace(/'/g, "\\'")}')" style="background: rgba(220, 38, 38, 0.08); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 8px;">
+                    <i class="bi bi-trash3"></i> Xóa Sự Kiện
+                </button>
+            `;
+        } else {
+            orgActions.innerHTML = '';
+        }
+    }
+
+    const modalEl = document.getElementById('eventShiftsModal');
+    if (modalEl) {
+        const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInstance.show();
+    }
+}
+
+/**
  * Xóa Sự Kiện & Toàn bộ Ca Trực
  */
 async function confirmDeleteEvent(eventId, eventTitle) {
@@ -5979,8 +6666,20 @@ async function confirmDeleteEvent(eventId, eventTitle) {
             if (shiftModalInstance) shiftModalInstance.hide();
             changeCalendarView(currentCalendarTier);
             renderMyShiftsTable();
-            const cardEl = document.getElementById(`eventCard_${eventId}`);
-            if (cardEl) cardEl.remove();
+            const rowEl = document.getElementById(`eventRow_${eventId}`);
+            if (rowEl) rowEl.remove();
+            const evModalEl = document.getElementById('eventShiftsModal');
+            if (evModalEl) {
+                const evModalInst = bootstrap.Modal.getInstance(evModalEl);
+                if (evModalInst) evModalInst.hide();
+            }
+            if (typeof rawEvents !== 'undefined') {
+                const evIdx = rawEvents.findIndex(e => parseInt(e.id) === parseInt(eventId));
+                if (evIdx !== -1) rawEvents.splice(evIdx, 1);
+            }
+            updateEventsTabCounts();
+            handleEventFilterChange();
+            renderMiniCalendar(miniCalYear, miniCalMonth);
         } else {
             showToast(data.message || 'Lỗi khi xóa sự kiện.', 'danger');
         }
