@@ -446,7 +446,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         height: 18px;
         padding: 0 4.5px;
         border-radius: 999px;
-        background: #EA580C;
+        background: #0284C7;
         color: #FFFFFF;
         font-size: 10px;
         font-weight: 800;
@@ -473,6 +473,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         top: 50%;
         transform: translateY(-50%);
         box-shadow: none !important;
+        background: #0284C7;
+        color: #FFFFFF;
     }
 
     .u040-me {
@@ -1924,7 +1926,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         height: 18px !important;
         padding: 0 4.5px !important;
         border-radius: 999px !important;
-        background: #EA580C !important;
+        background: #0284C7 !important; /* Xanh Dương Apple / Sky 600 - Thanh lịch, dịu mắt, chống chói */
         color: #FFFFFF !important;
         font-size: 10px !important;
         font-weight: 800 !important;
@@ -2336,6 +2338,54 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </a>
                         </li>
                     </ul>
+                </div>
+
+                <!-- NÚT THÔNG BÁO HỆ THỐNG (Apple HIG Bell Notification Center - Nền Xanh Dịu Mắt #0284C7) -->
+                <div class="dropdown">
+                    <button class="btn btn-fpt-secondary btn-fpt-sm position-relative d-flex align-items-center justify-content-center shadow-xs" type="button" id="topbarNotificationBtn" data-bs-toggle="dropdown" aria-expanded="false" title="Trung tâm thông báo hệ thống" style="width: 36px; height: 32px; padding: 0;">
+                        <i class="bi bi-bell-fill" style="color: #0284C7; font-size: 14px;"></i>
+                        <span class="position-absolute badge rounded-pill" style="top: -4px; right: -4px; background: #0284C7; color: #FFFFFF; font-size: 9px; padding: 2px 4.5px; font-weight: 800; border: none; box-shadow: 0 0 0 2px var(--ux-surface, #FFFFFF); line-height: 1;">
+                            <?= count($accountingList ?? []) ?>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 p-2" aria-labelledby="topbarNotificationBtn" style="min-width: 310px; border-radius: 16px; background: var(--ux-surface); border: 1px solid var(--ux-line) !important; z-index: 1060;">
+                        <div class="px-2.5 py-1.5 border-bottom d-flex align-items-center justify-content-between mb-1" style="border-color: var(--ux-line) !important;">
+                            <div class="fw-bold d-flex align-items-center gap-1.5" style="font-size: 12px; color: var(--ux-ink);">
+                                <i class="bi bi-bell-fill" style="color: #0284C7;"></i> Trung Tâm Thông Báo
+                            </div>
+                            <span class="badge rounded-pill" style="background: rgba(2, 132, 199, 0.12); color: #0284C7; font-size: 10px;">
+                                <?= count($accountingList ?? []) ?> thông báo
+                            </span>
+                        </div>
+                        <div class="d-flex flex-column gap-1 py-1" style="max-height: 270px; overflow-y: auto;">
+                            <?php 
+                            $recentNotifications = array_slice($activityLogs ?? [], 0, 4);
+                            if (!empty($recentNotifications)):
+                                foreach ($recentNotifications as $notif): 
+                            ?>
+                            <div class="p-2 rounded-2 d-flex align-items-start gap-2 transition-all" style="font-size: 11.5px; background: rgba(0,0,0,0.02);">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-0.5" style="width: 24px; height: 24px; background: rgba(2, 132, 199, 0.12); color: #0284C7; font-size: 11px;">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                </div>
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <div class="fw-semibold text-truncate" style="color: var(--ux-ink); font-size: 11.5px;"><?= htmlspecialchars($notif['action'] ?? 'Hoạt động') ?></div>
+                                    <div class="text-muted text-truncate" style="font-size: 10.5px;"><?= htmlspecialchars($notif['description'] ?? 'Ghi nhận kiểm toán hệ thống') ?></div>
+                                    <small class="text-secondary opacity-75" style="font-size: 9px;"><?= htmlspecialchars($notif['created_at'] ?? 'Vừa xong') ?></small>
+                                </div>
+                            </div>
+                            <?php 
+                                endforeach;
+                            else: 
+                            ?>
+                            <div class="p-3 text-center text-muted" style="font-size: 11.5px;">Không có thông báo mới nào</div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="pt-1.5 border-top text-center" style="border-color: var(--ux-line) !important;">
+                            <a href="javascript:void(0)" onclick="navigateToPage('audit-trail')" class="text-decoration-none fw-semibold" style="font-size: 11px; color: #0284C7;">
+                                Xem tất cả nhật ký kiểm toán <i class="bi bi-chevron-right" style="font-size: 10px;"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <?php if (!empty($perms['canCreateShift'])): ?>
                 <button type="button" class="btn-fpt-primary btn-fpt-sm" onclick="openCreateShiftModal()">
