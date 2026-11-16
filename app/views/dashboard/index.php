@@ -6984,7 +6984,7 @@ async function sendPromptToAi(message) {
         const replyHtml = data.reply_html || (data.reply ? renderAiMarkdown(data.reply) : 'PolyMee AI đã xử lý yêu cầu của bạn.');
         const aiReply = document.createElement('div');
         aiReply.className = 'd-flex gap-2';
-        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; min-width:34px; flex:none; background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%); color:#FFFFFF;"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:14px; line-height:1;"></i></div><div class="bg-white p-3 rounded-4 shadow-xs border" style="font-size:13px; max-width:88%; line-height:1.55;">${replyHtml}</div>`;
+        aiReply.innerHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; min-width:34px; flex:none; background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%); color:#FFFFFF;"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:14px; line-height:1;"></i></div><div class="bg-white p-3.5 rounded-4 shadow-xs border flex-grow-1" style="font-size:13px; max-width:94%; line-height:1.55;">${replyHtml}</div>`;
         history.appendChild(aiReply);
         history.scrollTop = history.scrollHeight;
 
