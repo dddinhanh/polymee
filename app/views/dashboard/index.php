@@ -1815,13 +1815,13 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             flex-direction: column !important;
             flex: 1 1 0% !important;
             min-height: 0 !important;
+            height: 100% !important;
             padding: 0 !important;
             margin-bottom: 0 !important;
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
+            overflow: hidden !important;
             box-sizing: border-box !important;
         }
 
@@ -1839,6 +1839,10 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             width: 100% !important;
             display: flex !important;
             flex-direction: column !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            overflow: hidden !important;
             box-sizing: border-box !important;
         }
 
@@ -1846,6 +1850,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             width: 100% !important;
             display: flex !important;
             flex-direction: column !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            overflow-y: auto !important;
             box-sizing: border-box !important;
         }
 
@@ -1853,6 +1860,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             width: 100% !important;
             display: flex !important;
             flex-direction: column !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            overflow-y: auto !important;
             box-sizing: border-box !important;
         }
 
@@ -1860,22 +1870,27 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             display: grid !important;
             grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
             gap: 6px !important;
-            margin-bottom: 8px !important;
+            margin-bottom: 6px !important;
             text-align: center !important;
+            flex-shrink: 0 !important;
         }
 
         .month-days-grid {
             display: grid !important;
             grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
-            grid-template-rows: repeat(var(--month-rows, 5), minmax(82px, 1fr)) !important;
+            grid-template-rows: repeat(var(--month-rows, 5), minmax(0, 1fr)) !important;
             gap: 6px !important;
             width: 100% !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            height: 100% !important;
             box-sizing: border-box !important;
         }
 
         .month-day-cell {
-            min-height: 82px !important;
-            padding: 6px 8px !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            padding: 5px 7px !important;
             border-radius: 12px !important;
             display: flex !important;
             flex-direction: column !important;
@@ -1892,6 +1907,14 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             border-color: rgba(234, 88, 12, 0.4);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
+
+        /* Utility classes for Viewport-Locked & Flex card layouts */
+        .shrink-0 { flex-shrink: 0 !important; }
+        .min-h-0 { min-height: 0 !important; }
+        .flex-1 { flex: 1 1 0% !important; }
+        .overflow-y-auto { overflow-y: auto !important; }
+        .overflow-hidden { overflow: hidden !important; }
+        .h-full { height: 100% !important; }
 
         .day-number-pill {
             font-size: 13px !important;
@@ -2998,21 +3021,21 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </div>
 
                     <!-- CỘT PHẢI: CHI TIẾT NGÀY ĐANG CHỌN & LỊCH SẮP TỚI (Mockup 1 & 2) -->
-                    <div class="calendar-sidebar-col">
-                        <!-- THẺ 1: CHI TIẾT NGÀY ĐANG CHỌN -->
-                        <div class="cal-sidebar-card" id="calDayDetailCard">
-                            <div class="d-flex align-items-center gap-2 mb-2.5 pb-1">
+                    <div class="calendar-sidebar-col h-full flex flex-col gap-4 overflow-hidden">
+                        <!-- THẺ 1: CHI TIẾT NGÀY ĐANG CHỌN (Chiếm ~65% chiều cao) -->
+                        <div class="cal-sidebar-card cal-day-detail-card min-h-0 flex flex-col overflow-hidden" id="calDayDetailCard">
+                            <div class="cal-card-header d-flex align-items-center gap-2 mb-2 pb-1 shrink-0 flex-shrink-0">
                                 <i class="bi bi-calendar-event" style="color: #EA580C; font-size: 16px;"></i>
                                 <h6 class="fw-bold mb-0 text-dark" id="calSelectedDayTitle" style="font-size: 14.5px;">Chi tiết ngày 11/11/2026</h6>
                             </div>
-                            <div id="calSelectedDayContent">
+                            <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1" id="calSelectedDayContent">
                                 <!-- Nạp động -->
                             </div>
                         </div>
 
-                        <!-- THẺ 2: LỊCH SẮP TỚI -->
-                        <div class="cal-sidebar-card" id="calUpcomingCard">
-                            <div class="d-flex align-items-center justify-content-between mb-2.5 pb-1">
+                        <!-- THẺ 2: LỊCH SẮP TỚI (Chiếm ~35% chiều cao) -->
+                        <div class="cal-sidebar-card cal-upcoming-card min-h-0 flex flex-col overflow-hidden" id="calUpcomingCard">
+                            <div class="cal-card-header d-flex align-items-center justify-content-between mb-2 pb-1 shrink-0 flex-shrink-0">
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-calendar-check" style="color: #EA580C; font-size: 16px;"></i>
                                     <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Lịch sắp tới</h6>
@@ -3021,7 +3044,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     Xem tất cả <i class="bi bi-chevron-right" style="font-size: 10px;"></i>
                                 </a>
                             </div>
-                            <div class="d-flex flex-column gap-2" id="calUpcomingListContainer">
+                            <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 d-flex flex-column gap-2 pe-1" id="calUpcomingListContainer">
                                 <!-- Nạp động 4 card với màu viền và nhãn như mockup 2 -->
                             </div>
                         </div>
@@ -5990,7 +6013,7 @@ function renderCalendarSidebarDayDetail(dateStr) {
 
     if (dayShifts.length === 0 && dayNotes.length === 0) {
         contentEl.innerHTML = `
-            <div class="text-center py-3">
+            <div class="text-center py-4 h-100 d-flex flex-column justify-content-center my-auto">
                 <p class="text-muted small mb-3" style="font-size: 12.5px;">Chưa có ca trực hoặc sự kiện.</p>
                 <div class="d-flex justify-content-center">
                     <div class="p-3 rounded-4 d-inline-flex align-items-center justify-content-center" style="background: #FFF7ED; width: 68px; height: 68px; border: 1px solid rgba(234, 88, 12, 0.1);">

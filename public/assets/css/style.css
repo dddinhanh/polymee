@@ -518,46 +518,120 @@ table td .btn-fpt-sm {
     line-height: 1.1;
 }
 
+/* =========================================================
+   VIEWPORT-LOCKED CALENDAR & FIXED-HEADER SCROLLABLE CARDS
+   ========================================================= */
 .calendar-layout-grid {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) 340px !important;
-    gap: 18px !important;
-    align-items: start !important;
+    gap: 16px !important;
+    align-items: stretch !important;
     width: 100% !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
     box-sizing: border-box !important;
-}
-@media (max-width: 1100px) {
-    .calendar-layout-grid {
-        grid-template-columns: 1fr !important;
-    }
 }
 
 .calendar-main-box {
     background: #FFFFFF;
     border-radius: 18px;
     border: 1px solid rgba(0, 0, 0, 0.06);
-    padding: 18px 20px;
+    padding: 16px 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
     box-sizing: border-box;
     min-width: 0;
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
 }
 
 .calendar-sidebar-col {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
     min-width: 0;
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
 }
 
 .cal-sidebar-card {
     background: #FFFFFF;
     border-radius: 18px;
     border: 1px solid rgba(0, 0, 0, 0.06);
-    padding: 18px 20px;
+    padding: 16px 18px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     box-sizing: border-box;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+/* Thẻ 1: Chi tiết ngày chiếm ~65% chiều cao */
+.cal-day-detail-card {
+    flex: 65 65 0% !important;
+    min-height: 0 !important;
+}
+
+/* Thẻ 2: Lịch sắp tới chiếm ~35% chiều cao */
+.cal-upcoming-card {
+    flex: 35 35 0% !important;
+    min-height: 0 !important;
+}
+
+/* Header cố định ở đầu mỗi thẻ (shrink-0) */
+.cal-card-header {
+    flex-shrink: 0 !important;
+}
+
+/* Danh sách cuộn nội bộ mượt mà (flex-1 overflow-y-auto min-h-0) */
+.cal-scrollable-list {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+.cal-scrollable-list::-webkit-scrollbar {
+    width: 4px;
+}
+.cal-scrollable-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+}
+.cal-scrollable-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+@media (max-width: 1100px) {
+    .calendar-layout-grid {
+        grid-template-columns: 1fr !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    .calendar-main-box {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    .calendar-sidebar-col {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    .cal-day-detail-card {
+        flex: none !important;
+        max-height: 380px !important;
+    }
+    .cal-upcoming-card {
+        flex: none !important;
+        max-height: 280px !important;
+    }
 }
 
 .upcoming-schedule-item {
