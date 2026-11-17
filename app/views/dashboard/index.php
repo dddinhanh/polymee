@@ -3008,11 +3008,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 <div class="flex-shrink-0">
                     <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-2" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">HÀNH CHÍNH & TÀI CHÍNH</span>
-                                <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Bảng Nghiệm Thu Thù Lao & Quyết Toán CTV</h2>
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Quy trình 2 nhánh: CTV Bàn ghế/máy móc (Nghiệm thu ảnh hiện trường) & CTV Media (Nghiệm thu Link Google Drive) ➔ Giảng viên thẩm định ➔ Trình Nhà trường ký duyệt chuyển khoản</p>
+                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 16px; letter-spacing: -0.015em;">Bảng Nghiệm Thu Thù Lao & Quyết Toán CTV</h2>
                         </div>
                         <div class="d-flex gap-2">
                             <button type="button" class="btn-fpt-secondary btn-fpt-sm d-inline-flex align-items-center gap-1.5" onclick="window.print()">
@@ -3206,11 +3202,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 <div class="flex-shrink-0">
                     <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">GIẢNG VIÊN & HÀNH CHÍNH</span>
-                                <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Quản Lý Danh Sách Cộng Tác Viên (CTV)</h2>
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Danh sách CTV theo từng bộ môn. Danh sách tối giản hóa chỉ hiển thị Tên & Bộ môn; nhấp nút icon con mắt (👁️) để xem chi tiết CCCD, VNeID & Ngân hàng.</p>
+                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 16px; letter-spacing: -0.015em;">Quản Lý Danh Sách Cộng Tác Viên (CTV)</h2>
                         </div>
                         <div class="d-flex gap-2">
                             <button class="btn-fpt-secondary btn-fpt-sm" onclick="window.print()">
@@ -3370,8 +3362,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 <div class="flex-shrink-0">
                     <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
                         <div>
-                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Lịch Trực & Ca Phân Công Của Tôi</h2>
-                            <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Theo dõi ca trực, nộp minh chứng nghiệm thu (Ảnh hiện trường hoặc Link Drive) để Giảng viên nghiệm thu và xem hợp đồng thanh toán thù lao.</p>
+                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 16px; letter-spacing: -0.015em;">Lịch Trực & Ca Phân Công Của Tôi</h2>
                         </div>
                         <span class="badge bg-primary px-3 py-2 fw-bold" style="font-size: 12px; border-radius: 8px;" id="myShiftsCountBadge">0 Ca Trực</span>
                     </div>
@@ -3624,54 +3615,18 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 6: MINH CHỨNG ĐỂ NGHIỆM THU SAU MỖI SỰ KIỆN HOÀN THÀNH -->
             <section class="spa-panel" id="panelSubmissions" style="display:none !important;">
-                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề & Hướng dẫn (Non-scrollable Top) -->
-                <div class="flex-shrink-0">
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
-                    <div>
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-warning text-dark font-monospace fw-bold px-2.5 py-1" style="font-size: 11px;">HẬU SỰ KIỆN</span>
-                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Minh Chứng Nghiệm Thu Sau Mỗi Sự Kiện Hoàn Thành</h2>
-                        </div>
-                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Role CTV: Up ảnh hiện trường • Role CTV Media: Up link Google Drive kèm logo & chỉnh sửa sáng • Giảng Viên: Duyệt đã đầy đủ minh chứng để nghiệm thu</p>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-2 fw-bold d-flex align-items-center gap-1" style="font-size: 12px; border-radius: 8px;">
-                            <i class="bi bi-shield-check"></i> Zero-Fraud Acceptance
+                <!-- Thanh Tiêu Đề & Công Cụ Tối Giản (Clean & Compact Bar) -->
+                <div class="d-flex justify-content-between align-items-center pb-2 mb-2 flex-shrink-0">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-light text-dark border px-2.5 py-1.5 fw-semibold num-tabular" style="font-size: 11.5px;">
+                            <i class="bi bi-collection-play me-1 text-primary"></i> <?= count($accountingList) ?> Minh Chứng Nghiệm Thu
                         </span>
                     </div>
-                </div>
-
-                <!-- Banner Hướng Dẫn Quy Trình Minh Chứng Theo Role -->
-                <div class="row g-2.5 mb-2.5">
-                    <div class="col-12 col-md-4">
-                        <div class="rounded-3 border h-100 shadow-xs" style="background: #FAFAFC; border-color: rgba(0,0,0,0.08) !important; padding: 12px 14px;">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <span class="badge bg-primary text-white rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 10.5px;">Role CTV Thường</span>
-                                <strong class="text-dark" style="font-size: 12.5px;">Ảnh Hiện Trường Có Mặt</strong>
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.5;">CTV có nhiệm vụ chụp ảnh có mặt thực tế tại vị trí trực (áo cam FPoly) để chứng minh có mặt nghiệm thu.</p>
-                        </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="exportAccountingCSV()">
+                            <i class="bi bi-file-earmark-excel me-1 text-success"></i> Xuất Excel (CSV)
+                        </button>
                     </div>
-                    <div class="col-12 col-md-4">
-                        <div class="rounded-3 border h-100 shadow-xs" style="background: #FAFAFC; border-color: rgba(0,0,0,0.08) !important; padding: 12px 14px;">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <span class="badge bg-warning text-dark rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 10.5px;">Role CTV Media</span>
-                                <strong class="text-dark" style="font-size: 12.5px;">Link Drive Đã Chỉnh Sáng & Logo</strong>
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.5;">CTV Media tải link Google Drive bộ ảnh sự kiện đã được <strong>gắn logo FPT Poly</strong> và <strong>hậu kỳ chỉnh sáng</strong>.</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="rounded-3 border h-100 shadow-xs" style="background: #FAFAFC; border-color: rgba(0,0,0,0.08) !important; padding: 12px 14px;">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <span class="badge bg-success text-white rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 10.5px;">Role Giảng Viên</span>
-                                <strong class="text-dark" style="font-size: 12.5px;">Duyệt / Nhắc Nhở Qua Email</strong>
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.5;">Giảng viên kiểm tra minh chứng duyệt nghiệm thu, hoặc <strong>gửi email nhắc nhở</strong> nếu CTV chưa nộp ảnh.</p>
-                        </div>
-                    </div>
-                </div>
-
                 </div>
                 <!-- 2. VÙNG BẢNG DỮ LIỆU: Scrollable Body & Sticky Header -->
                 <div class="card border-0 rounded-3 shadow-xs flex-1 overflow-hidden d-flex flex-column" style="border: 1px solid var(--ux-line) !important;">
@@ -3797,11 +3752,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 <div class="flex-shrink-0">
                 <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
                     <div>
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-warning text-dark font-monospace fw-bold px-2.5 py-1" style="font-size: 11px;">QUY TRÌNH MỚI</span>
-                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Hồ Sơ Hợp Đồng Nghiệm Thu & Trình Ký Nhà Trường</h2>
-                        </div>
-                        <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Nghiệm thu bằng ảnh hiện trường thực tế của CTV • Giảng viên thẩm định & lập hợp đồng • Trình Ban Giám Hiệu ký duyệt chuyển tiền</p>
+                        <h2 class="fw-bold mb-0 text-dark" style="font-size: 16px; letter-spacing: -0.015em;">Hồ Sơ Hợp Đồng Nghiệm Thu & Trình Ký Nhà Trường</h2>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="exportAccountingCSV()">
