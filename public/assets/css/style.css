@@ -12,30 +12,38 @@
     --fpt-primary-active: #C2410C;
     --fpt-primary-soft: rgba(234, 88, 12, 0.08);
     --fpt-primary-border: rgba(234, 88, 12, 0.25);
-    
+
     --fpt-navy: #1D1D1F;
     --fpt-navy-surface: #FAFAFC;
-    --fpt-slate-bg: #F5F5F7;          /* Apple Canvas Parchment */
-    --fpt-slate-card: #FFFFFF;        /* Apple Pure White */
-    --fpt-slate-border: rgba(0, 0, 0, 0.08); /* Apple 1px Hairline */
+    --fpt-slate-bg: #F5F5F7;
+    /* Apple Canvas Parchment */
+    --fpt-slate-card: #FFFFFF;
+    /* Apple Pure White */
+    --fpt-slate-border: rgba(0, 0, 0, 0.08);
+    /* Apple 1px Hairline */
     --fpt-slate-border-focus: #C7C7CC;
 
-    --fpt-text-main: #1D1D1F;         /* Apple Near-Black Ink */
-    --fpt-text-muted: #6E6E73;        /* Apple Secondary Gray */
-    --fpt-text-caption: #86868B;      /* Apple Caption Gray */
+    --fpt-text-main: #1D1D1F;
+    /* Apple Near-Black Ink */
+    --fpt-text-muted: #6E6E73;
+    /* Apple Secondary Gray */
+    --fpt-text-caption: #86868B;
+    /* Apple Caption Gray */
 
     --fpt-emerald: #059669;
     --fpt-emerald-hover: #047857;
     --fpt-emerald-soft: #ECFDF5;
 
-    --fpt-sky: #0066CC;              /* Apple Action Blue */
+    --fpt-sky: #0066CC;
+    /* Apple Action Blue */
     --fpt-sky-hover: #0071E3;
     --fpt-sky-soft: #F0F9FF;
 
     --fpt-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-[data-bs-theme="dark"], html.dark {
+[data-bs-theme="dark"],
+html.dark {
     --fpt-slate-bg: #1C1C1E;
     --fpt-slate-card: #2C2C2E;
     --fpt-slate-border: rgba(255, 255, 255, 0.08);
@@ -53,6 +61,7 @@
     .no-scrollbar::-webkit-scrollbar {
         display: none;
     }
+
     .no-scrollbar {
         -ms-overflow-style: none;
         scrollbar-width: none;
@@ -353,15 +362,18 @@ table td .btn-fpt-sm {
 #aiChatHistory::-webkit-scrollbar {
     width: 5px;
 }
+
 #aiChatMessages::-webkit-scrollbar-track,
 #aiChatHistory::-webkit-scrollbar-track {
     background: #f1f5f9;
 }
+
 #aiChatMessages::-webkit-scrollbar-thumb,
 #aiChatHistory::-webkit-scrollbar-thumb {
     background: #cbd5e1;
     border-radius: 4px;
 }
+
 #aiChatMessages::-webkit-scrollbar-thumb:hover,
 #aiChatHistory::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
@@ -371,21 +383,26 @@ table td .btn-fpt-sm {
 .ai-bubble-content p {
     margin-bottom: 0.5rem;
 }
+
 .ai-bubble-content p:last-child {
     margin-bottom: 0;
 }
+
 .ai-bubble-content ul {
     list-style-type: disc;
     padding-left: 1.25rem;
     margin-bottom: 0.5rem;
 }
+
 .ai-bubble-content li {
     margin-bottom: 0.25rem;
 }
+
 .ai-bubble-content strong {
     color: var(--fpt-text-main);
     font-weight: 700;
 }
+
 .ai-bubble-content a {
     color: var(--fpt-primary);
     text-decoration: underline;
@@ -394,8 +411,15 @@ table td .btn-fpt-sm {
 
 /* Fade in animation */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .animate-fade-in {
@@ -452,4 +476,147 @@ table td .btn-fpt-sm {
 
 .modal-backdrop.show {
     opacity: 0.45;
+}
+
+/* =========================================================
+   CALENDAR BENTO 2.0 & SIDEBAR (Mockup Layout Redesign)
+   ========================================================= */
+.kpi-bento-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.kpi-bento-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+.kpi-bento-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.kpi-bento-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #64748B;
+    margin-bottom: 2px;
+}
+.kpi-bento-val {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.1;
+}
+
+.calendar-layout-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 340px !important;
+    gap: 18px !important;
+    align-items: start !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+@media (max-width: 1100px) {
+    .calendar-layout-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+.calendar-main-box {
+    background: #FFFFFF;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 18px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.calendar-sidebar-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+
+.cal-sidebar-card {
+    background: #FFFFFF;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 18px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+}
+
+.upcoming-schedule-item {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    padding: 11px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.upcoming-schedule-item:hover {
+    background: #FAFAFC;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.cal-event-pill {
+    font-size: 10px !important;
+    font-weight: 600;
+    padding: 2.5px 6px !important;
+    border-radius: 6px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px !important;
+    display: flex;
+    align-items: center;
+    line-height: 1.3;
+}
+
+.cal-shift-pill {
+    font-size: 9.5px !important;
+    font-weight: 600;
+    padding: 2px 6px !important;
+    border-radius: 6px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px !important;
+    border: 1px solid rgba(234, 88, 12, 0.35);
+    color: #EA580C;
+    background: #FFFDFB;
+    display: flex;
+    align-items: center;
+    line-height: 1.3;
+}
+
+.month-day-cell.is-selected {
+    border: 1.5px solid #EA580C !important;
+    background: #FFF8F5 !important;
+    box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.12) !important;
+}
+
+.day-number-pill.selected-badge {
+    background: #EA580C !important;
+    color: #FFFFFF !important;
+    border-radius: 8px !important;
+    padding: 2px 7px !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    display: inline-block;
 }
