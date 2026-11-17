@@ -437,3 +437,19 @@ table td .btn-fpt-sm {
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 4px 14px rgba(234, 88, 12, 0.04);
 }
+
+/* =========================================================
+   MULTI-MODAL & BACKDROP STACKING PROTECTION
+   ========================================================= */
+.modal {
+    transition: opacity 0.15s linear;
+}
+
+.modal.show {
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.modal-backdrop.show {
+    opacity: 0.45;
+}

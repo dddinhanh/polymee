@@ -5459,7 +5459,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
                 <div class="d-flex gap-2">
                     <button type="button" class="btn-fpt-secondary btn-fpt-sm" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn-fpt-primary btn-fpt-sm" id="evModalAddShiftBtn" onclick="openCreateShiftModal()" style="display:none;">
+                    <button type="button" class="btn-fpt-primary btn-fpt-sm" id="evModalAddShiftBtn" onclick="openCreateShiftModal(currentOpenEventId)" style="display:none;">
                         <i class="bi bi-plus-lg me-1"></i> Thêm Ca Trực
                     </button>
                 </div>
@@ -5555,6 +5555,35 @@ document.addEventListener('DOMContentLoaded', function() {
     renderMonthGrid(currentYear, currentMonth);
     renderMyShiftsTable();
     initEventsPage();
+
+    // Universal Multi-Modal Stacking & Layering Protection
+    document.addEventListener('show.bs.modal', function(event) {
+        const openModals = Array.from(document.querySelectorAll('.modal.show')).filter(m => m !== event.target);
+        if (openModals.length > 0) {
+            let highestZ = 1055;
+            openModals.forEach(m => {
+                const z = parseInt(window.getComputedStyle(m).zIndex, 10);
+                if (!isNaN(z) && z > highestZ) highestZ = z;
+            });
+            const newZ = highestZ + 20;
+            event.target.style.zIndex = newZ;
+            setTimeout(() => {
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                if (backdrops.length > 0) {
+                    const latestBackdrop = backdrops[backdrops.length - 1];
+                    latestBackdrop.style.zIndex = newZ - 5;
+                }
+            }, 10);
+        }
+    });
+
+    document.addEventListener('hidden.bs.modal', function(event) {
+        event.target.style.zIndex = '';
+        const remainingOpen = document.querySelectorAll('.modal.show');
+        if (remainingOpen.length > 0) {
+            document.body.classList.add('modal-open');
+        }
+    });
 
     // Hỗ trợ Deep Link qua URL Query Parameters (?tab=accounting hoặc ?view=day&date=2026-11-15)
     const urlParams = new URLSearchParams(window.location.search);
@@ -6203,10 +6232,28 @@ async function deleteCalendarNote(noteId) {
  * MODAL ĐIỀU PHỐI / CHI TIẾT CA TRỰC
  * =========================================================
  */
-function openShiftDetail(shiftId) {
+function openShiftDetail(shiftId, returnToEventId = null) {
     const shift = rawShifts.find(s => parseInt(s.id) === parseInt(shiftId));
     if (!shift) return;
 
+    // Nếu Modal Chi Tiết Sự Kiện đang mở, đóng nó trước để tránh bị đè 2 modal lên nhau
+    const evModalEl = document.getElementById('eventShiftsModal');
+    if (evModalEl && evModalEl.classList.contains('show')) {
+        const evModalInst = bootstrap.Modal.getInstance(evModalEl);
+        if (evModalInst) {
+            evModalEl.addEventListener('hidden.bs.modal', function onEvHidden() {
+                evModalEl.removeEventListener('hidden.bs.modal', onEvHidden);
+                _renderAndShowShiftModal(shift, returnToEventId || shift.event_id);
+            }, { once: true });
+            evModalInst.hide();
+            return;
+        }
+    }
+
+    _renderAndShowShiftModal(shift, returnToEventId);
+}
+
+function _renderAndShowShiftModal(shift, returnToEventId = null) {
     const allowance = shift.remuneration_amount ? Number(shift.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150,000 đ';
     const lecturerName = shift.lecturer_name || 'ThS. Phan Hoàng Khải';
     const lecturerCode = shift.lecturer_code ? ` (${shift.lecturer_code})` : '';
@@ -6230,6 +6277,10 @@ function openShiftDetail(shiftId) {
     const isMine = parseInt(shift.is_registered_by_me) > 0;
     const canDeleteThis = userPermissions.canDeleteAnyEvent || (userPermissions.canDeleteOwnEvent && parseInt(shift.event_created_by) === parseInt(currentUser.id));
 
+    const backBtnHtml = returnToEventId 
+        ? `<button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="shiftModalInstance.hide(); openEventDetailsModal(${returnToEventId});"><i class="bi bi-arrow-left me-1"></i> Quay Lại Sự Kiện</button>`
+        : '';
+
     if (userPermissions.canRegisterShift) {
         noticeContainer.innerHTML = `
             <i class="bi bi-shield-check fs-5"></i>
@@ -6237,15 +6288,21 @@ function openShiftDetail(shiftId) {
         `;
         if (isMine) {
             actionContainer.innerHTML = `
-                <button type="button" class="btn-fpt-emerald" onclick="shiftModalInstance.hide(); navigateToPage('my-shifts');">
-                    <i class="bi bi-calendar-check me-1"></i> Đến Lịch Của Tôi Để Nộp Minh Chứng
-                </button>
+                <div class="d-flex align-items-center gap-2">
+                    ${backBtnHtml}
+                    <button type="button" class="btn-fpt-emerald" onclick="shiftModalInstance.hide(); navigateToPage('my-shifts');">
+                        <i class="bi bi-calendar-check me-1"></i> Đến Lịch Của Tôi Để Nộp Minh Chứng
+                    </button>
+                </div>
             `;
         } else {
             actionContainer.innerHTML = `
-                <button type="button" class="btn-fpt-primary" onclick="submitShiftRegistration(${shift.id})">
-                    <i class="bi bi-check-lg me-1"></i> Xác Nhận Đăng Ký (AJAX)
-                </button>
+                <div class="d-flex align-items-center gap-2">
+                    ${backBtnHtml}
+                    <button type="button" class="btn-fpt-primary" onclick="submitShiftRegistration(${shift.id}, ${returnToEventId || 'null'})">
+                        <i class="bi bi-check-lg me-1"></i> Xác Nhận Đăng Ký (AJAX)
+                    </button>
+                </div>
             `;
         }
     } else if (userPermissions.canCreateShift || canDeleteThis) {
@@ -6266,6 +6323,7 @@ function openShiftDetail(shiftId) {
         }
         actionContainer.innerHTML = `
             <div class="d-flex align-items-center gap-2">
+                ${backBtnHtml}
                 ${deleteBtnHtml}
                 <button type="button" class="btn-fpt-secondary" onclick="shiftModalInstance.hide(); navigateToPage('events')">
                     <i class="bi bi-people me-1"></i> Quản Lý Sự Kiện
@@ -6278,9 +6336,12 @@ function openShiftDetail(shiftId) {
             <span>Chế độ Tra cứu: Bạn đang xem thông tin ca trực theo vai trò <strong>${userPermissions.roleNameDisplay || ''}</strong>.</span>
         `;
         actionContainer.innerHTML = `
-            <button type="button" class="btn-fpt-secondary" data-bs-dismiss="modal">
-                <i class="bi bi-x-lg me-1"></i> Đóng
-            </button>
+            <div class="d-flex align-items-center gap-2">
+                ${backBtnHtml}
+                <button type="button" class="btn-fpt-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i> Đóng
+                </button>
+            </div>
         `;
     }
 
@@ -6495,9 +6556,12 @@ function handleEventCardClick(eventId, eventDate) {
     openEventShiftsModal(eventId);
 }
 
+let currentOpenEventId = null;
+
 function openEventShiftsModal(eventId) {
     const ev = (typeof rawEvents !== 'undefined') ? rawEvents.find(e => parseInt(e.id) === parseInt(eventId)) : null;
     if (!ev) return;
+    currentOpenEventId = eventId;
 
     const titleEl = document.getElementById('evModalTitle');
     const deptEl = document.getElementById('evModalDept');
@@ -6554,8 +6618,9 @@ function openEventShiftsModal(eventId) {
                     ${isMine 
                         ? `<span class="badge bg-success px-2.5 py-1.5 fw-semibold"><i class="bi bi-check2 me-1"></i>Bạn đã đăng ký</span>` 
                         : (userPermissions.canRegisterShift 
-                            ? `<button type="button" class="btn btn-sm btn-fpt-primary shadow-2xs" onclick="event.stopPropagation(); openShiftDetail(${s.id})">${isFull ? 'Đăng Ký Dự Phòng' : 'Đăng Ký'}</button>` 
-                            : `<button type="button" class="btn btn-sm btn-fpt-secondary shadow-2xs" onclick="event.stopPropagation(); openShiftDetail(${s.id})"><i class="bi bi-eye me-1"></i>Chi tiết</button>`)}
+                            ? `<button type="button" class="btn btn-sm btn-fpt-secondary shadow-2xs" onclick="event.stopPropagation(); openShiftDetail(${s.id}, ${ev.id})"><i class="bi bi-info-circle me-1"></i>Chi tiết</button>
+                               <button type="button" class="btn btn-sm btn-fpt-primary shadow-2xs" id="regShiftBtn_${s.id}" onclick="event.stopPropagation(); registerShiftDirectly(${s.id}, ${ev.id})">${isFull ? '<i class="bi bi-clock-history me-1"></i>Đăng Ký Dự Phòng' : '<i class="bi bi-check2 me-1"></i>Đăng Ký'}</button>` 
+                            : `<button type="button" class="btn btn-sm btn-fpt-secondary shadow-2xs" onclick="event.stopPropagation(); openShiftDetail(${s.id}, ${ev.id})"><i class="bi bi-eye me-1"></i>Chi tiết</button>`)}
                 </div>
             `;
             container.appendChild(card);
@@ -6586,6 +6651,62 @@ function openEventShiftsModal(eventId) {
     if (modalEl) {
         const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
         modalInstance.show();
+    }
+}
+
+/**
+ * Đăng ký ca trực trực tiếp từ Modal Sự kiện (1-click AJAX, không mở modal đè lên)
+ */
+async function registerShiftDirectly(shiftId, eventId) {
+    const shift = rawShifts.find(s => parseInt(s.id) === parseInt(shiftId));
+    if (!shift) return;
+
+    const btn = document.getElementById(`regShiftBtn_${shiftId}`);
+    const originalHtml = btn ? btn.innerHTML : '';
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true" style="width: 12px; height: 12px;"></span>Đang đăng ký...`;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('shift_id', shiftId);
+        formData.append('csrf_token', '<?= $csrfToken ?? "" ?>');
+
+        const response = await fetch('/shift/register', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            shift.is_registered_by_me = 1;
+            if (data.status === 'Approved') {
+                shift.approved_qty = parseInt(shift.approved_qty) + 1;
+            }
+            showToast(data.message || 'Đăng ký ca trực thành công!', 'success');
+
+            // Cập nhật lại giao diện modal sự kiện hiện tại
+            openEventShiftsModal(eventId);
+
+            // Cập nhật các bảng & lịch phía sau
+            changeCalendarView(currentCalendarTier);
+            renderMyShiftsTable();
+        } else {
+            showToast(data.message || 'Không thể đăng ký ca trực.', 'danger');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        }
+    } catch (err) {
+        showToast('Lỗi kết nối máy chủ.', 'danger');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
     }
 }
 
@@ -6677,7 +6798,32 @@ async function confirmDeleteShift(shiftId, shiftName) {
 /**
  * Mở Modal Đặt Lịch Ca Trực Mới
  */
-function openCreateShiftModal() {
+let currentEventIdForShiftCreation = null;
+
+function openCreateShiftModal(eventId = null) {
+    currentEventIdForShiftCreation = eventId || null;
+
+    // Nếu Modal Chi Tiết Sự Kiện đang mở, đóng trước để tránh bị đè lên nhau
+    const evModalEl = document.getElementById('eventShiftsModal');
+    if (evModalEl && evModalEl.classList.contains('show')) {
+        const evModalInst = bootstrap.Modal.getInstance(evModalEl);
+        if (evModalInst) {
+            evModalEl.addEventListener('hidden.bs.modal', function onEvHidden() {
+                evModalEl.removeEventListener('hidden.bs.modal', onEvHidden);
+                _showCreateShiftModal(eventId);
+            }, { once: true });
+            evModalInst.hide();
+            return;
+        }
+    }
+    _showCreateShiftModal(eventId);
+}
+
+function _showCreateShiftModal(eventId = null) {
+    if (eventId) {
+        const evSelect = document.getElementById('shiftEventSelect');
+        if (evSelect) evSelect.value = eventId;
+    }
     createShiftModalInstance.show();
 }
 
@@ -6709,6 +6855,14 @@ async function handleCreateShiftSubmit(e) {
 
             // Render lại chế độ xem hiện tại
             changeCalendarView(currentCalendarTier);
+
+            // Nếu tạo từ Modal Sự Kiện, tự động mở lại modal sự kiện với ca vừa tạo
+            if (currentEventIdForShiftCreation) {
+                setTimeout(() => {
+                    openEventShiftsModal(currentEventIdForShiftCreation);
+                    currentEventIdForShiftCreation = null;
+                }, 200);
+            }
         } else {
             showToast(data.message || 'Không thể tạo ca trực.', 'danger');
         }
@@ -6871,7 +7025,7 @@ function exportAccountingCSV() {
 /**
  * Đăng ký ca trực bằng AJAX (Không chớp trang)
  */
-async function submitShiftRegistration(shiftId) {
+async function submitShiftRegistration(shiftId, returnToEventId = null) {
     const shift = rawShifts.find(s => parseInt(s.id) === parseInt(shiftId));
     if (!shift) return;
 
@@ -6898,6 +7052,13 @@ async function submitShiftRegistration(shiftId) {
             showToast(data.message, 'success');
             changeCalendarView(currentCalendarTier);
             renderMyShiftsTable();
+
+            // Nếu người dùng thao tác từ Modal Sự Kiện, tự động mở lại modal sự kiện sau khi đóng modal ca trực
+            if (returnToEventId) {
+                setTimeout(() => {
+                    openEventShiftsModal(returnToEventId);
+                }, 200);
+            }
         } else {
             showToast(data.message || 'Không thể đăng ký ca trực.', 'danger');
         }
