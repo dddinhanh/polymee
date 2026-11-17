@@ -3001,7 +3001,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <div class="calendar-sidebar-col">
                         <!-- THẺ 1: CHI TIẾT NGÀY ĐANG CHỌN -->
                         <div class="cal-sidebar-card" id="calDayDetailCard">
-                            <div class="d-flex align-items-center gap-2 mb-2 pb-1">
+                            <div class="d-flex align-items-center gap-2 mb-2.5 pb-1">
                                 <i class="bi bi-calendar-event" style="color: #EA580C; font-size: 16px;"></i>
                                 <h6 class="fw-bold mb-0 text-dark" id="calSelectedDayTitle" style="font-size: 14.5px;">Chi tiết ngày 11/11/2026</h6>
                             </div>
@@ -5973,7 +5973,7 @@ function renderMonthGrid(year, month) {
 }
 
 /**
- * Render Sidebar Card 1: Chi tiết ngày đang chọn (Mockup 1 & 2)
+ * Render Sidebar Card 1: Chi tiết ngày đang chọn (Đồng bộ Bento 2.0 chuẩn Lịch Sắp Tới)
  */
 function renderCalendarSidebarDayDetail(dateStr) {
     const titleEl = document.getElementById('calSelectedDayTitle');
@@ -6007,12 +6007,19 @@ function renderCalendarSidebarDayDetail(dateStr) {
     // Ghi chú nếu có
     dayNotes.forEach(n => {
         html += `
-            <div class="p-2.5 rounded-3 border bg-light" style="border-left: 3.5px solid ${n.color || '#EA580C'} !important;">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <strong style="font-size: 12.5px; color: #1E293B;">${n.title}</strong>
-                    <span class="badge bg-white text-muted border font-monospace" style="font-size: 10px;">Ghi chú</span>
+            <div class="upcoming-schedule-item" style="border-left: 3.5px solid ${n.color || '#8B5CF6'}; cursor: default;">
+                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                    <span class="text-muted" style="font-size: 11px; font-weight: 500;">
+                        <i class="bi bi-pin-angle me-1"></i>Ghi chú lịch
+                    </span>
+                    <span class="badge rounded-pill" style="background: #F3E8FF; color: #7C3AED; font-size: 10px; font-weight: 600; padding: 2px 7px;">
+                        <span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: #7C3AED;"></span>Lưu ý
+                    </span>
                 </div>
-                <small class="text-muted d-block" style="font-size: 11.5px; line-height: 1.3;">${n.content || ''}</small>
+                <strong class="d-block text-dark text-truncate" style="font-size: 13px; line-height: 1.3;">${n.title}</strong>
+                <div class="text-muted" style="font-size: 11.5px; margin-top: 2px;">
+                    ${n.content || ''}
+                </div>
             </div>
         `;
     });
@@ -6021,28 +6028,74 @@ function renderCalendarSidebarDayDetail(dateStr) {
     dayShifts.forEach(s => {
         const isMine = parseInt(s.is_registered_by_me) > 0;
         const isFull = parseInt(s.approved_qty) >= parseInt(s.target_qty);
-        const allowance = s.remuneration_amount ? Number(s.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150,000 đ';
+        const allowance = s.remuneration_amount ? Number(s.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150.000 đ';
+        
+        let borderColor = '#EA580C';
+        let statusBg = '#FFF1EB';
+        let statusColor = '#EA580C';
+        let statusText = 'Đang tuyển';
+
+        if (isMine) {
+            borderColor = '#0284C7';
+            statusBg = '#F0F9FF';
+            statusColor = '#0284C7';
+            statusText = 'Ca của tôi';
+        } else if (isFull) {
+            borderColor = '#16A34A';
+            statusBg = '#F0FDF4';
+            statusColor = '#16A34A';
+            statusText = 'Đủ CTV';
+        }
+
+        const startTime = s.start_time ? s.start_time.substring(11, 16) : '08:00';
+        const endTime = s.end_time ? s.end_time.substring(11, 16) : '12:00';
+
+        // Nút hành động gọn gàng, bo cong viên thuốc (pill), đồng bộ thẩm mỹ với "Lịch sắp tới"
+        let actionBtnHtml = '';
+        if (isMine) {
+            actionBtnHtml = `
+                <span class="badge rounded-pill d-inline-flex align-items-center" style="background: #F0F9FF; color: #0284C7; font-size: 10px; font-weight: 600; padding: 2.5px 8px; border: 1px solid rgba(2, 132, 199, 0.2);">
+                    <i class="bi bi-check2 me-1"></i>Đã tham gia
+                </span>
+            `;
+        } else if (userPermissions.canRegisterShift) {
+            actionBtnHtml = `
+                <button type="button" class="btn btn-sm btn-fpt-primary shadow-2xs" id="regShiftBtn_${s.id}" 
+                    style="font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 600; line-height: 1.4;" 
+                    onclick="event.stopPropagation(); registerShiftDirectly(${s.id}, ${s.event_id})">
+                    ${isFull ? 'Dự Phòng' : 'Đăng Ký'}
+                </button>
+            `;
+        } else {
+            actionBtnHtml = `
+                <button type="button" class="btn btn-sm btn-fpt-secondary shadow-2xs" 
+                    style="font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 600; line-height: 1.4;" 
+                    onclick="event.stopPropagation(); openShiftDetail(${s.id})">
+                    Chi tiết
+                </button>
+            `;
+        }
+
         html += `
-            <div class="p-2.5 rounded-3 border bg-white shadow-2xs" style="border-left: 3.5px solid ${isMine ? '#0284C7' : (isFull ? '#16A34A' : '#EA580C')} !important;">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <span class="badge bg-light text-dark border font-monospace" style="font-size: 10.5px;">${s.start_time.substring(11, 16)} - ${s.end_time.substring(11, 16)}</span>
-                    ${isMine 
-                        ? `<span class="badge rounded-pill" style="background:#F0F9FF; color:#0284C7; font-size:10px; font-weight:600;">Ca của tôi</span>` 
-                        : (isFull 
-                            ? `<span class="badge rounded-pill" style="background:#F0FDF4; color:#16A34A; font-size:10px; font-weight:600;">Đủ CTV</span>`
-                            : `<span class="badge rounded-pill" style="background:#FFF1EB; color:#EA580C; font-size:10px; font-weight:600;">Đang tuyển</span>`)}
+            <div class="upcoming-schedule-item" onclick="openShiftDetail(${s.id})" style="border-left: 3.5px solid ${borderColor};">
+                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                    <span class="text-muted" style="font-size: 11px; font-weight: 500;">
+                        <i class="bi bi-clock me-1"></i>${startTime} - ${endTime}
+                    </span>
+                    <span class="badge rounded-pill" style="background: ${statusBg}; color: ${statusColor}; font-size: 10px; font-weight: 600; padding: 2px 7px;">
+                        <span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: ${statusColor};"></span>${statusText}
+                    </span>
                 </div>
-                <strong class="d-block text-dark text-truncate mb-1" style="font-size: 13px;">${s.name}</strong>
-                <div class="d-flex align-items-center justify-content-between text-muted" style="font-size: 11.5px;">
-                    <span><i class="bi bi-people me-1 text-primary"></i>${s.approved_qty}/${s.target_qty} CTV</span>
-                    <span class="text-success fw-semibold">${allowance}</span>
-                </div>
-                <div class="mt-2 pt-1 border-top d-flex justify-content-end gap-1.5">
-                    ${isMine 
-                        ? `<button type="button" class="btn btn-sm btn-fpt-secondary" onclick="openShiftDetail(${s.id})"><i class="bi bi-eye me-1"></i>Chi tiết</button>` 
-                        : (userPermissions.canRegisterShift 
-                            ? `<button type="button" class="btn btn-sm btn-fpt-primary" id="regShiftBtn_${s.id}" onclick="registerShiftDirectly(${s.id}, ${s.event_id})">${isFull ? 'Đăng Ký Dự Phòng' : 'Đăng Ký'}</button>` 
-                            : `<button type="button" class="btn btn-sm btn-fpt-secondary" onclick="openShiftDetail(${s.id})"><i class="bi bi-eye me-1"></i>Chi tiết</button>`)}
+                <strong class="d-block text-dark text-truncate" style="font-size: 13px; line-height: 1.35; margin: 3px 0 2px;">${s.name}</strong>
+                <div class="d-flex align-items-center justify-content-between mt-1 text-muted" style="font-size: 11.5px;">
+                    <div class="d-flex align-items-center gap-1.5">
+                        <span><i class="bi bi-people me-1 text-primary"></i>${s.approved_qty}/${s.target_qty} CTV</span>
+                        <span class="opacity-25">•</span>
+                        <span class="text-success fw-semibold">${allowance}</span>
+                    </div>
+                    <div>
+                        ${actionBtnHtml}
+                    </div>
                 </div>
             </div>
         `;
@@ -6891,8 +6944,11 @@ async function registerShiftDirectly(shiftId, eventId) {
             }
             showToast(data.message || 'Đăng ký ca trực thành công!', 'success');
 
-            // Cập nhật lại giao diện modal sự kiện hiện tại
-            openEventShiftsModal(eventId);
+            // Cập nhật lại giao diện modal sự kiện hiện tại (nếu đang mở)
+            const evModalEl = document.getElementById('eventShiftsModal');
+            if (evModalEl && evModalEl.classList.contains('show')) {
+                openEventShiftsModal(eventId);
+            }
 
             // Cập nhật các bảng & lịch phía sau
             changeCalendarView(currentCalendarTier);
