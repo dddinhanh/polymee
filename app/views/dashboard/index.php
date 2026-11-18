@@ -3017,35 +3017,35 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <!-- TAB 1: BẢNG LỊCH TRUNG TÂM (CALENDAR-FIRST) -->
             <section class="calendar-container" id="panelCalendar">
 
-                <!-- KPI Metrics Strip: 4 Thẻ Bento Chuẩn Mockup (Sự kiện trong tháng, Ca trực của tôi, Buổi cần nộp minh chứng, Tỷ lệ hoàn thành) -->
+                <!-- KPI Metrics Strip: 4 Thẻ Bento Chuẩn Mockup Image 5 & 6 -->
                 <div class="kpi-metric-strip mb-3" id="kpiMetricsStrip">
-                    <!-- Card 1: Sự kiện tháng -->
+                    <!-- Card 1: Sự kiện trong tháng -->
                     <div class="kpi-bento-card">
-                        <div class="kpi-icon-circle" style="background: #F0F9FF; color: #0284C7;">
+                        <div class="kpi-icon-circle" style="background: #FFF7ED; color: #EA580C;">
                             <i class="bi bi-calendar3"></i>
                         </div>
                         <div>
-                            <div class="kpi-bento-label">Sự kiện tháng</div>
-                            <div class="kpi-bento-val num-tabular"><?= count($events ?? []) ?: 6 ?></div>
+                            <div class="kpi-bento-label">Sự kiện trong tháng</div>
+                            <div class="kpi-bento-val num-tabular"><?= count($events ?? []) ?: 7 ?></div>
                         </div>
                     </div>
                     <!-- Card 2: Ca trực của tôi -->
                     <div class="kpi-bento-card">
-                        <div class="kpi-icon-circle" style="background: #F0F9FF; color: #0284C7;">
-                            <i class="bi bi-people"></i>
+                        <div class="kpi-icon-circle" style="background: #EFF6FF; color: #2563EB;">
+                            <i class="bi bi-layers"></i>
                         </div>
                         <div>
                             <div class="kpi-bento-label">Ca trực của tôi</div>
-                            <div class="kpi-bento-val num-tabular"><?= count($shifts ?? []) ?: 14 ?></div>
+                            <div class="kpi-bento-val num-tabular"><?= count($shifts ?? []) ?: 16 ?></div>
                         </div>
                     </div>
-                    <!-- Card 3: Buổi cần minh chứng -->
+                    <!-- Card 3: Buổi cần nộp minh chứng -->
                     <div class="kpi-bento-card">
                         <div class="kpi-icon-circle" style="background: #FAF5FF; color: #9333EA;">
                             <i class="bi bi-file-earmark-text"></i>
                         </div>
                         <div>
-                            <div class="kpi-bento-label">Buổi cần minh chứng</div>
+                            <div class="kpi-bento-label">Buổi cần nộp minh chứng</div>
                             <div class="kpi-bento-val num-tabular">3</div>
                         </div>
                     </div>
@@ -3140,94 +3140,59 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
 
-                    <!-- CỘT PHẢI: CHI TIẾT NGÀY ĐANG CHỌN (Mockup Chuẩn Sản Phẩm) -->
-                    <div class="calendar-sidebar-col" id="calSidebarInspector">
-                        <!-- HEADER CHI TIẾT NGÀY -->
-                        <div class="d-flex align-items-center justify-content-between mb-3 pb-1 flex-shrink-0">
-                            <div class="d-flex align-items-center gap-2.5">
-                                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: #F0F9FF; color: #0284C7; border: 1px solid rgba(2, 132, 199, 0.15);">
-                                    <i class="bi bi-calendar3 fs-5"></i>
-                                </div>
-                                <div>
-                                    <div class="text-muted" style="font-size: 11.5px; font-weight: 500;">Chi tiết ngày</div>
-                                    <h4 class="fw-bold mb-0 text-dark num-tabular" id="calSelectedDayTitle" style="font-size: 20px; letter-spacing: -0.5px;">18/11/2026</h4>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center gap-1">
-                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px; border-color: #E2E8F0;" onclick="navigateCalendarDay(-1)" title="Ngày trước">
-                                    <i class="bi bi-chevron-left" style="font-size: 10.5px;"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px; border-color: #E2E8F0;" onclick="navigateCalendarDay(1)" title="Ngày sau">
-                                    <i class="bi bi-chevron-right" style="font-size: 10.5px;"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- SEGMENTED TABS (4 TABS) -->
-                        <div class="d-flex align-items-center gap-1.5 mb-3 flex-shrink-0 overflow-x-auto no-scrollbar" id="calSidebarTabs">
-                            <button type="button" class="cal-tab-pill active" id="tabBtnActivities" onclick="switchSidebarTab('activities')">
-                                <i class="bi bi-calendar-event me-1"></i>Lịch hoạt động (<span id="calCountActivities">2</span>)
-                            </button>
-                            <button type="button" class="cal-tab-pill" id="tabBtnShifts" onclick="switchSidebarTab('shifts')">
-                                <i class="bi bi-person me-1"></i>Ca trực (<span id="calCountShifts">1</span>)
-                            </button>
-                            <button type="button" class="cal-tab-pill" id="tabBtnProofs" onclick="switchSidebarTab('proofs')">
-                                <i class="bi bi-image me-1"></i>Minh chứng
-                            </button>
-                            <button type="button" class="cal-tab-pill" id="tabBtnNotes" onclick="switchSidebarTab('notes')">
-                                <i class="bi bi-file-text me-1"></i>Ghi chú
-                            </button>
-                        </div>
-
-                        <!-- DANH SÁCH HOẠT ĐỘNG / CA TRỰC NGÀY ĐANG CHỌN -->
-                        <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1" id="calSelectedDayContent">
-                            <!-- Nạp động qua JS -->
-                        </div>
-
-                        <!-- CARD: CTV THAM GIA -->
-                        <div class="cal-subcard mt-2.5 mb-2.5 flex-shrink-0" id="calCtvParticipantCard">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <i class="bi bi-people" style="color: #0284C7; font-size: 14px;"></i>
-                                    <span class="fw-bold text-dark" style="font-size: 12.5px;">CTV tham gia (<span id="calCtvRatio">1/3</span>)</span>
-                                </div>
-                                <a href="javascript:void(0)" onclick="openInspectorEventModal()" class="text-decoration-none fw-semibold" style="font-size: 11px; color: #0284C7;">
-                                    Xem danh sách <i class="bi bi-chevron-right" style="font-size: 9px;"></i>
-                                </a>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between p-2 rounded-3" style="background: #FAFAFC; border: 1px solid rgba(0,0,0,0.04);">
+                    <!-- CỘT PHẢI: 2 THẺ (Chi tiết ngày ~62% + Lịch sắp tới ~38% - Mockup Image 3, 4, 7) -->
+                    <div class="calendar-sidebar-col" id="calendarRightSidebar">
+                        
+                        <!-- THẺ 1: CHI TIẾT NGÀY (Mockup Image 3, 4, 7) -->
+                        <div class="cal-sidebar-card cal-day-detail-card" id="calDayDetailCard">
+                            <!-- Header cố định (shrink-0) -->
+                            <div class="cal-card-header d-flex align-items-center justify-content-between mb-2 pb-1">
                                 <div class="d-flex align-items-center gap-2">
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 32px; height: 32px; background: #E0F2FE; color: #0284C7; font-size: 11px;">
-                                        DP
+                                    <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; background: #FFF7ED; color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.2);">
+                                        <i class="bi bi-calendar3" style="font-size: 16px;"></i>
                                     </div>
-                                    <div>
-                                        <strong class="d-block text-dark text-truncate" style="font-size: 12px; max-width: 140px;">Đinh Nguyễn Phương Anh</strong>
-                                        <small class="text-muted d-block" style="font-size: 10.5px;">CTV Media</small>
-                                    </div>
+                                    <h5 class="fw-bold mb-0 text-dark" style="font-size: 15.5px; letter-spacing: -0.3px;">
+                                        Chi tiết ngày <span id="calSelectedDayTitle">11/11/2026</span>
+                                    </h5>
                                 </div>
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <span class="badge rounded-pill" style="background: #F0FDF4; color: #16A34A; font-size: 9.5px; font-weight: 600; padding: 3px 7px;">
-                                        <span class="d-inline-block rounded-circle me-1" style="width: 4px; height: 4px; background: #16A34A;"></span>Đã đăng ký
-                                    </span>
-                                    <button type="button" class="btn btn-sm btn-outline-primary shadow-2xs" id="calQuickRegBtn" onclick="quickRegisterInspectorShift()" style="font-size: 10.5px; padding: 2px 8px; border-radius: 7px; font-weight: 600; border-color: #0284C7; color: #0284C7;">
-                                        + Đăng ký ca
+                                <div class="d-flex align-items-center gap-1">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 26px; height: 26px; border-color: #E2E8F0;" onclick="navigateCalendarDay(-1)" title="Ngày trước">
+                                        <i class="bi bi-chevron-left" style="font-size: 10px;"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 26px; height: 26px; border-color: #E2E8F0;" onclick="navigateCalendarDay(1)" title="Ngày sau">
+                                        <i class="bi bi-chevron-right" style="font-size: 10px;"></i>
                                     </button>
                                 </div>
                             </div>
+
+                            <!-- Danh sách cuộn nội bộ (flex-1 overflow-y-auto min-h-0) -->
+                            <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1" id="calSelectedDayContent">
+                                <!-- Nạp động qua JS: Render ca trực Image 7 hoặc Empty state Image 3/4 -->
+                            </div>
                         </div>
 
-                        <!-- CARD: TỆP & MINH CHỨNG -->
-                        <div class="cal-subcard flex-shrink-0" id="calProofUploadCard">
-                            <div class="d-flex align-items-center gap-1.5 mb-2">
-                                <i class="bi bi-paperclip" style="color: #0284C7; font-size: 14px;"></i>
-                                <span class="fw-bold text-dark" style="font-size: 12.5px;">Tệp & minh chứng</span>
+                        <!-- THẺ 2: LỊCH SẮP TỚI (Mockup Image 3 & 4) -->
+                        <div class="cal-sidebar-card cal-upcoming-card" id="calUpcomingCard">
+                            <!-- Header cố định (shrink-0) -->
+                            <div class="cal-card-header d-flex align-items-center justify-content-between mb-2 pb-1">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; background: #FFF7ED; color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.2);">
+                                        <i class="bi bi-calendar-check" style="font-size: 16px;"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-0 text-dark" style="font-size: 15.5px; letter-spacing: -0.3px;">Lịch sắp tới</h5>
+                                </div>
+                                <a href="javascript:void(0)" onclick="navigateToPage('shifts-sessions')" class="text-decoration-none fw-semibold d-inline-flex align-items-center gap-1" style="font-size: 12px; color: #EA580C;">
+                                    <span>Xem tất cả</span>
+                                    <i class="bi bi-chevron-right" style="font-size: 10px;"></i>
+                                </a>
                             </div>
-                            <div class="cal-upload-dropzone" onclick="triggerProofUploadModal()">
-                                <i class="bi bi-cloud-arrow-up text-primary mb-1 d-block" style="font-size: 24px; color: #0284C7 !important;"></i>
-                                <strong class="d-block text-dark" style="font-size: 12px; margin-bottom: 2px;">Tải minh chứng lên</strong>
-                                <div class="text-muted" style="font-size: 10.5px;">Kéo thả hoặc chọn tệp (JPG, PNG, PDF, tối đa 20MB)</div>
+
+                            <!-- Danh sách cuộn nội bộ (flex-1 overflow-y-auto min-h-0) -->
+                            <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1 d-flex flex-column gap-2" id="calUpcomingListContainer">
+                                <!-- Nạp động qua JS: 4 thẻ sắp tới chuẩn Image 3 & 4 -->
                             </div>
                         </div>
+
                     </div>
 
                 </div>
@@ -4982,6 +4947,60 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </button>
                     </div>
                     <div class="p-3 overflow-y-auto flex-1">
+                        <!-- BANNER HẬU SỰ KIỆN: MINH CHỨNG NGHIỆM THU (MOCKUP IMAGE 1) -->
+                        <div class="p-3 mb-3 rounded-3 border bg-white shadow-2xs">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2.5">
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge rounded-pill fw-bold" style="background: #F59E0B; color: #FFFFFF; font-size: 10px; padding: 4px 8px; letter-spacing: 0.5px;">HẬU SỰ KIỆN</span>
+                                        <h5 class="fw-bold text-dark mb-0" style="font-size: 15px; letter-spacing: -0.2px;">Minh Chứng Nghiệm Thu Sau Mỗi Sự Kiện Hoàn Thành</h5>
+                                    </div>
+                                    <p class="text-muted mb-0" style="font-size: 12px;">
+                                        Role CTV: Up ảnh hiện trường &bull; Role CTV Media: Up link Google Drive kèm logo & chỉnh sửa sáng &bull; Giảng Viên: Duyệt đã đầy đủ minh chứng để nghiệm thu
+                                    </p>
+                                </div>
+                                <div class="badge d-inline-flex align-items-center gap-1.5 py-1.5 px-3 rounded-pill fw-bold" style="background: #E0F2FE; color: #0284C7; border: 1px solid #BAE6FD; font-size: 11.5px;">
+                                    <i class="bi bi-shield-check"></i>
+                                    <span>Zero–Fraud Acceptance</span>
+                                </div>
+                            </div>
+                            <div class="row g-2.5">
+                                <div class="col-12 col-md-4">
+                                    <div class="p-2.5 rounded-3 border h-100" style="background: #FAFAFC;">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge rounded-pill" style="background: #2563EB; color: #FFFFFF; font-size: 9.5px; font-weight: 600;">Role CTV Thường</span>
+                                            <strong class="text-dark" style="font-size: 12.5px;">Ảnh Hiện Trường Có Mặt</strong>
+                                        </div>
+                                        <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                            CTV có nhiệm vụ chụp ảnh có mặt thực tế tại vị trí trực (áo cam FPoly) để chứng minh có mặt nghiệm thu.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="p-2.5 rounded-3 border h-100" style="background: #FAFAFC;">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge rounded-pill" style="background: #F59E0B; color: #FFFFFF; font-size: 9.5px; font-weight: 600;">Role CTV Media</span>
+                                            <strong class="text-dark" style="font-size: 12.5px;">Link Drive Đã Chỉnh Sáng & Logo</strong>
+                                        </div>
+                                        <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                            CTV Media tải link Google Drive bộ ảnh sự kiện đã được <strong>gắn logo FPT Poly</strong> và <strong>hậu kỳ chỉnh sáng</strong>.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="p-2.5 rounded-3 border h-100" style="background: #FAFAFC;">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge rounded-pill" style="background: #16A34A; color: #FFFFFF; font-size: 9.5px; font-weight: 600;">Role Giảng Viên</span>
+                                            <strong class="text-dark" style="font-size: 12.5px;">Duyệt / Nhắc Nhở Qua Email</strong>
+                                        </div>
+                                        <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                            Giảng viên kiểm tra minh chứng duyệt nghiệm thu, hoặc <strong>gửi email nhắc nhở</strong> nếu CTV chưa nộp ảnh.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row g-3">
                             <!-- Room 1 -->
                             <div class="col-12 col-md-6 col-xl-4">
@@ -5132,6 +5151,60 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </span>
                     </div>
                     <div class="p-3 overflow-y-auto flex-1">
+                        <!-- BANNER HẬU SỰ KIỆN: MINH CHỨNG NGHIỆM THU (MOCKUP IMAGE 1) -->
+                        <div class="p-3 mb-3 rounded-3 border bg-white shadow-2xs">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2.5">
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge rounded-pill fw-bold" style="background: #F59E0B; color: #FFFFFF; font-size: 10px; padding: 4px 8px; letter-spacing: 0.5px;">HẬU SỰ KIỆN</span>
+                                        <h5 class="fw-bold text-dark mb-0" style="font-size: 15px; letter-spacing: -0.2px;">Minh Chứng Nghiệm Thu Sau Mỗi Sự Kiện Hoàn Thành</h5>
+                                    </div>
+                                    <p class="text-muted mb-0" style="font-size: 12px;">
+                                        Role CTV: Up ảnh hiện trường &bull; Role CTV Media: Up link Google Drive kèm logo & chỉnh sửa sáng &bull; Giảng Viên: Duyệt đã đầy đủ minh chứng để nghiệm thu
+                                    </p>
+                                </div>
+                                <div class="badge d-inline-flex align-items-center gap-1.5 py-1.5 px-3 rounded-pill fw-bold" style="background: #E0F2FE; color: #0284C7; border: 1px solid #BAE6FD; font-size: 11.5px;">
+                                    <i class="bi bi-shield-check"></i>
+                                    <span>Zero–Fraud Acceptance</span>
+                                </div>
+                            </div>
+                            <div class="row g-2.5">
+                                <div class="col-12 col-md-4">
+                                    <div class="p-2.5 rounded-3 border h-100" style="background: #FAFAFC;">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge rounded-pill" style="background: #2563EB; color: #FFFFFF; font-size: 9.5px; font-weight: 600;">Role CTV Thường</span>
+                                            <strong class="text-dark" style="font-size: 12.5px;">Ảnh Hiện Trường Có Mặt</strong>
+                                        </div>
+                                        <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                            CTV có nhiệm vụ chụp ảnh có mặt thực tế tại vị trí trực (áo cam FPoly) để chứng minh có mặt nghiệm thu.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="p-2.5 rounded-3 border h-100" style="background: #FAFAFC;">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge rounded-pill" style="background: #F59E0B; color: #FFFFFF; font-size: 9.5px; font-weight: 600;">Role CTV Media</span>
+                                            <strong class="text-dark" style="font-size: 12.5px;">Link Drive Đã Chỉnh Sáng & Logo</strong>
+                                        </div>
+                                        <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                            CTV Media tải link Google Drive bộ ảnh sự kiện đã được <strong>gắn logo FPT Poly</strong> và <strong>hậu kỳ chỉnh sáng</strong>.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="p-2.5 rounded-3 border h-100" style="background: #FAFAFC;">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge rounded-pill" style="background: #16A34A; color: #FFFFFF; font-size: 9.5px; font-weight: 600;">Role Giảng Viên</span>
+                                            <strong class="text-dark" style="font-size: 12.5px;">Duyệt / Nhắc Nhở Qua Email</strong>
+                                        </div>
+                                        <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                            Giảng viên kiểm tra minh chứng duyệt nghiệm thu, hoặc <strong>gửi email nhắc nhở</strong> nếu CTV chưa nộp ảnh.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row g-3">
                             <?php foreach ($shifts as $s): ?>
                             <?php 
@@ -5197,6 +5270,60 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="p-3 overflow-y-auto flex-1">
+                        <!-- BANNER HẬU SỰ KIỆN: MINH CHỨNG NGHIỆM THU (MOCKUP IMAGE 1) -->
+                        <div class="p-3 mb-3 rounded-3 border bg-white shadow-2xs">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2.5">
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge rounded-pill fw-bold" style="background: #F59E0B; color: #FFFFFF; font-size: 10px; padding: 4px 8px; letter-spacing: 0.5px;">HẬU SỰ KIỆN</span>
+                                        <h5 class="fw-bold text-dark mb-0" style="font-size: 15px; letter-spacing: -0.2px;">Minh Chứng Nghiệm Thu Sau Mỗi Sự Kiện Hoàn Thành</h5>
+                                    </div>
+                                    <p class="text-muted mb-0" style="font-size: 12px;">
+                                        Role CTV: Up ảnh hiện trường &bull; Role CTV Media: Up link Google Drive kèm logo & chỉnh sửa sáng &bull; Giảng Viên: Duyệt đã đầy đủ minh chứng để nghiệm thu
+                                    </p>
+                                </div>
+                                <div class="badge d-inline-flex align-items-center gap-1.5 py-1.5 px-3 rounded-pill fw-bold" style="background: #E0F2FE; color: #0284C7; border: 1px solid #BAE6FD; font-size: 11.5px;">
+                                    <i class="bi bi-shield-check"></i>
+                                    <span>Zero–Fraud Acceptance</span>
+                                </div>
+                            </div>
+                            <div class="row g-2.5">
+                                <div class="col-12 col-md-4">
+                                    <div class="p-2.5 rounded-3 border h-100" style="background: #FAFAFC;">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge rounded-pill" style="background: #2563EB; color: #FFFFFF; font-size: 9.5px; font-weight: 600;">Role CTV Thường</span>
+                                            <strong class="text-dark" style="font-size: 12.5px;">Ảnh Hiện Trường Có Mặt</strong>
+                                        </div>
+                                        <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                            CTV có nhiệm vụ chụp ảnh có mặt thực tế tại vị trí trực (áo cam FPoly) để chứng minh có mặt nghiệm thu.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="p-2.5 rounded-3 border h-100" style="background: #FAFAFC;">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge rounded-pill" style="background: #F59E0B; color: #FFFFFF; font-size: 9.5px; font-weight: 600;">Role CTV Media</span>
+                                            <strong class="text-dark" style="font-size: 12.5px;">Link Drive Đã Chỉnh Sáng & Logo</strong>
+                                        </div>
+                                        <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                            CTV Media tải link Google Drive bộ ảnh sự kiện đã được <strong>gắn logo FPT Poly</strong> và <strong>hậu kỳ chỉnh sáng</strong>.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="p-2.5 rounded-3 border h-100" style="background: #FAFAFC;">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge rounded-pill" style="background: #16A34A; color: #FFFFFF; font-size: 9.5px; font-weight: 600;">Role Giảng Viên</span>
+                                            <strong class="text-dark" style="font-size: 12.5px;">Duyệt / Nhắc Nhở Qua Email</strong>
+                                        </div>
+                                        <p class="text-muted mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                            Giảng viên kiểm tra minh chứng duyệt nghiệm thu, hoặc <strong>gửi email nhắc nhở</strong> nếu CTV chưa nộp ảnh.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row g-3">
                             <div class="col-12 col-lg-7">
                                 <h5 class="fw-bold text-dark mb-2.5" style="font-size:15px;">Ca Trực Cần Nộp Minh Chứng</h5>
@@ -5499,152 +5626,149 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 </div>
 
 <!-- =========================================================
-     MODAL DUYỆT MINH CHỨNG – HẬU CẦN (PIXEL-PERFECT THEO MOCKUP)
+     MODAL DUYỆT MINH CHỨNG – HẬU CẦN (PIXEL-PERFECT THEO MOCKUP IMAGE 9)
      ========================================================= -->
 <div class="modal fade" id="modalVerifyFacilityProof" tabindex="-1" aria-hidden="true" style="z-index: 1090;">
-    <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 1080px;">
+    <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 1240px;">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; background: #FFFFFF;">
             
             <!-- Modal Header -->
             <div class="modal-header border-0 pb-1 px-4 pt-3.5 d-flex align-items-start justify-content-between">
-                <div>
-                    <h5 class="fw-bold mb-0 text-dark" style="font-size: 19px; letter-spacing: -0.015em;">Duyệt minh chứng – Hậu cần</h5>
-                    <p class="text-muted mb-0" style="font-size: 13px;">Kiểm tra minh chứng, đối chiếu tiêu chí và quyết định nghiệm thu.</p>
+                <div class="d-flex align-items-center gap-2.5">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-3 bg-primary-subtle text-primary" style="width: 32px; height: 32px;">
+                        <i class="bi bi-shield-check fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0 text-dark" style="font-size: 19px; letter-spacing: -0.015em;">Duyệt minh chứng – Hậu cần</h5>
+                        <p class="text-muted mb-0" style="font-size: 13px;">Kiểm tra minh chứng, đối chiếu tiêu chí và quyết định nghiệm thu.</p>
+                    </div>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <!-- Modal Body -->
+            <!-- Modal Body (3-Column Layout chuẩn Mockup Image 9) -->
             <div class="modal-body px-4 pt-2 pb-4">
-                
-                <!-- TOP CARD: Thông tin CTV & Sự kiện -->
-                <div class="proof-modal-card p-3 mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                    <!-- Left: CTV Info -->
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0" id="vfCtvAvatar" style="width: 44px; height: 44px; background: #FFEDD5; color: #C2410C; font-size: 17px;">
-                            H
-                        </div>
-                        <div>
-                            <div class="d-flex align-items-center gap-2 mb-0.5">
-                                <span class="fw-bold text-dark" id="vfCtvName" style="font-size: 15px;">Hoàng Minh Luận</span>
-                                <span class="badge" style="background: #EFF6FF; color: #2563EB; border: 1px solid #DBEAFE; font-size: 10px; font-weight: 600; padding: 2px 6px;">
-                                    ◆ CTV
-                                </span>
-                            </div>
-                            <div class="text-muted small" id="vfCtvMeta" style="font-size: 12px;">
-                                PI03015 • hoangminhluan@fpt.edu.vn
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right: Event & Shift Meta -->
-                    <div class="d-flex flex-column gap-1 text-end" style="font-size: 12.5px;">
-                        <div class="text-dark">
-                            <span class="text-muted me-1.5"><i class="bi bi-calendar-event me-1"></i>Sự kiện:</span>
-                            <strong id="vfEventTitle">Chung kết Cuộc thi Khởi nghiệp trẻ</strong>
-                        </div>
-                        <div class="text-dark">
-                            <span class="text-muted me-1.5"><i class="bi bi-layers me-1"></i>Ca trực:</span>
-                            <span id="vfShiftName" class="fw-medium">Ca 2: Kỹ thuật trình chiếu & Micro</span>
-                        </div>
-                        <div class="text-dark">
-                            <span class="text-muted me-1.5"><i class="bi bi-clock me-1"></i>Thời gian:</span>
-                            <span id="vfShiftTime">18/11/2026, 13:00 – 17:00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tabs: Minh chứng (8) & Trao đổi -->
-                <div class="d-flex align-items-center gap-4 border-bottom mb-3" style="border-color: #E2E8F0 !important;">
-                    <button type="button" class="btn btn-link text-decoration-none px-0 py-2 fw-semibold text-primary d-inline-flex align-items-center gap-1.5" style="border-bottom: 2.5px solid #2563EB; border-radius: 0; font-size: 13.5px;">
-                        <i class="bi bi-images"></i>
-                        <span>Minh chứng (8)</span>
-                    </button>
-                    <button type="button" class="btn btn-link text-decoration-none px-0 py-2 text-muted d-inline-flex align-items-center gap-1.5" style="font-size: 13.5px;" onclick="showToast('Chức năng Trao đổi & Lịch sử đang đồng bộ với kênh Chat BTC', 'info')">
-                        <i class="bi bi-chat-left-text"></i>
-                        <span>Trao đổi & Lịch sử</span>
-                    </button>
-                </div>
-
-                <!-- Main Content 2 Columns -->
-                <div class="row g-4">
-                    <!-- Cột Trái: Ảnh minh chứng (8) & Mô tả CTV -->
-                    <div class="col-12 col-lg-7 d-flex flex-column">
+                <div class="row g-3">
+                    
+                    <!-- CỘT 1: DANH SÁCH CTV NGHIỆM THU (Mockup Image 9) -->
+                    <div class="col-12 col-lg-3 border-end pe-3" id="vfCtvSidebarCol">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 14px;">Ảnh minh chứng (8)</h6>
+                            <h6 class="fw-bold text-dark mb-0" style="font-size: 14.5px;">Nghiệm thu</h6>
+                        </div>
+                        <div class="input-group input-group-sm mb-2.5">
+                            <span class="input-group-text bg-white border-end-0 text-muted" style="border-color: #E2E8F0;"><i class="bi bi-search" style="font-size: 11px;"></i></span>
+                            <input type="text" class="form-control border-start-0 ps-1" placeholder="Tìm kiếm CTV..." id="vfCtvSearchInput" oninput="filterVfCtvList(this.value)" style="border-color: #E2E8F0; font-size: 12px;">
+                        </div>
+                        <div class="text-muted small fw-semibold text-uppercase mb-2" style="font-size: 11px; letter-spacing: 0.3px;">Sinh viên / CTV</div>
+                        <div class="d-flex flex-column gap-1 overflow-y-auto" style="max-height: 520px;" id="vfCtvListContainer">
+                            <!-- Nạp động qua JS: Hoàng Minh Luân (Active), Nguyễn Thư Kỳ, Trần Gia Bảo, Lê Minh Tâm... -->
+                        </div>
+                    </div>
+
+                    <!-- CỘT 2: THÔNG TIN CHI TIẾT, 8 ẢNH & MÔ TẢ (Mockup Image 9) -->
+                    <div class="col-12 col-lg-5 ps-3 pe-3 border-end d-flex flex-column">
+                        <!-- TOP CARD: Thông tin CTV & Sự kiện -->
+                        <div class="proof-modal-card p-2.5 mb-2.5 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <!-- Left: CTV Info -->
+                            <div class="d-flex align-items-center gap-2.5">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0" id="vfCtvAvatar" style="width: 40px; height: 40px; background: #FFEDD5; color: #C2410C; font-size: 16px;">
+                                    H
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-1.5 mb-0.5">
+                                        <span class="fw-bold text-dark" id="vfCtvName" style="font-size: 14px;">Hoàng Minh Luận</span>
+                                        <span class="badge" style="background: #EFF6FF; color: #2563EB; border: 1px solid #DBEAFE; font-size: 9.5px; font-weight: 600; padding: 2px 5px;">
+                                            ◆ CTV
+                                        </span>
+                                    </div>
+                                    <div class="text-muted small" id="vfCtvMeta" style="font-size: 11.5px;">
+                                        PI03015 • hoangminhluan@fpt.edu.vn
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Event & Shift Meta -->
+                            <div class="d-flex flex-column gap-0.5 text-end" style="font-size: 11.5px;">
+                                <div class="text-dark">
+                                    <span class="text-muted me-1"><i class="bi bi-calendar-event me-1"></i>Sự kiện:</span>
+                                    <strong id="vfEventTitle" class="text-truncate d-inline-block align-bottom" style="max-width: 170px;">Chung kết Khởi nghiệp</strong>
+                                </div>
+                                <div class="text-dark">
+                                    <span class="text-muted me-1"><i class="bi bi-layers me-1"></i>Ca trực:</span>
+                                    <span id="vfShiftName" class="fw-medium text-truncate d-inline-block align-bottom" style="max-width: 170px;">Ca 2: Kỹ thuật</span>
+                                </div>
+                                <div class="text-dark">
+                                    <span class="text-muted me-1"><i class="bi bi-clock me-1"></i>Thời gian:</span>
+                                    <span id="vfShiftTime">18/11/2026, 13:00–17:00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabs: Minh chứng (8) & Trao đổi -->
+                        <div class="d-flex align-items-center gap-3 border-bottom mb-2.5 pb-0.5" style="border-color: #E2E8F0 !important;">
+                            <button type="button" class="btn btn-link text-decoration-none px-0 py-1.5 fw-semibold text-primary d-inline-flex align-items-center gap-1.5" style="border-bottom: 2.5px solid #2563EB; border-radius: 0; font-size: 13px;">
+                                <i class="bi bi-images"></i>
+                                <span>Minh chứng (8)</span>
+                            </button>
+                            <button type="button" class="btn btn-link text-decoration-none px-0 py-1.5 text-muted d-inline-flex align-items-center gap-1.5" style="font-size: 13px;" onclick="showToast('Chức năng Trao đổi & Lịch sử đang đồng bộ với kênh Chat BTC', 'info')">
+                                <i class="bi bi-chat-left-text"></i>
+                                <span>Trao đổi & Lịch sử</span>
+                            </button>
+                        </div>
+
+                        <!-- Header Ảnh minh chứng (8) -->
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 13.5px;">Ảnh minh chứng (8)</h6>
                             <div class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-2.5 py-1" style="font-size: 11.5px; border-radius: 6px;" onclick="downloadAllProofPhotos()">
+                                <button type="button" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-2.5 py-1" style="font-size: 11px; border-radius: 6px;" onclick="downloadAllProofPhotos()">
                                     <i class="bi bi-download"></i>
                                     <span>Tải xuống tất cả</span>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-1" style="font-size: 11.5px; border-radius: 6px;" onclick="expandProofFullscreen()" title="Xem toàn màn hình">
+                                <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-1" style="font-size: 11px; border-radius: 6px;" onclick="expandProofFullscreen()" title="Xem toàn màn hình">
                                     <i class="bi bi-arrows-fullscreen"></i>
                                 </button>
                             </div>
                         </div>
 
                         <!-- 8-Photo Grid (4 cols x 2 rows) -->
-                        <div class="proof-photo-grid mb-3" id="vfPhotoGrid">
-                            <!-- Photo 1 -->
-                            <div class="proof-photo-item" onclick="openProofZoomModal(0)">
-                                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=80" alt="Kỹ thuật âm thanh">
-                            </div>
-                            <!-- Photo 2 -->
-                            <div class="proof-photo-item" onclick="openProofZoomModal(1)">
-                                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=80" alt="Đèn spotlight">
-                            </div>
-                            <!-- Photo 3 -->
-                            <div class="proof-photo-item" onclick="openProofZoomModal(2)">
-                                <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&auto=format&fit=crop&q=80" alt="Sân khấu Chung kết">
-                            </div>
-                            <!-- Photo 4 -->
-                            <div class="proof-photo-item" onclick="openProofZoomModal(3)">
-                                <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&auto=format&fit=crop&q=80" alt="Laptop điều khiển">
-                            </div>
-                            <!-- Photo 5 -->
-                            <div class="proof-photo-item" onclick="openProofZoomModal(4)">
-                                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80" alt="Server rack">
-                            </div>
-                            <!-- Photo 6 -->
-                            <div class="proof-photo-item" onclick="openProofZoomModal(5)">
-                                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=80" alt="Bàn mixer âm thanh">
-                            </div>
-                            <!-- Photo 7 -->
-                            <div class="proof-photo-item" onclick="openProofZoomModal(6)">
-                                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&auto=format&fit=crop&q=80" alt="Setup hội trường">
-                            </div>
-                            <!-- Photo 8 -->
-                            <div class="proof-photo-item" onclick="openProofZoomModal(7)">
-                                <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&auto=format&fit=crop&q=80" alt="Khán phòng">
-                            </div>
+                        <div class="proof-photo-grid mb-2.5" id="vfPhotoGrid">
+                            <!-- 8 ảnh chuẩn Mockup -->
+                            <div class="proof-photo-item" onclick="openProofZoomModal(0)"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=80" alt="Kỹ thuật âm thanh"></div>
+                            <div class="proof-photo-item" onclick="openProofZoomModal(1)"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=80" alt="Đèn spotlight"></div>
+                            <div class="proof-photo-item" onclick="openProofZoomModal(2)"><img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&auto=format&fit=crop&q=80" alt="Sân khấu Chung kết"></div>
+                            <div class="proof-photo-item" onclick="openProofZoomModal(3)"><img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&auto=format&fit=crop&q=80" alt="Laptop điều khiển"></div>
+                            <div class="proof-photo-item" onclick="openProofZoomModal(4)"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80" alt="Server rack"></div>
+                            <div class="proof-photo-item" onclick="openProofZoomModal(5)"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=80" alt="Bàn mixer âm thanh"></div>
+                            <div class="proof-photo-item" onclick="openProofZoomModal(6)"><img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&auto=format&fit=crop&q=80" alt="Setup hội trường"></div>
+                            <div class="proof-photo-item" onclick="openProofZoomModal(7)"><img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&auto=format&fit=crop&q=80" alt="Khán phòng"></div>
                         </div>
 
                         <!-- Mô tả công việc từ CTV -->
-                        <div class="rounded-3 p-3 mt-auto" style="background: #F0F9FF; border: 1px solid #BAE6FD;">
-                            <div class="fw-semibold text-primary d-flex align-items-center gap-1.5 mb-1" style="font-size: 12.5px; color: #0284C7 !important;">
+                        <div class="rounded-3 p-2.5 mt-auto" style="background: #F0F9FF; border: 1px solid #BAE6FD;">
+                            <div class="fw-semibold text-primary d-flex align-items-center gap-1.5 mb-1" style="font-size: 12px; color: #0284C7 !important;">
                                 <i class="bi bi-info-circle-fill"></i>
                                 <span>Mô tả công việc (từ CTV)</span>
                             </div>
-                            <p class="mb-0 text-dark" id="vfProofDescription" style="font-size: 12px; line-height: 1.45; color: #334155 !important;">
+                            <p class="mb-0 text-dark" id="vfProofDescription" style="font-size: 11.5px; line-height: 1.4; color: #334155 !important;">
                                 Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.
                             </p>
                         </div>
                     </div>
 
-                    <!-- Cột Phải: Tiêu chí nghiệm thu & Quyết định -->
-                    <div class="col-12 col-lg-5 d-flex flex-column justify-content-between">
+                    <!-- CỘT 3: TIÊU CHÍ NGHIỆM THU & QUYẾT ĐỊNH (Mockup Image 9) -->
+                    <div class="col-12 col-lg-4 ps-3 d-flex flex-column justify-content-between">
                         <div>
                             <!-- Card 1: Tiêu chí nghiệm thu – Hậu cần -->
-                            <div class="proof-modal-card p-3 mb-3">
-                                <div class="d-flex align-items-center gap-2 mb-2.5">
-                                    <i class="bi bi-card-checklist text-primary" style="font-size: 15px;"></i>
-                                    <strong class="text-dark" style="font-size: 13.5px;">Tiêu chí nghiệm thu – Hậu cần</strong>
+                            <div class="proof-modal-card p-3 mb-2.5">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="bi bi-card-checklist text-primary" style="font-size: 14.5px;"></i>
+                                    <strong class="text-dark" style="font-size: 13px;">Tiêu chí nghiệm thu – Hậu cần</strong>
                                 </div>
-                                <div class="d-flex flex-column gap-2">
+                                <div class="d-flex flex-column gap-1.5">
                                     <!-- Tiêu chí 1 -->
                                     <div class="proof-criteria-item is-checked" onclick="toggleCriteriaCheck(this)">
                                         <div class="proof-criteria-check"><i class="bi bi-check-lg"></i></div>
-                                        <div style="font-size: 12.5px; line-height: 1.35; color: #0F172A;">
+                                        <div style="font-size: 12px; line-height: 1.35; color: #0F172A;">
                                             Có mặt và tham gia đúng thời gian ca trực
                                         </div>
                                     </div>
@@ -5652,10 +5776,10 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     <div class="proof-criteria-item is-checked" onclick="toggleCriteriaCheck(this)">
                                         <div class="proof-criteria-check"><i class="bi bi-check-lg"></i></div>
                                         <div>
-                                            <div style="font-size: 12.5px; line-height: 1.35; color: #0F172A;">
+                                            <div style="font-size: 12px; line-height: 1.35; color: #0F172A;">
                                                 Thực hiện đúng nhiệm vụ được phân công
                                             </div>
-                                            <div class="text-muted" style="font-size: 11px;">
+                                            <div class="text-muted" style="font-size: 10.5px;">
                                                 (ví dụ: âm thanh, trình chiếu, hậu trường, hỗ trợ sân khấu,...)
                                             </div>
                                         </div>
@@ -5663,14 +5787,14 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     <!-- Tiêu chí 3 -->
                                     <div class="proof-criteria-item is-checked" onclick="toggleCriteriaCheck(this)">
                                         <div class="proof-criteria-check"><i class="bi bi-check-lg"></i></div>
-                                        <div style="font-size: 12.5px; line-height: 1.35; color: #0F172A;">
+                                        <div style="font-size: 12px; line-height: 1.35; color: #0F172A;">
                                             Ảnh minh chứng rõ ràng, có bối cảnh tại sự kiện
                                         </div>
                                     </div>
                                     <!-- Tiêu chí 4 -->
                                     <div class="proof-criteria-item" onclick="toggleCriteriaCheck(this)">
                                         <div class="proof-criteria-check"><i class="bi bi-check-lg" style="display:none;"></i></div>
-                                        <div class="d-flex align-items-center gap-1" style="font-size: 12.5px; line-height: 1.35; color: #334155;">
+                                        <div class="d-flex align-items-center gap-1" style="font-size: 12px; line-height: 1.35; color: #334155;">
                                             <span>Đảm bảo tác phong làm việc, phối hợp với BTC</span>
                                             <i class="bi bi-info-circle text-muted" style="font-size: 11px;" title="Tuân thủ quy tắc ứng xử và trang phục"></i>
                                         </div>
@@ -5680,17 +5804,17 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                             <!-- Card 2: Quyết định nghiệm thu -->
                             <div class="proof-modal-card p-3">
-                                <div class="d-flex align-items-center gap-2 mb-2.5">
-                                    <i class="bi bi-shield-check text-primary" style="font-size: 15px;"></i>
-                                    <strong class="text-dark" style="font-size: 13.5px;">Quyết định nghiệm thu</strong>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="bi bi-shield-check text-primary" style="font-size: 14.5px;"></i>
+                                    <strong class="text-dark" style="font-size: 13px;">Quyết định nghiệm thu</strong>
                                 </div>
 
                                 <!-- Option 1: Duyệt nghiệm thu -->
                                 <div class="proof-decision-box is-selected" id="vfOptApprove" onclick="selectProofDecision('approve')">
                                     <div class="proof-radio-circle"></div>
                                     <div>
-                                        <strong class="d-block text-dark" style="font-size: 13px;">Duyệt nghiệm thu</strong>
-                                        <span class="text-muted" style="font-size: 11.5px;">Minh chứng đáp ứng đầy đủ tiêu chí.</span>
+                                        <strong class="d-block text-dark" style="font-size: 12.5px;">Duyệt nghiệm thu</strong>
+                                        <span class="text-muted" style="font-size: 11px;">Minh chứng đáp ứng đầy đủ tiêu chí.</span>
                                     </div>
                                 </div>
 
@@ -5698,18 +5822,18 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <div class="proof-decision-box" id="vfOptRequestMore" onclick="selectProofDecision('request_more')">
                                     <div class="proof-radio-circle"></div>
                                     <div>
-                                        <strong class="d-block text-dark" style="font-size: 13px;">Yêu cầu bổ sung</strong>
-                                        <span class="text-muted" style="font-size: 11.5px;">Minh chứng chưa đủ, cần CTV bổ sung thêm.</span>
+                                        <strong class="d-block text-dark" style="font-size: 12.5px;">Yêu cầu bổ sung</strong>
+                                        <span class="text-muted" style="font-size: 11px;">Minh chứng chưa đủ, cần CTV bổ sung thêm.</span>
                                     </div>
                                 </div>
 
                                 <!-- Textarea Lý do / Ghi chú -->
-                                <div class="mt-2.5">
-                                    <label class="form-label mb-1 text-dark fw-semibold" style="font-size: 12px;">
+                                <div class="mt-2">
+                                    <label class="form-label mb-1 text-dark fw-semibold" style="font-size: 11.5px;">
                                         Lý do / Ghi chú <span class="text-danger" id="vfNoteAsterisk" style="display:none;">*</span>
                                     </label>
-                                    <textarea class="form-control" id="vfDecisionNote" rows="3" placeholder="Nhập ghi chú cho CTV (nếu có)..." maxlength="500" oninput="updateDecisionNoteCounter()" style="font-size: 12px; border-radius: 8px; resize: none;"></textarea>
-                                    <div class="text-end text-muted mt-1" style="font-size: 11px;">
+                                    <textarea class="form-control" id="vfDecisionNote" rows="2" placeholder="Nhập ghi chú cho CTV (nếu có)..." maxlength="500" oninput="updateDecisionNoteCounter()" style="font-size: 11.5px; border-radius: 8px; resize: none;"></textarea>
+                                    <div class="text-end text-muted mt-1" style="font-size: 10.5px;">
                                         <span id="vfNoteCharCount">0</span> / 500
                                     </div>
                                 </div>
@@ -5717,19 +5841,23 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
 
                         <!-- Footer Actions -->
-                        <div class="d-flex align-items-center justify-content-end gap-2 mt-3 pt-2">
-                            <button type="button" class="btn btn-sm btn-link text-muted fw-semibold text-decoration-none px-3 py-1.5" data-bs-dismiss="modal" style="font-size: 13px;">
+                        <div class="d-flex align-items-center justify-content-end gap-2 mt-3 pt-1">
+                            <button type="button" class="btn btn-sm btn-link text-muted fw-semibold text-decoration-none px-3 py-1.5" data-bs-dismiss="modal" style="font-size: 12.5px;">
                                 Hủy
                             </button>
-                            <button type="button" class="btn btn-sm btn-primary px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5" id="vfConfirmBtn" onclick="confirmFacilityProofVerification()" style="background: #2563EB; border-color: #2563EB; border-radius: 8px; font-size: 13px;">
+                            <button type="button" class="btn btn-sm btn-primary px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5" id="vfConfirmBtn" onclick="confirmFacilityProofVerification()" style="background: #2563EB; border-color: #2563EB; border-radius: 8px; font-size: 12.5px;">
                                 <i class="bi bi-check-lg"></i>
                                 <span>Xác nhận</span>
                             </button>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
+
+        </div>
+    </div>
+</div>
 
         </div>
     </div>
@@ -8057,7 +8185,7 @@ function triggerProofUploadModal() {
 }
 
 /**
- * Render Sidebar Chi tiết ngày (Thiết kế chuẩn UI/UX SaaS Promax)
+ * Render Sidebar Chi tiết ngày (Thiết kế chuẩn UI/UX SaaS Mockup Image 3, 4, 7)
  */
 function renderCalendarSidebarDayDetail(dateStr) {
     const titleEl = document.getElementById('calSelectedDayTitle');
@@ -8072,33 +8200,13 @@ function renderCalendarSidebarDayDetail(dateStr) {
     const dayShifts = (typeof rawShifts !== 'undefined') ? rawShifts.filter(s => s.start_time.startsWith(dateStr)) : [];
     const dayNotes = (typeof rawCalendarNotes !== 'undefined') ? rawCalendarNotes.filter(n => (n.date || n.target_date) === dateStr) : [];
 
-    // Cập nhật số đếm trên Tabs
-    const countActEl = document.getElementById('calCountActivities');
-    if (countActEl) countActEl.textContent = dayShifts.length + dayNotes.length;
-
-    const countShiftsEl = document.getElementById('calCountShifts');
-    const myDayShifts = dayShifts.filter(s => parseInt(s.is_registered_by_me) > 0);
-    if (countShiftsEl) countShiftsEl.textContent = myDayShifts.length || (dayShifts.length ? '1' : '0');
-
-    // Cập nhật card CTV tham gia
-    const ctvRatioEl = document.getElementById('calCtvRatio');
-    if (ctvRatioEl) {
-        if (dayShifts.length > 0) {
-            const firstShift = dayShifts[0];
-            ctvRatioEl.textContent = `${firstShift.approved_qty || 1}/${firstShift.target_qty || 3}`;
-            activeInspectorEventId = firstShift.event_id;
-        } else {
-            ctvRatioEl.textContent = '0/0';
-        }
-    }
-
     if (dayShifts.length === 0 && dayNotes.length === 0) {
         contentEl.innerHTML = `
-            <div class="text-center py-4 h-100 d-flex flex-column justify-content-center my-auto">
-                <p class="text-muted small mb-3" style="font-size: 12.5px;">Chưa có ca trực hoặc sự kiện nào trong ngày ${formattedDate}.</p>
+            <div class="text-center py-4 h-100 d-flex flex-column align-items-center justify-content-center my-auto">
+                <p class="text-muted small mb-3" style="font-size: 13px;">Chưa có ca trực hoặc sự kiện.</p>
                 <div class="d-flex justify-content-center">
-                    <div class="p-3 rounded-4 d-inline-flex align-items-center justify-content-center" style="background: #F0F9FF; width: 68px; height: 68px; border: 1px solid rgba(2, 132, 199, 0.15);">
-                        <i class="bi bi-calendar2-minus" style="font-size: 32px; color: #0284C7;"></i>
+                    <div class="p-3 rounded-4 d-inline-flex align-items-center justify-content-center" style="background: #FFF7ED; width: 68px; height: 68px; border: 1px solid rgba(234, 88, 12, 0.15);">
+                        <i class="bi bi-calendar2-minus" style="font-size: 32px; color: #EA580C;"></i>
                     </div>
                 </div>
             </div>
@@ -8108,74 +8216,55 @@ function renderCalendarSidebarDayDetail(dateStr) {
 
     let html = '<div class="d-flex flex-column gap-2">';
 
-    // 1. Hiển thị Ghi chú / Hoạt động cơ sở vật chất (như Card 1 trong mockup: Bảo trì phòng máy Lab AI Tòa B)
-    dayNotes.forEach(n => {
-        html += `
-            <div class="cal-activity-card" onclick="openInspectorEventModal(${n.event_id || 2})">
-                <div class="cal-time-box">
-                    <div class="cal-time-val">13:00</div>
-                    <div class="cal-time-dash">- 17:00</div>
-                </div>
-                <div class="cal-activity-body">
-                    <div class="d-flex align-items-start justify-content-between gap-1 mb-0.5">
-                        <strong class="cal-activity-title text-truncate">${n.title}</strong>
-                        <div class="d-flex align-items-center gap-1 flex-shrink-0">
-                            <span class="badge rounded-pill" style="background: #FFF7ED; color: #EA580C; font-size: 9.5px; font-weight: 600; padding: 2px 7px;">
-                                <span class="d-inline-block rounded-circle me-1" style="width: 4px; height: 4px; background: #EA580C;"></span>Đang tuyển
-                            </span>
-                            <i class="bi bi-chevron-right text-muted" style="font-size: 10px;"></i>
-                        </div>
-                    </div>
-                    <div class="cal-activity-location text-muted">
-                        <i class="bi bi-geo-alt me-1"></i>Phòng CSC, Tòa B
-                    </div>
-                    <div class="cal-activity-desc text-muted">
-                        ${n.content || 'Phòng CSCV tiến hành kiểm tra đường truyền mạng và cài bổ sung Ollama AI models.'}
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-
-    // 2. Hiển thị Ca trực (như Card 2 trong mockup: Ca 1: Đón Tiếp Khách Mời & Hỗ Trợ Kỹ Thuật Lab)
+    // 1. Hiển thị Ca trực theo Mockup Image 7
     dayShifts.forEach(s => {
         const isMine = parseInt(s.is_registered_by_me) > 0;
         const allowance = s.remuneration_amount ? Number(s.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150.000 đ';
         
-        const startTime = s.start_time ? s.start_time.substring(11, 16) : '17:30';
-        const endTime = s.end_time ? s.end_time.substring(11, 16) : '19:00';
+        const startTime = s.start_time ? s.start_time.substring(11, 16) : '07:30';
+        const endTime = s.end_time ? s.end_time.substring(11, 16) : '12:00';
+        const isFull = parseInt(s.approved_qty) >= parseInt(s.target_qty);
 
         html += `
-            <div class="cal-activity-card" onclick="openShiftDetail(${s.id})">
-                <div class="cal-time-box">
-                    <div class="cal-time-val">${startTime}</div>
-                    <div class="cal-time-dash">- ${endTime}</div>
+            <div class="cal-shift-card" style="border-left: 4px solid ${isMine ? '#0284C7' : '#EA580C'} !important;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="badge border" style="background: #F8FAFC; color: #0F172A; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
+                        ${startTime} – ${endTime}
+                    </span>
+                    <span class="badge rounded-pill" style="background: ${isMine ? '#F0FDF4' : '#FFF7ED'}; color: ${isMine ? '#16A34A' : '#EA580C'}; font-size: 11px; font-weight: 600; padding: 3px 8px;">
+                        <span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: ${isMine ? '#16A34A' : '#EA580C'};"></span>${isMine ? 'Đã xác nhận' : 'Đang tuyển'}
+                    </span>
                 </div>
-                <div class="cal-activity-body">
-                    <div class="d-flex align-items-start justify-content-between gap-1 mb-0.5">
-                        <strong class="cal-activity-title text-truncate">${s.name}</strong>
-                        <div class="d-flex align-items-center gap-1 flex-shrink-0">
-                            ${isMine ? `
-                                <span class="badge rounded-pill" style="background: #F0FDF4; color: #16A34A; font-size: 9.5px; font-weight: 600; padding: 2px 7px;">
-                                    <i class="bi bi-check2 me-1"></i>Đã đăng ký
-                                </span>
-                            ` : `
-                                <span class="badge rounded-pill" style="background: #FFF7ED; color: #EA580C; font-size: 9.5px; font-weight: 600; padding: 2px 7px;">
-                                    <span class="d-inline-block rounded-circle me-1" style="width: 4px; height: 4px; background: #EA580C;"></span>Đang tuyển
-                                </span>
-                            `}
-                            <i class="bi bi-chevron-right text-muted" style="font-size: 10px;"></i>
-                        </div>
-                    </div>
-                    <div class="cal-activity-location text-muted">
-                        <i class="bi bi-geo-alt me-1"></i>${s.location_name || 'Phòng Lab, Tòa B'}
-                    </div>
-                    <div class="d-flex align-items-center gap-2 mt-1 text-muted" style="font-size: 11px;">
-                        <span><i class="bi bi-people me-1 text-primary"></i>${s.approved_qty || 1}/${s.target_qty || 3} CTV</span>
-                        <span>•</span>
-                        <span>Thù lao: <strong class="text-success">${allowance}</strong></span>
-                    </div>
+                <h6 class="fw-bold text-dark mb-2" style="font-size: 13.5px; line-height: 1.35;">
+                    ${s.name}
+                </h6>
+                <div class="d-flex align-items-center justify-content-between mb-2.5" style="font-size: 12.5px;">
+                    <span class="text-muted"><i class="bi bi-people me-1 text-primary"></i>${s.approved_qty}/${s.target_qty} CTV</span>
+                    <strong style="color: #16A34A; font-size: 13px;">${allowance}</strong>
                 </div>
+                ${isMine ? `
+                    <div class="w-100 py-1.5 rounded-3 text-center fw-semibold text-success border border-success-subtle bg-success-subtle" style="font-size: 12px;">
+                        <i class="bi bi-check2 me-1"></i>Đã Đăng Ký
+                    </div>
+                ` : `
+                    <button type="button" class="btn w-100 fw-bold py-1.5 rounded-3 text-white shadow-2xs" id="calRegBtn_${s.id}" style="background: #EA580C; font-size: 12.5px;" onclick="registerShiftDirectly(${s.id}, ${s.event_id})">
+                        ${isFull ? 'Đăng Ký Dự Phòng' : 'Đăng Ký'}
+                    </button>
+                `}
+            </div>
+        `;
+    });
+
+    // 2. Hiển thị Ghi chú / Hoạt động
+    dayNotes.forEach(n => {
+        html += `
+            <div class="p-2.5 rounded-3 mb-2 bg-light border" onclick="openEventDrawer(${n.event_id || 2})" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 10px;">Ghi chú lịch</span>
+                    <span class="badge rounded-pill" style="background: #FFF7ED; color: #EA580C; font-size: 9.5px;">Lưu ý</span>
+                </div>
+                <strong class="d-block text-dark text-truncate" style="font-size: 12.5px;">${n.title}</strong>
+                <small class="text-muted text-truncate d-block" style="font-size: 11px;">${n.content || ''}</small>
             </div>
         `;
     });
@@ -8235,7 +8324,7 @@ function renderCalendarUpcomingSchedule() {
     ];
 
     container.innerHTML = items.map(item => `
-        <div class="upcoming-schedule-item" onclick="openEventDetailsModal(${item.eventId})" style="border-left: 3.5px solid ${item.borderColor};">
+        <div class="upcoming-schedule-item" onclick="openEventDrawer(${item.eventId})" style="border-left: 3.5px solid ${item.borderColor}; cursor: pointer;">
             <div class="d-flex align-items-center justify-content-between mb-0.5">
                 <span class="text-muted" style="font-size: 11px; font-weight: 500;">
                     <i class="bi bi-calendar3 me-1"></i>${item.date}
@@ -9681,6 +9770,56 @@ function previewProofModal(name, shiftName, imgUrl, note) {
 let currentFacilityAssignmentId = 8;
 let currentProofDecision = 'approve';
 
+const sampleVfCtvs = [
+    { id: 8, name: 'Hoàng Minh Luận', code: 'PI03015', email: 'hoangminhluan@fpt.edu.vn', avatar: 'H', bg: '#FFEDD5', color: '#C2410C', event: 'Chung kết Cuộc thi Khởi nghiệp trẻ', shift: 'Ca 2: Kỹ thuật trình chiếu & Micro', time: '18/11/2026, 13:00 – 17:00', note: 'Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.' },
+    { id: 9, name: 'Nguyễn Thư Kỳ', code: 'PI03028', email: 'nguyenthuky@fpt.edu.vn', avatar: 'N', bg: '#E0E7FF', color: '#4338CA', event: 'FPoly TechDay 2026', shift: 'Ca 1: Lễ tân & Đón tiếp VIP', time: '15/11/2026, 07:30 – 11:30', note: 'Đón tiếp khách mời VIP tại sảnh Tòa T, phát thẻ khách và tài liệu hội thảo, hướng dẫn vào hội trường đúng sơ đồ ghế ngồi.' },
+    { id: 10, name: 'Trần Gia Bảo', code: 'PI03102', email: 'trangiabao@fpt.edu.vn', avatar: 'T', bg: '#FEE2E2', color: '#B91C1C', event: 'Giải Thể Thao Sinh Viên FPoly', shift: 'Ca 1: Hậu cần & Trọng tài', time: '20/11/2026, 08:00 – 12:00', note: 'Chuẩn bị sân bóng, cờ biên, bóng thi đấu và nước uống cho 8 đội tham gia, hỗ trợ trọng tài ghi chép biên bản trận đấu.' },
+    { id: 11, name: 'Lê Minh Tâm', code: 'PI03077', email: 'leminhtam@fpt.edu.vn', avatar: 'L', bg: '#FEF3C7', color: '#B45309', event: 'Hội Thảo Đổi Mới Đào Tạo AI', shift: 'Ca 2: Điều phối khán phòng', time: '22/11/2026, 13:30 – 17:30', note: 'Điều phối micro lưu động cho khán giả đặt câu hỏi giao lưu với diễn giả, hỗ trợ kỹ thuật máy chiếu và chụp ảnh hậu trường.' }
+];
+
+function renderVfCtvList(filter = '') {
+    const container = document.getElementById('vfCtvListContainer');
+    if (!container) return;
+
+    const list = sampleVfCtvs.filter(c => 
+        !filter || c.name.toLowerCase().includes(filter.toLowerCase()) || c.code.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    container.innerHTML = list.map(c => `
+        <div class="vf-ctv-item ${c.id === currentFacilityAssignmentId ? 'active' : ''}" onclick="selectVfCtv(${c.id})">
+            <div class="vf-ctv-avatar" style="background: ${c.bg}; color: ${c.color};">
+                ${c.avatar}
+            </div>
+            <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
+                <div class="fw-bold text-dark text-truncate" style="font-size: 13px;">${c.name}</div>
+                <div class="text-muted text-truncate" style="font-size: 11px;">${c.code}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function selectVfCtv(ctvId) {
+    currentFacilityAssignmentId = ctvId;
+    const ctv = sampleVfCtvs.find(c => c.id === ctvId);
+    if (!ctv) return;
+
+    document.getElementById('vfCtvName').textContent = ctv.name;
+    document.getElementById('vfCtvAvatar').textContent = ctv.avatar;
+    document.getElementById('vfCtvAvatar').style.background = ctv.bg;
+    document.getElementById('vfCtvAvatar').style.color = ctv.color;
+    document.getElementById('vfCtvMeta').textContent = `${ctv.code} • ${ctv.email}`;
+    document.getElementById('vfEventTitle').textContent = ctv.event;
+    document.getElementById('vfShiftName').textContent = ctv.shift;
+    document.getElementById('vfShiftTime').textContent = ctv.time;
+    document.getElementById('vfProofDescription').textContent = ctv.note;
+
+    renderVfCtvList(document.getElementById('vfCtvSearchInput')?.value || '');
+}
+
+function filterVfCtvList(val) {
+    renderVfCtvList(val);
+}
+
 const sampleFacilityPhotos = [
     { url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80', title: 'Kỹ thuật viên âm thanh tác nghiệp tại bàn điều khiển' },
     { url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop&q=80', title: 'Kiểm tra và cân chỉnh đèn spotlight sân khấu' },
@@ -9715,14 +9854,19 @@ function openFacilityProofModal(assignmentId = 8) {
         document.getElementById('vfShiftTime').textContent = timeStr;
         document.getElementById('vfProofDescription').textContent = acc.proof_note || 'Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.';
     } else {
-        document.getElementById('vfCtvName').textContent = 'Hoàng Minh Luận';
-        document.getElementById('vfCtvAvatar').textContent = 'H';
-        document.getElementById('vfCtvMeta').textContent = 'PI03015 • hoangminhluan@fpt.edu.vn';
-        document.getElementById('vfEventTitle').textContent = 'Chung kết Cuộc thi Khởi nghiệp trẻ';
-        document.getElementById('vfShiftName').textContent = 'Ca 2: Kỹ thuật trình chiếu & Micro';
-        document.getElementById('vfShiftTime').textContent = '18/11/2026, 13:00 – 17:00';
-        document.getElementById('vfProofDescription').textContent = 'Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.';
+        const ctv = sampleVfCtvs.find(c => c.id === currentFacilityAssignmentId) || sampleVfCtvs[0];
+        document.getElementById('vfCtvName').textContent = ctv.name;
+        document.getElementById('vfCtvAvatar').textContent = ctv.avatar;
+        document.getElementById('vfCtvAvatar').style.background = ctv.bg;
+        document.getElementById('vfCtvAvatar').style.color = ctv.color;
+        document.getElementById('vfCtvMeta').textContent = `${ctv.code} • ${ctv.email}`;
+        document.getElementById('vfEventTitle').textContent = ctv.event;
+        document.getElementById('vfShiftName').textContent = ctv.shift;
+        document.getElementById('vfShiftTime').textContent = ctv.time;
+        document.getElementById('vfProofDescription').textContent = ctv.note;
     }
+
+    renderVfCtvList();
 
     // Reset decision to approve
     selectProofDecision('approve');
