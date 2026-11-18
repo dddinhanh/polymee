@@ -523,7 +523,7 @@ table td .btn-fpt-sm {
    ========================================================= */
 .calendar-layout-grid {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 340px !important;
+    grid-template-columns: minmax(0, 1fr) 410px !important;
     gap: 16px !important;
     align-items: stretch !important;
     width: 100% !important;
@@ -550,14 +550,29 @@ table td .btn-fpt-sm {
 }
 
 .calendar-sidebar-col {
+    background: #FFFFFF;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 18px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     display: flex !important;
     flex-direction: column !important;
-    gap: 16px !important;
+    gap: 0 !important;
     min-width: 0;
     min-height: 0 !important;
     height: 100% !important;
-    overflow: hidden !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     box-sizing: border-box !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+.calendar-sidebar-col::-webkit-scrollbar {
+    width: 4px;
+}
+.calendar-sidebar-col::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
 }
 
 .cal-sidebar-card {
@@ -571,6 +586,142 @@ table td .btn-fpt-sm {
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
+}
+
+/* =========================================================
+   CALENDAR PROMAX REDESIGN (MATCHING OFFICIAL SAAS MOCKUP)
+   ========================================================= */
+.kpi-icon-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.cal-tab-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    font-size: 11.5px;
+    font-weight: 500;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: #F8FAFC;
+    color: #64748B;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.cal-tab-pill:hover {
+    background: #F1F5F9;
+    color: #1E293B;
+}
+.cal-tab-pill.active {
+    background: #0284C7 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-color: #0284C7 !important;
+    box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3) !important;
+}
+
+.cal-activity-card {
+    display: flex;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin-bottom: 10px;
+}
+.cal-activity-card:hover {
+    border-color: #38BDF8;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+}
+.cal-time-box {
+    width: 72px;
+    background: #F0F9FF;
+    border-right: 1px solid rgba(2, 132, 199, 0.12);
+    padding: 10px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-shrink: 0;
+}
+.cal-time-val {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.2;
+}
+.cal-time-dash {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #475569;
+    line-height: 1.2;
+}
+.cal-activity-body {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 12px;
+}
+.cal-activity-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.35;
+}
+.cal-activity-location {
+    font-size: 11px;
+    color: #64748B;
+    margin-bottom: 2px;
+}
+.cal-activity-desc {
+    font-size: 11px;
+    color: #64748B;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.cal-subcard {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding-top: 10px;
+}
+
+.cal-upload-dropzone {
+    border: 1.5px dashed #CBD5E1;
+    border-radius: 12px;
+    background: #F8FAFC;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.cal-upload-dropzone:hover {
+    border-color: #0284C7;
+    background: #F0F9FF;
+}
+
+.month-day-cell.is-selected {
+    border: 1.5px solid #38BDF8 !important;
+    background: #F0F9FF !important;
+}
+.day-number-pill.selected-badge {
+    background: #0284C7 !important;
+    color: #FFFFFF !important;
+    border-radius: 6px !important;
+    padding: 2px 6px !important;
+    line-height: 1 !important;
 }
 
 /* Thẻ 1: Chi tiết ngày chiếm ~65% chiều cao */

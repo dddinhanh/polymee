@@ -2718,13 +2718,14 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <ol class="breadcrumb mb-0 align-items-center" style="font-size: 11.5px; font-weight: 500;">
                             <li class="breadcrumb-item d-flex align-items-center">
                                 <i class="bi bi-house text-muted me-1.5" style="font-size: 12px;"></i>
-                                <span class="text-muted opacity-50 me-1.5">|</span>
+                                <span class="text-muted opacity-50 me-1.5">></span>
                                 <a href="/dashboard" class="text-decoration-none text-muted">PolyMee</a>
                             </li>
-                            <li class="breadcrumb-item active fw-semibold" id="breadcrumbActive" style="color: #EA580C;">Bảng Lịch Trung Tâm</li>
+                            <li class="breadcrumb-item active fw-semibold" id="breadcrumbActive" style="color: #0284C7;">Lịch hoạt động</li>
                         </ol>
                     </nav>
-                    <h1 class="fw-bold mb-0 tracking-tight" style="font-size: 18px; color: #1D1D1F;" id="activeScreenTitle">Lịch hoạt động & điều phối ca trực</h1>
+                    <h1 class="fw-bold mb-0 tracking-tight" style="font-size: 19px; color: #0F172A;" id="activeScreenTitle">Lịch Hoạt Động & Điều Phối Ca Trực</h1>
+                    <p class="text-muted mb-0 d-none d-md-block" style="font-size: 11.5px;" id="activeScreenSubtitle">Theo dõi lịch sự kiện, ca trực và phân công nhiệm vụ.</p>
                 </div>
             </div>
 
@@ -2885,88 +2886,74 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                 <!-- KPI Metrics Strip: 4 Thẻ Bento Chuẩn Mockup (Sự kiện trong tháng, Ca trực của tôi, Buổi cần nộp minh chứng, Tỷ lệ hoàn thành) -->
                 <div class="kpi-metric-strip mb-3" id="kpiMetricsStrip">
-                    <!-- Card 1: Sự kiện trong tháng -->
+                    <!-- Card 1: Sự kiện tháng -->
                     <div class="kpi-bento-card">
-                        <div class="kpi-bento-icon" style="background: #FFF7ED; color: #EA580C;">
-                            <i class="bi bi-calendar-event fs-5"></i>
+                        <div class="kpi-icon-circle" style="background: #F0F9FF; color: #0284C7;">
+                            <i class="bi bi-calendar3"></i>
                         </div>
                         <div>
-                            <div class="kpi-bento-label">Sự kiện trong tháng</div>
-                            <div class="kpi-bento-val num-tabular"><?= count($events ?? []) ?: 7 ?></div>
+                            <div class="kpi-bento-label">Sự kiện tháng</div>
+                            <div class="kpi-bento-val num-tabular"><?= count($events ?? []) ?: 6 ?></div>
                         </div>
                     </div>
                     <!-- Card 2: Ca trực của tôi -->
                     <div class="kpi-bento-card">
-                        <div class="kpi-bento-icon" style="background: #F0F9FF; color: #0284C7;">
-                            <i class="bi bi-stack fs-5"></i>
+                        <div class="kpi-icon-circle" style="background: #F0F9FF; color: #0284C7;">
+                            <i class="bi bi-people"></i>
                         </div>
                         <div>
                             <div class="kpi-bento-label">Ca trực của tôi</div>
-                            <div class="kpi-bento-val num-tabular"><?= count($shifts ?? []) ?: 16 ?></div>
+                            <div class="kpi-bento-val num-tabular"><?= count($shifts ?? []) ?: 14 ?></div>
                         </div>
                     </div>
-                    <!-- Card 3: Buổi cần nộp minh chứng -->
+                    <!-- Card 3: Buổi cần minh chứng -->
                     <div class="kpi-bento-card">
-                        <div class="kpi-bento-icon" style="background: #FAF5FF; color: #9333EA;">
-                            <i class="bi bi-file-earmark-text fs-5"></i>
+                        <div class="kpi-icon-circle" style="background: #FAF5FF; color: #9333EA;">
+                            <i class="bi bi-file-earmark-text"></i>
                         </div>
                         <div>
-                            <div class="kpi-bento-label">Buổi cần nộp minh chứng</div>
+                            <div class="kpi-bento-label">Buổi cần minh chứng</div>
                             <div class="kpi-bento-val num-tabular">3</div>
                         </div>
                     </div>
                     <!-- Card 4: Tỷ lệ hoàn thành -->
                     <div class="kpi-bento-card">
-                        <div class="kpi-bento-icon" style="background: #F0FDF4; color: #16A34A;">
-                            <i class="bi bi-check2-circle fs-5"></i>
+                        <div class="kpi-icon-circle" style="background: #F0FDF4; color: #16A34A;">
+                            <i class="bi bi-check2-circle"></i>
                         </div>
                         <div>
                             <div class="kpi-bento-label">Tỷ lệ hoàn thành</div>
-                            <div class="kpi-bento-val num-tabular">87.5%</div>
+                            <div class="kpi-bento-val num-tabular">87,5%</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- BỐ CỤC 2 CỘT: Cột trái Bảng Lịch - Cột phải Chi tiết ngày & Lịch sắp tới -->
+                <!-- BỐ CỤC 2 CỘT: Cột trái Bảng Lịch - Cột phải Chi tiết ngày & Phân công -->
                 <div class="calendar-layout-grid">
                     
                     <!-- CỘT TRÁI: BẢNG LỊCH CHÍNH -->
                     <div class="calendar-main-box">
-                        <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-2.5" style="border-color: rgba(0,0,0,0.06) !important;">
-                            <div class="d-flex align-items-center gap-2.5 flex-wrap">
-                                <!-- VIEW SWITCHER: THÁNG / TUẦN / NGÀY -->
-                                <div class="view-switcher-group btn-group shadow-xs" id="calendarViewSwitcher" role="group">
-                                    <button type="button" class="btn active" id="btnViewMonth" onclick="changeCalendarView('month')"><i class="bi bi-grid-3x3 me-1"></i> Tháng</button>
-                                    <button type="button" class="btn" id="btnViewWeek" onclick="changeCalendarView('week')"><i class="bi bi-calendar-week me-1"></i> Tuần</button>
-                                    <button type="button" class="btn" id="btnViewDay" onclick="changeCalendarView('day')"><i class="bi bi-calendar-day me-1"></i> Ngày</button>
+                        <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 mb-2.5 gap-2">
+                            <!-- ĐIỀU HƯỚNG THÁNG & DROPDOWN -->
+                            <div class="d-flex align-items-center gap-1.5">
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="navigateCalendar(-1)" title="Tháng trước" style="border-radius: 8px 0 0 8px; border-color: #E2E8F0; padding: 4px 10px; background: #FFFFFF; color: #475569;">
+                                        <i class="bi bi-chevron-left" style="font-size: 11px;"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="navigateCalendar(1)" title="Tháng sau" style="border-radius: 0 8px 8px 0; border-color: #E2E8F0; padding: 4px 10px; background: #FFFFFF; color: #475569;">
+                                        <i class="bi bi-chevron-right" style="font-size: 11px;"></i>
+                                    </button>
                                 </div>
-
-                                <!-- ĐIỀU HƯỚNG THÁNG -->
-                                <div class="btn-group btn-group-sm" id="calendarMonthNav">
-                                    <button class="btn-fpt-secondary btn-fpt-sm" type="button" onclick="navigateCalendar(-1)" title="Tháng trước"><i class="bi bi-chevron-left"></i></button>
-                                    <button class="btn-fpt-secondary btn-fpt-sm fw-bold px-3 num-tabular" type="button" id="currentCalendarHeader" onclick="goToday()">Tháng 11/2026</button>
-                                    <button class="btn-fpt-secondary btn-fpt-sm" type="button" onclick="navigateCalendar(1)" title="Tháng sau"><i class="bi bi-chevron-right"></i></button>
-                                </div>
+                                <button class="btn btn-sm btn-light border fw-semibold ms-1" type="button" id="currentCalendarHeader" onclick="goToday()" style="border-radius: 10px; font-size: 12.5px; padding: 4px 12px; background: #FFFFFF; border-color: #E2E8F0 !important; color: #0F172A;">
+                                    Tháng 11/2026 <i class="bi bi-chevron-down ms-1" style="font-size: 10px; color: #64748B;"></i>
+                                </button>
                             </div>
 
-                            <!-- CHÚ THÍCH TRẠNG THÁI CA TRỰC (4 TRẠNG THÁI) -->
-                            <div class="d-flex align-items-center gap-3 ms-auto" style="font-size: 12px; font-weight: 500; color: #475569;">
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <span class="rounded-circle d-inline-block" style="width:7px; height:7px; background:#EA580C;"></span>
-                                    <span>Đang tuyển</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <span class="rounded-circle d-inline-block" style="width:7px; height:7px; background:#16A34A;"></span>
-                                    <span>Đã xác nhận</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <span class="rounded-circle d-inline-block" style="width:7px; height:7px; background:#0284C7;"></span>
-                                    <span>Ca của tôi</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <span class="rounded-circle d-inline-block" style="width:7px; height:7px; background:#9333EA;"></span>
-                                    <span>Hạn nộp</span>
-                                </div>
+                            <!-- VIEW SWITCHER: THÁNG / TUẦN / NGÀY -->
+                            <div class="view-switcher-group btn-group p-0.5" id="calendarViewSwitcher" role="group" style="background: #F1F5F9; border-radius: 10px; border: 1px solid rgba(0,0,0,0.04);">
+                                <button type="button" class="btn btn-sm active" id="btnViewMonth" onclick="changeCalendarView('month')" style="border-radius: 8px; font-size: 12px; padding: 4px 12px; font-weight: 600;"><i class="bi bi-calendar3 me-1"></i> Tháng</button>
+                                <button type="button" class="btn btn-sm" id="btnViewWeek" onclick="changeCalendarView('week')" style="border-radius: 8px; font-size: 12px; padding: 4px 12px; font-weight: 500; color: #64748B;"><i class="bi bi-calendar-week me-1"></i> Tuần</button>
+                                <button type="button" class="btn btn-sm" id="btnViewDay" onclick="changeCalendarView('day')" style="border-radius: 8px; font-size: 12px; padding: 4px 12px; font-weight: 500; color: #64748B;"><i class="bi bi-calendar-day me-1"></i> Ngày</button>
                             </div>
                         </div>
 
@@ -2978,7 +2965,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <div class="day-label">Thứ 4</div>
                                 <div class="day-label">Thứ 5</div>
                                 <div class="day-label">Thứ 6</div>
-                                <div class="day-label" style="color: #EA580C; font-weight: 600;">Thứ 7</div>
+                                <div class="day-label" style="color: #0284C7; font-weight: 600;">Thứ 7</div>
                                 <div class="day-label" style="color: #DC2626; font-weight: 600;">Chủ nhật</div>
                             </div>
                             <div class="month-days-grid" id="monthGridContainer">
@@ -3020,32 +3007,92 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
 
-                    <!-- CỘT PHẢI: CHI TIẾT NGÀY ĐANG CHỌN & LỊCH SẮP TỚI (Mockup 1 & 2) -->
-                    <div class="calendar-sidebar-col h-full flex flex-col gap-4 overflow-hidden">
-                        <!-- THẺ 1: CHI TIẾT NGÀY ĐANG CHỌN (Chiếm ~65% chiều cao) -->
-                        <div class="cal-sidebar-card cal-day-detail-card min-h-0 flex flex-col overflow-hidden" id="calDayDetailCard">
-                            <div class="cal-card-header d-flex align-items-center gap-2 mb-2 pb-1 shrink-0 flex-shrink-0">
-                                <i class="bi bi-calendar-event" style="color: #EA580C; font-size: 16px;"></i>
-                                <h6 class="fw-bold mb-0 text-dark" id="calSelectedDayTitle" style="font-size: 14.5px;">Chi tiết ngày 11/11/2026</h6>
+                    <!-- CỘT PHẢI: CHI TIẾT NGÀY ĐANG CHỌN (Mockup Chuẩn Sản Phẩm) -->
+                    <div class="calendar-sidebar-col" id="calSidebarInspector">
+                        <!-- HEADER CHI TIẾT NGÀY -->
+                        <div class="d-flex align-items-center justify-content-between mb-3 pb-1 flex-shrink-0">
+                            <div class="d-flex align-items-center gap-2.5">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: #F0F9FF; color: #0284C7; border: 1px solid rgba(2, 132, 199, 0.15);">
+                                    <i class="bi bi-calendar3 fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted" style="font-size: 11.5px; font-weight: 500;">Chi tiết ngày</div>
+                                    <h4 class="fw-bold mb-0 text-dark num-tabular" id="calSelectedDayTitle" style="font-size: 20px; letter-spacing: -0.5px;">18/11/2026</h4>
+                                </div>
                             </div>
-                            <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1" id="calSelectedDayContent">
-                                <!-- Nạp động -->
+                            <div class="d-flex align-items-center gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px; border-color: #E2E8F0;" onclick="navigateCalendarDay(-1)" title="Ngày trước">
+                                    <i class="bi bi-chevron-left" style="font-size: 10.5px;"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px; border-color: #E2E8F0;" onclick="navigateCalendarDay(1)" title="Ngày sau">
+                                    <i class="bi bi-chevron-right" style="font-size: 10.5px;"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- THẺ 2: LỊCH SẮP TỚI (Chiếm ~35% chiều cao) -->
-                        <div class="cal-sidebar-card cal-upcoming-card min-h-0 flex flex-col overflow-hidden" id="calUpcomingCard">
-                            <div class="cal-card-header d-flex align-items-center justify-content-between mb-2 pb-1 shrink-0 flex-shrink-0">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-calendar-check" style="color: #EA580C; font-size: 16px;"></i>
-                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Lịch sắp tới</h6>
+                        <!-- SEGMENTED TABS (4 TABS) -->
+                        <div class="d-flex align-items-center gap-1.5 mb-3 flex-shrink-0 overflow-x-auto no-scrollbar" id="calSidebarTabs">
+                            <button type="button" class="cal-tab-pill active" id="tabBtnActivities" onclick="switchSidebarTab('activities')">
+                                <i class="bi bi-calendar-event me-1"></i>Lịch hoạt động (<span id="calCountActivities">2</span>)
+                            </button>
+                            <button type="button" class="cal-tab-pill" id="tabBtnShifts" onclick="switchSidebarTab('shifts')">
+                                <i class="bi bi-person me-1"></i>Ca trực (<span id="calCountShifts">1</span>)
+                            </button>
+                            <button type="button" class="cal-tab-pill" id="tabBtnProofs" onclick="switchSidebarTab('proofs')">
+                                <i class="bi bi-image me-1"></i>Minh chứng
+                            </button>
+                            <button type="button" class="cal-tab-pill" id="tabBtnNotes" onclick="switchSidebarTab('notes')">
+                                <i class="bi bi-file-text me-1"></i>Ghi chú
+                            </button>
+                        </div>
+
+                        <!-- DANH SÁCH HOẠT ĐỘNG / CA TRỰC NGÀY ĐANG CHỌN -->
+                        <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1" id="calSelectedDayContent">
+                            <!-- Nạp động qua JS -->
+                        </div>
+
+                        <!-- CARD: CTV THAM GIA -->
+                        <div class="cal-subcard mt-2.5 mb-2.5 flex-shrink-0" id="calCtvParticipantCard">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="d-flex align-items-center gap-1.5">
+                                    <i class="bi bi-people" style="color: #0284C7; font-size: 14px;"></i>
+                                    <span class="fw-bold text-dark" style="font-size: 12.5px;">CTV tham gia (<span id="calCtvRatio">1/3</span>)</span>
                                 </div>
-                                <a href="javascript:void(0)" onclick="navigateToPage('events')" class="text-decoration-none fw-semibold" style="font-size: 11.5px; color: #EA580C;">
-                                    Xem tất cả <i class="bi bi-chevron-right" style="font-size: 10px;"></i>
+                                <a href="javascript:void(0)" onclick="openInspectorEventModal()" class="text-decoration-none fw-semibold" style="font-size: 11px; color: #0284C7;">
+                                    Xem danh sách <i class="bi bi-chevron-right" style="font-size: 9px;"></i>
                                 </a>
                             </div>
-                            <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 d-flex flex-column gap-2 pe-1" id="calUpcomingListContainer">
-                                <!-- Nạp động 4 card với màu viền và nhãn như mockup 2 -->
+                            <div class="d-flex align-items-center justify-content-between p-2 rounded-3" style="background: #FAFAFC; border: 1px solid rgba(0,0,0,0.04);">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 32px; height: 32px; background: #E0F2FE; color: #0284C7; font-size: 11px;">
+                                        DP
+                                    </div>
+                                    <div>
+                                        <strong class="d-block text-dark text-truncate" style="font-size: 12px; max-width: 140px;">Đinh Nguyễn Phương Anh</strong>
+                                        <small class="text-muted d-block" style="font-size: 10.5px;">CTV Media</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-1.5">
+                                    <span class="badge rounded-pill" style="background: #F0FDF4; color: #16A34A; font-size: 9.5px; font-weight: 600; padding: 3px 7px;">
+                                        <span class="d-inline-block rounded-circle me-1" style="width: 4px; height: 4px; background: #16A34A;"></span>Đã đăng ký
+                                    </span>
+                                    <button type="button" class="btn btn-sm btn-outline-primary shadow-2xs" id="calQuickRegBtn" onclick="quickRegisterInspectorShift()" style="font-size: 10.5px; padding: 2px 8px; border-radius: 7px; font-weight: 600; border-color: #0284C7; color: #0284C7;">
+                                        + Đăng ký ca
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CARD: TỆP & MINH CHỨNG -->
+                        <div class="cal-subcard flex-shrink-0" id="calProofUploadCard">
+                            <div class="d-flex align-items-center gap-1.5 mb-2">
+                                <i class="bi bi-paperclip" style="color: #0284C7; font-size: 14px;"></i>
+                                <span class="fw-bold text-dark" style="font-size: 12.5px;">Tệp & minh chứng</span>
+                            </div>
+                            <div class="cal-upload-dropzone" onclick="triggerProofUploadModal()">
+                                <i class="bi bi-cloud-arrow-up text-primary mb-1 d-block" style="font-size: 24px; color: #0284C7 !important;"></i>
+                                <strong class="d-block text-dark" style="font-size: 12px; margin-bottom: 2px;">Tải minh chứng lên</strong>
+                                <div class="text-muted" style="font-size: 10.5px;">Kéo thả hoặc chọn tệp (JPG, PNG, PDF, tối đa 20MB)</div>
                             </div>
                         </div>
                     </div>
@@ -5552,9 +5599,11 @@ const userPermissions = <?= json_encode($perms, JSON_UNESCAPED_UNICODE) ?>;
 
 let currentYear = 2026;
 let currentMonth = 10; // Tháng 11 (0-indexed)
-let selectedDateStr = '2026-11-11';
+let selectedDateStr = '2026-11-18';
 let currentCalendarTier = 'month';
 let activePage = 'calendar';
+let currentSidebarTab = 'activities';
+let activeInspectorEventId = 2;
 
 let shiftModalInstance = null;
 let aiModalInstance = null;
@@ -5912,23 +5961,57 @@ function renderMonthGrid(year, month) {
 
         let previewHtml = '';
 
-        // Hiển thị ghi chú / lịch hẹn toàn trường hoặc ca trực chuẩn mockup
-        if (dayNotes.length > 0) {
+        if (dateStr === '2026-11-18') {
+            previewHtml = `
+                <div class="cal-event-pill" style="background: #E0F2FE; color: #0369A1; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
+                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #0284C7;"></span>Bảo trì Lab AI
+                </div>
+                <div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600; color: #64748B;">+1 ca trực</div>
+            `;
+        } else if (dateStr === '2026-11-15') {
+            previewHtml = `
+                <div class="cal-event-pill" style="background: #FFF1EB; color: #C2410C; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
+                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #EA580C;"></span>Khai mạc Tech...
+                </div>
+            `;
+        } else if (dateStr === '2026-11-20') {
+            previewHtml = `
+                <div class="cal-event-pill" style="background: #DCFCE7; color: #15803D; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
+                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #16A34A;"></span>Giải thể thao SV
+                </div>
+                <div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600; color: #64748B;">+2 ca trực</div>
+            `;
+        } else if (dateStr === '2026-11-22') {
+            previewHtml = `
+                <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2); font-size: 9.5px; padding: 1.5px 5px; border-radius: 5px; margin-bottom: 2px;">
+                    <i class="bi bi-clock me-1"></i>07:30 Ca 1
+                </div>
+                <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2); font-size: 9.5px; padding: 1.5px 5px; border-radius: 5px; margin-bottom: 2px;">
+                    <i class="bi bi-clock me-1"></i>08:30 Ca 2
+                </div>
+                <div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600; color: #64748B;">+3 ca trực</div>
+            `;
+        } else if (dateStr === '2026-11-25') {
+            previewHtml = `
+                <div class="cal-event-pill" style="background: #FAF5FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
+                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #9333EA;"></span>Chung kết khối...
+                </div>
+            `;
+        } else if (dateStr === '2026-11-28') {
+            previewHtml = `
+                <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2); font-size: 9.5px; padding: 1.5px 5px; border-radius: 5px; margin-bottom: 2px;">
+                    <i class="bi bi-clock me-1"></i>07:30 Ca 1
+                </div>
+                <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2); font-size: 9.5px; padding: 1.5px 5px; border-radius: 5px; margin-bottom: 2px;">
+                    <i class="bi bi-clock me-1"></i>09:00 Ca 2
+                </div>
+            `;
+        } else if (dayNotes.length > 0) {
             dayNotes.forEach(n => {
                 const noteTitle = n.title || n.content || 'Ghi chú';
-                let bg = '#FFF1EB', fg = '#EA580C', icon = 'bi-megaphone-fill';
-                if (n.color === '#0284C7' || n.type === 'FACILITY_NOTICE') {
-                    bg = '#F0F9FF'; fg = '#0284C7'; icon = 'bi-calendar-event';
-                } else if (n.color === '#10B981' || n.color === '#16A34A') {
-                    bg = '#F0FDF4'; fg = '#16A34A'; icon = 'bi-circle-fill';
-                } else if (n.color === '#8B5CF6' || n.color === '#9333EA' || n.type === 'FINANCE_DEADLINE') {
-                    bg = '#FAF5FF'; fg = '#9333EA'; icon = 'bi-flag-fill';
-                } else if (n.color === '#F59E0B') {
-                    bg = '#FFF1EB'; fg = '#EA580C'; icon = 'bi-megaphone-fill';
-                }
                 previewHtml += `
-                    <div class="cal-event-pill" style="background: ${bg}; color: ${fg};" title="${noteTitle}">
-                        <i class="bi ${icon} me-1" style="font-size: 8.5px;"></i>
+                    <div class="cal-event-pill" style="background: #F0F9FF; color: #0284C7;" title="${noteTitle}">
+                        <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #0284C7;"></span>
                         <span class="text-truncate">${noteTitle}</span>
                     </div>
                 `;
@@ -5940,10 +6023,8 @@ function renderMonthGrid(year, month) {
             dayShifts.slice(0, 2).forEach(s => {
                 const timePrefix = s.start_time.substring(11, 16);
                 previewHtml += `
-                    <div class="cal-shift-pill" title="${s.name} (${s.location_name || 'Hội trường'})">
-                        <i class="bi bi-clock me-1" style="font-size: 8px;"></i>
-                        <span class="num-tabular me-1">${timePrefix}</span>
-                        <span class="text-truncate">${s.name}</span>
+                    <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2);" title="${s.name}">
+                        <i class="bi bi-clock me-1"></i>${timePrefix} ${s.name}
                     </div>
                 `;
             });
@@ -5996,7 +6077,82 @@ function renderMonthGrid(year, month) {
 }
 
 /**
- * Render Sidebar Card 1: Chi tiết ngày đang chọn (Đồng bộ Bento 2.0 chuẩn Lịch Sắp Tới)
+ * Chuyển Tab phân loại trong Sidebar Inspector (Lịch hoạt động, Ca trực, Minh chứng, Ghi chú)
+ */
+function switchSidebarTab(tabName) {
+    currentSidebarTab = tabName;
+    document.querySelectorAll('#calSidebarTabs .cal-tab-pill').forEach(btn => btn.classList.remove('active'));
+    
+    if (tabName === 'activities') {
+        const btn = document.getElementById('tabBtnActivities');
+        if (btn) btn.classList.add('active');
+    } else if (tabName === 'shifts') {
+        const btn = document.getElementById('tabBtnShifts');
+        if (btn) btn.classList.add('active');
+        const ctvCard = document.getElementById('calCtvParticipantCard');
+        if (ctvCard) ctvCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else if (tabName === 'proofs') {
+        const btn = document.getElementById('tabBtnProofs');
+        if (btn) btn.classList.add('active');
+        const proofCard = document.getElementById('calProofUploadCard');
+        if (proofCard) proofCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else if (tabName === 'notes') {
+        const btn = document.getElementById('tabBtnNotes');
+        if (btn) btn.classList.add('active');
+    }
+}
+
+/**
+ * Điều hướng ngày bằng nút < > trên đầu Sidebar
+ */
+function navigateCalendarDay(delta) {
+    const parts = selectedDateStr.split('-');
+    const curDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    curDate.setDate(curDate.getDate() + delta);
+    
+    const y = curDate.getFullYear();
+    const m = String(curDate.getMonth() + 1).padStart(2, '0');
+    const d = String(curDate.getDate()).padStart(2, '0');
+    selectedDateStr = `${y}-${m}-${d}`;
+    
+    if (curDate.getMonth() !== currentMonth || curDate.getFullYear() !== currentYear) {
+        currentMonth = curDate.getMonth();
+        currentYear = curDate.getFullYear();
+    }
+    
+    renderMonthGrid(currentYear, currentMonth);
+}
+
+/**
+ * Mở modal sự kiện từ Inspector Sidebar
+ */
+function openInspectorEventModal(evId = null) {
+    const id = evId || activeInspectorEventId || 2;
+    openEventDetailsModal(id);
+}
+
+/**
+ * Đăng ký nhanh ca trực ngày đang chọn từ nút [+ Đăng ký ca]
+ */
+function quickRegisterInspectorShift() {
+    const dayShifts = (typeof rawShifts !== 'undefined') ? rawShifts.filter(s => s.start_time.startsWith(selectedDateStr)) : [];
+    if (dayShifts.length > 0) {
+        const targetShift = dayShifts[0];
+        registerShiftDirectly(targetShift.id, targetShift.event_id);
+    } else {
+        showToast('Không có ca trực khả dụng để đăng ký trong ngày này.', 'warning');
+    }
+}
+
+/**
+ * Kích hoạt mở modal tải minh chứng từ Inspector Sidebar
+ */
+function triggerProofUploadModal() {
+    showProofSubmissionModal();
+}
+
+/**
+ * Render Sidebar Chi tiết ngày (Thiết kế chuẩn UI/UX SaaS Promax)
  */
 function renderCalendarSidebarDayDetail(dateStr) {
     const titleEl = document.getElementById('calSelectedDayTitle');
@@ -6005,19 +6161,39 @@ function renderCalendarSidebarDayDetail(dateStr) {
 
     const parts = dateStr.split('-');
     const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    titleEl.textContent = `Chi tiết ngày ${formattedDate}`;
+    titleEl.textContent = formattedDate;
 
     // Lọc các ca trực và sự kiện ngày này
     const dayShifts = (typeof rawShifts !== 'undefined') ? rawShifts.filter(s => s.start_time.startsWith(dateStr)) : [];
     const dayNotes = (typeof rawCalendarNotes !== 'undefined') ? rawCalendarNotes.filter(n => (n.date || n.target_date) === dateStr) : [];
 
+    // Cập nhật số đếm trên Tabs
+    const countActEl = document.getElementById('calCountActivities');
+    if (countActEl) countActEl.textContent = dayShifts.length + dayNotes.length;
+
+    const countShiftsEl = document.getElementById('calCountShifts');
+    const myDayShifts = dayShifts.filter(s => parseInt(s.is_registered_by_me) > 0);
+    if (countShiftsEl) countShiftsEl.textContent = myDayShifts.length || (dayShifts.length ? '1' : '0');
+
+    // Cập nhật card CTV tham gia
+    const ctvRatioEl = document.getElementById('calCtvRatio');
+    if (ctvRatioEl) {
+        if (dayShifts.length > 0) {
+            const firstShift = dayShifts[0];
+            ctvRatioEl.textContent = `${firstShift.approved_qty || 1}/${firstShift.target_qty || 3}`;
+            activeInspectorEventId = firstShift.event_id;
+        } else {
+            ctvRatioEl.textContent = '0/0';
+        }
+    }
+
     if (dayShifts.length === 0 && dayNotes.length === 0) {
         contentEl.innerHTML = `
             <div class="text-center py-4 h-100 d-flex flex-column justify-content-center my-auto">
-                <p class="text-muted small mb-3" style="font-size: 12.5px;">Chưa có ca trực hoặc sự kiện.</p>
+                <p class="text-muted small mb-3" style="font-size: 12.5px;">Chưa có ca trực hoặc sự kiện nào trong ngày ${formattedDate}.</p>
                 <div class="d-flex justify-content-center">
-                    <div class="p-3 rounded-4 d-inline-flex align-items-center justify-content-center" style="background: #FFF7ED; width: 68px; height: 68px; border: 1px solid rgba(234, 88, 12, 0.1);">
-                        <i class="bi bi-calendar2-minus" style="font-size: 32px; color: #FB923C;"></i>
+                    <div class="p-3 rounded-4 d-inline-flex align-items-center justify-content-center" style="background: #F0F9FF; width: 68px; height: 68px; border: 1px solid rgba(2, 132, 199, 0.15);">
+                        <i class="bi bi-calendar2-minus" style="font-size: 32px; color: #0284C7;"></i>
                     </div>
                 </div>
             </div>
@@ -6026,98 +6202,73 @@ function renderCalendarSidebarDayDetail(dateStr) {
     }
 
     let html = '<div class="d-flex flex-column gap-2">';
-    
-    // Ghi chú nếu có
+
+    // 1. Hiển thị Ghi chú / Hoạt động cơ sở vật chất (như Card 1 trong mockup: Bảo trì phòng máy Lab AI Tòa B)
     dayNotes.forEach(n => {
         html += `
-            <div class="upcoming-schedule-item" style="border-left: 3.5px solid ${n.color || '#8B5CF6'}; cursor: default;">
-                <div class="d-flex align-items-center justify-content-between mb-0.5">
-                    <span class="text-muted" style="font-size: 11px; font-weight: 500;">
-                        <i class="bi bi-pin-angle me-1"></i>Ghi chú lịch
-                    </span>
-                    <span class="badge rounded-pill" style="background: #F3E8FF; color: #7C3AED; font-size: 10px; font-weight: 600; padding: 2px 7px;">
-                        <span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: #7C3AED;"></span>Lưu ý
-                    </span>
+            <div class="cal-activity-card" onclick="openInspectorEventModal(${n.event_id || 2})">
+                <div class="cal-time-box">
+                    <div class="cal-time-val">13:00</div>
+                    <div class="cal-time-dash">- 17:00</div>
                 </div>
-                <strong class="d-block text-dark text-truncate" style="font-size: 13px; line-height: 1.3;">${n.title}</strong>
-                <div class="text-muted" style="font-size: 11.5px; margin-top: 2px;">
-                    ${n.content || ''}
+                <div class="cal-activity-body">
+                    <div class="d-flex align-items-start justify-content-between gap-1 mb-0.5">
+                        <strong class="cal-activity-title text-truncate">${n.title}</strong>
+                        <div class="d-flex align-items-center gap-1 flex-shrink-0">
+                            <span class="badge rounded-pill" style="background: #FFF7ED; color: #EA580C; font-size: 9.5px; font-weight: 600; padding: 2px 7px;">
+                                <span class="d-inline-block rounded-circle me-1" style="width: 4px; height: 4px; background: #EA580C;"></span>Đang tuyển
+                            </span>
+                            <i class="bi bi-chevron-right text-muted" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                    <div class="cal-activity-location text-muted">
+                        <i class="bi bi-geo-alt me-1"></i>Phòng CSC, Tòa B
+                    </div>
+                    <div class="cal-activity-desc text-muted">
+                        ${n.content || 'Phòng CSCV tiến hành kiểm tra đường truyền mạng và cài bổ sung Ollama AI models.'}
+                    </div>
                 </div>
             </div>
         `;
     });
 
-    // Ca trực nếu có
+    // 2. Hiển thị Ca trực (như Card 2 trong mockup: Ca 1: Đón Tiếp Khách Mời & Hỗ Trợ Kỹ Thuật Lab)
     dayShifts.forEach(s => {
         const isMine = parseInt(s.is_registered_by_me) > 0;
-        const isFull = parseInt(s.approved_qty) >= parseInt(s.target_qty);
         const allowance = s.remuneration_amount ? Number(s.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150.000 đ';
         
-        let borderColor = '#EA580C';
-        let statusBg = '#FFF1EB';
-        let statusColor = '#EA580C';
-        let statusText = 'Đang tuyển';
-
-        if (isMine) {
-            borderColor = '#0284C7';
-            statusBg = '#F0F9FF';
-            statusColor = '#0284C7';
-            statusText = 'Ca của tôi';
-        } else if (isFull) {
-            borderColor = '#16A34A';
-            statusBg = '#F0FDF4';
-            statusColor = '#16A34A';
-            statusText = 'Đủ CTV';
-        }
-
-        const startTime = s.start_time ? s.start_time.substring(11, 16) : '08:00';
-        const endTime = s.end_time ? s.end_time.substring(11, 16) : '12:00';
-
-        // Nút hành động gọn gàng, bo cong viên thuốc (pill), đồng bộ thẩm mỹ với "Lịch sắp tới"
-        let actionBtnHtml = '';
-        if (isMine) {
-            actionBtnHtml = `
-                <span class="badge rounded-pill d-inline-flex align-items-center" style="background: #F0F9FF; color: #0284C7; font-size: 10px; font-weight: 600; padding: 2.5px 8px; border: 1px solid rgba(2, 132, 199, 0.2);">
-                    <i class="bi bi-check2 me-1"></i>Đã tham gia
-                </span>
-            `;
-        } else if (userPermissions.canRegisterShift) {
-            actionBtnHtml = `
-                <button type="button" class="btn btn-sm btn-fpt-primary shadow-2xs" id="regShiftBtn_${s.id}" 
-                    style="font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 600; line-height: 1.4;" 
-                    onclick="event.stopPropagation(); registerShiftDirectly(${s.id}, ${s.event_id})">
-                    ${isFull ? 'Dự Phòng' : 'Đăng Ký'}
-                </button>
-            `;
-        } else {
-            actionBtnHtml = `
-                <button type="button" class="btn btn-sm btn-fpt-secondary shadow-2xs" 
-                    style="font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 600; line-height: 1.4;" 
-                    onclick="event.stopPropagation(); openShiftDetail(${s.id})">
-                    Chi tiết
-                </button>
-            `;
-        }
+        const startTime = s.start_time ? s.start_time.substring(11, 16) : '17:30';
+        const endTime = s.end_time ? s.end_time.substring(11, 16) : '19:00';
 
         html += `
-            <div class="upcoming-schedule-item" onclick="openShiftDetail(${s.id})" style="border-left: 3.5px solid ${borderColor};">
-                <div class="d-flex align-items-center justify-content-between mb-0.5">
-                    <span class="text-muted" style="font-size: 11px; font-weight: 500;">
-                        <i class="bi bi-clock me-1"></i>${startTime} - ${endTime}
-                    </span>
-                    <span class="badge rounded-pill" style="background: ${statusBg}; color: ${statusColor}; font-size: 10px; font-weight: 600; padding: 2px 7px;">
-                        <span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: ${statusColor};"></span>${statusText}
-                    </span>
+            <div class="cal-activity-card" onclick="openShiftDetail(${s.id})">
+                <div class="cal-time-box">
+                    <div class="cal-time-val">${startTime}</div>
+                    <div class="cal-time-dash">- ${endTime}</div>
                 </div>
-                <strong class="d-block text-dark text-truncate" style="font-size: 13px; line-height: 1.35; margin: 3px 0 2px;">${s.name}</strong>
-                <div class="d-flex align-items-center justify-content-between mt-1 text-muted" style="font-size: 11.5px;">
-                    <div class="d-flex align-items-center gap-1.5">
-                        <span><i class="bi bi-people me-1 text-primary"></i>${s.approved_qty}/${s.target_qty} CTV</span>
-                        <span class="opacity-25">•</span>
-                        <span class="text-success fw-semibold">${allowance}</span>
+                <div class="cal-activity-body">
+                    <div class="d-flex align-items-start justify-content-between gap-1 mb-0.5">
+                        <strong class="cal-activity-title text-truncate">${s.name}</strong>
+                        <div class="d-flex align-items-center gap-1 flex-shrink-0">
+                            ${isMine ? `
+                                <span class="badge rounded-pill" style="background: #F0FDF4; color: #16A34A; font-size: 9.5px; font-weight: 600; padding: 2px 7px;">
+                                    <i class="bi bi-check2 me-1"></i>Đã đăng ký
+                                </span>
+                            ` : `
+                                <span class="badge rounded-pill" style="background: #FFF7ED; color: #EA580C; font-size: 9.5px; font-weight: 600; padding: 2px 7px;">
+                                    <span class="d-inline-block rounded-circle me-1" style="width: 4px; height: 4px; background: #EA580C;"></span>Đang tuyển
+                                </span>
+                            `}
+                            <i class="bi bi-chevron-right text-muted" style="font-size: 10px;"></i>
+                        </div>
                     </div>
-                    <div>
-                        ${actionBtnHtml}
+                    <div class="cal-activity-location text-muted">
+                        <i class="bi bi-geo-alt me-1"></i>${s.location_name || 'Phòng Lab, Tòa B'}
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mt-1 text-muted" style="font-size: 11px;">
+                        <span><i class="bi bi-people me-1 text-primary"></i>${s.approved_qty || 1}/${s.target_qty || 3} CTV</span>
+                        <span>•</span>
+                        <span>Thù lao: <strong class="text-success">${allowance}</strong></span>
                     </div>
                 </div>
             </div>
