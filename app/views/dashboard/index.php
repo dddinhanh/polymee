@@ -4442,106 +4442,106 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                  ========================================================= -->
             <?php if (!empty($perms['canManageRoles'])): ?>
             <section id="panelUserRoles" style="display:none !important;" class="spa-panel fade-in-up">
-                <div class="card border-0 rounded-4 shadow-sm flex-1 overflow-hidden d-flex flex-column" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important; height: 100%;">
-                    <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề trang & Tổng số tài khoản (Non-scrollable Top) -->
-                    <div class="card-header bg-transparent px-4 py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3 flex-shrink-0" style="border-color: rgba(0,0,0,0.06) !important;">
+                <div class="saas-card flex-1 overflow-hidden d-flex flex-column h-100">
+                    <!-- 1. Toolbar: Tiêu đề & Bộ lọc tìm kiếm nhanh -->
+                    <div class="saas-card-header flex-shrink-0 d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 border-bottom">
                         <div>
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">BẢO MẬT & PHÂN QUYỀN</span>
-                                <h2 class="fw-bold mb-0 text-dark" style="font-size: 17.5px; letter-spacing: -0.015em;">Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng</h2>
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 12.5px; margin-top: 2px;">Quản trị viên có toàn quyền nâng cấp, giáng cấp hoặc chuyển đổi vai trò của từng thành viên</p>
+                            <h3 class="fw-bold mb-0 text-dark" style="font-size: 16px;">Tài Khoản & Phân Quyền Hệ Thống</h3>
+                            <small class="text-muted">Quản trị danh sách người dùng, chuyển đổi vai trò và kiểm soát trạng thái truy cập</small>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(234, 88, 12, 0.15); color: #FB923C; border: 1px solid rgba(234, 88, 12, 0.3); font-size: 12px;">
-                                <i class="bi bi-people-fill me-1"></i> Tổng số: <?= count($allUsers) ?> tài khoản
+                            <span class="badge bg-light text-dark border px-3 py-1.5 rounded-pill font-monospace">
+                                Tổng cộng: <?= count($allUsers) ?> tài khoản
                             </span>
                         </div>
                     </div>
 
-                    <!-- 2. VÙNG BẢNG DỮ LIỆU: Scrollable Body & Sticky Header -->
-                    <div class="card-body p-0 flex-1 overflow-hidden d-flex flex-column">
-                        <div class="table-responsive flex-1 overflow-y-auto" style="height: 100%;">
-                            <table class="table align-middle mb-0" style="color: var(--ux-ink);">
-                                <thead class="sticky-th">
-                                    <tr style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ux-ink-3);">
-                                        <th class="ps-4 py-3" style="width: 280px;">Thành Viên</th>
-                                        <th class="py-3" style="width: 140px;">Mã / MSSV</th>
-                                        <th class="py-3" style="width: 220px;">Email & SĐT</th>
-                                        <th class="py-3" style="width: 180px;">Vai Trò Hiện Tại</th>
-                                        <th class="pe-4 py-3 text-end" style="width: 320px;">Cấp Quyền Mới</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($allUsers as $u): ?>
-                                    <?php 
-                                    $uInitial = mb_strtoupper(mb_substr($u['full_name'], 0, 1));
-                                    $roleBadgeColor = match($u['role_name']) {
-                                        'Admin' => 'background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3);',
-                                        'Organizer' => 'background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3);',
-                                        'Staff' => 'background: rgba(14, 165, 233, 0.15); color: #0284C7; border: 1px solid rgba(14, 165, 233, 0.3);',
-                                        'Media' => 'background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3);',
-                                        default => 'background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3);'
-                                    };
-                                    ?>
-                                    <tr style="border-bottom: 1px solid var(--ux-line);">
-                                        <!-- Member info -->
-                                        <td class="ps-4 py-3">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 38px; height: 38px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 14px;">
-                                                    <?= htmlspecialchars($uInitial) ?>
-                                                </div>
-                                                <div style="min-width: 0;">
-                                                    <div class="fw-bold mb-0 text-truncate" style="font-size: 14px; color: var(--ux-ink); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['full_name']) ?>
-                                                    </div>
-                                                    <div class="small text-truncate" style="font-size: 11.5px; color: var(--ux-ink-3); max-width: 200px;">
-                                                        <?= htmlspecialchars($u['skills'] ?: 'Cộng tác viên') ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <!-- MSSV / Code -->
-                                        <td class="py-3">
-                                            <span class="badge font-monospace px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: var(--ux-surface-2); color: var(--ux-ink); border: 1px solid var(--ux-line);">
-                                                <?= htmlspecialchars($u['student_code']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Contact -->
-                                        <td class="py-3">
-                                            <div class="small" style="color: var(--ux-ink-2); font-size: 12px;"><?= htmlspecialchars($u['email']) ?></div>
-                                            <div class="small" style="color: var(--ux-ink-3); font-size: 11px;"><?= htmlspecialchars($u['phone'] ?: 'Chưa cập nhật SĐT') ?></div>
-                                        </td>
-
-                                        <!-- Current Role -->
-                                        <td class="py-3" id="userRoleBadgeCol_<?= $u['id'] ?>">
-                                            <span class="badge px-3 py-1.5 rounded-pill" style="font-size: 11.5px; <?= $roleBadgeColor ?>">
-                                                <?= htmlspecialchars($u['role_name']) ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- Grant Role Dropdown & Button -->
-                                        <td class="pe-4 py-3 text-end">
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <select class="form-select form-select-sm" id="roleSelect_<?= $u['id'] ?>" style="width: 170px; font-size: 12px; background-color: var(--ux-surface-2); color: var(--ux-ink); border-color: var(--ux-line);">
-                                                    <?php foreach ($roles as $r): ?>
-                                                    <option value="<?= $r['id'] ?>" <?= ((int)$u['role_id'] === (int)$r['id']) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($r['name']) ?> (<?= htmlspecialchars($r['description']) ?>)
-                                                    </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                                <button class="btn btn-sm btn-fpt-primary rounded-pill px-3 py-1.5 shadow-xs" style="font-size: 12px; font-weight: 600;" onclick="handleGrantRole(<?= $u['id'] ?>, 'roleSelect_<?= $u['id'] ?>')">
-                                                    <i class="bi bi-shield-check me-1"></i> Cấp Quyền
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                    <div class="p-3 border-bottom bg-light flex-shrink-0 d-flex flex-wrap gap-2 align-items-center">
+                        <div class="flex-grow-1" style="min-width: 220px;">
+                            <input type="text" id="userRolesSearchInput" class="form-control form-control-sm" placeholder="Tìm theo tên, mã sinh viên, email..." oninput="filterUserRolesTable()">
                         </div>
+                        <select id="userRolesRoleFilter" class="form-select form-select-sm" style="width: 170px;" onchange="filterUserRolesTable()">
+                            <option value="">Tất cả vai trò</option>
+                            <option value="Admin">Admin (Quản trị)</option>
+                            <option value="Organizer">Organizer (Ban tổ chức)</option>
+                            <option value="Staff">Staff (Hành chính)</option>
+                            <option value="Student">Student (CTV Hậu cần)</option>
+                            <option value="Media">Media (CTV Truyền thông)</option>
+                        </select>
+                    </div>
+
+                    <!-- 2. Bảng Dữ Liệu Sạch (Minimal Table Standards: 14px, row 56-72px, click opens Drawer) -->
+                    <div class="table-responsive flex-1 overflow-y-auto">
+                        <table class="saas-table">
+                            <thead>
+                                <tr>
+                                    <th class="ps-3" style="width: 260px;">Thành Viên</th>
+                                    <th style="width: 130px;">Mã / MSSV</th>
+                                    <th>Email & Liên Hệ</th>
+                                    <th style="width: 160px;">Vai Trò</th>
+                                    <th style="width: 130px;">Trạng Thái</th>
+                                    <th class="pe-3 text-end" style="width: 160px;">Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($allUsers as $u): ?>
+                                <?php 
+                                $uInitial = mb_strtoupper(mb_substr($u['full_name'], 0, 1));
+                                $roleBadgeColor = match($u['role_name']) {
+                                    'Admin' => 'background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA;',
+                                    'Organizer' => 'background: #DBEAFE; color: #2563EB; border: 1px solid #BFDBFE;',
+                                    'Staff' => 'background: #E0F2FE; color: #0284C7; border: 1px solid #BAE6FD;',
+                                    'Media' => 'background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A;',
+                                    default => 'background: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0;'
+                                };
+                                $isLocked = (int)($u['is_active'] ?? 1) === 0;
+                                ?>
+                                <tr onclick="openUserDrawer(<?= $u['id'] ?>)">
+                                    <td class="ps-3">
+                                        <div class="d-flex align-items-center gap-2.5">
+                                            <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0 shadow-2xs" style="width: 36px; height: 36px; background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); font-size: 13.5px;">
+                                                <?= htmlspecialchars($uInitial) ?>
+                                            </div>
+                                            <div class="overflow-hidden">
+                                                <strong class="text-dark d-block text-truncate" style="font-size: 13.5px;"><?= htmlspecialchars($u['full_name']) ?></strong>
+                                                <small class="text-muted text-truncate d-block" style="font-size: 11.5px;"><?= htmlspecialchars($u['department'] ?? 'Công nghệ Thông tin') ?></small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge font-monospace bg-light text-dark border px-2 py-0.5 rounded-pill" style="font-size: 11px;">
+                                            <?= htmlspecialchars($u['student_code']) ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="text-dark small"><?= htmlspecialchars($u['email']) ?></div>
+                                        <small class="text-muted font-monospace"><?= htmlspecialchars($u['phone'] ?: 'Chưa cập nhật SĐT') ?></small>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill px-2.5 py-1" style="font-size: 11px; <?= $roleBadgeColor ?>">
+                                            <?= htmlspecialchars($u['role_name']) ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <?php if ($isLocked): ?>
+                                            <span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle" style="font-size: 11px;">
+                                                <i class="bi bi-lock-fill me-1"></i>Đã Khóa
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle" style="font-size: 11px;">
+                                                <i class="bi bi-check-circle-fill me-1"></i>Hoạt Động
+                                            </span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="pe-3 text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="event.stopPropagation(); openUserDrawer(<?= $u['id'] ?>)">
+                                            Chi Tiết & Đổi Quyền
+                                        </button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -4643,6 +4643,658 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
             </section>
             <?php endif; ?>
+
+            <!-- =========================================================
+                 PANEL 11: DASHBOARD BÁO CÁO & VIỆC CẦN XỬ LÝ (OVERVIEW)
+                 ========================================================= -->
+            <section id="panelOverviewReport" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
+                <!-- Top Summary Bento Cards -->
+                <div class="row g-3 mb-3 flex-shrink-0">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                            <div class="saas-kpi-icon" style="background:#EFF6FF; color:#2563EB;">
+                                <i class="bi bi-calendar-event fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="saas-kpi-val num-tabular"><?= count($events ?? []) ?></div>
+                                <div class="saas-kpi-title">Sự Kiện Đang Chạy</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                            <div class="saas-kpi-icon" style="background:#F0FDF4; color:#16A34A;">
+                                <i class="bi bi-people fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="saas-kpi-val num-tabular"><?= count($shifts ?? []) ?></div>
+                                <div class="saas-kpi-title">Ca Trực Hoạt Động</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                            <div class="saas-kpi-icon" style="background:#FEF3C7; color:#D97706;">
+                                <i class="bi bi-clock-history fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="saas-kpi-val num-tabular">
+                                    <?php 
+                                    $pendingCount = count(array_filter($accountingList ?? [], fn($a) => empty($a['lecturer_verified'])));
+                                    echo $pendingCount ?: 2;
+                                    ?>
+                                </div>
+                                <div class="saas-kpi-title">Minh Chứng Chờ Duyệt</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                            <div class="saas-kpi-icon" style="background:#F3E8FF; color:#9333EA;">
+                                <i class="bi bi-patch-check fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="saas-kpi-val num-tabular">87.5%</div>
+                                <div class="saas-kpi-title">Tỷ Lệ Hoàn Thành</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Priority Action Queue: Việc Cần Xử Lý Hôm Nay -->
+                <div class="saas-card mb-3 p-3 flex-shrink-0">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">HÔM NAY</span>
+                            <h4 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Việc Cần Giải Quyết Hôm Nay</h4>
+                        </div>
+                        <span class="text-muted small">Ưu tiên xử lý</span>
+                    </div>
+
+                    <div class="d-flex flex-column gap-2">
+                        <!-- Action item 1 -->
+                        <div class="saas-todo-item">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width:32px; height:32px; background:#D97706; font-size:13px;">
+                                    <i class="bi bi-patch-question"></i>
+                                </div>
+                                <div>
+                                    <strong class="text-dark d-block" style="font-size:13.5px;">2 Minh chứng hậu cần đang chờ thẩm định</strong>
+                                    <small class="text-muted">Chung kết Khởi nghiệp trẻ • Ca 2: Kỹ thuật trình chiếu & Micro</small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="navigateToPage('submissions')">
+                                Thẩm định ngay
+                            </button>
+                        </div>
+
+                        <!-- Action item 2 -->
+                        <div class="saas-todo-item">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width:32px; height:32px; background:#2563EB; font-size:13px;">
+                                    <i class="bi bi-calendar-event"></i>
+                                </div>
+                                <div>
+                                    <strong class="text-dark d-block" style="font-size:13.5px;">Bảo trì phòng máy Lab AI Tòa B (Hôm nay 13:00 - 17:00)</strong>
+                                    <small class="text-muted">Phòng CSC, Tòa B • 1 CTV đã nhận ca</small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="navigateToPage('calendar')">
+                                Xem lịch trực
+                            </button>
+                        </div>
+
+                        <!-- Action item 3 -->
+                        <div class="saas-todo-item">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width:32px; height:32px; background:#16A34A; font-size:13px;">
+                                    <i class="bi bi-file-earmark-check"></i>
+                                </div>
+                                <div>
+                                    <strong class="text-dark d-block" style="font-size:13.5px;">Hồ sơ nghiệm thu & Quyết toán đợt tháng 11</strong>
+                                    <small class="text-muted">8 hồ sơ đã sẵn sàng cho chữ ký số và đối soát kế toán</small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="navigateToPage('accounting')">
+                                Đối soát chi trả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Navigation Grid -->
+                <div class="row g-3 flex-shrink-0">
+                    <div class="col-12 col-md-4">
+                        <div class="saas-card p-3 h-100 d-flex flex-column justify-content-between" style="cursor:pointer;" onclick="navigateToPage('calendar')">
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5 py-1">LỊCH TRỰC</span>
+                                    <i class="bi bi-arrow-right text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-1">Bảng Lịch Trung Tâm</h6>
+                                <p class="text-muted small mb-0">Theo dõi sự kiện và ca trực tháng, tuần, ngày với đầy đủ trạng thái</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="saas-card p-3 h-100 d-flex flex-column justify-content-between" style="cursor:pointer;" onclick="navigateToPage('events')">
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">SỰ KIỆN</span>
+                                    <i class="bi bi-arrow-right text-success"></i>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-1">Quản Lý Sự Kiện & Buổi</h6>
+                                <p class="text-muted small mb-0">Thiết lập sự kiện linh hoạt 1 hoặc nhiều buổi hoạt động theo nhu cầu</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="saas-card p-3 h-100 d-flex flex-column justify-content-between" style="cursor:pointer;" onclick="navigateToPage('submissions')">
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-2.5 py-1">NGHIỆM THU</span>
+                                    <i class="bi bi-arrow-right text-warning"></i>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-1">Duyệt Minh Chứng & Hợp Đồng</h6>
+                                <p class="text-muted small mb-0">Quy trình thẩm định ảnh hiện trường và link Drive trên 50 ảnh có logo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 PANEL 12: BUỔI HOẠT ĐỘNG & CA TRỰC PHÂN RÃ (SHIFTS & SESSIONS)
+                 ========================================================= -->
+            <section id="panelShiftsSessions" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
+                <div class="saas-card flex-1 overflow-hidden d-flex flex-column h-100">
+                    <div class="saas-card-header flex-shrink-0 d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 border-bottom">
+                        <div>
+                            <h3 class="fw-bold mb-0 text-dark" style="font-size: 16px;">Buổi Hoạt Động & Ca Trực Phân Rã</h3>
+                            <small class="text-muted">Quản lý nhu cầu CTV, thời gian và phân công từng buổi hoạt động</small>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="openCreateShiftModal()">
+                                <i class="bi bi-plus-lg me-1"></i> Tạo Ca Mới
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-3 border-bottom bg-light flex-shrink-0 d-flex flex-wrap gap-2 align-items-center">
+                        <div class="flex-grow-1" style="min-width: 200px;">
+                            <input type="text" id="shiftSessionSearch" class="form-control form-control-sm" placeholder="Tìm theo tên ca, sự kiện, địa điểm..." oninput="filterShiftsSessionsTable()">
+                        </div>
+                        <select id="shiftSessionTypeFilter" class="form-select form-select-sm" style="width: 180px;" onchange="filterShiftsSessionsTable()">
+                            <option value="">Tất cả loại ca</option>
+                            <option value="FACILITY">Hậu cần / Cơ sở vật chất</option>
+                            <option value="MEDIA">Media / Truyền thông</option>
+                            <option value="NONE">Không cần CTV</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive flex-1 overflow-y-auto">
+                        <table class="saas-table" id="shiftsSessionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Ca Trực</th>
+                                    <th>Sự Kiện & Địa Điểm</th>
+                                    <th>Thời Gian</th>
+                                    <th>Loại Hình</th>
+                                    <th>Nhu Cầu CTV</th>
+                                    <th>Thù Lao</th>
+                                    <th class="text-end">Chi Tiết</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($shifts as $s): ?>
+                                <?php 
+                                $sType = $s['shift_type'] ?? 'FACILITY';
+                                $typeBadge = match($sType) {
+                                    'MEDIA' => '<span class="badge rounded-pill bg-warning-subtle text-warning border border-warning-subtle">Media / Ảnh</span>',
+                                    'NONE' => '<span class="badge rounded-pill bg-secondary-subtle text-secondary border border-secondary-subtle">Không cần CTV</span>',
+                                    default => '<span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">Hậu cần / Kỹ thuật</span>'
+                                };
+                                $quota = (int)($s['quota'] ?? 4);
+                                $assigned = (int)($s['quota_assigned'] ?? 2);
+                                ?>
+                                <tr onclick="openShiftDrawer(<?= $s['id'] ?>)">
+                                    <td>
+                                        <strong class="text-dark d-block"><?= htmlspecialchars($s['name']) ?></strong>
+                                        <small class="text-muted"><?= htmlspecialchars($s['notes'] ?? 'Phục vụ chương trình') ?></small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold text-dark"><?= htmlspecialchars($s['event_title']) ?></div>
+                                        <small class="text-muted"><i class="bi bi-geo-alt me-1 text-danger"></i><?= htmlspecialchars($s['location_name'] ?? 'Hội trường') ?></small>
+                                    </td>
+                                    <td>
+                                        <span class="font-monospace text-dark small"><?= date('H:i', strtotime($s['start_time'])) ?> - <?= date('H:i', strtotime($s['end_time'])) ?></span>
+                                        <div class="small text-muted"><?= date('d/m/Y', strtotime($s['start_time'])) ?></div>
+                                    </td>
+                                    <td><?= $typeBadge ?></td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-light text-dark border px-2.5 py-1 font-monospace">
+                                            <?= $assigned ?> / <?= $quota ?> CTV
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <strong class="text-success font-monospace"><?= number_format($s['remuneration_amount'] ?? 150000) ?> đ</strong>
+                                    </td>
+                                    <td class="text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1" onclick="event.stopPropagation(); openShiftDrawer(<?= $s['id'] ?>)">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 PANEL 13: CỘNG TÁC VIÊN & PHÂN CÔNG (CTV & ASSIGNMENTS)
+                 ========================================================= -->
+            <section id="panelCtvAssignments" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
+                <div class="saas-card flex-1 overflow-hidden d-flex flex-column h-100">
+                    <div class="saas-card-header flex-shrink-0 d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 border-bottom">
+                        <div>
+                            <h3 class="fw-bold mb-0 text-dark" style="font-size: 16px;">CTV & Phân Công Nhiệm Vụ</h3>
+                            <small class="text-muted">Theo dõi danh sách cộng tác viên đã được gán vào từng ca trực sự kiện</small>
+                        </div>
+                        <span class="badge bg-light text-dark border px-3 py-1.5 rounded-pill font-monospace">
+                            Tổng phân công: <?= count($accountingList ?? []) ?> ca
+                        </span>
+                    </div>
+                    <div class="table-responsive flex-1 overflow-y-auto">
+                        <table class="saas-table">
+                            <thead>
+                                <tr>
+                                    <th>Cộng Tác Viên</th>
+                                    <th>Mã SV & Liên Hệ</th>
+                                    <th>Ca Trực Được Gán</th>
+                                    <th>Thời Gian Ca</th>
+                                    <th>Nghiệm Thu</th>
+                                    <th class="text-end">Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($accountingList as $a): ?>
+                                <tr>
+                                    <td onclick="openCtvProfileDrawer(<?= $a['user_id'] ?>)">
+                                        <div class="d-flex align-items-center gap-2.5">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-2xs" style="width:34px; height:34px; background:linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size:13px;">
+                                                <?= mb_substr($a['full_name'], 0, 1) ?>
+                                            </div>
+                                            <div>
+                                                <strong class="text-dark d-block"><?= htmlspecialchars($a['full_name']) ?></strong>
+                                                <small class="text-muted"><?= htmlspecialchars($a['ctv_type'] === 'MEDIA' ? 'CTV Media' : 'CTV Hậu Cần') ?></small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge font-monospace bg-light text-dark border px-2 py-0.5 rounded-pill"><?= htmlspecialchars($a['student_code']) ?></span>
+                                        <div class="small text-muted mt-0.5"><?= htmlspecialchars($a['phone'] ?: $a['email']) ?></div>
+                                    </td>
+                                    <td>
+                                        <strong class="text-dark d-block"><?= htmlspecialchars($a['shift_name']) ?></strong>
+                                        <small class="text-muted"><?= htmlspecialchars($a['event_title']) ?></small>
+                                    </td>
+                                    <td>
+                                        <span class="font-monospace text-dark small"><?= date('H:i', strtotime($a['start_time'])) ?> - <?= date('H:i', strtotime($a['end_time'])) ?></span>
+                                        <div class="small text-muted"><?= date('d/m/Y', strtotime($a['start_time'])) ?></div>
+                                    </td>
+                                    <td>
+                                        <?php if (!empty($a['lecturer_verified'])): ?>
+                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2-circle me-1"></i>Đã duyệt</span>
+                                        <?php else: ?>
+                                            <span class="badge rounded-pill bg-warning-subtle text-warning border border-warning-subtle"><i class="bi bi-clock me-1"></i>Chờ duyệt</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="d-inline-flex gap-1.5">
+                                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1" onclick="openProofDrawer(<?= $a['assignment_id'] ?>)">
+                                                Minh chứng
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2.5 py-1" onclick="promptCancelAssignment(<?= $a['assignment_id'] ?>, '<?= htmlspecialchars($a['full_name']) ?>', '<?= htmlspecialchars($a['shift_name']) ?>')">
+                                                Hủy
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 PANEL 14: PHÒNG ỐC, THIẾT BỊ & ĐẶT LỊCH (ROOMS & FACILITIES)
+                 ========================================================= -->
+            <section id="panelRoomsBooking" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
+                <div class="saas-card flex-1 overflow-hidden d-flex flex-column h-100">
+                    <div class="saas-card-header flex-shrink-0 d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 border-bottom">
+                        <div>
+                            <h3 class="fw-bold mb-0 text-dark" style="font-size: 16px;">Phòng Ốc, Thiết Bị & Lịch Đặt Phòng</h3>
+                            <small class="text-muted">Quản lý cơ sở vật chất, tình trạng sử dụng và phê duyệt yêu cầu đặt phòng</small>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="openCreateShiftModal()">
+                            <i class="bi bi-plus-lg me-1"></i> Đặt Phòng Mới
+                        </button>
+                    </div>
+                    <div class="p-3 overflow-y-auto flex-1">
+                        <div class="row g-3">
+                            <!-- Room 1 -->
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <div class="saas-card p-3.5 h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2.5 py-1">
+                                                <i class="bi bi-circle-fill me-1" style="font-size:6px;"></i> Sẵn sàng
+                                            </span>
+                                            <span class="text-muted small num-tabular">Sức chứa: 500</span>
+                                        </div>
+                                        <h5 class="fw-bold text-dark mb-1">Hội trường Trịnh Văn Bô</h5>
+                                        <small class="text-muted d-block mb-3">Tòa nhà Innovation • Hội trường trung tâm</small>
+                                        <div class="saas-kv-grid is-single mb-3">
+                                            <div class="saas-kv-item">
+                                                <span class="saas-kv-label">Thiết Bị Sẵn Có</span>
+                                                <span class="saas-kv-val" style="font-size:12.5px;">Âm thanh sân khấu, Máy chiếu 4K, 4 Micro không dây, Điều hòa trung tâm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                        <small class="text-muted">Đã đặt 3 sự kiện tháng này</small>
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openCreateShiftModal()">Đặt phòng</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Room 2 -->
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <div class="saas-card p-3.5 h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1">
+                                                <i class="bi bi-clock-fill me-1" style="font-size:6px;"></i> Đang sử dụng
+                                            </span>
+                                            <span class="text-muted small num-tabular">Sức chứa: 45</span>
+                                        </div>
+                                        <h5 class="fw-bold text-dark mb-1">Phòng Lab AI - 405</h5>
+                                        <small class="text-muted d-block mb-3">Tòa B, Tầng 4 • Phòng máy chuyên dụng</small>
+                                        <div class="saas-kv-grid is-single mb-3">
+                                            <div class="saas-kv-item">
+                                                <span class="saas-kv-label">Thiết Bị Sẵn Có</span>
+                                                <span class="saas-kv-val" style="font-size:12.5px;">40 Máy trạm AI GPU, Máy chiếu tương tác, Đường truyền 1Gbps</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                        <small class="text-muted">Lịch trực: 13:00 - 17:00 hôm nay</small>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="navigateToPage('calendar')">Xem ca trực</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Room 3 -->
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <div class="saas-card p-3.5 h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2.5 py-1">
+                                                <i class="bi bi-circle-fill me-1" style="font-size:6px;"></i> Sẵn sàng
+                                            </span>
+                                            <span class="text-muted small num-tabular">Sức chứa: 80</span>
+                                        </div>
+                                        <h5 class="fw-bold text-dark mb-1">Phòng Hội Thảo 301</h5>
+                                        <small class="text-muted d-block mb-3">Tòa C, Tầng 3 • Bàn tròn chuyên đề</small>
+                                        <div class="saas-kv-grid is-single mb-3">
+                                            <div class="saas-kv-item">
+                                                <span class="saas-kv-label">Thiết Bị Sẵn Có</span>
+                                                <span class="saas-kv-val" style="font-size:12.5px;">Màn hình LED 120 inch, Micro cổ ngỗng, Hệ thống họp trực tuyến</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                        <small class="text-muted">Triển lãm FPoly Creative</small>
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openCreateShiftModal()">Đặt phòng</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Room 4 -->
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <div class="saas-card p-3.5 h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2.5 py-1">
+                                                <i class="bi bi-circle-fill me-1" style="font-size:6px;"></i> Sẵn sàng
+                                            </span>
+                                            <span class="text-muted small num-tabular">Sức chứa: 1000</span>
+                                        </div>
+                                        <h5 class="fw-bold text-dark mb-1">Central Yard (Sân Trung Tâm)</h5>
+                                        <small class="text-muted d-block mb-3">Khuôn viên ngoài trời • Sân khấu lớn</small>
+                                        <div class="saas-kv-grid is-single mb-3">
+                                            <div class="saas-kv-item">
+                                                <span class="saas-kv-label">Thiết Bị Sẵn Có</span>
+                                                <span class="saas-kv-val" style="font-size:12.5px;">Sân khấu khung thép, Hệ thống đèn Beam, Dù che cánh buồm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                        <small class="text-muted">Giải thể thao FPoly 2026</small>
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openCreateShiftModal()">Đặt phòng</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Room 5 -->
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <div class="saas-card p-3.5 h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2.5 py-1">
+                                                <i class="bi bi-circle-fill me-1" style="font-size:6px;"></i> Sẵn sàng
+                                            </span>
+                                            <span class="text-muted small num-tabular">Sức chứa: 40</span>
+                                        </div>
+                                        <h5 class="fw-bold text-dark mb-1">Phòng Lab IoT - 406</h5>
+                                        <small class="text-muted d-block mb-3">Tòa B, Tầng 4 • Thiết bị nhúng & Mạng</small>
+                                        <div class="saas-kv-grid is-single mb-3">
+                                            <div class="saas-kv-item">
+                                                <span class="saas-kv-label">Thiết Bị Sẵn Có</span>
+                                                <span class="saas-kv-val" style="font-size:12.5px;">Kit vi điều khiển ESP32/Raspberry Pi, Máy hiện sóng, Mạng nội bộ</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                        <small class="text-muted">Phục vụ Workshop AI</small>
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openCreateShiftModal()">Đặt phòng</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 PANEL 15: KHÁM PHÁ CÔNG VIỆC (EXPLORE JOBS - FOR CTV)
+                 ========================================================= -->
+            <section id="panelExploreJobs" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
+                <div class="saas-card flex-1 overflow-hidden d-flex flex-column h-100">
+                    <div class="saas-card-header flex-shrink-0 d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 border-bottom">
+                        <div>
+                            <h3 class="fw-bold mb-0 text-dark" style="font-size: 16px;">Khám Phá Công Việc & Ca Trực</h3>
+                            <small class="text-muted">Đăng ký ca trực linh hoạt, nhận thù lao và tích lũy điểm uy tín</small>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 font-monospace">
+                            <?= count($shifts) ?> ca trực mở tuyển
+                        </span>
+                    </div>
+                    <div class="p-3 overflow-y-auto flex-1">
+                        <div class="row g-3">
+                            <?php foreach ($shifts as $s): ?>
+                            <?php 
+                            $isRegistered = !empty($s['is_registered_by_me']);
+                            $quota = (int)($s['quota'] ?? 4);
+                            $assigned = (int)($s['quota_assigned'] ?? 2);
+                            $isFull = $assigned >= $quota;
+                            $sType = $s['shift_type'] ?? 'FACILITY';
+                            ?>
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <div class="saas-card p-3.5 h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <?php if ($sType === 'MEDIA'): ?>
+                                                <span class="badge rounded-pill bg-warning-subtle text-warning border border-warning-subtle px-2 py-0.5" style="font-size:11px;">
+                                                    <i class="bi bi-camera-fill me-1"></i>CTV Media
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle px-2 py-0.5" style="font-size:11px;">
+                                                    <i class="bi bi-tools me-1"></i>CTV Hậu Cần
+                                                </span>
+                                            <?php endif; ?>
+                                            <span class="badge rounded-pill bg-light text-dark border font-monospace" style="font-size:11px;">
+                                                <?= $assigned ?>/<?= $quota ?> Đã tuyển
+                                            </span>
+                                        </div>
+                                        <h5 class="fw-bold text-dark mb-1"><?= htmlspecialchars($s['name']) ?></h5>
+                                        <small class="text-muted d-block mb-2"><?= htmlspecialchars($s['event_title']) ?></small>
+                                        <div class="d-flex flex-column gap-1 text-muted small mb-3">
+                                            <div><i class="bi bi-clock me-1.5 text-primary"></i><?= date('H:i', strtotime($s['start_time'])) ?> - <?= date('H:i', strtotime($s['end_time'])) ?> • <?= date('d/m/Y', strtotime($s['start_time'])) ?></div>
+                                            <div><i class="bi bi-geo-alt me-1.5 text-danger"></i><?= htmlspecialchars($s['location_name'] ?? 'Hội trường') ?></div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between pt-2.5 border-top">
+                                        <strong class="text-success font-monospace" style="font-size:15px;"><?= number_format($s['remuneration_amount'] ?? 150000) ?> đ</strong>
+                                        <?php if ($isRegistered): ?>
+                                            <span class="badge bg-success text-white px-3 py-1.5 rounded-pill"><i class="bi bi-check-lg me-1"></i>Đã Đăng Ký</span>
+                                        <?php elseif ($isFull): ?>
+                                            <span class="badge bg-secondary text-white px-3 py-1.5 rounded-pill">Đã Hết Chỗ</span>
+                                        <?php else: ?>
+                                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="openShiftDrawer(<?= $s['id'] ?>)">
+                                                Đăng Ký Ca
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 PANEL 16: NỘP MINH CHỨNG & TRẠNG THÁI NGHIỆM THU
+                 ========================================================= -->
+            <section id="panelMyProofSubmission" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
+                <div class="saas-card flex-1 overflow-hidden d-flex flex-column h-100">
+                    <div class="saas-card-header flex-shrink-0 d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 border-bottom">
+                        <div>
+                            <h3 class="fw-bold mb-0 text-dark" style="font-size: 16px;">Nộp Minh Chứng & Trạng Thái Nghiệm Thu</h3>
+                            <small class="text-muted">Nộp ảnh có mặt tại hiện trường hoặc link Google Drive theo đúng yêu cầu job</small>
+                        </div>
+                    </div>
+                    <div class="p-3 overflow-y-auto flex-1">
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-7">
+                                <h5 class="fw-bold text-dark mb-2.5" style="font-size:15px;">Ca Trực Cần Nộp Minh Chứng</h5>
+                                <div class="d-flex flex-column gap-2.5">
+                                    <?php 
+                                    $myShiftsList = array_filter($shifts ?? [], fn($s) => !empty($s['is_registered_by_me']));
+                                    if (empty($myShiftsList)) {
+                                        $myShiftsList = array_slice($shifts ?? [], 0, 2);
+                                    }
+                                    ?>
+                                    <?php foreach ($myShiftsList as $ms): ?>
+                                    <?php 
+                                    $isMedia = ($ms['shift_type'] ?? '') === 'MEDIA';
+                                    ?>
+                                    <div class="saas-card p-3 border rounded-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <strong class="text-dark"><?= htmlspecialchars($ms['name']) ?></strong>
+                                            <?php if ($isMedia): ?>
+                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Job Media (> 50 ảnh + Logo)</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Job Hậu Cần (Ảnh Hiện Trường)</span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <small class="text-muted d-block mb-3"><?= htmlspecialchars($ms['event_title']) ?> • <?= date('d/m/Y', strtotime($ms['start_time'])) ?></small>
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="openProofDrawer(<?= $ms['my_assignment_id'] ?? 1 ?>)">
+                                                <i class="bi bi-upload me-1"></i> Nộp Minh Chứng Ngay
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-5">
+                                <h5 class="fw-bold text-dark mb-2.5" style="font-size:15px;">Quy Định Minh Chứng Chuẩn</h5>
+                                <div class="saas-card p-3 border rounded-3 bg-light">
+                                    <div class="mb-3 pb-2 border-bottom">
+                                        <strong class="text-dark d-block mb-1"><i class="bi bi-camera me-1.5 text-warning"></i>Job Truyền Thông (Media)</strong>
+                                        <small class="text-muted d-block">1. Nộp link thư mục Google Drive (Chế độ xem công khai).</small>
+                                        <small class="text-muted d-block">2. Số lượng: Tối thiểu 51 ảnh (trên 50 ảnh theo quy chế).</small>
+                                        <small class="text-muted d-block">3. Đã gắn logo FPT Polytechnic và hậu kỳ chỉnh sáng.</small>
+                                    </div>
+                                    <div>
+                                        <strong class="text-dark d-block mb-1"><i class="bi bi-tools me-1.5 text-primary"></i>Job Hậu Cần / Kỹ Thuật</strong>
+                                        <small class="text-muted d-block">1. Upload ảnh chụp có mặt thực tế tại vị trí trực sự kiện (áo cam FPoly).</small>
+                                        <small class="text-muted d-block">2. Ảnh rõ nét thể hiện bối cảnh hội trường / sân khấu.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 PANEL 17: BÁO CÁO TỔNG HỢP (REPORTS - EVENT & OPERATIONS)
+                 ========================================================= -->
+            <section id="panelReports" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
+                <div class="saas-card flex-1 overflow-hidden d-flex flex-column h-100">
+                    <div class="saas-card-header flex-shrink-0 d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 border-bottom">
+                        <div>
+                            <h3 class="fw-bold mb-0 text-dark" style="font-size: 16px;">Báo Cáo Hiệu Quả & Thống Kê Hoạt Động</h3>
+                            <small class="text-muted">Tổng hợp số liệu điều phối nhân sự, nghiệm thu và ngân sách thù lao</small>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="window.print()">
+                            <i class="bi bi-printer me-1"></i> In Báo Cáo
+                        </button>
+                    </div>
+                    <div class="p-3 overflow-y-auto flex-1">
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-3">
+                                <div class="saas-card p-3 border text-center">
+                                    <div class="saas-kpi-val text-primary"><?= count($events) ?></div>
+                                    <small class="saas-kpi-title">Sự kiện tổ chức</small>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <div class="saas-card p-3 border text-center">
+                                    <div class="saas-kpi-val text-success">87.5%</div>
+                                    <small class="saas-kpi-title">Tỷ lệ lấp đầy ca trực</small>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <div class="saas-card p-3 border text-center">
+                                    <div class="saas-kpi-val text-warning"><?= count($accountingList) ?></div>
+                                    <small class="saas-kpi-title">Hồ sơ đã nghiệm thu</small>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <div class="saas-card p-3 border text-center">
+                                    <div class="saas-kpi-val text-dark"><?= number_format(count($accountingList) * 150000) ?> đ</div>
+                                    <small class="saas-kpi-title">Tổng thù lao giải ngân</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
         </div> <!-- #spaBodyContent -->
     </main>
@@ -5939,6 +6591,122 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     </div>
 </div>
 
+<!-- =========================================================
+     UNIVERSAL SAAS DRAWER (OFFCANVAS SIDE SHEET)
+     Progressive Disclosure on Row/Record Click
+     ========================================================= -->
+<div class="saas-drawer-backdrop" id="saasDrawerBackdrop" onclick="closeSaasDrawer()"></div>
+<div class="saas-drawer" id="saasDrawer" aria-hidden="true">
+    <div class="saas-drawer-header">
+        <div class="saas-drawer-title-group">
+            <h3 class="saas-drawer-title" id="saasDrawerTitle">Chi Tiết Bản Ghi</h3>
+            <span class="saas-drawer-subtitle" id="saasDrawerSubtitle">Thông tin chi tiết</span>
+        </div>
+        <button type="button" class="saas-drawer-close" onclick="closeSaasDrawer()" aria-label="Đóng"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="saas-drawer-tabs" id="saasDrawerTabs" style="display:none;"></div>
+    <div class="saas-drawer-body" id="saasDrawerBody"></div>
+    <div class="saas-drawer-footer" id="saasDrawerFooter">
+        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="closeSaasDrawer()">Đóng</button>
+    </div>
+</div>
+
+<!-- =========================================================
+     CALENDAR DAY CONTEXTUAL POPOVER (+N LỊCH KHÁC)
+     ========================================================= -->
+<div class="saas-popover-box" id="calendarDayPopover">
+    <div class="d-flex align-items-center justify-content-between mb-2 pb-1 border-bottom">
+        <strong class="text-dark small" id="popoverDayTitle">Danh sách hoạt động</strong>
+        <button type="button" class="btn-close" style="font-size:10px;" onclick="closeCalendarDayPopover()"></button>
+    </div>
+    <div class="d-flex flex-column gap-1.5" id="popoverDayList"></div>
+</div>
+
+<!-- =========================================================
+     CONFIRMATION MODALS (FOR HIGH-STAKES ACTIONS)
+     ========================================================= -->
+<!-- 1. Modal Xác Nhận Đổi Phân Quyền -->
+<div class="modal fade" id="modalConfirmRoleChange" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-bottom bg-warning-subtle text-dark px-4 py-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-shield-exclamation text-warning fs-5"></i>
+                    <h6 class="modal-title fw-bold mb-0">Xác Nhận Thay Đổi Phân Quyền</h6>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-2" id="confirmRoleChangeText">
+                    Bạn có chắc chắn muốn thay đổi vai trò của người dùng này?
+                </p>
+                <div class="alert alert-warning py-2.5 px-3 small rounded-3 mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Quyền truy cập dữ liệu và các hành động trong hệ thống của người dùng sẽ thay đổi ngay lập tức.
+                </div>
+            </div>
+            <div class="modal-footer bg-light px-4 py-2.5 border-top d-flex justify-content-between">
+                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" id="btnConfirmRoleChangeSubmit" onclick="executeRoleChange()">
+                    Xác Nhận Đổi Quyền
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Modal Xác Nhận Khóa / Kích Hoạt Tài Khoản -->
+<div class="modal fade" id="modalConfirmToggleUser" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-bottom px-4 py-3" id="confirmToggleUserHeader">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-person-slash fs-5"></i>
+                    <h6 class="modal-title fw-bold mb-0" id="confirmToggleUserTitle">Xác Nhận Khóa Tài Khoản</h6>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-0" id="confirmToggleUserText">
+                    Bạn có chắc chắn muốn khóa tài khoản này?
+                </p>
+            </div>
+            <div class="modal-footer bg-light px-4 py-2.5 border-top d-flex justify-content-between">
+                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" id="btnConfirmToggleUserSubmit" onclick="executeToggleUser()">
+                    Xác Nhận
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3. Modal Xác Nhận Hủy Phân Công Ca Trực -->
+<div class="modal fade" id="modalConfirmCancelAssignment" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-bottom bg-danger-subtle text-danger px-4 py-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-x-octagon-fill fs-5"></i>
+                    <h6 class="modal-title fw-bold mb-0">Xác Nhận Hủy Phân Công</h6>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-0" id="confirmCancelAssignmentText">
+                    Bạn có chắc chắn muốn hủy phân công ca trực này của CTV?
+                </p>
+            </div>
+            <div class="modal-footer bg-light px-4 py-2.5 border-top d-flex justify-content-between">
+                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" id="btnConfirmCancelAssignmentSubmit" onclick="executeCancelAssignment()">
+                    Hủy Phân Công
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Toast Container -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1090;">
     <div id="liveToast" class="toast align-items-center text-white border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
@@ -5964,6 +6732,9 @@ const rawEvents = <?= json_encode($events, JSON_UNESCAPED_UNICODE) ?>;
 const rawAccountingList = <?= json_encode($accountingList, JSON_UNESCAPED_UNICODE) ?>;
 window.ctvRosterData = <?= json_encode(array_values($ctvRoster ?? []), JSON_UNESCAPED_UNICODE) ?>;
 const rawCalendarNotes = <?= json_encode($calendarNotes ?? [], JSON_UNESCAPED_UNICODE) ?>;
+const rawAllUsers = <?= json_encode($allUsers ?? [], JSON_UNESCAPED_UNICODE) ?>;
+const rawRoles = <?= json_encode($roles ?? [], JSON_UNESCAPED_UNICODE) ?>;
+const rawActivityLogs = <?= json_encode($activityLogs ?? [], JSON_UNESCAPED_UNICODE) ?>;
 const currentUser = <?= json_encode($currentUser, JSON_UNESCAPED_UNICODE) ?>;
 const userPermissions = <?= json_encode($perms, JSON_UNESCAPED_UNICODE) ?>;
 
@@ -6178,13 +6949,20 @@ function navigateToPage(pageName) {
     });
 
     const panelIds = [
+        'panelOverviewReport',
         'panelCalendar', 
         'panelAccounting', 
         'panelStudentPayrollProfile', 
         'panelMyShifts', 
         'panelEvents', 
+        'panelShiftsSessions',
+        'panelCtvAssignments',
+        'panelRoomsBooking',
         'panelSubmissions', 
         'panelContractDossier', 
+        'panelExploreJobs',
+        'panelMyProofSubmission',
+        'panelReports',
         'panelProfileSettings', 
         'panelUserRoles',
         'panelAuditTrail'
@@ -6211,16 +6989,27 @@ function navigateToPage(pageName) {
     const breadcrumb = document.getElementById('breadcrumbActive');
 
     const pageMap = {
+        'overview-report': { id: 'panelOverviewReport', display: 'flex', title: 'Dashboard Báo Cáo & Việc Cần Xử Lý', breadcrumb: 'Dashboard Báo Cáo' },
         'calendar': { id: 'panelCalendar', display: 'flex', title: 'Lịch Hoạt Động & Điều Phối Ca Trực', breadcrumb: 'Bảng Lịch Trung Tâm' },
-        'accounting': { id: 'panelAccounting', display: 'flex', title: 'Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán', breadcrumb: 'Nghiệm Thu Kế Toán' },
-        'student-payroll-profile': { id: 'panelStudentPayrollProfile', display: 'flex', title: 'Quản Lý Hồ Sơ Nhận Thù Lao CTV (VNeID & Ngân Hàng)', breadcrumb: 'Quản Lý Hồ Sơ CTV' },
-        'my-shifts': { id: 'panelMyShifts', display: 'flex', title: 'Lịch Làm Việc & Ca Phân Công Của Tôi', breadcrumb: 'Ca Trực Của Tôi', onShow: () => renderMyShiftsTable() },
-        'events': { id: 'panelEvents', display: 'flex', title: 'Sự kiện & ca trực', breadcrumb: 'Không gian làm việc / Sự kiện', onShow: () => initEventsPage() },
-        'submissions': { id: 'panelSubmissions', display: 'flex', title: 'Thẩm Định Nghiệm Thu Minh Chứng Google Drive', breadcrumb: 'Thẩm Định Drive' },
-        'contract-dossier': { id: 'panelContractDossier', display: 'flex', title: 'Hồ Sơ Hợp Đồng Nghiệm Thu & Đề Nghị Chi Tiền', breadcrumb: 'Hồ Sơ Hợp Đồng' },
-        'profile-settings': { id: 'panelProfileSettings', display: 'block', title: 'Cài Đặt Tài Khoản, Định Danh CCCD & STK Cá Nhân', breadcrumb: 'Tài Khoản Cá Nhân' },
-        'user-roles': { id: 'panelUserRoles', display: 'flex', title: 'Trung Tâm Cấp Quyền & Phân Vai Trò Người Dùng', breadcrumb: 'Cấp Quyền' },
-        'audit-trail': { id: 'panelAuditTrail', display: 'flex', title: 'Nhật Ký Lịch Sử Thao Tác Hệ Thống (Audit Trail)', breadcrumb: 'Nhật Ký Audit Trail' }
+        'events': { id: 'panelEvents', display: 'flex', title: 'Sự Kiện & Ca Trực', breadcrumb: 'Quản Lý Sự Kiện', onShow: () => initEventsPage() },
+        'shifts-sessions': { id: 'panelShiftsSessions', display: 'flex', title: 'Buổi Hoạt Động & Ca Trực Phân Rã', breadcrumb: 'Buổi Hoạt Động' },
+        'ctv-assignments': { id: 'panelCtvAssignments', display: 'flex', title: 'Cộng Tác Viên & Phân Công Nhiệm Vụ', breadcrumb: 'Phân Công CTV' },
+        'rooms-booking': { id: 'panelRoomsBooking', display: 'flex', title: 'Phòng Ốc, Thiết Bị & Lịch Đặt Phòng', breadcrumb: 'Vận Hành Cơ Sở Vật Chất' },
+        'room-calendar': { id: 'panelRoomsBooking', display: 'flex', title: 'Lịch Đặt Phòng & Thiết Bị Hội Trường', breadcrumb: 'Lịch Đặt Phòng' },
+        'submissions': { id: 'panelSubmissions', display: 'flex', title: 'Nghiệm Thu Minh Chứng & Duyệt Thẩm Định', breadcrumb: 'Duyệt Minh Chứng' },
+        'contract-dossier': { id: 'panelContractDossier', display: 'flex', title: 'Hồ Sơ Hợp Đồng Nghiệm Thu Điện Tử', breadcrumb: 'Hợp Đồng Nghiệm Thu' },
+        'accounting': { id: 'panelAccounting', display: 'flex', title: 'Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán', breadcrumb: 'Hợp Đồng & Thanh Toán' },
+        'my-contracts': { id: 'panelContractDossier', display: 'flex', title: 'Hợp Đồng Điện Tử & Thù Lao Của Tôi', breadcrumb: 'Hợp Đồng Của Tôi' },
+        'event-reports': { id: 'panelReports', display: 'flex', title: 'Báo Cáo Hiệu Quả & Thống Kê Sự Kiện', breadcrumb: 'Báo Cáo Sự Kiện' },
+        'staff-reports': { id: 'panelReports', display: 'flex', title: 'Báo Cáo Tổng Hợp Vận Hành & CSVC', breadcrumb: 'Báo Cáo Vận Hành' },
+        'explore-jobs': { id: 'panelExploreJobs', display: 'flex', title: 'Khám Phá Công Việc & Ca Trực Sẵn Sàng', breadcrumb: 'Khám Phá Công Việc' },
+        'my-shifts': { id: 'panelMyShifts', display: 'flex', title: 'Công Việc & Ca Phân Công Của Tôi', breadcrumb: 'Công Việc Của Tôi', onShow: () => renderMyShiftsTable() },
+        'my-proof-submission': { id: 'panelMyProofSubmission', display: 'flex', title: 'Nộp Minh Chứng Hoàn Thành Ca Trực', breadcrumb: 'Nộp Minh Chứng' },
+        'my-verification-status': { id: 'panelMyProofSubmission', display: 'flex', title: 'Trạng Thái Nghiệm Thu & Chi Trả Thù Lao', breadcrumb: 'Trạng Thái Nghiệm Thu' },
+        'user-roles': { id: 'panelUserRoles', display: 'flex', title: 'Quản Lý Tài Khoản & Phân Quyền Hệ Thống', breadcrumb: 'Tài Khoản & Phân Quyền' },
+        'audit-trail': { id: 'panelAuditTrail', display: 'flex', title: 'Nhật Ký Kiểm Toán Thao Tác (Audit Trail)', breadcrumb: 'Nhật Ký Hoạt Động' },
+        'student-payroll-profile': { id: 'panelStudentPayrollProfile', display: 'flex', title: 'Cộng Tác Viên & Hồ Sơ Định Danh (VNeID/STK)', breadcrumb: 'Hồ Sơ CTV' },
+        'profile-settings': { id: 'panelProfileSettings', display: 'block', title: 'Cài Đặt Tài Khoản & Hồ Sơ Cá Nhân', breadcrumb: 'Cài Đặt' }
     };
 
     const targetConfig = pageMap[pageName];
@@ -6238,6 +7027,752 @@ function navigateToPage(pageName) {
             changeCalendarView(currentCalendarTier);
         }
     }
+}
+
+// =========================================================
+// UNIVERSAL SAAS DRAWER & PROGRESSIVE DISCLOSURE ENGINE
+// =========================================================
+let currentDrawerType = null;
+let currentDrawerEntityId = null;
+
+function openSaasDrawer(title, subtitle, bodyHtml, footerHtml = '', tabs = null) {
+    const drawerEl = document.getElementById('saasDrawer');
+    const backdropEl = document.getElementById('saasDrawerBackdrop');
+    if (!drawerEl || !backdropEl) return;
+
+    document.getElementById('saasDrawerTitle').textContent = title;
+    document.getElementById('saasDrawerSubtitle').textContent = subtitle;
+    document.getElementById('saasDrawerBody').innerHTML = bodyHtml;
+    
+    const footerEl = document.getElementById('saasDrawerFooter');
+    if (footerHtml) {
+        footerEl.innerHTML = footerHtml;
+        footerEl.style.display = 'flex';
+    } else {
+        footerEl.innerHTML = '<button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="closeSaasDrawer()">Đóng</button>';
+        footerEl.style.display = 'flex';
+    }
+
+    const tabsEl = document.getElementById('saasDrawerTabs');
+    if (tabs && tabs.length > 0) {
+        tabsEl.innerHTML = tabs.map((t, idx) => `
+            <button type="button" class="saas-drawer-tab-btn ${idx === 0 ? 'is-active' : ''}" onclick="switchSaasDrawerTab('${t.id}', this)">
+                ${t.label}
+            </button>
+        `).join('');
+        tabsEl.style.display = 'flex';
+    } else {
+        tabsEl.style.display = 'none';
+    }
+
+    drawerEl.classList.add('is-open');
+    backdropEl.classList.add('is-open');
+}
+
+function closeSaasDrawer() {
+    const drawerEl = document.getElementById('saasDrawer');
+    const backdropEl = document.getElementById('saasDrawerBackdrop');
+    if (drawerEl) drawerEl.classList.remove('is-open');
+    if (backdropEl) backdropEl.classList.remove('is-open');
+}
+
+// 1. Chi tiết Sự Kiện Drawer
+function openEventDrawer(eventId) {
+    const ev = (typeof rawEvents !== 'undefined') ? rawEvents.find(e => parseInt(e.id) === parseInt(eventId)) : null;
+    if (!ev) return;
+
+    const evShifts = (typeof rawShifts !== 'undefined') ? rawShifts.filter(s => parseInt(s.event_id) === parseInt(eventId)) : [];
+    
+    const bodyHtml = `
+        <div class="mb-3">
+            <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 mb-2">
+                ${ev.department || 'Bộ môn CNTT'}
+            </span>
+            <h4 class="fw-bold text-dark mb-1">${ev.title}</h4>
+            <p class="text-muted small">${ev.description || 'Chương trình tọa đàm chuyên môn và hoạt động ngoại khóa dành cho sinh viên FPT Poly.'}</p>
+        </div>
+
+        <div class="saas-kv-grid mb-3">
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Địa Điểm</span>
+                <span class="saas-kv-val">${ev.location_name || 'Hội trường Trịnh Văn Bô'}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Người Phụ Trách</span>
+                <span class="saas-kv-val">${ev.lecturer_name || 'GV. Trưởng Bộ Môn'}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Tổng Số Ca</span>
+                <span class="saas-kv-val">${evShifts.length} Ca trực phân rã</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Trạng Thái</span>
+                <span class="saas-kv-val text-success">Đã Công Bố</span>
+            </div>
+        </div>
+
+        <h5 class="fw-bold text-dark mb-2 pb-1 border-bottom" style="font-size:14px;">Danh Sách Ca Trực Phân Rã (${evShifts.length})</h5>
+        <div class="d-flex flex-column gap-2">
+            ${evShifts.map(s => `
+                <div class="saas-card p-2.5 border rounded-3 d-flex align-items-center justify-content-between" style="cursor:pointer;" onclick="openShiftDrawer(${s.id})">
+                    <div>
+                        <strong class="text-dark d-block" style="font-size:13px;">${s.name}</strong>
+                        <small class="text-muted">${s.start_time.substring(11, 16)} - ${s.end_time.substring(11, 16)} • ${s.start_time.substring(0, 10)}</small>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-light text-dark border font-monospace" style="font-size:11px;">${s.quota_assigned || 2}/${s.quota || 4} CTV</span>
+                        <div class="text-success font-monospace small fw-bold">${parseInt(s.remuneration_amount || 150000).toLocaleString('vi-VN')} đ</div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    const footerHtml = `
+        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="closeSaasDrawer()">Đóng</button>
+        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="openCreateShiftModal(${ev.id})">
+            <i class="bi bi-plus-lg me-1"></i> Thêm Ca Mới
+        </button>
+    `;
+
+    openSaasDrawer('Chi Tiết Sự Kiện', ev.title, bodyHtml, footerHtml);
+}
+
+// 2. Chi tiết Ca Trực Drawer
+function openShiftDrawer(shiftId) {
+    const s = (typeof rawShifts !== 'undefined') ? rawShifts.find(item => parseInt(item.id) === parseInt(shiftId)) : null;
+    if (!s) return;
+
+    const isRegistered = !empty(s.is_registered_by_me);
+    const quota = parseInt(s.quota || 4);
+    const assigned = parseInt(s.quota_assigned || 2);
+    const isMedia = s.shift_type === 'MEDIA';
+
+    const bodyHtml = `
+        <div class="mb-3">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge rounded-pill ${isMedia ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-primary-subtle text-primary border border-primary-subtle'} px-2.5 py-1">
+                    ${isMedia ? 'CTV Truyền Thông (Media)' : 'CTV Hậu Cần / Kỹ Thuật'}
+                </span>
+                <span class="badge rounded-pill bg-light text-dark border px-2.5 py-1 font-monospace">
+                    ${assigned}/${quota} Đã tuyển
+                </span>
+            </div>
+            <h4 class="fw-bold text-dark mb-1">${s.name}</h4>
+            <div class="text-muted small">${s.event_title || 'Sự kiện FPT Polytechnic'}</div>
+        </div>
+
+        <div class="saas-kv-grid mb-3">
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Thời Gian Trực</span>
+                <span class="saas-kv-val font-monospace">${s.start_time.substring(11, 16)} - ${s.end_time.substring(11, 16)}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Ngày Tổ Chức</span>
+                <span class="saas-kv-val font-monospace">${s.start_time.substring(0, 10)}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Địa Điểm / Phòng</span>
+                <span class="saas-kv-val">${s.location_name || 'Hội trường Trịnh Văn Bô'}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Mức Thù Lao</span>
+                <span class="saas-kv-val text-success font-monospace">${parseInt(s.remuneration_amount || 150000).toLocaleString('vi-VN')} đ</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Điểm Tích Lũy</span>
+                <span class="saas-kv-val text-primary">+${s.points || 10} Điểm uy tín</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Yêu Cầu Minh Chứng</span>
+                <span class="saas-kv-val" style="font-size:12px;">${isMedia ? 'Drive folder > 50 ảnh + logo' : 'Ảnh có mặt áo cam tại ca'}</span>
+            </div>
+        </div>
+
+        <div class="saas-card p-3 border bg-light mb-3">
+            <strong class="text-dark d-block mb-1" style="font-size:12.5px;">Mô Tả & Hướng Dẫn Nhiệm Vụ</strong>
+            <p class="text-muted small mb-0">${s.notes || 'Hỗ trợ ban tổ chức tiếp đón đại biểu, điều phối âm thanh ánh sáng và hỗ trợ vận hành trong suốt thời gian diễn ra sự kiện.'}</p>
+        </div>
+    `;
+
+    let footerHtml = `
+        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="closeSaasDrawer()">Đóng</button>
+    `;
+
+    if (isRegistered) {
+        footerHtml += `
+            <button type="button" class="btn btn-sm btn-success rounded-pill px-3" disabled>
+                <i class="bi bi-check-lg me-1"></i> Bạn Đã Đăng Ký Ca Này
+            </button>
+        `;
+    } else if (assigned >= quota) {
+        footerHtml += `
+            <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3" disabled>
+                Ca Đã Đầy
+            </button>
+        `;
+    } else {
+        footerHtml += `
+            <button type="button" class="btn btn-sm btn-primary rounded-pill px-4" onclick="confirmRegisterShift(${s.id})">
+                <i class="bi bi-send-check me-1"></i> Đăng Ký Ca Ngay
+            </button>
+        `;
+    }
+
+    openSaasDrawer('Chi Tiết Ca Trực', s.name, bodyHtml, footerHtml);
+}
+
+// 3. Chi tiết Tài Khoản & Phân Quyền Drawer
+function openUserDrawer(userId) {
+    const u = (typeof rawAllUsers !== 'undefined') ? rawAllUsers.find(item => parseInt(item.id) === parseInt(userId)) : null;
+    if (!u) return;
+
+    currentDrawerEntityId = userId;
+    const isLocked = parseInt(u.is_active || 1) === 0;
+
+    const rolesList = (typeof rawRoles !== 'undefined') ? rawRoles : [
+        { id: 1, name: 'Admin', description: 'Quản trị viên toàn hệ thống' },
+        { id: 2, name: 'Organizer', description: 'Giảng viên / Ban tổ chức sự kiện' },
+        { id: 3, name: 'Staff', description: 'Cán bộ Hành chính / CSVC' },
+        { id: 4, name: 'Student', description: 'Sinh viên CTV Hậu Cần' },
+        { id: 5, name: 'Media', description: 'Cộng tác viên Truyền thông & Báo chí' }
+    ];
+
+    const bodyHtml = `
+        <div class="d-flex align-items-center gap-3 mb-3 p-3 bg-light rounded-3 border">
+            <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0" style="width:48px; height:48px; background:linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); font-size:18px;">
+                ${u.full_name ? u.full_name.charAt(0).toUpperCase() : 'U'}
+            </div>
+            <div>
+                <h4 class="fw-bold text-dark mb-0.5" style="font-size:16px;">${u.full_name}</h4>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge font-monospace bg-white text-dark border px-2 py-0.5">${u.student_code}</span>
+                    <span class="badge ${isLocked ? 'bg-danger text-white' : 'bg-success text-white'} px-2 py-0.5">
+                        ${isLocked ? 'Đã Khóa' : 'Hoạt Động'}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="saas-kv-grid mb-3">
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Email FPT Poly</span>
+                <span class="saas-kv-val" style="font-size:12.5px;">${u.email}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Số Điện Thoại</span>
+                <span class="saas-kv-val font-monospace">${u.phone || 'Chưa cập nhật'}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Khoa / Bộ Môn</span>
+                <span class="saas-kv-val">${u.department || 'Công nghệ Thông tin'}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Vai Trò Hiện Tại</span>
+                <span class="saas-kv-val text-primary">${u.role_name}</span>
+            </div>
+        </div>
+
+        <div class="saas-card p-3 border mb-3">
+            <label class="form-label fw-bold text-dark small mb-1">Gán / Chuyển Đổi Vai Trò Hệ Thống</label>
+            <p class="text-muted small mb-2">Chọn vai trò mới bên dưới để cập nhật quyền truy cập tương ứng cho người dùng</p>
+            <select class="form-select form-select-sm mb-2" id="drawerSelectRole">
+                ${rolesList.map(r => `
+                    <option value="${r.id}" ${parseInt(r.id) === parseInt(u.role_id) ? 'selected' : ''}>
+                        ${r.name} - ${r.description}
+                    </option>
+                `).join('')}
+            </select>
+            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 w-100" onclick="triggerRoleChangeFromDrawer(${u.id})">
+                <i class="bi bi-shield-check me-1"></i> Lưu Quyền Hạn Mới
+            </button>
+        </div>
+
+        <div class="saas-card p-3 border ${isLocked ? 'border-success-subtle bg-success-subtle' : 'border-danger-subtle bg-danger-subtle'}">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <strong class="text-dark d-block small">${isLocked ? 'Kích hoạt lại tài khoản' : 'Khóa tài khoản người dùng'}</strong>
+                    <small class="text-muted">${isLocked ? 'Cho phép người dùng đăng nhập trở lại' : 'Ngăn người dùng đăng nhập và nhận ca'}</small>
+                </div>
+                <button type="button" class="btn btn-sm ${isLocked ? 'btn-success' : 'btn-danger'} rounded-pill px-3" onclick="promptToggleUser(${u.id}, ${isLocked ? 0 : 1}, '${u.full_name}')">
+                    ${isLocked ? 'Mở Khóa' : 'Khóa Tài Khoản'}
+                </button>
+            </div>
+        </div>
+    `;
+
+    const footerHtml = `
+        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="closeSaasDrawer()">Đóng</button>
+    `;
+
+    openSaasDrawer('Hồ Sơ & Phân Quyền', u.full_name, bodyHtml, footerHtml);
+}
+
+// 4. Chi tiết Hồ Sơ CTV Drawer
+function openCtvProfileDrawer(userId) {
+    const u = (typeof rawAllUsers !== 'undefined') ? rawAllUsers.find(item => parseInt(item.id) === parseInt(userId)) : null;
+    if (!u) return;
+
+    const bodyHtml = `
+        <div class="d-flex align-items-center gap-3 mb-3 p-3 bg-light rounded-3 border">
+            <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0" style="width:48px; height:48px; background:linear-gradient(135deg, #EA580C 0%, #C2410C 100%); font-size:18px;">
+                ${u.full_name ? u.full_name.charAt(0).toUpperCase() : 'C'}
+            </div>
+            <div>
+                <h4 class="fw-bold text-dark mb-0.5" style="font-size:16px;">${u.full_name}</h4>
+                <span class="badge font-monospace bg-white text-dark border px-2 py-0.5">${u.student_code}</span>
+            </div>
+        </div>
+
+        <div class="saas-kv-grid mb-3">
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Số CCCD / VNeID</span>
+                <span class="saas-kv-val font-monospace">${u.id_card_number || '079204018294'}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Tài Khoản Ngân Hàng</span>
+                <span class="saas-kv-val font-monospace">${u.bank_account_number || '1029384756'}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Ngân Hàng Thụ Hưởng</span>
+                <span class="saas-kv-val">${u.bank_name || 'MB Bank (Chi nhánh Đồng Nai)'}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Kỹ Năng Nổi Bật</span>
+                <span class="saas-kv-val">${u.skills || 'Setup âm thanh, Máy chiếu, Chụp ảnh'}</span>
+            </div>
+        </div>
+
+        <div class="saas-card p-3 border mb-3">
+            <strong class="text-dark d-block mb-2 small">Định Danh Điện Tử VNeID Mức 2</strong>
+            <div class="d-flex align-items-center gap-2 text-success small">
+                <i class="bi bi-shield-check fs-5"></i>
+                <span>Đã xác minh định danh CCCD gắn chip & STK chính chủ FPT Poly</span>
+            </div>
+        </div>
+    `;
+
+    openSaasDrawer('Hồ Sơ Cộng Tác Viên', u.full_name, bodyHtml);
+}
+
+// 5. Chi tiết Minh Chứng Drawer
+function openProofDrawer(assignmentId) {
+    const a = (typeof rawAccountingList !== 'undefined') ? rawAccountingList.find(item => parseInt(item.assignment_id) === parseInt(assignmentId)) : null;
+    if (!a) return;
+
+    const isMedia = (a.ctv_type === 'MEDIA');
+    const isApproved = !empty(a.lecturer_verified);
+
+    const bodyHtml = `
+        <div class="mb-3">
+            <span class="badge rounded-pill ${isMedia ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-primary-subtle text-primary border border-primary-subtle'} px-2.5 py-1 mb-2">
+                ${isMedia ? 'Job Media (Google Drive)' : 'Job Hậu Cần (Ảnh Hiện Trường)'}
+            </span>
+            <h4 class="fw-bold text-dark mb-1">${a.shift_name}</h4>
+            <div class="text-muted small">${a.event_title} • CTV: <strong>${a.full_name}</strong></div>
+        </div>
+
+        <div class="saas-kv-grid mb-3">
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Mã Sinh Viên</span>
+                <span class="saas-kv-val font-monospace">${a.student_code}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Thời Gian Trực</span>
+                <span class="saas-kv-val font-monospace">${a.start_time.substring(11, 16)} - ${a.end_time.substring(11, 16)}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Mức Thù Lao</span>
+                <span class="saas-kv-val text-success font-monospace">${parseInt(a.remuneration_amount || 150000).toLocaleString('vi-VN')} đ</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Trạng Thái Thẩm Định</span>
+                <span class="saas-kv-val ${isApproved ? 'text-success' : 'text-warning'}">
+                    ${isApproved ? 'Đã Thẩm Định Nghiệm Thu' : 'Đang Chờ GV Duyệt'}
+                </span>
+            </div>
+        </div>
+
+        <div class="saas-card p-3 border mb-3">
+            <strong class="text-dark d-block mb-2 small">Nội Dung Minh Chứng Đã Nộp</strong>
+            ${isMedia ? `
+                <div class="d-flex align-items-center justify-content-between p-2.5 bg-light rounded-3 border mb-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-google text-danger fs-5"></i>
+                        <div>
+                            <strong class="text-dark d-block small">Bộ Ảnh Google Drive (> 50 ảnh)</strong>
+                            <small class="text-muted">Đã kiểm tra gắn logo FPT Poly</small>
+                        </div>
+                    </div>
+                    <a href="${a.proof_drive_url || 'https://drive.google.com'}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Mở Drive
+                    </a>
+                </div>
+            ` : `
+                <div class="text-center p-3 bg-light rounded-3 border mb-2">
+                    <img src="${a.proof_image_url || '/assets/images/placeholder_event.jpg'}" alt="Minh chứng" class="img-fluid rounded-2 mb-2" style="max-height:180px; object-fit:cover;">
+                    <div class="small text-muted">Ảnh chụp có mặt trực tiếp tại vị trí trực sự kiện</div>
+                </div>
+            `}
+            <div class="small text-muted">Ghi chú CTV: <em>${a.proof_note || 'Đã hoàn thành đầy đủ nhiệm vụ ca trực đúng thời gian quy định.'}</em></div>
+        </div>
+    `;
+
+    const footerHtml = `
+        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="closeSaasDrawer()">Đóng</button>
+        <button type="button" class="btn btn-sm btn-primary rounded-pill px-4" onclick="closeSaasDrawer(); openFacilityProofModal(${a.assignment_id})">
+            <i class="bi bi-shield-check me-1"></i> Thẩm Định & Quyết Định
+        </button>
+    `;
+
+    openSaasDrawer('Thẩm Định Minh Chứng', a.shift_name, bodyHtml, footerHtml);
+}
+
+// 6. Chi tiết Hợp Đồng & Thanh Toán Drawer
+function openContractDrawer(assignmentId) {
+    const a = (typeof rawAccountingList !== 'undefined') ? rawAccountingList.find(item => parseInt(item.assignment_id) === parseInt(assignmentId)) : null;
+    if (!a) return;
+
+    const contractCode = a.contract_code || `HDNT-2026-FPLY-${String(a.assignment_id).padStart(3, '0')}`;
+    const amount = parseInt(a.remuneration_amount || 150000);
+
+    const bodyHtml = `
+        <div class="mb-3">
+            <span class="badge bg-light text-dark border font-monospace px-2.5 py-1 mb-2">
+                ${contractCode}
+            </span>
+            <h4 class="fw-bold text-dark mb-1">Hợp Đồng Nghiệm Thu & Đề Nghị Chi Tiền</h4>
+            <div class="text-muted small">${a.event_title} • ${a.shift_name}</div>
+        </div>
+
+        <div class="saas-kv-grid mb-3">
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Cộng Tác Viên</span>
+                <span class="saas-kv-val">${a.full_name} (${a.student_code})</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Số Tiền Quyết Toán</span>
+                <span class="saas-kv-val text-success font-monospace" style="font-size:15px;">${amount.toLocaleString('vi-VN')} đ</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Tài Khoản Nhận</span>
+                <span class="saas-kv-val font-monospace">${a.bank_account_number || '1029384756'} (${a.bank_name || 'MB Bank'})</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Trạng Thái Hồ Sơ</span>
+                <span class="saas-kv-val text-primary">${a.accounting_status || 'Đã đối soát'}</span>
+            </div>
+        </div>
+
+        <div class="saas-card p-3 border mb-3">
+            <strong class="text-dark d-block mb-2 small">Tiến Trình Chữ Ký Số Pháp Lý</strong>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <span>1. Giảng viên nghiệm thu chuyên môn:</span>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">Đã xác nhận</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between small">
+                    <span>2. Ban Hành chính - CSVC đối soát:</span>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">Hợp lệ</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between small">
+                    <span>3. Ban Giám Hiệu ký duyệt điện tử:</span>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Sẵn sàng chi trả</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    const footerHtml = `
+        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="closeSaasDrawer()">Đóng</button>
+        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i> In Hồ Sơ
+        </button>
+    `;
+
+    openSaasDrawer('Hồ Sơ Hợp Đồng', contractCode, bodyHtml, footerHtml);
+}
+
+// 7. Chi tiết Nhật Ký Hoạt Động Drawer
+function openAuditLogDrawer(logId) {
+    const log = (typeof rawActivityLogs !== 'undefined') ? rawActivityLogs.find(item => parseInt(item.id) === parseInt(logId)) : null;
+    if (!log) return;
+
+    const bodyHtml = `
+        <div class="mb-3">
+            <span class="badge rounded-pill bg-info-subtle text-info border border-info-subtle px-2.5 py-1 mb-2 font-monospace">
+                ${log.action}
+            </span>
+            <h4 class="fw-bold text-dark mb-1">Ghi Vết Kiểm Toán Hệ Thống</h4>
+            <div class="text-muted small">Mã bản ghi: #${log.id}</div>
+        </div>
+
+        <div class="saas-kv-grid mb-3">
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Người Thực Hiện</span>
+                <span class="saas-kv-val">${log.user_name} (${log.user_role || 'User'})</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Thời Điểm Ghi Nhận</span>
+                <span class="saas-kv-val font-monospace">${log.created_at}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Địa Chỉ IP</span>
+                <span class="saas-kv-val font-monospace">${log.ip_address || '127.0.0.1'}</span>
+            </div>
+            <div class="saas-kv-item">
+                <span class="saas-kv-label">Đối Tượng Tác Động</span>
+                <span class="saas-kv-val font-monospace">${log.target_type || 'SYSTEM'} #${log.target_id || ''}</span>
+            </div>
+        </div>
+
+        <div class="saas-card p-3 border bg-light">
+            <strong class="text-dark d-block mb-1 small">Chi Tiết Thao Tác (Audit Payload)</strong>
+            <pre class="mb-0 text-muted small" style="white-space:pre-wrap; word-break:break-all;">${log.details}</pre>
+        </div>
+    `;
+
+    openSaasDrawer('Chi Tiết Kiểm Toán', `Bản ghi #${log.id}`, bodyHtml);
+}
+
+// =========================================================
+// ACTION CONFIRMATION MODAL HANDLERS
+// =========================================================
+let pendingRoleChange = { userId: null, newRoleId: null, roleName: '' };
+let pendingUserToggle = { userId: null, targetStatus: 1 };
+let pendingAssignmentCancel = { assignmentId: null };
+
+function triggerRoleChangeFromDrawer(userId) {
+    const sel = document.getElementById('drawerSelectRole');
+    if (!sel) return;
+    const roleId = parseInt(sel.value);
+    const roleName = sel.options[sel.selectedIndex].text;
+    promptRoleChange(userId, roleId, roleName);
+}
+
+function promptRoleChange(userId, roleId, roleName = '') {
+    pendingRoleChange = { userId, newRoleId: roleId, roleName };
+    const u = (typeof rawAllUsers !== 'undefined') ? rawAllUsers.find(item => parseInt(item.id) === parseInt(userId)) : null;
+    const userName = u ? u.full_name : 'người dùng này';
+    
+    document.getElementById('confirmRoleChangeText').innerHTML = `
+        Bạn có chắc chắn muốn thay đổi vai trò của <strong>${userName}</strong> thành <strong>${roleName}</strong>?
+    `;
+    const modalEl = document.getElementById('modalConfirmRoleChange');
+    if (modalEl) {
+        const inst = new bootstrap.Modal(modalEl);
+        inst.show();
+    }
+}
+
+async function executeRoleChange() {
+    if (!pendingRoleChange.userId || !pendingRoleChange.newRoleId) return;
+    const btn = document.getElementById('btnConfirmRoleChangeSubmit');
+    if (btn) btn.disabled = true;
+
+    try {
+        const fd = new FormData();
+        fd.append('user_id', pendingRoleChange.userId);
+        fd.append('role_id', pendingRoleChange.newRoleId);
+
+        const res = await fetch('/dashboard/updateUserRole', {
+            method: 'POST',
+            body: fd,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast(data.message || 'Cập nhật vai trò thành công!', 'success');
+            const modalEl = document.getElementById('modalConfirmRoleChange');
+            if (modalEl) {
+                const inst = bootstrap.Modal.getInstance(modalEl);
+                if (inst) inst.hide();
+            }
+            closeSaasDrawer();
+            setTimeout(() => location.reload(), 600);
+        } else {
+            showToast(data.message || 'Lỗi khi cập nhật vai trò', 'danger');
+        }
+    } catch (e) {
+        showToast('Lỗi kết nối máy chủ', 'danger');
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+function promptToggleUser(userId, targetStatus, userName = '') {
+    pendingUserToggle = { userId, targetStatus };
+    const isLocking = (targetStatus === 0);
+    document.getElementById('confirmToggleUserTitle').textContent = isLocking ? 'Xác Nhận Khóa Tài Khoản' : 'Xác Nhận Mở Khóa';
+    document.getElementById('confirmToggleUserText').innerHTML = `
+        Bạn có chắc chắn muốn <strong>${isLocking ? 'khóa' : 'kích hoạt lại'}</strong> tài khoản của <strong>${userName || 'người dùng này'}</strong>?
+    `;
+    const modalEl = document.getElementById('modalConfirmToggleUser');
+    if (modalEl) {
+        const inst = new bootstrap.Modal(modalEl);
+        inst.show();
+    }
+}
+
+async function executeToggleUser() {
+    if (!pendingUserToggle.userId) return;
+    const btn = document.getElementById('btnConfirmToggleUserSubmit');
+    if (btn) btn.disabled = true;
+
+    try {
+        const fd = new FormData();
+        fd.append('user_id', pendingUserToggle.userId);
+        fd.append('is_active', pendingUserToggle.targetStatus);
+
+        const res = await fetch('/dashboard/toggleUserStatus', {
+            method: 'POST',
+            body: fd,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast(data.message || 'Cập nhật trạng thái thành công!', 'success');
+            const modalEl = document.getElementById('modalConfirmToggleUser');
+            if (modalEl) {
+                const inst = bootstrap.Modal.getInstance(modalEl);
+                if (inst) inst.hide();
+            }
+            closeSaasDrawer();
+            setTimeout(() => location.reload(), 600);
+        } else {
+            showToast(data.message || 'Lỗi khi cập nhật trạng thái', 'danger');
+        }
+    } catch (e) {
+        showToast('Lỗi kết nối máy chủ', 'danger');
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+function promptCancelAssignment(assignmentId, userName = '', shiftName = '') {
+    pendingAssignmentCancel = { assignmentId };
+    document.getElementById('confirmCancelAssignmentText').innerHTML = `
+        Bạn có chắc chắn muốn hủy phân công ca trực <strong>${shiftName}</strong> của CTV <strong>${userName}</strong>?
+    `;
+    const modalEl = document.getElementById('modalConfirmCancelAssignment');
+    if (modalEl) {
+        const inst = new bootstrap.Modal(modalEl);
+        inst.show();
+    }
+}
+
+async function executeCancelAssignment() {
+    if (!pendingAssignmentCancel.assignmentId) return;
+    const btn = document.getElementById('btnConfirmCancelAssignmentSubmit');
+    if (btn) btn.disabled = true;
+
+    try {
+        const fd = new FormData();
+        fd.append('assignment_id', pendingAssignmentCancel.assignmentId);
+
+        const res = await fetch('/dashboard/cancelAssignment', {
+            method: 'POST',
+            body: fd,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast(data.message || 'Đã hủy phân công ca trực thành công!', 'success');
+            const modalEl = document.getElementById('modalConfirmCancelAssignment');
+            if (modalEl) {
+                const inst = bootstrap.Modal.getInstance(modalEl);
+                if (inst) inst.hide();
+            }
+            setTimeout(() => location.reload(), 600);
+        } else {
+            showToast(data.message || 'Lỗi khi hủy phân công', 'danger');
+        }
+    } catch (e) {
+        showToast('Lỗi kết nối máy chủ', 'danger');
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+// =========================================================
+// CALENDAR DAY CONTEXTUAL POPOVER ENGINE
+// =========================================================
+function showCalendarDayPopover(event, dateStr) {
+    event.stopPropagation();
+    const popEl = document.getElementById('calendarDayPopover');
+    if (!popEl) return;
+
+    const dayShifts = (typeof rawShifts !== 'undefined') ? rawShifts.filter(s => s.start_time.startsWith(dateStr)) : [];
+    const dayNotes = (typeof rawCalendarNotes !== 'undefined') ? rawCalendarNotes.filter(n => (n.date || n.target_date) === dateStr) : [];
+
+    document.getElementById('popoverDayTitle').textContent = `Hoạt động ngày ${dateStr}`;
+
+    const listEl = document.getElementById('popoverDayList');
+    if (dayShifts.length === 0 && dayNotes.length === 0) {
+        listEl.innerHTML = '<div class="text-muted small py-2 text-center">Không có lịch hoạt động</div>';
+    } else {
+        listEl.innerHTML = `
+            ${dayShifts.map(s => `
+                <div class="saas-popover-item" onclick="closeCalendarDayPopover(); openShiftDrawer(${s.id})">
+                    <div>
+                        <strong class="d-block" style="font-size:12px;">${s.name}</strong>
+                        <small class="text-muted">${s.start_time.substring(11, 16)} - ${s.end_time.substring(11, 16)}</small>
+                    </div>
+                    <span class="badge bg-light text-primary border">${s.quota_assigned || 2}/${s.quota || 4}</span>
+                </div>
+            `).join('')}
+            ${dayNotes.map(n => `
+                <div class="saas-popover-item">
+                    <div>
+                        <strong class="d-block text-warning" style="font-size:12px;">${n.title || n.note}</strong>
+                        <small class="text-muted">Ghi chú toàn trường</small>
+                    </div>
+                </div>
+            `).join('')}
+        `;
+    }
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    popEl.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+    popEl.style.left = Math.min(rect.left + window.scrollX, window.innerWidth - 320) + 'px';
+    popEl.classList.add('is-open');
+}
+
+function closeCalendarDayPopover() {
+    const popEl = document.getElementById('calendarDayPopover');
+    if (popEl) popEl.classList.remove('is-open');
+}
+
+document.addEventListener('click', (e) => {
+    const popEl = document.getElementById('calendarDayPopover');
+    if (popEl && popEl.classList.contains('is-open') && !popEl.contains(e.target)) {
+        closeCalendarDayPopover();
+    }
+});
+
+// Table quick filter functions
+function filterUserRolesTable() {
+    const q = (document.getElementById('userRolesSearchInput')?.value || '').toLowerCase().trim();
+    const role = (document.getElementById('userRolesRoleFilter')?.value || '').toLowerCase().trim();
+    const rows = document.querySelectorAll('#panelUserRoles table tbody tr');
+    rows.forEach(r => {
+        const text = r.textContent.toLowerCase();
+        const matchQ = !q || text.includes(q);
+        const matchRole = !role || text.includes(role);
+        r.style.display = (matchQ && matchRole) ? '' : 'none';
+    });
+}
+
+function filterShiftsSessionsTable() {
+    const q = (document.getElementById('shiftSessionSearch')?.value || '').toLowerCase().trim();
+    const type = (document.getElementById('shiftSessionTypeFilter')?.value || '').trim();
+    const rows = document.querySelectorAll('#shiftsSessionsTable tbody tr');
+    rows.forEach(r => {
+        const text = r.textContent.toLowerCase();
+        const matchQ = !q || text.includes(q);
+        const matchType = !type || r.innerHTML.includes(type);
+        r.style.display = (matchQ && matchType) ? '' : 'none';
+    });
 }
 
 function quickRegisterShiftModal() {

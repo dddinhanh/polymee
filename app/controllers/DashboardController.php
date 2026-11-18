@@ -1221,4 +1221,72 @@ class DashboardController extends BaseController
             $this->json(['success' => false, 'message' => 'Lỗi khi xóa ca trực: ' . $e->getMessage()], 500);
         }
     }
+
+    /**
+     * API Hủy phân công ca trực CTV (Xác nhận qua Modal)
+     */
+    public function cancelAssignment(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['success' => false, 'message' => 'Phương thức không được hỗ trợ.'], 405);
+            return;
+        }
+
+        if (!$this->currentUser) {
+            $this->json(['success' => false, 'message' => 'Vui lòng đăng nhập để thực hiện.'], 401);
+            return;
+        }
+
+        $assignmentId = (int)($_POST['assignment_id'] ?? 0);
+        if ($assignmentId <= 0) {
+            $this->json(['success' => false, 'message' => 'Mã phân công không hợp lệ.'], 400);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare("SELECT sa.*, s.name as shift_name, u.full_name as user_name FROM shift_assignments sa INNER JOIN shifts s ON sa.shift_id = s.id INNER JOIN users u ON sa.user_id = u.id WHERE sa.id = :id");
+        $stmt->execute([':id' => $assignmentId]);
+        $assignment = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$assignment) {
+            $this->json(['success' => false, 'message' => 'Không tìm thấy phân công cần hủy.'], 404);
+            return;
+        }
+
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        $role = $permissions['role'];
+        $currentUserId = (int)($this->currentUser['id'] ?? 0);
+
+        if (!in_array($role, ['ADMIN', 'HEAD_ADMIN', 'LECTURER'], true) && (int)$assignment['user_id'] !== $currentUserId) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền hủy phân công này.'], 403);
+            return;
+        }
+
+        try {
+            $stmtDel = $db->prepare("DELETE FROM shift_assignments WHERE id = :id");
+            $stmtDel->execute([':id' => $assignmentId]);
+
+            // Cập nhật số lượng đã tuyển trong shifts nếu có cột quota_assigned
+            try {
+                $stmtCount = $db->prepare("SELECT COUNT(*) FROM shift_assignments WHERE shift_id = :sid");
+                $stmtCount->execute([':sid' => $assignment['shift_id']]);
+                $newCount = (int)$stmtCount->fetchColumn();
+
+                $stmtUpdateShift = $db->prepare("UPDATE shifts SET quota_assigned = :cnt WHERE id = :sid");
+                $stmtUpdateShift->execute([':cnt' => $newCount, ':sid' => $assignment['shift_id']]);
+            } catch (\Throwable $e2) {
+                // column might not exist in sqlite, ignore
+            }
+
+            $this->logActivity('CANCEL_ASSIGNMENT', 'SHIFT_ASSIGNMENT', $assignmentId, "Đã hủy phân công ca [{$assignment['shift_name']}] của CTV [{$assignment['user_name']}].");
+
+            $this->json([
+                'success' => true,
+                'message' => "Đã hủy phân công ca trực thành công!",
+                'assignment_id' => $assignmentId
+            ]);
+        } catch (\Throwable $e) {
+            $this->json(['success' => false, 'message' => 'Lỗi khi hủy phân công: ' . $e->getMessage()], 500);
+        }
+    }
 }
