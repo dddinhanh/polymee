@@ -25,7 +25,7 @@ $c->index();
 $html = ob_get_clean();
 
 $check_list = [
-    'panelMyProofSubmission' => ['Nộp thêm ảnh', 'Chi tiết Minh chứng', 'proof-photo-matrix'],
+    'panelMyProofSubmission' => ['Nộp thêm ảnh', 'Chi tiết nghiệm thu', 'proof-stepper-track', 'proof-cta-box', 'proof-photo-matrix', 'Tiêu chí nghiệm thu', 'Trạng thái xử lý', 'Nghiệm Thu & Minh Chứng'],
     'panelOverviewReport' => ['Việc cần làm hôm nay', 'Lịch sắp tới', 'dash-todo-card'],
     'panelMyShifts' => ['my-shifts-split-layout', 'myShiftsDetailDrawer', 'Ca 3: Media', 'FPoly TechDay 2026'],
     'panelExploreJobs' => ['exploreJobCardsContainer', 'saas-job-card', 'Khám Phá Công Việc'],
@@ -54,3 +54,4 @@ if ($allOk) {
 } else {
     exit(1);
 }
+
