@@ -3047,13 +3047,13 @@ table td .btn-fpt-sm {
     background: #FFFFFF;
     border: 1px solid #E2E8F0;
     border-radius: 10px;
-    padding: 18px;
+    padding: 12px 14px;
 }
 .contract-kv-row {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     font-size: 13px;
 }
 .contract-kv-row:last-child {
@@ -3062,10 +3062,357 @@ table td .btn-fpt-sm {
 .contract-kv-label {
     color: #64748B;
     font-size: 12.5px;
-    min-width: 140px;
+    min-width: 130px;
 }
 .contract-kv-val {
     color: #0F172A;
     font-weight: 500;
     text-align: right;
+}
+
+/* ==========================================================================
+   POLYMEE COMPACT & FIT-TO-VIEWPORT DESIGN SYSTEM (1366x768 & 1920x1080)
+   Principles: Fit-to-Viewport, Zero Unneeded Outer Scroll, Smooth Internal Scroll
+   ========================================================================== */
+
+/* 1. Global Viewport Fit & Compact Shell */
+@media (min-width: 992px) {
+    html, body {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .app-shell {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
+        width: 100% !important;
+        display: flex !important;
+    }
+
+    .main-workspace {
+        flex: 1 1 0% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        padding: 8px 14px 10px 10px !important;
+    }
+
+    /* Topbar compact fit */
+    .dashboard-topbar {
+        flex-shrink: 0 !important;
+        min-height: 44px !important;
+        padding: 6px 14px !important;
+        margin-bottom: 8px !important;
+        border-radius: 12px !important;
+    }
+
+    /* Central SPA Viewport Host */
+    #spaBodyContent {
+        flex: 1 1 0% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    /* Active SPA Panel is strictly locked to remaining viewport height */
+    .spa-panel:not([style*="display: none"]):not([style*="display:none"]) {
+        flex: 1 1 0% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        padding: 10px 14px !important;
+        margin-bottom: 0 !important;
+        border-radius: 12px !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* 2. Compact Bento Metric Strips (Fits 1366x768 & 1920x1080) */
+.contract-bento-grid,
+.kpi-metric-strip,
+.saas-kpi-grid,
+.dashboard-kpi-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin-bottom: 8px !important;
+    flex-shrink: 0 !important;
+}
+@media (max-width: 1024px) {
+    .contract-bento-grid,
+    .kpi-metric-strip,
+    .saas-kpi-grid,
+    .dashboard-kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+.contract-bento-card,
+.kpi-mini-card,
+.saas-kpi-card {
+    padding: 7px 12px !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    min-height: 48px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    box-sizing: border-box !important;
+}
+
+.contract-bento-icon,
+.kpi-mini-icon,
+.saas-kpi-icon {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    border-radius: 8px !important;
+    font-size: 15px !important;
+    display: grid !important;
+    place-items: center !important;
+    flex-shrink: 0 !important;
+}
+
+.contract-bento-title,
+.kpi-mini-label,
+.saas-kpi-title {
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+    color: #64748B !important;
+    margin-bottom: 1px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+}
+
+.contract-bento-num,
+.kpi-mini-val,
+.saas-kpi-val {
+    font-size: 19px !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    color: #0F172A !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+/* 3. Compact Tables with Sticky Header & Smooth Internal Scroll */
+.table-responsive {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.table-responsive thead th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 4 !important;
+    background: #FAFAFC !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 7px 10px !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+    white-space: nowrap !important;
+}
+
+[data-bs-theme="dark"] .table-responsive thead th {
+    background: #1E293B !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.table-responsive tbody td {
+    padding: 6px 10px !important;
+    font-size: 13.5px !important;
+    vertical-align: middle !important;
+}
+
+/* 4. Fit-to-Viewport Master-Detail: Contract Dossier */
+.contract-master-layout {
+    display: grid !important;
+    grid-template-columns: 310px 1fr !important;
+    gap: 12px !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+@media (max-width: 1024px) {
+    .contract-master-layout {
+        grid-template-columns: 1fr !important;
+        overflow-y: auto !important;
+    }
+}
+
+#contractItemsList {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    max-height: calc(100vh - 170px) !important;
+    padding-right: 4px !important;
+}
+
+.contract-card-item {
+    padding: 9px 11px !important;
+    margin-bottom: 7px !important;
+    border-radius: 10px !important;
+}
+
+#contractTabGeneralContent,
+#contractTabProofContent,
+#contractTabPaymentContent,
+#contractTabHistoryContent {
+    overflow-y: auto !important;
+    max-height: calc(100vh - 215px) !important;
+    padding-right: 4px !important;
+}
+
+.contract-detail-tabs {
+    margin-bottom: 12px !important;
+    gap: 18px !important;
+}
+
+.contract-detail-tab-btn {
+    padding: 7px 0 !important;
+    font-size: 13px !important;
+}
+
+/* 5. Fit-to-Viewport: Proof Detail Panel (Role BTC & Admin) */
+.proof-admin-split-layout {
+    display: grid !important;
+    grid-template-columns: 1fr 310px !important;
+    gap: 12px !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+@media (max-width: 1200px) {
+    .proof-admin-split-layout {
+        grid-template-columns: 1fr !important;
+        overflow-y: auto !important;
+    }
+}
+
+.proof-admin-photo-grid-6 {
+    gap: 6px !important;
+}
+
+.proof-admin-photo-grid-6 .proof-photo-item {
+    max-height: clamp(80px, 12vh, 115px) !important;
+    aspect-ratio: 16/10 !important;
+}
+
+.proof-admin-photo-grid-6 .proof-photo-item img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.proof-filmstrip-bar {
+    padding-top: 5px !important;
+    margin-top: 5px !important;
+}
+
+.proof-thumb-cell {
+    width: 42px !important;
+    height: 30px !important;
+}
+
+#inspectorTabInfo,
+#inspectorTabHistory,
+#inspectorTabFiles {
+    overflow-y: auto !important;
+    max-height: calc(100vh - 230px) !important;
+    padding-right: 2px !important;
+}
+
+/* 6. My Shifts Split Layout & Drawer */
+.my-shifts-split-layout {
+    gap: 12px !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+.my-shifts-detail-drawer {
+    width: 340px !important;
+    max-height: 100% !important;
+    overflow-y: auto !important;
+    padding: 12px !important;
+}
+
+/* 7. Overview Dashboard: Compact Middle Split */
+.dash-todo-card {
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+    border: 1px solid #E2E8F0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    background: #FFFFFF !important;
+}
+
+.dash-timeline-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+/* 8. Thin Ergonomic Scrollbars that never cause horizontal overflow */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 0.6);
+}
+
+/* 9. Compact Modals with Viewport Capping */
+.modal-dialog {
+    max-height: calc(100vh - 30px) !important;
+    margin: 15px auto !important;
+}
+.modal-content {
+    max-height: calc(100vh - 30px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+.modal-header {
+    flex-shrink: 0 !important;
+    padding: 10px 16px !important;
+}
+.modal-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    padding: 14px 18px !important;
+}
+.modal-footer {
+    flex-shrink: 0 !important;
+    padding: 8px 16px !important;
 }

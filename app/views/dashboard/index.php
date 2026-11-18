@@ -132,7 +132,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         top: 0;
         height: 100vh;
         z-index: 1040;
-        padding: 12px;
+        padding: 8px 6px;
         display: flex;
         flex-direction: column;
     }
@@ -328,7 +328,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 3px;
         overflow-y: auto;
         scrollbar-width: none;
     }
@@ -337,7 +337,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     .u040-section-label {
-        padding: 10px 0 2px 14px;
+        padding: 6px 0 2px 12px;
         list-style: none;
         pointer-events: none;
         user-select: none;
@@ -364,8 +364,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         left: 0;
         right: 0;
         top: 0;
-        height: 46px;
-        border-radius: 12px;
+        height: 38px;
+        border-radius: 10px;
         background: rgba(234, 88, 12, 0.08);
         transform: translateY(var(--y, 0));
         transition: transform .4s var(--ux-spring);
@@ -375,10 +375,10 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     .u040-hl::before {
         content: "";
         position: absolute;
-        left: -10px;
-        top: 10px;
-        bottom: 10px;
-        width: 5px;
+        left: -8px;
+        top: 8px;
+        bottom: 8px;
+        width: 4px;
         border-radius: 0 4px 4px 0;
         background: var(--ux-accent);
     }
@@ -387,12 +387,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         position: relative;
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
         width: 100%;
-        height: 46px;
-        padding: 0 0 0 16px;
+        height: 38px;
+        padding: 0 0 0 12px;
         border: 0;
-        border-radius: 12px;
+        border-radius: 10px;
         background: none;
         color: var(--ux-ink);
         opacity: .78;
@@ -592,7 +592,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         min-width: 0;
         display: flex;
         flex-direction: column;
-        padding: 16px 24px 16px 12px;
+        padding: 8px 14px 10px 10px;
         overflow: hidden;
     }
 
@@ -602,15 +602,16 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         z-index: 1020 !important;
         background: rgba(255, 255, 255, 0.94) !important;
         border: 1px solid var(--ux-line);
-        border-radius: 20px;
-        padding: 12px 20px;
-        margin-bottom: 16px;
+        border-radius: 12px;
+        padding: 6px 14px;
+        margin-bottom: 8px;
+        min-height: 44px;
         display: flex;
         flex-wrap: nowrap !important;
         align-items: center;
         justify-content: space-between;
-        gap: 14px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+        gap: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         overflow: visible !important;
@@ -1757,6 +1758,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             flex-shrink: 0 !important;
             overflow-y: auto !important;
             z-index: 1040;
+            padding: 8px 6px !important;
         }
 
         .main-workspace {
@@ -1764,7 +1766,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             min-width: 0;
             height: 100vh !important;
             max-height: 100vh !important;
-            padding: 12px 20px 16px 12px;
+            padding: 8px 14px 10px 10px !important;
             display: flex;
             flex-direction: column;
             overflow: hidden !important;
@@ -1776,11 +1778,11 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             z-index: 1020 !important;
             background: rgba(255, 255, 255, 0.94) !important;
             flex-shrink: 0;
-            padding: 10px 18px;
-            margin-bottom: 12px;
-            min-height: 52px;
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            padding: 6px 14px !important;
+            margin-bottom: 8px !important;
+            min-height: 44px !important;
+            border-radius: 12px !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
             overflow: visible !important;
@@ -2835,24 +2837,25 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
         <!-- Top Bar Navigation & Controls -->
         <header class="dashboard-topbar">
             <!-- Left: Breadcrumbs & Screen Title -->
-            <div class="d-flex align-items-center gap-3">
-                <a href="/dashboard" class="d-flex align-items-center text-decoration-none p-1 rounded-3" style="height: 38px; border: none !important; box-shadow: none !important; background: transparent;" title="FPT Polytechnic">
-                    <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 25px; width: auto; object-fit: contain; border: none !important;">
+            <div class="d-flex align-items-center gap-2.5 min-w-0">
+                <a href="/dashboard" class="d-flex align-items-center text-decoration-none p-0.5 rounded-2 flex-shrink-0" style="height: 32px; border: none !important; box-shadow: none !important; background: transparent;" title="FPT Polytechnic">
+                    <img src="/assets/images/fpt_polytechnic_logo.png" alt="FPT Polytechnic" style="height: 22px; width: auto; object-fit: contain; border: none !important;">
                 </a>
-                <div class="vr mx-1 d-none d-sm-block" style="height: 24px; opacity: 0.25;"></div>
-                <div class="d-flex flex-column">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0 align-items-center" style="font-size: 11.5px; font-weight: 500;">
-                            <li class="breadcrumb-item d-flex align-items-center">
-                                <i class="bi bi-house text-muted me-1.5" style="font-size: 12px;"></i>
-                                <span class="text-muted opacity-50 me-1.5">></span>
-                                <a href="/dashboard" class="text-decoration-none text-muted">PolyMee</a>
-                            </li>
-                            <li class="breadcrumb-item active fw-semibold" id="breadcrumbActive" style="color: #0284C7;">Lịch hoạt động</li>
-                        </ol>
-                    </nav>
-                    <h1 class="fw-bold mb-0 tracking-tight" style="font-size: 19px; color: #0F172A;" id="activeScreenTitle">Lịch Hoạt Động & Điều Phối Ca Trực</h1>
-                    <p class="text-muted mb-0 d-none d-md-block" style="font-size: 11.5px;" id="activeScreenSubtitle">Theo dõi lịch sự kiện, ca trực và phân công nhiệm vụ.</p>
+                <div class="vr mx-0.5 d-none d-sm-block" style="height: 20px; opacity: 0.25;"></div>
+                <div class="d-flex flex-column justify-content-center min-w-0">
+                    <div class="d-flex align-items-center gap-2 min-w-0">
+                        <h1 class="fw-bold mb-0 tracking-tight text-truncate" style="font-size: 16px; color: #0F172A; line-height: 1.2;" id="activeScreenTitle">Lịch Hoạt Động & Điều Phối Ca Trực</h1>
+                        <span class="text-muted opacity-40 d-none d-md-inline">•</span>
+                        <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+                            <ol class="breadcrumb mb-0 align-items-center" style="font-size: 11.5px; font-weight: 500;">
+                                <li class="breadcrumb-item d-flex align-items-center">
+                                    <a href="/dashboard" class="text-decoration-none text-muted">PolyMee</a>
+                                </li>
+                                <li class="breadcrumb-item active fw-semibold" id="breadcrumbActive" style="color: #0284C7;">Lịch hoạt động</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <p class="text-muted mb-0 d-none d-xl-block text-truncate" style="font-size: 11px; line-height: 1.2;" id="activeScreenSubtitle">Theo dõi lịch sự kiện, ca trực và phân công nhiệm vụ.</p>
                 </div>
             </div>
 
@@ -3443,9 +3446,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <section class="spa-panel" id="panelMyShifts" style="display:none !important;">
                 
                 <!-- 4 Bento KPI Cards Chuẩn Mockup Image 15 -->
-                <div class="row g-3 mb-3 flex-shrink-0">
+                <div class="row g-2.5 mb-2 flex-shrink-0">
                     <div class="col-12 col-sm-6 col-xl-3">
-                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                        <div class="saas-card saas-kpi-card p-2.5 d-flex align-items-center gap-2.5">
                             <div class="saas-kpi-icon" style="background:#EFF6FF; color:#2563EB;">
                                 <i class="bi bi-calendar3 fs-5"></i>
                             </div>
@@ -3456,7 +3459,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-xl-3">
-                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                        <div class="saas-card saas-kpi-card p-2.5 d-flex align-items-center gap-2.5">
                             <div class="saas-kpi-icon" style="background:#FEF3C7; color:#D97706;">
                                 <i class="bi bi-layers fs-5"></i>
                             </div>
@@ -3467,7 +3470,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-xl-3">
-                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                        <div class="saas-card saas-kpi-card p-2.5 d-flex align-items-center gap-2.5">
                             <div class="saas-kpi-icon" style="background:#F0FDF4; color:#16A34A;">
                                 <i class="bi bi-check2-circle fs-5"></i>
                             </div>
@@ -3478,7 +3481,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-xl-3">
-                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                        <div class="saas-card saas-kpi-card p-2.5 d-flex align-items-center gap-2.5">
                             <div class="saas-kpi-icon" style="background:#FAF5FF; color:#9333EA;">
                                 <i class="bi bi-wallet2 fs-5"></i>
                             </div>
@@ -3496,7 +3499,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <!-- Bảng Danh Sách Bên Trái -->
                     <div class="my-shifts-main-view">
                         <!-- Filter Tabs & Toolbar -->
-                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                        <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
                             <div class="cal-view-segmented" id="myShiftsFilterTabs">
                                 <button type="button" class="cal-view-btn active" onclick="filterMyShifts('all', this)">Tất cả</button>
                                 <button type="button" class="cal-view-btn" onclick="filterMyShifts('upcoming', this)">Sắp diễn ra</button>
@@ -3521,108 +3524,108 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             <div class="table-responsive flex-1 overflow-y-auto">
                                 <table class="table table-hover align-middle mb-0">
                                     <thead class="sticky-th" style="background: #F8FAFC; border-bottom: 1px solid #E2E8F0;">
-                                        <tr style="font-size: 12.5px; color: #475569;">
-                                            <th style="padding: 12px 16px;">Thời gian</th>
+                                        <tr style="font-size: 12px; color: #475569;">
+                                            <th style="padding: 7px 12px;">Thời gian</th>
                                             <th>Công việc</th>
                                             <th>Địa điểm</th>
                                             <th>Minh chứng</th>
                                             <th>Trạng thái</th>
-                                            <th class="text-end" style="padding-right: 16px;"></th>
+                                            <th class="text-end" style="padding-right: 12px;"></th>
                                         </tr>
                                     </thead>
                                     <tbody id="myShiftsTableBody">
                                         <!-- Hàng 1 (Active) -->
                                         <tr class="cursor-pointer table-active" onclick="selectMyShiftRow(this, 1)" style="border-bottom: 1px solid #F1F5F9;">
-                                            <td style="padding: 14px 16px;">
+                                            <td style="padding: 7px 12px;">
                                                 <div class="fw-bold text-dark" style="font-size: 13.5px;">08:00 – 12:00</div>
-                                                <div class="text-muted small" style="font-size: 11.5px;">15/11/2026</div>
+                                                <div class="text-muted small" style="font-size: 11px;">15/11/2026</div>
                                             </td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2.5">
-                                                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=100&q=80" style="width: 44px; height: 32px; border-radius: 6px; object-fit: cover;">
+                                            <td style="padding: 7px 12px;">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=100&q=80" style="width: 40px; height: 30px; border-radius: 6px; object-fit: cover;">
                                                     <div>
                                                         <div class="fw-bold text-dark" style="font-size: 13.5px;">Ca 3: Media</div>
-                                                        <div class="text-muted small" style="font-size: 11.5px;">FPoly TechDay 2026</div>
+                                                        <div class="text-muted small" style="font-size: 11px;">FPoly TechDay 2026</div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div class="text-muted small" style="font-size: 12.5px;"><i class="bi bi-geo-alt me-1 text-primary"></i>Hội trường A</div>
+                                            <td style="padding: 7px 12px;">
+                                                <div class="text-muted small" style="font-size: 12px;"><i class="bi bi-geo-alt me-1 text-primary"></i>Hội trường A</div>
                                             </td>
-                                            <td>
+                                            <td style="padding: 7px 12px;">
                                                 <div class="d-flex align-items-center gap-2">
                                                     <i class="bi bi-google-play text-success" title="Google Drive"></i>
                                                     <span class="badge bg-light text-dark border" style="font-size: 11px;"><i class="bi bi-images me-1"></i>56</span>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <span class="badge rounded-pill" style="background: #DCFCE7; color: #16A34A; font-size: 11.5px; padding: 4px 10px;">
+                                            <td style="padding: 7px 12px;">
+                                                <span class="badge rounded-pill" style="background: #DCFCE7; color: #16A34A; font-size: 11px; padding: 3px 8px;">
                                                     <i class="bi bi-check me-1"></i>Đã nghiệm thu
                                                 </span>
                                             </td>
-                                            <td class="text-end" style="padding-right: 16px;">
+                                            <td class="text-end" style="padding-right: 12px;">
                                                 <button type="button" class="btn btn-sm btn-link text-muted p-0"><i class="bi bi-three-dots"></i></button>
                                             </td>
                                         </tr>
 
                                         <!-- Hàng 2 -->
                                         <tr class="cursor-pointer" onclick="selectMyShiftRow(this, 2)" style="border-bottom: 1px solid #F1F5F9;">
-                                            <td style="padding: 14px 16px;">
+                                            <td style="padding: 7px 12px;">
                                                 <div class="fw-bold text-dark" style="font-size: 13.5px;">13:00 – 17:00</div>
-                                                <div class="text-muted small" style="font-size: 11.5px;">18/11/2026</div>
+                                                <div class="text-muted small" style="font-size: 11px;">18/11/2026</div>
                                             </td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2.5">
-                                                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=100&q=80" style="width: 44px; height: 32px; border-radius: 6px; object-fit: cover;">
+                                            <td style="padding: 7px 12px;">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=100&q=80" style="width: 40px; height: 30px; border-radius: 6px; object-fit: cover;">
                                                     <div>
                                                         <div class="fw-bold text-dark" style="font-size: 13.5px;">Ca 2: Hậu cần</div>
-                                                        <div class="text-muted small" style="font-size: 11.5px;">Chung kết Khởi nghiệp trẻ</div>
+                                                        <div class="text-muted small" style="font-size: 11px;">Chung kết Khởi nghiệp trẻ</div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div class="text-muted small" style="font-size: 12.5px;"><i class="bi bi-geo-alt me-1 text-primary"></i>Hội trường B</div>
+                                            <td style="padding: 7px 12px;">
+                                                <div class="text-muted small" style="font-size: 12px;"><i class="bi bi-geo-alt me-1 text-primary"></i>Hội trường B</div>
                                             </td>
-                                            <td>
+                                            <td style="padding: 7px 12px;">
                                                 <span class="badge bg-light text-dark border" style="font-size: 11px;"><i class="bi bi-images me-1"></i>8</span>
                                             </td>
-                                            <td>
-                                                <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11.5px; padding: 4px 10px;">
+                                            <td style="padding: 7px 12px;">
+                                                <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11px; padding: 3px 8px;">
                                                     <i class="bi bi-clock me-1"></i>Chờ duyệt
                                                 </span>
                                             </td>
-                                            <td class="text-end" style="padding-right: 16px;">
+                                            <td class="text-end" style="padding-right: 12px;">
                                                 <button type="button" class="btn btn-sm btn-link text-muted p-0"><i class="bi bi-three-dots"></i></button>
                                             </td>
                                         </tr>
 
                                         <!-- Hàng 3 -->
                                         <tr class="cursor-pointer" onclick="selectMyShiftRow(this, 3)" style="border-bottom: 1px solid #F1F5F9;">
-                                            <td style="padding: 14px 16px;">
+                                            <td style="padding: 7px 12px;">
                                                 <div class="fw-bold text-dark" style="font-size: 13.5px;">17:30 – 18:30</div>
-                                                <div class="text-muted small" style="font-size: 11.5px;">20/11/2026</div>
+                                                <div class="text-muted small" style="font-size: 11px;">20/11/2026</div>
                                             </td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2.5">
-                                                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=100&q=80" style="width: 44px; height: 32px; border-radius: 6px; object-fit: cover;">
+                                            <td style="padding: 7px 12px;">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=100&q=80" style="width: 40px; height: 30px; border-radius: 6px; object-fit: cover;">
                                                     <div>
                                                         <div class="fw-bold text-dark" style="font-size: 13.5px;">Ca 3: Hậu cần</div>
-                                                        <div class="text-muted small" style="font-size: 11.5px;">Workshop AI</div>
+                                                        <div class="text-muted small" style="font-size: 11px;">Workshop AI</div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div class="text-muted small" style="font-size: 12.5px;"><i class="bi bi-geo-alt me-1 text-primary"></i>Phòng B201</div>
+                                            <td style="padding: 7px 12px;">
+                                                <div class="text-muted small" style="font-size: 12px;"><i class="bi bi-geo-alt me-1 text-primary"></i>Phòng B201</div>
                                             </td>
-                                            <td>
+                                            <td style="padding: 7px 12px;">
                                                 <span class="badge bg-light text-dark border" style="font-size: 11px;"><i class="bi bi-images me-1"></i>4</span>
                                             </td>
-                                            <td>
-                                                <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11.5px; padding: 4px 10px;">
+                                            <td style="padding: 7px 12px;">
+                                                <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11px; padding: 3px 8px;">
                                                     <i class="bi bi-clock me-1"></i>Chờ duyệt
                                                 </span>
                                             </td>
-                                            <td class="text-end" style="padding-right: 16px;">
+                                            <td class="text-end" style="padding-right: 12px;">
                                                 <button type="button" class="btn btn-sm btn-link text-muted p-0"><i class="bi bi-three-dots"></i></button>
                                             </td>
                                         </tr>
@@ -3631,17 +3634,17 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </div>
 
                             <!-- Pagination -->
-                            <div class="d-flex align-items-center justify-content-center gap-2 p-2.5 border-top" style="border-color: #F1F5F9 !important;">
-                                <button type="button" class="btn btn-sm btn-light border rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px;"><i class="bi bi-chevron-left" style="font-size: 11px;"></i></button>
-                                <span class="badge bg-primary text-white" style="font-size: 12px; padding: 5px 10px; border-radius: 6px;">1</span>
-                                <span class="badge bg-light text-dark border" style="font-size: 12px; padding: 5px 10px; border-radius: 6px; cursor: pointer;">2</span>
-                                <button type="button" class="btn btn-sm btn-light border rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px;"><i class="bi bi-chevron-right" style="font-size: 11px;"></i></button>
+                            <div class="d-flex align-items-center justify-content-center gap-2 p-2 border-top" style="border-color: #F1F5F9 !important;">
+                                <button type="button" class="btn btn-sm btn-light border rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 26px; height: 26px;"><i class="bi bi-chevron-left" style="font-size: 11px;"></i></button>
+                                <span class="badge bg-primary text-white" style="font-size: 11.5px; padding: 4px 9px; border-radius: 6px;">1</span>
+                                <span class="badge bg-light text-dark border" style="font-size: 11.5px; padding: 4px 9px; border-radius: 6px; cursor: pointer;">2</span>
+                                <button type="button" class="btn btn-sm btn-light border rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 26px; height: 26px;"><i class="bi bi-chevron-right" style="font-size: 11px;"></i></button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Drawer Bên Phải: Chi Tiết Nghiệm Thu Chuẩn Mockup Image 15 -->
-                    <div class="my-shifts-detail-drawer p-3.5" id="myShiftsDetailDrawer">
+                    <div class="my-shifts-detail-drawer p-3" id="myShiftsDetailDrawer">
                         <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
                             <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Chi tiết nghiệm thu</h6>
                             <button type="button" class="btn btn-sm btn-link text-muted p-0" onclick="closeMyShiftsDrawer()" title="Đóng">
@@ -5274,9 +5277,9 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <section id="panelOverviewReport" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
                 
                 <!-- 4 Bento KPI Cards Chuẩn Mockup Image 13 -->
-                <div class="row g-3 mb-3 flex-shrink-0">
+                <div class="row g-2.5 mb-2 flex-shrink-0">
                     <div class="col-12 col-sm-6 col-xl-3">
-                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                        <div class="saas-card saas-kpi-card p-2.5 d-flex align-items-center gap-2.5">
                             <div class="saas-kpi-icon" style="background:#EFF6FF; color:#2563EB;">
                                 <i class="bi bi-calendar3 fs-5"></i>
                             </div>
@@ -5287,7 +5290,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-xl-3">
-                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                        <div class="saas-card saas-kpi-card p-2.5 d-flex align-items-center gap-2.5">
                             <div class="saas-kpi-icon" style="background:#F0FDF4; color:#16A34A;">
                                 <i class="bi bi-layers fs-5"></i>
                             </div>
@@ -5298,7 +5301,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-xl-3">
-                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                        <div class="saas-card saas-kpi-card p-2.5 d-flex align-items-center gap-2.5">
                             <div class="saas-kpi-icon" style="background:#FEF3C7; color:#D97706;">
                                 <i class="bi bi-clock-history fs-5"></i>
                             </div>
@@ -5309,7 +5312,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-xl-3">
-                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                        <div class="saas-card saas-kpi-card p-2.5 d-flex align-items-center gap-2.5">
                             <div class="saas-kpi-icon" style="background:#F3E8FF; color:#9333EA;">
                                 <i class="bi bi-patch-check fs-5"></i>
                             </div>
@@ -5322,20 +5325,20 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- Thân Dashboard: 2 Cột Chuẩn Mockup Image 13 -->
-                <div class="row g-3 mb-3">
+                <div class="row g-2.5 mb-2 flex-1 min-h-0 overflow-hidden">
                     
                     <!-- Cột Trái: Việc Cần Làm Hôm Nay ⓘ -->
-                    <div class="col-12 col-lg-7">
-                        <div class="card border-0 rounded-3 shadow-xs h-100 p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
-                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                    <div class="col-12 col-lg-7 h-100 min-h-0 d-flex flex-column">
+                        <div class="card border-0 rounded-3 shadow-xs h-100 p-3 d-flex flex-column overflow-hidden" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                            <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom flex-shrink-0" style="border-color: #F1F5F9 !important;">
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-check2-square text-primary" style="font-size: 16px;"></i>
-                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Việc cần làm hôm nay</h6>
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Việc cần làm hôm nay</h6>
                                     <i class="bi bi-info-circle text-muted" style="font-size: 12px;" title="Danh sách các việc ưu tiên cần bạn xử lý trong ngày"></i>
                                 </div>
                             </div>
 
-                            <div class="d-flex flex-column gap-2.5">
+                            <div class="d-flex flex-column gap-2 overflow-y-auto flex-1 min-h-0 pe-1">
                                 <!-- Todo Item 1 -->
                                 <div class="dash-todo-card">
                                     <div class="d-flex align-items-center gap-3">
@@ -5403,12 +5406,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     </div>
 
                     <!-- Cột Phải: Lịch Sắp Tới → (Timeline dọc) -->
-                    <div class="col-12 col-lg-5">
-                        <div class="card border-0 rounded-3 shadow-xs h-100 p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
-                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                    <div class="col-12 col-lg-5 h-100 min-h-0 d-flex flex-column">
+                        <div class="card border-0 rounded-3 shadow-xs h-100 p-3 d-flex flex-column overflow-hidden" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                            <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom flex-shrink-0" style="border-color: #F1F5F9 !important;">
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-calendar3 text-primary" style="font-size: 16px;"></i>
-                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Lịch sắp tới</h6>
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Lịch sắp tới</h6>
                                 </div>
                                 <a href="javascript:void(0)" onclick="navigateToPage('calendar')" class="text-decoration-none text-muted" title="Xem tất cả lịch">
                                     <i class="bi bi-arrow-right"></i>
@@ -5416,7 +5419,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </div>
 
                             <!-- Timeline Dọc -->
-                            <div class="d-flex flex-column gap-3 pt-1">
+                            <div class="d-flex flex-column gap-2.5 pt-1 overflow-y-auto flex-1 min-h-0 pe-1">
                                 <!-- Timeline Item 1 -->
                                 <div class="dash-timeline-item">
                                     <div class="dash-timeline-date">
@@ -5473,17 +5476,17 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- 3 Thẻ Điều Hướng Nhanh Chân Trang (Quick Shortcuts) -->
-                <div class="row g-3">
+                <div class="row g-2.5 flex-shrink-0">
                     <div class="col-12 col-md-4">
-                        <div class="card border-0 rounded-3 shadow-xs p-3 cursor-pointer" onclick="navigateToPage('calendar')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
+                        <div class="card border-0 rounded-3 shadow-xs p-2.5 cursor-pointer" onclick="navigateToPage('calendar')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
                             <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #EFF6FF; color: #2563EB;">
+                                <div class="d-flex align-items-center gap-2.5">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; background: #EFF6FF; color: #2563EB;">
                                         <i class="bi bi-calendar3"></i>
                                     </div>
                                     <div>
-                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 14px;">Lịch trung tâm</h6>
-                                        <div class="text-muted small" style="font-size: 12px;">Xem sự kiện và ca trực</div>
+                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 13.5px;">Lịch trung tâm</h6>
+                                        <div class="text-muted small" style="font-size: 11.5px;">Xem sự kiện và ca trực</div>
                                     </div>
                                 </div>
                                 <i class="bi bi-arrow-right text-muted"></i>
@@ -5491,15 +5494,15 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="card border-0 rounded-3 shadow-xs p-3 cursor-pointer" onclick="navigateToPage('my-shifts')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
+                        <div class="card border-0 rounded-3 shadow-xs p-2.5 cursor-pointer" onclick="navigateToPage('my-shifts')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
                             <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #F0FDF4; color: #16A34A;">
+                                <div class="d-flex align-items-center gap-2.5">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; background: #F0FDF4; color: #16A34A;">
                                         <i class="bi bi-briefcase"></i>
                                     </div>
                                     <div>
-                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 14px;">Công việc của tôi</h6>
-                                        <div class="text-muted small" style="font-size: 12px;">Theo dõi công việc đang nhận</div>
+                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 13.5px;">Công việc của tôi</h6>
+                                        <div class="text-muted small" style="font-size: 11.5px;">Theo dõi công việc đang nhận</div>
                                     </div>
                                 </div>
                                 <i class="bi bi-arrow-right text-muted"></i>
@@ -5507,15 +5510,15 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="card border-0 rounded-3 shadow-xs p-3 cursor-pointer" onclick="navigateToPage('contract-dossier')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
+                        <div class="card border-0 rounded-3 shadow-xs p-2.5 cursor-pointer" onclick="navigateToPage('contract-dossier')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
                             <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #FAF5FF; color: #9333EA;">
+                                <div class="d-flex align-items-center gap-2.5">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; background: #FAF5FF; color: #9333EA;">
                                         <i class="bi bi-file-earmark-check"></i>
                                     </div>
                                     <div>
-                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 14px;">Nghiệm thu & Hợp đồng</h6>
-                                        <div class="text-muted small" style="font-size: 12px;">Quản lý nghiệm thu và hồ sơ</div>
+                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 13.5px;">Nghiệm thu & Hợp đồng</h6>
+                                        <div class="text-muted small" style="font-size: 11.5px;">Quản lý nghiệm thu và hồ sơ</div>
                                     </div>
                                 </div>
                                 <i class="bi bi-arrow-right text-muted"></i>
