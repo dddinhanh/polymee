@@ -178,9 +178,15 @@ class DashboardController extends BaseController
         $points = (int)($_POST['points'] ?? 10);
         $remunerationAmount = (int)($_POST['remuneration_amount'] ?? 200000);
         $skillRequired = trim($_POST['skill_required'] ?? 'Kỹ năng làm việc nhóm & trách nhiệm');
-        $shiftType = in_array(strtoupper($_POST['shift_type'] ?? ''), ['MEDIA', 'FACILITY'], true) 
-                     ? strtoupper($_POST['shift_type']) 
+        $shiftTypeInput = strtoupper(trim($_POST['shift_type'] ?? ''));
+        $shiftType = in_array($shiftTypeInput, ['MEDIA', 'FACILITY', 'NONE'], true) 
+                     ? $shiftTypeInput 
                      : (stripos($name, 'media') !== false || stripos($name, 'quay') !== false || stripos($name, 'chụp') !== false || stripos($name, 'ảnh') !== false ? 'MEDIA' : 'FACILITY');
+
+        if ($shiftType === 'NONE') {
+            $targetQty = 0;
+            $remunerationAmount = 0;
+        }
 
         if (empty($name) || empty($startTime) || empty($endTime) || $eventId <= 0) {
             $this->json(['success' => false, 'message' => 'Vui lòng điền đầy đủ thông tin sự kiện, tên ca và thời gian.'], 400);
@@ -392,9 +398,43 @@ class DashboardController extends BaseController
 
         $assignmentId = (int)($_POST['assignment_id'] ?? 0);
         $lecturerName = trim($_POST['lecturer_name'] ?? ($this->currentUser['full_name'] ?? 'Giảng viên phụ trách'));
+        $decision = trim($_POST['decision'] ?? 'approve');
+        $note = trim($_POST['note'] ?? '');
 
         if ($assignmentId <= 0) {
             $this->json(['success' => false, 'message' => 'Hồ sơ không hợp lệ.'], 400);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+
+        // Xử lý khi Giảng viên chọn "Yêu cầu bổ sung"
+        if ($decision === 'request_more') {
+            $stmt = $db->prepare("UPDATE shift_assignments SET 
+                                    lecturer_verified = 0, 
+                                    lecturer_name = :lname, 
+                                    accounting_status = 'Revision_Required',
+                                    accounting_note = :note,
+                                    school_status = 'Pending'
+                                  WHERE id = :id");
+            $stmt->execute([
+                ':lname' => $lecturerName,
+                ':note' => $note ?: 'Cần bổ sung thêm minh chứng rõ nét hơn',
+                ':id' => $assignmentId
+            ]);
+
+            $this->logActivity(
+                'REQUEST_PROOF_REVISION',
+                'shift_assignment',
+                $assignmentId,
+                "Giảng viên {$lecturerName} đã gửi yêu cầu bổ sung minh chứng: " . ($note ?: 'Minh chứng chưa đủ')
+            );
+
+            $this->json([
+                'success' => true,
+                'message' => 'Đã gửi yêu cầu bổ sung minh chứng thành công! CTV sẽ nhận được thông báo để cập nhật.',
+                'decision' => 'request_more'
+            ]);
             return;
         }
 
@@ -796,6 +836,140 @@ class DashboardController extends BaseController
             'message' => "Đã cấp quyền '{$targetRole['name']}' thành công cho người dùng {$targetUser['full_name']}!",
             'role_name' => $targetRole['name'],
             'role_desc' => $targetRole['description']
+        ]);
+    }
+
+    /**
+     * API Tạo tài khoản người dùng mới (Dành cho Quản trị viên Admin)
+     */
+    public function createUser(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['success' => false, 'message' => 'Phương thức không hợp lệ'], 405);
+            return;
+        }
+
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (!$permissions['canManageRoles']) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền tạo tài khoản mới. Chỉ Quản trị viên (Admin) mới có quyền!'], 403);
+            return;
+        }
+
+        $fullName = trim($_POST['full_name'] ?? '');
+        $studentCode = strtoupper(trim($_POST['student_code'] ?? ''));
+        $email = strtolower(trim($_POST['email'] ?? ''));
+        $roleId = (int)($_POST['role_id'] ?? 4);
+        $phone = trim($_POST['phone'] ?? '');
+        $department = trim($_POST['department'] ?? 'Công nghệ Thông tin');
+        $skills = trim($_POST['skills'] ?? 'Cộng tác viên hỗ trợ sự kiện');
+        $rawPassword = $_POST['password'] ?? '123456';
+
+        if (empty($fullName) || empty($studentCode) || empty($email) || $roleId <= 0) {
+            $this->json(['success' => false, 'message' => 'Vui lòng điền đầy đủ: Họ tên, Mã số (MSSV), Email và Vai trò.'], 422);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+
+        // Kiểm tra trùng lặp email hoặc mã số
+        $stmtCheck = $db->prepare("SELECT id FROM users WHERE student_code = :code OR email = :email");
+        $stmtCheck->execute([':code' => $studentCode, ':email' => $email]);
+        if ($stmtCheck->fetch()) {
+            $this->json(['success' => false, 'message' => 'Mã sinh viên/cán bộ hoặc Email này đã tồn tại trong hệ thống!'], 409);
+            return;
+        }
+
+        $passwordHash = password_hash($rawPassword, PASSWORD_DEFAULT);
+
+        $stmtInsert = $db->prepare("INSERT INTO users (student_code, full_name, email, password_hash, phone, role_id, department, skills, is_active, created_at)
+                                     VALUES (:student_code, :full_name, :email, :password_hash, :phone, :role_id, :department, :skills, 1, datetime('now', 'localtime'))");
+        $stmtInsert->execute([
+            ':student_code' => $studentCode,
+            ':full_name' => $fullName,
+            ':email' => $email,
+            ':password_hash' => $passwordHash,
+            ':phone' => $phone,
+            ':role_id' => $roleId,
+            ':department' => $department,
+            ':skills' => $skills
+        ]);
+
+        $newUserId = (int)$db->lastInsertId();
+
+        $stmtRole = $db->prepare("SELECT name FROM roles WHERE id = :id");
+        $stmtRole->execute([':id' => $roleId]);
+        $roleName = $stmtRole->fetchColumn() ?: 'Thành viên';
+
+        $this->logActivity('CREATE_USER', 'USER', $newUserId, "Admin [{$this->currentUser['full_name']}] tạo tài khoản mới [{$fullName}] ({$studentCode}) với vai trò [{$roleName}].");
+
+        $this->json([
+            'success' => true,
+            'message' => "Tạo tài khoản {$fullName} ({$studentCode}) thành công!",
+            'user_id' => $newUserId,
+            'user' => [
+                'id' => $newUserId,
+                'full_name' => $fullName,
+                'student_code' => $studentCode,
+                'email' => $email,
+                'phone' => $phone,
+                'role_id' => $roleId,
+                'role_name' => $roleName,
+                'department' => $department,
+                'skills' => $skills,
+                'is_active' => 1
+            ]
+        ]);
+    }
+
+    /**
+     * API Khóa / Kích hoạt tài khoản người dùng (Dành cho Quản trị viên Admin)
+     */
+    public function toggleUserStatus(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['success' => false, 'message' => 'Phương thức không hợp lệ'], 405);
+            return;
+        }
+
+        $permissions = RolePermissionHelper::getPermissions($this->currentUser);
+        if (!$permissions['canManageRoles']) {
+            $this->json(['success' => false, 'message' => 'Bạn không có quyền quản lý trạng thái tài khoản. Chỉ Quản trị viên (Admin) mới có quyền!'], 403);
+            return;
+        }
+
+        $userId = (int)($_POST['user_id'] ?? 0);
+        $newStatus = (int)($_POST['is_active'] ?? 1);
+
+        if ($userId <= 0) {
+            $this->json(['success' => false, 'message' => 'Mã tài khoản không hợp lệ'], 422);
+            return;
+        }
+
+        if ($userId === (int)($this->currentUser['id'] ?? 0)) {
+            $this->json(['success' => false, 'message' => 'Bạn không thể tự khóa tài khoản quản trị của chính mình!'], 400);
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+        $stmtUser = $db->prepare("SELECT full_name, student_code FROM users WHERE id = :id");
+        $stmtUser->execute([':id' => $userId]);
+        $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            $this->json(['success' => false, 'message' => 'Không tìm thấy người dùng'], 404);
+            return;
+        }
+
+        $stmtUpdate = $db->prepare("UPDATE users SET is_active = :status WHERE id = :id");
+        $stmtUpdate->execute([':status' => $newStatus, ':id' => $userId]);
+
+        $statusText = ($newStatus === 1) ? 'Kích hoạt / Mở khóa' : 'Khóa tài khoản';
+        $this->logActivity('TOGGLE_USER_STATUS', 'USER', $userId, "Admin [{$this->currentUser['full_name']}] đã {$statusText} cho tài khoản [{$user['full_name']}] ({$user['student_code']}).");
+
+        $this->json([
+            'success' => true,
+            'message' => "Đã {$statusText} thành công cho người dùng {$user['full_name']}!",
+            'is_active' => $newStatus
         ]);
     }
 

@@ -845,3 +845,250 @@ table td .btn-fpt-sm {
     font-size: 11px !important;
     display: inline-block;
 }
+
+/* =========================================================
+   ENTERPRISE SAAS DESIGN SYSTEM TOKENS (Linear / Stripe Standard)
+   ========================================================= */
+:root {
+    --saas-bg: #F8FAFC;
+    --saas-card: #FFFFFF;
+    --saas-ink: #0F172A;
+    --saas-muted: #64748B;
+    --saas-primary: #2563EB;
+    --saas-primary-hover: #1D4ED8;
+    --saas-primary-soft: #EFF6FF;
+    --saas-line: #E2E8F0;
+    --saas-success: #16A34A;
+    --saas-warning: #D97706;
+    --saas-danger: #DC2626;
+    --saas-radius: 10px;
+}
+
+.saas-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+    transition: all 0.15s ease;
+}
+
+.saas-card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.saas-kpi-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.saas-kpi-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.saas-kpi-val {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+}
+
+.saas-kpi-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748B;
+    margin-bottom: 2px;
+}
+
+.saas-badge-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.saas-badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+.saas-badge-active {
+    background: #F0FDF4;
+    color: #16A34A;
+    border: 1px solid #DCFCE7;
+}
+.saas-badge-locked {
+    background: #FEF2F2;
+    color: #DC2626;
+    border: 1px solid #FEE2E2;
+}
+
+.saas-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+}
+.saas-btn-primary {
+    background: #2563EB;
+    color: #FFFFFF !important;
+}
+.saas-btn-primary:hover {
+    background: #1D4ED8;
+    color: #FFFFFF !important;
+}
+.saas-btn-secondary {
+    background: #FFFFFF;
+    border-color: #E2E8F0;
+    color: #334155 !important;
+}
+.saas-btn-secondary:hover {
+    background: #F8FAFC;
+    border-color: #CBD5E1;
+}
+
+/* =========================================================
+   MODAL DUYỆT MINH CHỨNG – HẬU CẦN (PIXEL-PERFECT MOCKUP)
+   ========================================================= */
+.proof-modal-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+}
+
+.proof-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+@media (max-width: 768px) {
+    .proof-photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.proof-photo-item {
+    aspect-ratio: 4/3;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #E2E8F0;
+    background: #0F172A;
+    position: relative;
+    cursor: pointer;
+}
+.proof-photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.proof-photo-item:hover img {
+    transform: scale(1.05);
+    opacity: 0.95;
+}
+
+.proof-criteria-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    cursor: pointer;
+    user-select: none;
+}
+.proof-criteria-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid #CBD5E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1.5px;
+    transition: all 0.15s ease;
+}
+.proof-criteria-item.is-checked .proof-criteria-check {
+    background: #16A34A;
+    border-color: #16A34A;
+    color: #FFFFFF;
+}
+
+.proof-decision-box {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.proof-decision-box:hover {
+    border-color: #94A3B8;
+}
+.proof-decision-box.is-selected {
+    border: 1.5px solid #2563EB !important;
+    background: #F8FAFC !important;
+}
+
+.proof-radio-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #CBD5E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.15s ease;
+}
+.proof-decision-box.is-selected .proof-radio-circle {
+    border-color: #2563EB;
+}
+.proof-radio-circle::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2563EB;
+    display: none;
+}
+.proof-decision-box.is-selected .proof-radio-circle::after {
+    display: block;
+}
+

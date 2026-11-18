@@ -138,7 +138,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     .u040 {
-        --rw: 76px;
+        --rw: 72px;
         position: relative;
         display: flex;
         flex-direction: column;
@@ -148,7 +148,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
     }
 
     .u040.is-wide {
-        --rw: 252px;
+        --rw: 240px;
     }
 
     .u040-rail {
@@ -2473,124 +2473,280 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 <ul class="u040-nav" id="railNav">
                     <li class="u040-hl" role="presentation"></li>
 
-                    <!-- 1. LỊCH TRÌNH & ĐIỀU PHỐI -->
-                    <li class="u040-section-label"><span>LỊCH TRÌNH & ĐIỀU PHỐI</span></li>
+                    <?php 
+                    $roleCode = $perms['role'] ?? 'CTV';
+                    ?>
+
+                    <?php if ($roleCode === 'ADMIN'): ?>
+                    <!-- ================= ROLE ADMIN ================= -->
+                    <li class="u040-section-label"><span>TỔNG QUAN</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:0" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & phân rã ca trực">
+                        <button class="u040-it" type="button" data-page="overview-report" onclick="navigateToPage('overview-report')" title="Dashboard báo cáo hệ thống">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+                            <span>Dashboard Báo Cáo</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & phân rã ca trực">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
                             <span>Lịch Hoạt Động</span>
-                            <?php if (!empty($events)): ?>
-                            <em class="u040-bd" aria-label="Sự kiện"><?= count($events) ?></em>
-                            <?php endif; ?>
+                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
                         </button>
                     </li>
-                    <?php if ($perms['canViewMyShifts']): ?>
-                    <li>
-                        <button class="u040-it" type="button" style="--i:1" data-page="my-shifts" onclick="navigateToPage('my-shifts')" title="Ca trực cá nhân đã đăng ký & Nộp minh chứng">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>
-                            <span>Ca Trực Của Tôi</span>
-                            <?php 
-                            $myRegisteredShiftsCount = count(array_filter($shifts ?? [], fn($s) => !empty($s['is_registered_by_me']) || !empty($s['is_registered'])));
-                            if ($myRegisteredShiftsCount > 0): 
-                            ?>
-                            <em class="u040-bd" aria-label="Ca trực cá nhân"><?= $myRegisteredShiftsCount ?></em>
-                            <?php endif; ?>
-                        </button>
-                    </li>
-                    <?php endif; ?>
-                    <?php if ($perms['canViewContracts']): ?>
-                    <li>
-                        <button class="u040-it" type="button" style="--i:2" data-page="contract-dossier" onclick="navigateToPage('contract-dossier')" title="Hồ Sơ Hợp Đồng Nghiệm Thu">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 9V3.5L18.5 8H14zM8 13h8M8 17h5"/></svg>
-                            <span>Hồ Sơ Hợp Đồng</span>
-                            <?php 
-                            $contractsCount = count(array_filter($accountingList ?? [], fn($a) => !empty($a['contract_code']) || in_array($a['status'] ?? '', ['Accepted', 'Signed_Paid'], true)));
-                            if ($contractsCount === 0 && !empty($accountingList)) $contractsCount = count($accountingList);
-                            if ($contractsCount > 0): 
-                            ?>
-                            <em class="u040-bd" aria-label="Hồ sơ hợp đồng"><?= $contractsCount ?></em>
-                            <?php endif; ?>
-                        </button>
-                    </li>
-                    <?php endif; ?>
 
-                    <!-- 2. TÀI CHÍNH & VNEID (Phân Quyền Kế Toán & Hồ Sơ) -->
-                    <?php if ($perms['canViewAccounting'] || $perms['canViewCtvProfiles'] || $perms['canViewMyProfile'] || $perms['canViewSubmissions']): ?>
-                    <li class="u040-section-label"><span>TÀI CHÍNH & VNEID</span></li>
-                    <?php if ($perms['canViewAccounting']): ?>
+                    <li class="u040-section-label"><span>QUẢN LÝ</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:3" data-page="accounting" onclick="navigateToPage('accounting')" title="Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7h6M9 11h6M9 15h4M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
-                            <span>Nghiệm Thu Kế Toán</span>
-                            <em class="u040-bd" aria-label="Hồ sơ nghiệm thu"><?= count($accountingList) ?></em>
+                        <button class="u040-it" type="button" data-page="user-roles" onclick="navigateToPage('user-roles')" title="Quản lý tài khoản & phân quyền">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+                            <span>Tài Khoản & Phân Quyền</span>
+                            <em class="u040-bd"><?= count($allUsers ?? []) ?></em>
                         </button>
                     </li>
-                    <?php endif; ?>
-                    <?php if (!empty($perms['canViewCtvProfiles'])): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:4" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="Quản lý hồ sơ định danh CCCD, VNeID & STK ngân hàng của CTV">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h2"/></svg>
-                            <span>Quản Lý Hồ Sơ CTV</span>
-                            <em class="u040-bd" aria-label="CTV Count"><?= count($ctvRoster ?? []) ?></em>
+                        <button class="u040-it" type="button" data-page="audit-trail" onclick="navigateToPage('audit-trail')" title="Nhật ký hoạt động hệ thống (Audit Trail)">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                            <span>Nhật Ký Hoạt Động</span>
                         </button>
                     </li>
-                    <?php endif; ?>
-                    <?php if ($perms['canViewSubmissions']): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:5" data-page="submissions" onclick="navigateToPage('submissions')" title="Thẩm định nghiệm thu minh chứng Google Drive">
+                        <button class="u040-it" type="button" data-page="events" onclick="navigateToPage('events')" title="Quản lý sự kiện">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>
+                            <span>Sự Kiện</span>
+                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="Cộng tác viên & Hồ sơ định danh">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <span>Cộng Tác Viên</span>
+                            <em class="u040-bd"><?= count($ctvRoster ?? []) ?></em>
+                        </button>
+                    </li>
+
+                    <li class="u040-section-label"><span>VẬN HÀNH</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="rooms-booking" onclick="navigateToPage('rooms-booking')" title="Phòng & Đặt lịch">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+                            <span>Phòng & Đặt Lịch</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="submissions" onclick="navigateToPage('submissions')" title="Thẩm định nghiệm thu minh chứng">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5V13M5 9V4.5M12 19.5V11M12 7V4.5M19 19.5V15M19 11V4.5M3 13h4M10 7h4M17 15h4"/></svg>
-                            <span>Minh Chứng Drive</span>
+                            <span>Nghiệm Thu</span>
                             <?php 
                             $subsCount = count(array_filter($accountingList ?? [], fn($a) => !empty($a['proof_image_url']) || !empty($a['drive_url'])));
-                            if ($subsCount === 0 && !empty($accountingList)) $subsCount = count($accountingList);
-                            if ($subsCount > 0): 
+                            if ($subsCount > 0): ?><em class="u040-bd"><?= $subsCount ?></em><?php endif; 
                             ?>
-                            <em class="u040-bd" aria-label="Minh chứng"><?= $subsCount ?></em>
-                            <?php endif; ?>
                         </button>
                     </li>
-                    <?php endif; ?>
-                    <?php endif; ?>
-
-                    <!-- 3. QUẢN LÝ TỔ CHỨC -->
-                    <?php if ($perms['canViewEvents']): ?>
-                    <li class="u040-section-label"><span>QUẢN LÝ TỔ CHỨC</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:6" data-page="events" onclick="navigateToPage('events')" title="Quản lý sự kiện & điều phối ca trực">
+                        <button class="u040-it" type="button" data-page="accounting" onclick="navigateToPage('accounting')" title="Hợp đồng & Thanh toán quyết toán">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7h6M9 11h6M9 15h4M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+                            <span>Hợp Đồng & Thanh Toán</span>
+                            <em class="u040-bd"><?= count($accountingList) ?></em>
+                        </button>
+                    </li>
+
+                    <li class="u040-section-label"><span>HỆ THỐNG</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="profile-settings" onclick="navigateToPage('profile-settings')" title="Cài đặt hệ thống">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                            <span>Cài Đặt</span>
+                        </button>
+                    </li>
+
+                    <?php elseif ($roleCode === 'LECTURER'): ?>
+                    <!-- ================= ROLE ORGANIZER (GIẢNG VIÊN / BTC) ================= -->
+                    <li class="u040-section-label"><span>TỔNG QUAN</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="overview-report" onclick="navigateToPage('overview-report')" title="Dashboard báo cáo tổ chức">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+                            <span>Dashboard Báo Cáo</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & phân rã ca trực">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
+                            <span>Lịch Hoạt Động</span>
+                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
+                        </button>
+                    </li>
+
+                    <li class="u040-section-label"><span>TỔ CHỨC SỰ KIỆN</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="events" onclick="navigateToPage('events')" title="Quản lý sự kiện">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>
                             <span>Quản Lý Sự Kiện</span>
-                            <?php if (!empty($events)): ?>
-                            <em class="u040-bd" aria-label="Sự kiện"><?= count($events) ?></em>
-                            <?php endif; ?>
+                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
                         </button>
                     </li>
-                    <?php endif; ?>
+                    <li>
+                        <button class="u040-it" type="button" data-page="shifts-sessions" onclick="navigateToPage('shifts-sessions')" title="Buổi hoạt động & ca trực">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>Buổi Hoạt Động & Ca Trực</span>
+                            <em class="u040-bd"><?= count($shifts ?? []) ?></em>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="ctv-assignments" onclick="navigateToPage('ctv-assignments')" title="Cộng tác viên & Phân công nhiệm vụ">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <span>CTV & Phân Công</span>
+                        </button>
+                    </li>
 
-                    <!-- 4. HỆ THỐNG & TÀI KHOẢN -->
-                    <li class="u040-section-label"><span>HỆ THỐNG & TÀI KHOẢN</span></li>
+                    <li class="u040-section-label"><span>NGHIỆM THU</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:7" data-page="profile-settings" onclick="navigateToPage('profile-settings')" title="Cài đặt thông tin tài khoản cá nhân, CCCD & STK">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <span>Tài Khoản Cá Nhân</span>
+                        <button class="u040-it" type="button" data-page="submissions" onclick="navigateToPage('submissions')" title="Duyệt minh chứng ảnh hiện trường & Google Drive">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5V13M5 9V4.5M12 19.5V11M12 7V4.5M19 19.5V15M19 11V4.5M3 13h4M10 7h4M17 15h4"/></svg>
+                            <span>Duyệt Minh Chứng</span>
+                            <?php 
+                            $pendingVerifyCount = count(array_filter($accountingList ?? [], fn($a) => empty($a['lecturer_verified'])));
+                            if ($pendingVerifyCount > 0): ?><em class="u040-bd"><?= $pendingVerifyCount ?></em><?php endif; 
+                            ?>
                         </button>
                     </li>
-                    <?php if (!empty($perms['canManageRoles'])): ?>
                     <li>
-                        <button class="u040-it" type="button" style="--i:8" data-page="user-roles" onclick="navigateToPage('user-roles')" title="Trung tâm cấp quyền & phân vai trò người dùng">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                            <span>Cấp Quyền</span>
-                            <?php if (!empty($roles)): ?>
-                            <em class="u040-bd" aria-label="Cấp quyền"><?= count($roles) ?></em>
-                            <?php endif; ?>
+                        <button class="u040-it" type="button" data-page="contract-dossier" onclick="navigateToPage('contract-dossier')" title="Hợp đồng nghiệm thu điện tử">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 9V3.5L18.5 8H14zM8 13h8M8 17h5"/></svg>
+                            <span>Hợp Đồng Nghiệm Thu</span>
                         </button>
                     </li>
-                    <?php endif; ?>
-                    <?php if (!empty($perms['canViewAuditLogs'])): ?>
+
+                    <li class="u040-section-label"><span>THỐNG KÊ</span></li>
                     <li>
-                        <button class="u040-it" type="button" style="--i:9" data-page="audit-trail" onclick="navigateToPage('audit-trail')" title="Nhật ký lịch sử thao tác hệ thống (Audit Trail)">
+                        <button class="u040-it" type="button" data-page="event-reports" onclick="navigateToPage('event-reports')" title="Báo cáo hiệu quả sự kiện">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                            <span>Báo Cáo Sự Kiện</span>
+                        </button>
+                    </li>
+
+                    <?php elseif ($roleCode === 'STAFF'): ?>
+                    <!-- ================= ROLE STAFF (HÀNH CHÍNH / CSVC) ================= -->
+                    <li class="u040-section-label"><span>TỔNG QUAN</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="overview-report" onclick="navigateToPage('overview-report')" title="Dashboard báo cáo vận hành">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+                            <span>Dashboard Báo Cáo</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & CSVC">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
+                            <span>Lịch Hoạt Động</span>
+                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
+                        </button>
+                    </li>
+
+                    <li class="u040-section-label"><span>VẬN HÀNH</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="rooms-booking" onclick="navigateToPage('rooms-booking')" title="Phòng & Thiết bị">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+                            <span>Phòng & Thiết Bị</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="room-calendar" onclick="navigateToPage('room-calendar')" title="Lịch đặt phòng">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+                            <span>Lịch Đặt Phòng</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="Hồ sơ CTV & CCCD / STK">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <span>Hồ Sơ CTV</span>
+                        </button>
+                    </li>
+
+                    <li class="u040-section-label"><span>TÀI CHÍNH</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="contract-dossier" onclick="navigateToPage('contract-dossier')" title="Hợp đồng & Trình ký chữ ký số">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 9V3.5L18.5 8H14zM8 13h8M8 17h5"/></svg>
+                            <span>Hợp Đồng & Trình Ký</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="accounting" onclick="navigateToPage('accounting')" title="Thanh toán & Quyết toán thù lao">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7h6M9 11h6M9 15h4M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+                            <span>Thanh Toán & Quyết Toán</span>
+                            <em class="u040-bd"><?= count($accountingList) ?></em>
+                        </button>
+                    </li>
+
+                    <li class="u040-section-label"><span>THEO DÕI</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="staff-reports" onclick="navigateToPage('staff-reports')" title="Báo cáo vận hành">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                            <span>Báo Cáo</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="audit-trail" onclick="navigateToPage('audit-trail')" title="Nhật ký hoạt động kiểm toán">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
-                            <span>Nhật Ký Audit Trail</span>
-                            <em class="u040-bd" aria-label="Logs"><?= count($activityLogs) > 99 ? '99+' : count($activityLogs) ?></em>
+                            <span>Nhật Ký Hoạt Động</span>
+                        </button>
+                    </li>
+
+                    <?php else: ?>
+                    <!-- ================= ROLE STUDENT / MEDIA (CTV) ================= -->
+                    <li class="u040-section-label"><span>TỔNG QUAN</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="overview-report" onclick="navigateToPage('overview-report')" title="Dashboard của tôi">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+                            <span>Dashboard Của Tôi</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & đăng ký ca">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
+                            <span>Lịch Hoạt Động</span>
+                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
+                        </button>
+                    </li>
+
+                    <li class="u040-section-label"><span>CÔNG VIỆC</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="explore-jobs" onclick="navigateToPage('explore-jobs')" title="Khám phá cơ hội nhận ca trực">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <span>Khám Phá Công Việc</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="my-shifts" onclick="navigateToPage('my-shifts')" title="Công việc của tôi đã đăng ký">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>
+                            <span>Công Việc Của Tôi</span>
+                            <?php 
+                            $myRegisteredShiftsCount = count(array_filter($shifts ?? [], fn($s) => !empty($s['is_registered_by_me']) || !empty($s['is_registered'])));
+                            if ($myRegisteredShiftsCount > 0): ?><em class="u040-bd"><?= $myRegisteredShiftsCount ?></em><?php endif; 
+                            ?>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="my-proof-submission" onclick="navigateToPage('my-proof-submission')" title="Nộp minh chứng hiện trường hoặc Google Drive">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <span>Nộp Minh Chứng</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="my-verification-status" onclick="navigateToPage('my-verification-status')" title="Trạng thái nghiệm thu công việc">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                            <span>Trạng Thái Nghiệm Thu</span>
+                        </button>
+                    </li>
+
+                    <li class="u040-section-label"><span>TÀI CHÍNH</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="my-contracts" onclick="navigateToPage('my-contracts')" title="Hợp đồng điện tử & Thù lao nhận được">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                            <span>Hợp Đồng & Thù Lao</span>
+                        </button>
+                    </li>
+
+                    <li class="u040-section-label"><span>CÁ NHÂN</span></li>
+                    <li>
+                        <button class="u040-it" type="button" data-page="profile-settings" onclick="navigateToPage('profile-settings')" title="Hồ sơ cá nhân & CCCD / STK">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <span>Hồ Sơ Cá Nhân</span>
                         </button>
                     </li>
                     <?php endif; ?>
@@ -3264,7 +3420,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                                 <span style="font-size: 11px;">Hợp Đồng</span>
                                             </button>
                                             <?php if ((empty($acc['lecturer_verified']) || $acc['lecturer_verified'] == 0) && $perms['canVerifyLecturer']): ?>
-                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-2.5 py-1 shadow-xs fw-semibold d-inline-flex align-items-center gap-1 text-white" onclick="verifyLecturerAcceptance(<?= $acc['assignment_id'] ?>)" title="Giảng viên duyệt nghiệm thu">
+                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill px-2.5 py-1 shadow-xs fw-semibold d-inline-flex align-items-center gap-1 text-white" onclick="openFacilityProofModal(<?= $acc['assignment_id'] ?>)" title="Giảng viên duyệt nghiệm thu">
                                                 <i class="bi bi-check-lg" style="font-size: 11px;"></i>
                                                 <span style="font-size: 11px;">Duyệt</span>
                                             </button>
@@ -3784,8 +3940,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                         </div>
                                         <?php else: ?>
                                         <div>
-                                            <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-2.5 fw-medium d-inline-flex align-items-center gap-1.5 shadow-2xs" style="font-size: 11px;" onclick="previewProofModal('<?= addslashes($subItem['full_name']) ?>', '<?= addslashes($subItem['shift_name']) ?>', '<?= addslashes($subProofUrl) ?>', '<?= addslashes($subItem['proof_note'] ?? '') ?>')">
-                                                <i class="bi bi-eye text-primary"></i> Xem Ảnh
+                                            <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-2.5 fw-medium d-inline-flex align-items-center gap-1.5 shadow-2xs" style="font-size: 11px;" onclick="openFacilityProofModal(<?= $subAssId ?>)">
+                                                <i class="bi bi-eye text-primary"></i> Xem Chi Tiết
                                             </button>
                                         </div>
                                         <?php endif; ?>
@@ -3824,7 +3980,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                                 <i class="bi bi-patch-check-fill text-success me-1"></i> Đã Duyệt
                                             </button>
                                             <?php elseif ($hasProof): ?>
-                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill py-1 px-2.5 shadow-xs" style="font-size: 11px;" onclick="verifyLecturerAcceptance(<?= $subAssId ?>)">
+                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill py-1 px-2.5 shadow-xs" style="font-size: 11px;" onclick="openFacilityProofModal(<?= $subAssId ?>)">
                                                 <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
                                             </button>
                                             <?php else: ?>
@@ -4709,6 +4865,243 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <i class="bi bi-patch-check-fill me-1"></i> Thông tin số CCCD đã khớp với ảnh chụp màn hình ứng dụng VNeID định danh điện tử Mức 2.
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
+     MODAL DUYỆT MINH CHỨNG – HẬU CẦN (PIXEL-PERFECT THEO MOCKUP)
+     ========================================================= -->
+<div class="modal fade" id="modalVerifyFacilityProof" tabindex="-1" aria-hidden="true" style="z-index: 1090;">
+    <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 1080px;">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; background: #FFFFFF;">
+            
+            <!-- Modal Header -->
+            <div class="modal-header border-0 pb-1 px-4 pt-3.5 d-flex align-items-start justify-content-between">
+                <div>
+                    <h5 class="fw-bold mb-0 text-dark" style="font-size: 19px; letter-spacing: -0.015em;">Duyệt minh chứng – Hậu cần</h5>
+                    <p class="text-muted mb-0" style="font-size: 13px;">Kiểm tra minh chứng, đối chiếu tiêu chí và quyết định nghiệm thu.</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body px-4 pt-2 pb-4">
+                
+                <!-- TOP CARD: Thông tin CTV & Sự kiện -->
+                <div class="proof-modal-card p-3 mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <!-- Left: CTV Info -->
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0" id="vfCtvAvatar" style="width: 44px; height: 44px; background: #FFEDD5; color: #C2410C; font-size: 17px;">
+                            H
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-0.5">
+                                <span class="fw-bold text-dark" id="vfCtvName" style="font-size: 15px;">Hoàng Minh Luận</span>
+                                <span class="badge" style="background: #EFF6FF; color: #2563EB; border: 1px solid #DBEAFE; font-size: 10px; font-weight: 600; padding: 2px 6px;">
+                                    ◆ CTV
+                                </span>
+                            </div>
+                            <div class="text-muted small" id="vfCtvMeta" style="font-size: 12px;">
+                                PI03015 • hoangminhluan@fpt.edu.vn
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Event & Shift Meta -->
+                    <div class="d-flex flex-column gap-1 text-end" style="font-size: 12.5px;">
+                        <div class="text-dark">
+                            <span class="text-muted me-1.5"><i class="bi bi-calendar-event me-1"></i>Sự kiện:</span>
+                            <strong id="vfEventTitle">Chung kết Cuộc thi Khởi nghiệp trẻ</strong>
+                        </div>
+                        <div class="text-dark">
+                            <span class="text-muted me-1.5"><i class="bi bi-layers me-1"></i>Ca trực:</span>
+                            <span id="vfShiftName" class="fw-medium">Ca 2: Kỹ thuật trình chiếu & Micro</span>
+                        </div>
+                        <div class="text-dark">
+                            <span class="text-muted me-1.5"><i class="bi bi-clock me-1"></i>Thời gian:</span>
+                            <span id="vfShiftTime">18/11/2026, 13:00 – 17:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs: Minh chứng (8) & Trao đổi -->
+                <div class="d-flex align-items-center gap-4 border-bottom mb-3" style="border-color: #E2E8F0 !important;">
+                    <button type="button" class="btn btn-link text-decoration-none px-0 py-2 fw-semibold text-primary d-inline-flex align-items-center gap-1.5" style="border-bottom: 2.5px solid #2563EB; border-radius: 0; font-size: 13.5px;">
+                        <i class="bi bi-images"></i>
+                        <span>Minh chứng (8)</span>
+                    </button>
+                    <button type="button" class="btn btn-link text-decoration-none px-0 py-2 text-muted d-inline-flex align-items-center gap-1.5" style="font-size: 13.5px;" onclick="showToast('Chức năng Trao đổi & Lịch sử đang đồng bộ với kênh Chat BTC', 'info')">
+                        <i class="bi bi-chat-left-text"></i>
+                        <span>Trao đổi & Lịch sử</span>
+                    </button>
+                </div>
+
+                <!-- Main Content 2 Columns -->
+                <div class="row g-4">
+                    <!-- Cột Trái: Ảnh minh chứng (8) & Mô tả CTV -->
+                    <div class="col-12 col-lg-7 d-flex flex-column">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 14px;">Ảnh minh chứng (8)</h6>
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-2.5 py-1" style="font-size: 11.5px; border-radius: 6px;" onclick="downloadAllProofPhotos()">
+                                    <i class="bi bi-download"></i>
+                                    <span>Tải xuống tất cả</span>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-1" style="font-size: 11.5px; border-radius: 6px;" onclick="expandProofFullscreen()" title="Xem toàn màn hình">
+                                    <i class="bi bi-arrows-fullscreen"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 8-Photo Grid (4 cols x 2 rows) -->
+                        <div class="proof-photo-grid mb-3" id="vfPhotoGrid">
+                            <!-- Photo 1 -->
+                            <div class="proof-photo-item" onclick="openProofZoomModal(0)">
+                                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=80" alt="Kỹ thuật âm thanh">
+                            </div>
+                            <!-- Photo 2 -->
+                            <div class="proof-photo-item" onclick="openProofZoomModal(1)">
+                                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=80" alt="Đèn spotlight">
+                            </div>
+                            <!-- Photo 3 -->
+                            <div class="proof-photo-item" onclick="openProofZoomModal(2)">
+                                <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&auto=format&fit=crop&q=80" alt="Sân khấu Chung kết">
+                            </div>
+                            <!-- Photo 4 -->
+                            <div class="proof-photo-item" onclick="openProofZoomModal(3)">
+                                <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&auto=format&fit=crop&q=80" alt="Laptop điều khiển">
+                            </div>
+                            <!-- Photo 5 -->
+                            <div class="proof-photo-item" onclick="openProofZoomModal(4)">
+                                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80" alt="Server rack">
+                            </div>
+                            <!-- Photo 6 -->
+                            <div class="proof-photo-item" onclick="openProofZoomModal(5)">
+                                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=80" alt="Bàn mixer âm thanh">
+                            </div>
+                            <!-- Photo 7 -->
+                            <div class="proof-photo-item" onclick="openProofZoomModal(6)">
+                                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&auto=format&fit=crop&q=80" alt="Setup hội trường">
+                            </div>
+                            <!-- Photo 8 -->
+                            <div class="proof-photo-item" onclick="openProofZoomModal(7)">
+                                <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&auto=format&fit=crop&q=80" alt="Khán phòng">
+                            </div>
+                        </div>
+
+                        <!-- Mô tả công việc từ CTV -->
+                        <div class="rounded-3 p-3 mt-auto" style="background: #F0F9FF; border: 1px solid #BAE6FD;">
+                            <div class="fw-semibold text-primary d-flex align-items-center gap-1.5 mb-1" style="font-size: 12.5px; color: #0284C7 !important;">
+                                <i class="bi bi-info-circle-fill"></i>
+                                <span>Mô tả công việc (từ CTV)</span>
+                            </div>
+                            <p class="mb-0 text-dark" id="vfProofDescription" style="font-size: 12px; line-height: 1.45; color: #334155 !important;">
+                                Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Cột Phải: Tiêu chí nghiệm thu & Quyết định -->
+                    <div class="col-12 col-lg-5 d-flex flex-column justify-content-between">
+                        <div>
+                            <!-- Card 1: Tiêu chí nghiệm thu – Hậu cần -->
+                            <div class="proof-modal-card p-3 mb-3">
+                                <div class="d-flex align-items-center gap-2 mb-2.5">
+                                    <i class="bi bi-card-checklist text-primary" style="font-size: 15px;"></i>
+                                    <strong class="text-dark" style="font-size: 13.5px;">Tiêu chí nghiệm thu – Hậu cần</strong>
+                                </div>
+                                <div class="d-flex flex-column gap-2">
+                                    <!-- Tiêu chí 1 -->
+                                    <div class="proof-criteria-item is-checked" onclick="toggleCriteriaCheck(this)">
+                                        <div class="proof-criteria-check"><i class="bi bi-check-lg"></i></div>
+                                        <div style="font-size: 12.5px; line-height: 1.35; color: #0F172A;">
+                                            Có mặt và tham gia đúng thời gian ca trực
+                                        </div>
+                                    </div>
+                                    <!-- Tiêu chí 2 -->
+                                    <div class="proof-criteria-item is-checked" onclick="toggleCriteriaCheck(this)">
+                                        <div class="proof-criteria-check"><i class="bi bi-check-lg"></i></div>
+                                        <div>
+                                            <div style="font-size: 12.5px; line-height: 1.35; color: #0F172A;">
+                                                Thực hiện đúng nhiệm vụ được phân công
+                                            </div>
+                                            <div class="text-muted" style="font-size: 11px;">
+                                                (ví dụ: âm thanh, trình chiếu, hậu trường, hỗ trợ sân khấu,...)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Tiêu chí 3 -->
+                                    <div class="proof-criteria-item is-checked" onclick="toggleCriteriaCheck(this)">
+                                        <div class="proof-criteria-check"><i class="bi bi-check-lg"></i></div>
+                                        <div style="font-size: 12.5px; line-height: 1.35; color: #0F172A;">
+                                            Ảnh minh chứng rõ ràng, có bối cảnh tại sự kiện
+                                        </div>
+                                    </div>
+                                    <!-- Tiêu chí 4 -->
+                                    <div class="proof-criteria-item" onclick="toggleCriteriaCheck(this)">
+                                        <div class="proof-criteria-check"><i class="bi bi-check-lg" style="display:none;"></i></div>
+                                        <div class="d-flex align-items-center gap-1" style="font-size: 12.5px; line-height: 1.35; color: #334155;">
+                                            <span>Đảm bảo tác phong làm việc, phối hợp với BTC</span>
+                                            <i class="bi bi-info-circle text-muted" style="font-size: 11px;" title="Tuân thủ quy tắc ứng xử và trang phục"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Quyết định nghiệm thu -->
+                            <div class="proof-modal-card p-3">
+                                <div class="d-flex align-items-center gap-2 mb-2.5">
+                                    <i class="bi bi-shield-check text-primary" style="font-size: 15px;"></i>
+                                    <strong class="text-dark" style="font-size: 13.5px;">Quyết định nghiệm thu</strong>
+                                </div>
+
+                                <!-- Option 1: Duyệt nghiệm thu -->
+                                <div class="proof-decision-box is-selected" id="vfOptApprove" onclick="selectProofDecision('approve')">
+                                    <div class="proof-radio-circle"></div>
+                                    <div>
+                                        <strong class="d-block text-dark" style="font-size: 13px;">Duyệt nghiệm thu</strong>
+                                        <span class="text-muted" style="font-size: 11.5px;">Minh chứng đáp ứng đầy đủ tiêu chí.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Option 2: Yêu cầu bổ sung -->
+                                <div class="proof-decision-box" id="vfOptRequestMore" onclick="selectProofDecision('request_more')">
+                                    <div class="proof-radio-circle"></div>
+                                    <div>
+                                        <strong class="d-block text-dark" style="font-size: 13px;">Yêu cầu bổ sung</strong>
+                                        <span class="text-muted" style="font-size: 11.5px;">Minh chứng chưa đủ, cần CTV bổ sung thêm.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Textarea Lý do / Ghi chú -->
+                                <div class="mt-2.5">
+                                    <label class="form-label mb-1 text-dark fw-semibold" style="font-size: 12px;">
+                                        Lý do / Ghi chú <span class="text-danger" id="vfNoteAsterisk" style="display:none;">*</span>
+                                    </label>
+                                    <textarea class="form-control" id="vfDecisionNote" rows="3" placeholder="Nhập ghi chú cho CTV (nếu có)..." maxlength="500" oninput="updateDecisionNoteCounter()" style="font-size: 12px; border-radius: 8px; resize: none;"></textarea>
+                                    <div class="text-end text-muted mt-1" style="font-size: 11px;">
+                                        <span id="vfNoteCharCount">0</span> / 500
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Actions -->
+                        <div class="d-flex align-items-center justify-content-end gap-2 mt-3 pt-2">
+                            <button type="button" class="btn btn-sm btn-link text-muted fw-semibold text-decoration-none px-3 py-1.5" data-bs-dismiss="modal" style="font-size: 13px;">
+                                Hủy
+                            </button>
+                            <button type="button" class="btn btn-sm btn-primary px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5" id="vfConfirmBtn" onclick="confirmFacilityProofVerification()" style="background: #2563EB; border-color: #2563EB; border-radius: 8px; font-size: 13px;">
+                                <i class="bi bi-check-lg"></i>
+                                <span>Xác nhận</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>
@@ -7773,74 +8166,217 @@ function previewProofModal(name, shiftName, imgUrl, note) {
     previewProofModalInstance.show();
 }
 
-/**
- * Giảng viên xác nhận nghiệm thu hiện trường & khởi tạo hợp đồng
- */
-async function verifyLecturerAcceptance(assignmentId) {
+let currentFacilityAssignmentId = 8;
+let currentProofDecision = 'approve';
+
+const sampleFacilityPhotos = [
+    { url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80', title: 'Kỹ thuật viên âm thanh tác nghiệp tại bàn điều khiển' },
+    { url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop&q=80', title: 'Kiểm tra và cân chỉnh đèn spotlight sân khấu' },
+    { url: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop&q=80', title: 'Toàn cảnh sân khấu Chung kết Cuộc thi Khởi nghiệp trẻ' },
+    { url: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&auto=format&fit=crop&q=80', title: 'Điều phối slide pitching và laptop kỹ thuật của BTC' },
+    { url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80', title: 'Kiểm tra đấu nối dây tín hiệu tủ rack server âm thanh' },
+    { url: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80', title: 'Cân chỉnh Equalizer trên bàn mixer kỹ thuật số đa kênh' },
+    { url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80', title: 'Đội hậu cần phối hợp sắp xếp bàn ghế ban giám khảo' },
+    { url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80', title: 'Hội trường Trịnh Văn Bô sẵn sàng trước giờ khai mạc' }
+];
+
+function openFacilityProofModal(assignmentId = 8) {
+    currentFacilityAssignmentId = parseInt(assignmentId) || 8;
+    const acc = (typeof rawAccountingList !== 'undefined') 
+        ? rawAccountingList.find(a => parseInt(a.assignment_id) === currentFacilityAssignmentId)
+        : null;
+
+    if (acc) {
+        document.getElementById('vfCtvName').textContent = acc.full_name || 'Hoàng Minh Luận';
+        document.getElementById('vfCtvAvatar').textContent = (acc.full_name ? acc.full_name.charAt(0).toUpperCase() : 'H');
+        document.getElementById('vfCtvMeta').textContent = (acc.student_code || 'PI03015') + ' • ' + (acc.email || 'hoangminhluan@fpt.edu.vn');
+        document.getElementById('vfEventTitle').textContent = acc.event_title || 'Chung kết Cuộc thi Khởi nghiệp trẻ';
+        document.getElementById('vfShiftName').textContent = acc.shift_name || 'Ca 2: Kỹ thuật trình chiếu & Micro';
+        
+        let timeStr = '18/11/2026, 13:00 – 17:00';
+        if (acc.start_time && acc.end_time) {
+            const d = acc.start_time.substring(8, 10) + '/' + acc.start_time.substring(5, 7) + '/' + acc.start_time.substring(0, 4);
+            const s = acc.start_time.substring(11, 16);
+            const e = acc.end_time.substring(11, 16);
+            timeStr = `${d}, ${s} – ${e}`;
+        }
+        document.getElementById('vfShiftTime').textContent = timeStr;
+        document.getElementById('vfProofDescription').textContent = acc.proof_note || 'Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.';
+    } else {
+        document.getElementById('vfCtvName').textContent = 'Hoàng Minh Luận';
+        document.getElementById('vfCtvAvatar').textContent = 'H';
+        document.getElementById('vfCtvMeta').textContent = 'PI03015 • hoangminhluan@fpt.edu.vn';
+        document.getElementById('vfEventTitle').textContent = 'Chung kết Cuộc thi Khởi nghiệp trẻ';
+        document.getElementById('vfShiftName').textContent = 'Ca 2: Kỹ thuật trình chiếu & Micro';
+        document.getElementById('vfShiftTime').textContent = '18/11/2026, 13:00 – 17:00';
+        document.getElementById('vfProofDescription').textContent = 'Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.';
+    }
+
+    // Reset decision to approve
+    selectProofDecision('approve');
+    const noteArea = document.getElementById('vfDecisionNote');
+    if (noteArea) noteArea.value = '';
+    updateDecisionNoteCounter();
+
+    const modalEl = document.getElementById('modalVerifyFacilityProof');
+    if (modalEl) {
+        const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInstance.show();
+    }
+}
+
+function toggleCriteriaCheck(itemEl) {
+    itemEl.classList.toggle('is-checked');
+    const checkIcon = itemEl.querySelector('.proof-criteria-check i');
+    if (checkIcon) {
+        checkIcon.style.display = itemEl.classList.contains('is-checked') ? 'block' : 'none';
+    }
+}
+
+function selectProofDecision(decision) {
+    currentProofDecision = decision;
+    const optApprove = document.getElementById('vfOptApprove');
+    const optRequestMore = document.getElementById('vfOptRequestMore');
+    const asterisk = document.getElementById('vfNoteAsterisk');
+    const confirmBtn = document.getElementById('vfConfirmBtn');
+
+    if (decision === 'approve') {
+        if (optApprove) optApprove.classList.add('is-selected');
+        if (optRequestMore) optRequestMore.classList.remove('is-selected');
+        if (asterisk) asterisk.style.display = 'none';
+        if (confirmBtn) {
+            confirmBtn.className = 'btn btn-sm btn-primary px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5';
+            confirmBtn.style.background = '#2563EB';
+            confirmBtn.style.borderColor = '#2563EB';
+            confirmBtn.innerHTML = '<i class="bi bi-check-lg"></i><span>Xác nhận</span>';
+        }
+    } else {
+        if (optRequestMore) optRequestMore.classList.add('is-selected');
+        if (optApprove) optApprove.classList.remove('is-selected');
+        if (asterisk) asterisk.style.display = 'inline';
+        const noteArea = document.getElementById('vfDecisionNote');
+        if (noteArea) {
+            noteArea.focus();
+            if (!noteArea.value) {
+                noteArea.placeholder = 'Nhập lý do yêu cầu CTV bổ sung minh chứng (bắt buộc)...';
+            }
+        }
+        if (confirmBtn) {
+            confirmBtn.className = 'btn btn-sm btn-warning px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5 text-dark';
+            confirmBtn.style.background = '#F59E0B';
+            confirmBtn.style.borderColor = '#F59E0B';
+            confirmBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i><span>Gửi yêu cầu bổ sung</span>';
+        }
+    }
+}
+
+function updateDecisionNoteCounter() {
+    const noteArea = document.getElementById('vfDecisionNote');
+    const counter = document.getElementById('vfNoteCharCount');
+    if (noteArea && counter) {
+        counter.textContent = noteArea.value.length;
+    }
+}
+
+async function confirmFacilityProofVerification() {
+    const noteArea = document.getElementById('vfDecisionNote');
+    const noteVal = noteArea ? noteArea.value.trim() : '';
+
+    if (currentProofDecision === 'request_more' && !noteVal) {
+        showToast('Vui lòng nhập lý do yêu cầu bổ sung minh chứng cho CTV!', 'warning');
+        if (noteArea) noteArea.focus();
+        return;
+    }
+
     try {
         const formData = new FormData();
-        formData.append('assignment_id', assignmentId);
+        formData.append('assignment_id', currentFacilityAssignmentId);
+        formData.append('decision', currentProofDecision);
+        formData.append('note', noteVal);
 
         const response = await fetch('/dashboard/verifyLecturerAcceptance', {
             method: 'POST',
             body: formData
         });
         const data = await response.json();
+
         if (data.success) {
-            showToast(data.message, 'success');
+            showToast(data.message, currentProofDecision === 'approve' ? 'success' : 'info');
 
             // Cập nhật local state
-            const acc = rawAccountingList.find(a => parseInt(a.assignment_id) === assignmentId);
+            const acc = (typeof rawAccountingList !== 'undefined') 
+                ? rawAccountingList.find(a => parseInt(a.assignment_id) === currentFacilityAssignmentId)
+                : null;
+
             if (acc) {
-                acc.lecturer_verified = 1;
-                acc.contract_code = data.contract_code;
-                acc.lecturer_name = data.lecturer_name;
-                acc.accounting_status = 'Approved';
-            }
-            const shift = rawShifts.find(s => parseInt(s.my_assignment_id) === assignmentId);
-            if (shift) {
-                shift.my_lecturer_verified = 1;
-                shift.my_contract_code = data.contract_code;
+                if (currentProofDecision === 'approve') {
+                    acc.lecturer_verified = 1;
+                    acc.contract_code = data.contract_code || ('HDNT-2026-FPLY-' + String(currentFacilityAssignmentId).padStart(3, '0'));
+                    acc.accounting_status = 'Approved';
+                } else {
+                    acc.lecturer_verified = 0;
+                    acc.accounting_status = 'Revision_Required';
+                    acc.accounting_note = noteVal;
+                }
             }
 
-            // Cập nhật UI hàng bảng
-            const verCol = document.getElementById(`accVerificationCol_${assignmentId}`);
+            // Đóng modal
+            const modalEl = document.getElementById('modalVerifyFacilityProof');
+            if (modalEl) {
+                const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) modalInstance.hide();
+            }
+
+            // Cập nhật UI bảng
+            const verCol = document.getElementById(`accVerificationCol_${currentFacilityAssignmentId}`);
             if (verCol) {
-                verCol.innerHTML = `
-                    <span class="badge bg-success-subtle text-success border border-success-subtle d-inline-block mb-1">
-                        <i class="bi bi-patch-check-fill me-1"></i>GV: ${data.lecturer_name}
-                    </span>
-                    <div>
-                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace" style="font-size: 10.5px;">
-                            ${data.contract_code}
+                if (currentProofDecision === 'approve') {
+                    verCol.innerHTML = `
+                        <span class="badge bg-success-subtle text-success border border-success-subtle d-inline-block mb-1">
+                            <i class="bi bi-patch-check-fill me-1"></i>Đã duyệt nghiệm thu
                         </span>
-                    </div>
-                    <small class="text-warning-emphasis d-block mt-1"><i class="bi bi-hourglass-split me-1"></i>Chờ trường ký</small>
-                `;
+                        <div>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace" style="font-size: 10.5px;">
+                                ${data.contract_code || ''}
+                            </span>
+                        </div>
+                    `;
+                } else {
+                    verCol.innerHTML = `
+                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle d-inline-block mb-1">
+                            <i class="bi bi-arrow-repeat me-1"></i>Yêu cầu bổ sung
+                        </span>
+                    `;
+                }
             }
 
-            const actionCol = document.getElementById(`accActionBtns_${assignmentId}`);
-            if (actionCol) {
-                actionCol.innerHTML = `
-                    <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill px-2.5 py-1 shadow-2xs fw-medium d-inline-flex align-items-center gap-1" onclick="openAccountingDetailModal(${assignmentId})" title="Xem chi tiết hồ sơ & STK">
-                        <i class="bi bi-eye text-primary" style="font-size: 11px;"></i><span style="font-size: 11px;">Chi Tiết</span>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill px-2.5 py-1 shadow-2xs fw-medium d-inline-flex align-items-center gap-1" onclick="openContractModal(${assignmentId})" title="Xem Hợp đồng">
-                        <i class="bi bi-file-earmark-text text-warning" style="font-size: 11px;"></i><span style="font-size: 11px;">Hợp Đồng</span>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-fpt-primary rounded-pill px-2.5 py-1 shadow-xs fw-semibold text-white d-inline-flex align-items-center gap-1" onclick="submitToSchool(${assignmentId})" title="Trình Nhà trường ký duyệt">
-                        <i class="bi bi-send" style="font-size: 11px;"></i><span style="font-size: 11px;">Trình Ký</span>
-                    </button>
-                `;
-            }
-
-            renderMyShiftsTable();
+            if (typeof renderMyShiftsTable === 'function') renderMyShiftsTable();
         } else {
             showToast(data.message || 'Lỗi khi xác nhận nghiệm thu.', 'danger');
         }
     } catch (err) {
-        showToast('Lỗi kết nối khi giảng viên duyệt.', 'danger');
+        showToast('Lỗi kết nối khi gửi kết quả nghiệm thu: ' + err.message, 'danger');
     }
+}
+
+function downloadAllProofPhotos() {
+    showToast('Bắt đầu tải xuống bộ 8 ảnh minh chứng độ phân giải cao (.zip)...', 'info');
+}
+
+function expandProofFullscreen() {
+    openProofZoomModal(0);
+}
+
+function openProofZoomModal(photoIndex) {
+    const photo = sampleFacilityPhotos[photoIndex] || sampleFacilityPhotos[0];
+    previewProofModal('Hoàng Minh Luận', 'Ca 2: Kỹ thuật trình chiếu & Micro (' + (photoIndex + 1) + '/8)', photo.url, photo.title);
+}
+
+/**
+ * Giảng viên xác nhận nghiệm thu hiện trường & khởi tạo hợp đồng
+ */
+function verifyLecturerAcceptance(assignmentId) {
+    openFacilityProofModal(assignmentId);
 }
 
 /**
