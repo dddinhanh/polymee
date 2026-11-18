@@ -3204,85 +3204,50 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
 
-                    <!-- CỘT PHẢI: CHI TIẾT NGÀY & LỊCH SẮP TỚI -->
-                    <div class="calendar-sidebar-col" id="calendarRightSidebar">
+                    <!-- CỘT PHẢI: DAY INSPECTOR CHUẨN APPLE CALENDAR (100% CHIỀU CAO, KHÔNG BỊ CO ÉP) -->
+                    <div class="calendar-sidebar-col" id="calendarRightSidebar" style="height: 100%; display: flex; flex-direction: column;">
                         
-                        <!-- THẺ 1: CHI TIẾT NGÀY (Mockup Image 10 khi trùng lịch & Image 3, 4, 7 khi bình thường) -->
-                        <div class="cal-sidebar-card cal-day-detail-card" id="calDayDetailCard">
+                        <div class="cal-sidebar-card cal-day-detail-card flex-1 d-flex flex-column overflow-hidden h-100" id="calDayDetailCard" style="border: 1px solid #E2E8F0; border-radius: 12px; background: #FFFFFF; padding: 14px;">
                             <!-- Header cố định (shrink-0) -->
-                            <div class="cal-card-header d-flex align-items-center justify-content-between mb-2 pb-1 shrink-0">
-                                <div class="d-flex align-items-center gap-2.5">
-                                    <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px; background: #EFF6FF; color: #2563EB; border: 1px solid rgba(37, 99, 235, 0.15);">
-                                        <i class="bi bi-calendar3" style="font-size: 17px;"></i>
+                            <div class="cal-card-header d-flex align-items-center justify-content-between mb-2.5 pb-2 border-bottom shrink-0" style="border-color: #F1F5F9 !important;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px; background: #EFF6FF; color: #2563EB; border: 1px solid rgba(37, 99, 235, 0.15);">
+                                        <i class="bi bi-calendar3" style="font-size: 15px;"></i>
                                     </div>
                                     <div>
-                                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px; display: block;">Chi tiết ngày</span>
-                                        <h5 class="fw-bold mb-0 text-dark" style="font-size: 17px; letter-spacing: -0.4px;" id="calSelectedDayTitle">
+                                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 9.5px; letter-spacing: 0.5px; display: block;" id="calSidebarModeLabel">Chi tiết ngày</span>
+                                        <h5 class="fw-bold mb-0 text-dark" style="font-size: 16px; letter-spacing: -0.3px;" id="calSelectedDayTitle">
                                             18/11/2026
                                         </h5>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px; border-color: #E2E8F0;" onclick="navigateCalendarDay(-1)" title="Ngày trước">
-                                        <i class="bi bi-chevron-left" style="font-size: 11px;"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px; border-color: #E2E8F0;" onclick="navigateCalendarDay(1)" title="Ngày sau">
-                                        <i class="bi bi-chevron-right" style="font-size: 11px;"></i>
-                                    </button>
+
+                                <div class="d-flex align-items-center gap-2 ms-auto">
+                                    <!-- Apple Calendar Segmented Control -->
+                                    <div class="apple-cal-segmented">
+                                        <button type="button" class="apple-cal-segmented-btn is-active" id="btnCalModeDay" onclick="setCalSidebarMode('day')">Lịch ngày</button>
+                                        <button type="button" class="apple-cal-segmented-btn" id="btnCalModeUpcoming" onclick="setCalSidebarMode('upcoming')">Sắp tới</button>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-1" id="calDayNavBtns">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 26px; height: 26px; border-color: #E2E8F0;" onclick="navigateCalendarDay(-1)" title="Ngày trước">
+                                            <i class="bi bi-chevron-left" style="font-size: 10px;"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 26px; height: 26px; border-color: #E2E8F0;" onclick="navigateCalendarDay(1)" title="Ngày sau">
+                                            <i class="bi bi-chevron-right" style="font-size: 10px;"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Tabs phân loại nhanh chi tiết ngày (Mockup Image 10) -->
                             <div class="cal-day-filter-tabs d-flex align-items-center gap-1.5 mb-2.5 pb-1 overflow-x-auto shrink-0" id="calDayFilterTabs" style="display: none;">
-                                <!-- Nạp động qua JS: Tất cả (4), Sự kiện (1), Ca trực (2), Khác (1) -->
+                                <!-- Nạp động qua JS: Tất cả (N), Sự kiện (N), Ca trực (N), Khác (N) -->
                             </div>
 
                             <!-- Danh sách cuộn nội bộ (flex-1 overflow-y-auto min-h-0) -->
                             <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1" id="calSelectedDayContent">
                                 <!-- Nạp động qua JS -->
-                            </div>
-                        </div>
-
-                        <!-- THẺ 2: LỊCH SẮP TỚI (Mockup Image 3 & 4) -->
-                        <div class="cal-sidebar-card cal-upcoming-card" id="calUpcomingCard">
-                            <!-- Header cố định (shrink-0) -->
-                            <div class="cal-card-header d-flex align-items-center justify-content-between mb-2 pb-1 shrink-0">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; background: #FFF7ED; color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.2);">
-                                        <i class="bi bi-calendar-check" style="font-size: 16px;"></i>
-                                    </div>
-                                    <h5 class="fw-bold mb-0 text-dark" style="font-size: 15.5px; letter-spacing: -0.3px;">Lịch sắp tới</h5>
-                                </div>
-                                <a href="javascript:void(0)" onclick="navigateToPage('shifts-sessions')" class="text-decoration-none fw-semibold d-inline-flex align-items-center gap-1" style="font-size: 12px; color: #EA580C;">
-                                    <span>Xem tất cả</span>
-                                    <i class="bi bi-chevron-right" style="font-size: 10px;"></i>
-                                </a>
-                            </div>
-
-                            <!-- Danh sách cuộn nội bộ (flex-1 overflow-y-auto min-h-0) -->
-                            <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1 d-flex flex-column gap-2" id="calUpcomingListContainer">
-                                <!-- Nạp động qua JS: 4 thẻ sắp tới chuẩn Image 3 & 4 -->
-                            </div>
-                        </div>
-
-                    </div>
-                            <!-- Header cố định (shrink-0) -->
-                            <div class="cal-card-header d-flex align-items-center justify-content-between mb-2 pb-1">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; background: #FFF7ED; color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.2);">
-                                        <i class="bi bi-calendar-check" style="font-size: 16px;"></i>
-                                    </div>
-                                    <h5 class="fw-bold mb-0 text-dark" style="font-size: 15.5px; letter-spacing: -0.3px;">Lịch sắp tới</h5>
-                                </div>
-                                <a href="javascript:void(0)" onclick="navigateToPage('shifts-sessions')" class="text-decoration-none fw-semibold d-inline-flex align-items-center gap-1" style="font-size: 12px; color: #EA580C;">
-                                    <span>Xem tất cả</span>
-                                    <i class="bi bi-chevron-right" style="font-size: 10px;"></i>
-                                </a>
-                            </div>
-
-                            <!-- Danh sách cuộn nội bộ (flex-1 overflow-y-auto min-h-0) -->
-                            <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1 d-flex flex-column gap-2" id="calUpcomingListContainer">
-                                <!-- Nạp động qua JS: 4 thẻ sắp tới chuẩn Image 3 & 4 -->
                             </div>
                         </div>
 
@@ -3920,18 +3885,18 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </button>
                     </div>
                 </div>
-                <!-- 2. VÙNG BẢNG DỮ LIỆU: Scrollable Body & Sticky Header -->
-                <div class="card border-0 rounded-3 shadow-xs flex-1 overflow-hidden d-flex flex-column" style="border: 1px solid var(--ux-line) !important;">
+                <!-- 2. VÙNG BẢNG DỮ LIỆU: Chuẩn Enterprise SaaS (Linear / Stripe Standard) -->
+                <div class="submissions-table-card flex-1 overflow-hidden d-flex flex-column">
                     <div class="table-responsive flex-1 overflow-y-auto" style="height: 100%;">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="sticky-th">
+                    <table class="submissions-table align-middle">
+                        <thead>
                             <tr>
-                                <th class="ps-3" style="width: 220px;">Sinh Viên CTV</th>
-                                <th>Sự Kiện & Ca Trực</th>
-                                <th>Minh Chứng Đã Nộp</th>
-                                <th>Ghi Chú Nghiệm Thu</th>
-                                <th>Trạng Thái</th>
-                                <th class="text-end pe-3" style="width: 200px;">Thao Tác Nghiệm Thu</th>
+                                <th style="width: 22%;">Sinh viên CTV</th>
+                                <th style="width: 30%;">Sự kiện & Ca trực</th>
+                                <th style="width: 16%;">Minh chứng đã nộp</th>
+                                <th style="width: 16%;">Ghi chú nghiệm thu</th>
+                                <th style="width: 12%;">Trạng thái</th>
+                                <th class="text-end" style="width: 14%;">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -3942,86 +3907,126 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             $isDriveLink = str_contains($subProofUrl, 'drive.google.com') || str_contains($subProofUrl, 'docs.google.com') || str_contains(strtolower($subItem['shift_name'] . ' ' . $subItem['full_name']), 'media');
                             $hasProof = !empty($subProofUrl);
                             $isVerified = (int)($subItem['lecturer_verified'] ?? 0) === 1;
+                            $firstLetter = mb_strtoupper(mb_substr($subItem['full_name'], 0, 1));
                             ?>
-                            <tr>
-                                <td class="ps-3">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="rounded-circle d-grid place-items-center text-white fw-bold shadow-xs flex-shrink-0" style="width: 30px; height: 30px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 11.5px;">
-                                            <?= mb_strtoupper(mb_substr($subItem['full_name'], 0, 1)) ?>
+                            <tr id="subRow_<?= $subAssId ?>">
+                                <!-- 1. Sinh viên CTV -->
+                                <td>
+                                    <div class="d-flex align-items-center gap-2.5">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center text-dark fw-bold flex-shrink-0" style="width: 34px; height: 34px; background: #F1F5F9; border: 1px solid #E2E8F0; font-size: 13px;">
+                                            <?= $firstLetter ?>
                                         </div>
-                                        <div>
-                                            <strong class="d-block text-dark" style="font-size: 12.5px; line-height: 1.25;"><?= htmlspecialchars($subItem['full_name']) ?></strong>
-                                            <small class="text-muted" style="font-size: 11px;"><span class="badge bg-light text-dark border font-monospace px-1.5 py-0.5"><?= htmlspecialchars($subItem['student_code']) ?></span> • <?= $isDriveLink ? '<span class="text-warning fw-semibold"><i class="bi bi-camera-reels me-1"></i>Media</span>' : '<span class="text-primary"><i class="bi bi-person me-1"></i>CTV</span>' ?></small>
+                                        <div class="min-w-0">
+                                            <div class="fw-medium text-dark text-truncate" style="font-size: 14px; line-height: 1.3;" title="<?= htmlspecialchars($subItem['full_name']) ?>">
+                                                <?= htmlspecialchars($subItem['full_name']) ?>
+                                            </div>
+                                            <div class="text-sub mt-0.5 d-flex align-items-center gap-1.5">
+                                                <span class="font-monospace text-muted"><?= htmlspecialchars($subItem['student_code']) ?></span>
+                                                <span class="text-muted">•</span>
+                                                <span class="badge rounded-pill <?= $isDriveLink ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-700' ?>" style="font-size: 10.5px; padding: 2px 7px; font-weight: 500;">
+                                                    <?= $isDriveLink ? 'Media' : 'Hậu cần' ?>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
+
+                                <!-- 2. Sự kiện & Ca trực (Ưu tiên rộng nhất 30%) -->
                                 <td>
-                                    <strong class="text-dark d-block text-truncate" style="font-size: 12.5px; max-width: 250px;" title="<?= htmlspecialchars($subItem['event_title']) ?>"><?= htmlspecialchars($subItem['event_title']) ?></strong>
-                                    <small class="text-muted" style="font-size: 11px;"><?= htmlspecialchars($subItem['shift_name']) ?></small>
+                                    <div class="event-title-clamp" title="<?= htmlspecialchars($subItem['event_title']) ?>">
+                                        <?= htmlspecialchars($subItem['event_title']) ?>
+                                    </div>
+                                    <div class="text-sub mt-1 text-truncate" title="<?= htmlspecialchars($subItem['shift_name']) ?>">
+                                        <i class="bi bi-calendar-event me-1 text-muted" style="font-size: 11px;"></i><?= htmlspecialchars($subItem['shift_name']) ?>
+                                    </div>
                                 </td>
+
+                                <!-- 3. Minh chứng đã nộp -->
                                 <td>
                                     <?php if ($hasProof): ?>
                                         <?php if ($isDriveLink): ?>
-                                        <div class="d-inline-flex flex-column gap-1 align-items-start">
-                                            <a href="<?= htmlspecialchars($subProofUrl) ?>" target="_blank" class="btn-drive-pill" title="Mở thư mục Google Drive bộ ảnh sự kiện">
-                                                <i class="fa-brands fa-google-drive"></i>
-                                                <span>Mở Drive Media</span>
-                                                <i class="bi bi-arrow-up-right"></i>
+                                        <div>
+                                            <a href="<?= htmlspecialchars($subProofUrl) ?>" target="_blank" class="btn-action-secondary py-1 px-2.5" style="font-size: 12px;" title="Mở thư mục Google Drive">
+                                                <i class="fa-brands fa-google-drive text-primary"></i>
+                                                <span>Drive Media</span>
+                                                <i class="bi bi-arrow-up-right text-muted" style="font-size: 10px;"></i>
                                             </a>
-                                            <span class="proof-verified-pill">
-                                                <i class="bi bi-patch-check-fill"></i>
-                                                <span>Đã gắn Logo & Chỉnh sáng</span>
-                                            </span>
+                                            <div class="text-sub mt-1" style="font-size: 11.5px;">
+                                                <i class="bi bi-check2 text-success me-1"></i>120 ảnh đã gắn logo
+                                            </div>
                                         </div>
                                         <?php else: ?>
                                         <div>
-                                            <button type="button" class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-2.5 fw-medium d-inline-flex align-items-center gap-1.5 shadow-2xs" style="font-size: 11px;" onclick="openFacilityProofModal(<?= $subAssId ?>)">
-                                                <i class="bi bi-eye text-primary"></i> Xem Chi Tiết
+                                            <button type="button" class="btn-action-secondary py-1 px-2.5" style="font-size: 12px;" onclick="openProofVerificationDrawer(<?= $subAssId ?>)">
+                                                <i class="bi bi-images text-primary"></i>
+                                                <span>Xem minh chứng</span>
                                             </button>
+                                            <div class="text-sub mt-1" style="font-size: 11.5px;">
+                                                <i class="bi bi-check2 text-success me-1"></i>Ảnh hiện trường ca trực
+                                            </div>
                                         </div>
                                         <?php endif; ?>
                                     <?php else: ?>
-                                        <span class="badge bg-light text-muted border py-1 px-2" style="font-size: 10.5px;"><i class="bi bi-clock-history me-1"></i>Chưa nộp minh chứng</span>
+                                        <span class="text-sub text-muted d-inline-flex align-items-center gap-1">
+                                            <i class="bi bi-clock-history"></i> Chưa nộp minh chứng
+                                        </span>
                                     <?php endif; ?>
                                 </td>
+
+                                <!-- 4. Ghi chú nghiệm thu (Thu gọn 2 dòng, tooltip xem đầy đủ) -->
                                 <td>
-                                    <small class="text-muted" style="font-size: 11.5px;"><?= htmlspecialchars($subItem['proof_note'] ?: ($isDriveLink ? 'Bộ ảnh Media đã chỉnh sửa sáng và gắn logo FPT' : 'Có mặt đúng giờ tại địa điểm trực sự kiện')) ?></small>
+                                    <?php
+                                    $proofNote = $subItem['proof_note'] ?: ($isDriveLink ? 'Bộ ảnh Media đã chỉnh sửa sáng và gắn logo FPT' : 'Có mặt đúng giờ tại địa điểm trực sự kiện');
+                                    ?>
+                                    <div class="note-clamp" title="<?= htmlspecialchars($proofNote) ?>">
+                                        <?= htmlspecialchars($proofNote) ?>
+                                    </div>
                                 </td>
+
+                                <!-- 5. Trạng thái -->
                                 <td>
                                     <?php if ($isVerified): ?>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2" style="font-size: 10.5px;">
-                                        <i class="bi bi-check-circle-fill me-1"></i>Đã Nghiệm Thu
+                                    <span class="badge-saas" style="background: #ECFDF5; color: #15803D; border: 1px solid #BBF7D0;">
+                                        <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: #16A34A;"></span>
+                                        Đã nghiệm thu
                                     </span>
-                                    <small class="d-block text-muted font-monospace mt-0.5" style="font-size:10px;"><?= htmlspecialchars($subItem['contract_code'] ?? '') ?></small>
+                                    <div class="text-sub font-monospace mt-1" style="font-size: 11px;">
+                                        <?= htmlspecialchars($subItem['contract_code'] ?? '') ?>
+                                    </div>
                                     <?php elseif ($hasProof): ?>
-                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle py-1 px-2" style="font-size: 10.5px;">
-                                        <i class="bi bi-hourglass-split me-1"></i>Chờ GV Duyệt
+                                    <span class="badge-saas" style="background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A;">
+                                        <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: #D97706;"></span>
+                                        Chờ GV duyệt
                                     </span>
                                     <?php else: ?>
-                                    <span class="badge bg-secondary-subtle text-secondary py-1 px-2" style="font-size: 10.5px;">Chưa gửi</span>
+                                    <span class="badge-saas" style="background: #F8FAFC; color: #64748B; border: 1px solid #E2E8F0;">
+                                        <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: #94A3B8;"></span>
+                                        Chưa nộp
+                                    </span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-end pe-3">
+
+                                <!-- 6. Thao tác nghiệm thu -->
+                                <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-1.5">
                                         <?php if ((int)$subItem['user_id'] === (int)($currentUser['id'] ?? 0) || empty($perms['canVerifyLecturer'])): ?>
-                                        <button type="button" class="btn btn-sm btn-fpt-primary rounded-pill py-1 px-2.5 shadow-xs" style="font-size: 11px;" onclick="openSubmitProofModal(<?= $subAssId ?>, '<?= htmlspecialchars(addslashes($subItem['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($subItem['start_time'])) ?>')">
-                                            <i class="bi bi-cloud-arrow-up-fill me-1"></i> <?= $hasProof ? 'Cập Nhật' : 'Nộp Minh Chứng' ?>
+                                        <button type="button" class="btn-action-review" onclick="openSubmitProofModal(<?= $subAssId ?>, '<?= htmlspecialchars(addslashes($subItem['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($subItem['start_time'])) ?>')">
+                                            <i class="bi bi-cloud-arrow-up"></i> <?= $hasProof ? 'Cập nhật' : 'Nộp minh chứng' ?>
                                         </button>
                                         <?php endif; ?>
 
                                         <?php if (!empty($perms['canVerifyLecturer'])): ?>
                                             <?php if ($isVerified): ?>
-                                            <button class="btn btn-sm btn-fpt-secondary rounded-pill py-1 px-2.5 disabled" disabled style="font-size: 11px;">
-                                                <i class="bi bi-patch-check-fill text-success me-1"></i> Đã Duyệt
+                                            <button type="button" class="btn-action-secondary" onclick="openProofVerificationDrawer(<?= $subAssId ?>)" title="Xem lại chi tiết hồ sơ nghiệm thu">
+                                                <i class="bi bi-check-circle text-success"></i> Xem lại
                                             </button>
                                             <?php elseif ($hasProof): ?>
-                                            <button type="button" class="btn btn-sm btn-fpt-emerald rounded-pill py-1 px-2.5 shadow-xs" style="font-size: 11px;" onclick="openFacilityProofModal(<?= $subAssId ?>)">
-                                                <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
+                                            <button type="button" class="btn-action-review" onclick="openProofVerificationDrawer(<?= $subAssId ?>)" title="Kiểm tra minh chứng và ra quyết định nghiệm thu">
+                                                <i class="bi bi-shield-check"></i> Xem & duyệt
                                             </button>
                                             <?php else: ?>
-                                            <!-- CTV chưa nộp minh chứng: Giảng viên có nút nhắc nhở gửi tự động qua email -->
-                                            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill py-1 px-2.5 shadow-xs fw-semibold" style="font-size: 11px; white-space: nowrap;" onclick="sendProofReminder(<?= $subAssId ?>, '<?= htmlspecialchars(addslashes($subItem['full_name'])) ?>', '<?= htmlspecialchars(addslashes($subItem['email'] ?? '')) ?>', this)" title="Tự động gửi email thông báo nhắc sinh viên nộp minh chứng">
-                                                <i class="bi bi-bell-fill me-1 text-warning"></i> Nhắc Nhở Qua Email
+                                            <button type="button" class="btn-action-secondary" onclick="sendProofReminder(<?= $subAssId ?>, '<?= htmlspecialchars(addslashes($subItem['full_name'])) ?>', '<?= htmlspecialchars(addslashes($subItem['email'] ?? '')) ?>', this)" title="Tự động gửi email thông báo nhắc sinh viên nộp minh chứng">
+                                                <i class="bi bi-bell text-warning"></i> Nhắc nhở
                                             </button>
                                             <?php endif; ?>
                                         <?php endif; ?>
@@ -4030,7 +4035,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
-                        </table>
+                    </table>
                     </div>
                 </div>
             </section>
@@ -7660,77 +7665,346 @@ function openCtvProfileDrawer(userId) {
     openSaasDrawer('Hồ Sơ Cộng Tác Viên', u.full_name, bodyHtml);
 }
 
-// 5. Chi tiết Minh Chứng Drawer
-function openProofDrawer(assignmentId) {
-    const a = (typeof rawAccountingList !== 'undefined') ? rawAccountingList.find(item => parseInt(item.assignment_id) === parseInt(assignmentId)) : null;
-    if (!a) return;
+// 5. Chi tiết Minh Chứng & Duyệt Nghiệm Thu Drawer (Enterprise SaaS)
+let currentReviewAssignmentId = null;
+let currentReviewDecision = 'approve';
 
-    const isMedia = (a.ctv_type === 'MEDIA');
-    const isApproved = !empty(a.lecturer_verified);
+function openProofVerificationDrawer(assignmentId) {
+    currentReviewAssignmentId = parseInt(assignmentId);
+    currentReviewDecision = 'approve';
+
+    const a = (typeof rawAccountingList !== 'undefined') 
+        ? rawAccountingList.find(item => parseInt(item.assignment_id) === currentReviewAssignmentId) 
+        : null;
+
+    if (!a) {
+        showToast('Không tìm thấy thông tin ca trực nghiệm thu!', 'warning');
+        return;
+    }
+
+    const isMedia = (a.ctv_type === 'MEDIA') || (a.proof_image_url && (a.proof_image_url.includes('drive.google.com') || a.proof_image_url.includes('docs.google.com')));
+    const isVerified = (parseInt(a.lecturer_verified) === 1);
+    const amountStr = parseInt(a.remuneration_amount || 150000).toLocaleString('vi-VN') + ' đ';
+
+    let timeStr = '18/11/2026, 13:00 – 17:00';
+    if (a.start_time && a.end_time) {
+        const d = a.start_time.substring(8, 10) + '/' + a.start_time.substring(5, 7) + '/' + a.start_time.substring(0, 4);
+        const s = a.start_time.substring(11, 16);
+        const e = a.end_time.substring(11, 16);
+        timeStr = `${d}, ${s} – ${e}`;
+    }
+
+    const sampleProofImages = [
+        'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80'
+    ];
 
     const bodyHtml = `
-        <div class="mb-3">
-            <span class="badge rounded-pill ${isMedia ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-primary-subtle text-primary border border-primary-subtle'} px-2.5 py-1 mb-2">
-                ${isMedia ? 'Job Media (Google Drive)' : 'Job Hậu Cần (Ảnh Hiện Trường)'}
-            </span>
-            <h4 class="fw-bold text-dark mb-1">${a.shift_name}</h4>
-            <div class="text-muted small">${a.event_title} • CTV: <strong>${a.full_name}</strong></div>
-        </div>
-
-        <div class="saas-kv-grid mb-3">
-            <div class="saas-kv-item">
-                <span class="saas-kv-label">Mã Sinh Viên</span>
-                <span class="saas-kv-val font-monospace">${a.student_code}</span>
-            </div>
-            <div class="saas-kv-item">
-                <span class="saas-kv-label">Thời Gian Trực</span>
-                <span class="saas-kv-val font-monospace">${a.start_time.substring(11, 16)} - ${a.end_time.substring(11, 16)}</span>
-            </div>
-            <div class="saas-kv-item">
-                <span class="saas-kv-label">Mức Thù Lao</span>
-                <span class="saas-kv-val text-success font-monospace">${parseInt(a.remuneration_amount || 150000).toLocaleString('vi-VN')} đ</span>
-            </div>
-            <div class="saas-kv-item">
-                <span class="saas-kv-label">Trạng Thái Thẩm Định</span>
-                <span class="saas-kv-val ${isApproved ? 'text-success' : 'text-warning'}">
-                    ${isApproved ? 'Đã Thẩm Định Nghiệm Thu' : 'Đang Chờ GV Duyệt'}
-                </span>
-            </div>
-        </div>
-
-        <div class="saas-card p-3 border mb-3">
-            <strong class="text-dark d-block mb-2 small">Nội Dung Minh Chứng Đã Nộp</strong>
-            ${isMedia ? `
-                <div class="d-flex align-items-center justify-content-between p-2.5 bg-light rounded-3 border mb-2">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-google text-danger fs-5"></i>
+        <div class="d-flex flex-column gap-3.5">
+            <!-- Thẻ hồ sơ CTV & Ca trực -->
+            <div class="p-3 rounded-3 border bg-light" style="border-color: #E2E8F0 !important;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center text-dark fw-bold" style="width: 38px; height: 38px; background: #FFFFFF; border: 1px solid #CBD5E1; font-size: 14px;">
+                            ${(a.full_name || 'H').charAt(0).toUpperCase()}
+                        </div>
                         <div>
-                            <strong class="text-dark d-block small">Bộ Ảnh Google Drive (> 50 ảnh)</strong>
-                            <small class="text-muted">Đã kiểm tra gắn logo FPT Poly</small>
+                            <div class="fw-bold text-dark" style="font-size: 14.5px;">${a.full_name || 'Cộng tác viên'}</div>
+                            <div class="text-muted" style="font-size: 12px;">
+                                <span class="font-monospace">${a.student_code || 'PI03015'}</span> • ${a.email || 'ctv@fpt.edu.vn'}
+                            </div>
                         </div>
                     </div>
-                    <a href="${a.proof_drive_url || 'https://drive.google.com'}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                        <i class="bi bi-box-arrow-up-right me-1"></i> Mở Drive
-                    </a>
+                    <span class="badge rounded-pill ${isMedia ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}" style="font-size: 11px; padding: 4px 10px;">
+                        ${isMedia ? 'Job Media' : 'Job Hậu cần'}
+                    </span>
                 </div>
-            ` : `
-                <div class="text-center p-3 bg-light rounded-3 border mb-2">
-                    <img src="${a.proof_image_url || '/assets/images/placeholder_event.jpg'}" alt="Minh chứng" class="img-fluid rounded-2 mb-2" style="max-height:180px; object-fit:cover;">
-                    <div class="small text-muted">Ảnh chụp có mặt trực tiếp tại vị trí trực sự kiện</div>
+
+                <div class="saas-kv-grid mt-2 pt-2 border-top" style="border-color: #E2E8F0 !important;">
+                    <div class="saas-kv-item">
+                        <span class="saas-kv-label">Sự Kiện</span>
+                        <span class="saas-kv-val text-truncate" title="${a.event_title}">${a.event_title}</span>
+                    </div>
+                    <div class="saas-kv-item">
+                        <span class="saas-kv-label">Ca Trực</span>
+                        <span class="saas-kv-val text-truncate" title="${a.shift_name}">${a.shift_name}</span>
+                    </div>
+                    <div class="saas-kv-item">
+                        <span class="saas-kv-label">Thời Gian</span>
+                        <span class="saas-kv-val font-monospace">${timeStr}</span>
+                    </div>
+                    <div class="saas-kv-item">
+                        <span class="saas-kv-label">Mức Thù Lao</span>
+                        <span class="saas-kv-val text-success font-monospace">${amountStr}</span>
+                    </div>
                 </div>
-            `}
-            <div class="small text-muted">Ghi chú CTV: <em>${a.proof_note || 'Đã hoàn thành đầy đủ nhiệm vụ ca trực đúng thời gian quy định.'}</em></div>
+            </div>
+
+            <!-- Khối minh chứng -->
+            <div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fw-bold text-dark mb-0" style="font-size: 13.5px;">
+                        <i class="bi bi-images me-1 text-primary"></i> Minh chứng đã nộp
+                    </h6>
+                    ${isMedia ? `
+                        <a href="${a.proof_drive_url || a.proof_image_url || 'https://drive.google.com'}" target="_blank" class="btn-action-secondary py-1 px-2" style="font-size: 11.5px;">
+                            <i class="fa-brands fa-google-drive text-primary"></i> Mở Drive gốc <i class="bi bi-arrow-up-right" style="font-size: 9px;"></i>
+                        </a>
+                    ` : ''}
+                </div>
+
+                ${isMedia ? `
+                    <div class="p-3 rounded-3 border bg-white mb-2" style="border-color: #E2E8F0 !important;">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2.5">
+                                <i class="fa-brands fa-google-drive text-primary" style="font-size: 26px;"></i>
+                                <div>
+                                    <div class="fw-semibold text-dark" style="font-size: 13px;">Thư mục Google Drive Media Sự Kiện</div>
+                                    <div class="text-muted" style="font-size: 11.5px;">Đã kiểm tra gắn Logo FPT và chỉnh tone màu</div>
+                                </div>
+                            </div>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 11px;">
+                                <i class="bi bi-check-circle me-1"></i>Đạt chuẩn Media
+                            </span>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="drawer-proof-grid mb-2">
+                        ${sampleProofImages.map(imgUrl => `
+                            <img src="${imgUrl}" alt="Minh chứng" class="drawer-proof-img" onclick="window.open('${imgUrl}', '_blank')" title="Bấm để xem ảnh phóng to">
+                        `).join('')}
+                    </div>
+                `}
+
+                <div class="p-2.5 rounded-3 bg-light border text-muted" style="font-size: 12px; line-height: 1.45;">
+                    <strong class="text-dark d-block mb-1">Mô tả công việc từ CTV:</strong>
+                    ${a.proof_note || 'Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.'}
+                </div>
+            </div>
+
+            <!-- Tiêu chí nghiệm thu (Checklist) -->
+            <div>
+                <h6 class="fw-bold text-dark mb-2" style="font-size: 13.5px;">
+                    <i class="bi bi-check2-square me-1 text-primary"></i> Tiêu chí nghiệm thu
+                </h6>
+                <div class="d-flex flex-column gap-1.5">
+                    <div class="proof-criterion-row is-checked" onclick="toggleDrawerCriterion(this)">
+                        <div class="proof-criterion-checkbox"><i class="bi bi-check"></i></div>
+                        <div style="font-size: 12.5px; color: #0F172A; line-height: 1.35;">
+                            Có mặt và tham gia đúng thời gian ca trực quy định
+                        </div>
+                    </div>
+                    <div class="proof-criterion-row is-checked" onclick="toggleDrawerCriterion(this)">
+                        <div class="proof-criterion-checkbox"><i class="bi bi-check"></i></div>
+                        <div style="font-size: 12.5px; color: #0F172A; line-height: 1.35;">
+                            Thực hiện đúng nhiệm vụ được phân công (âm thanh, trình chiếu, hậu trường, hỗ trợ sân khấu...)
+                        </div>
+                    </div>
+                    <div class="proof-criterion-row is-checked" onclick="toggleDrawerCriterion(this)">
+                        <div class="proof-criterion-checkbox"><i class="bi bi-check"></i></div>
+                        <div style="font-size: 12.5px; color: #0F172A; line-height: 1.35;">
+                            Ảnh minh chứng rõ ràng, có bối cảnh tại sự kiện
+                        </div>
+                    </div>
+                    <div class="proof-criterion-row is-checked" onclick="toggleDrawerCriterion(this)">
+                        <div class="proof-criterion-checkbox"><i class="bi bi-check"></i></div>
+                        <div style="font-size: 12.5px; color: #0F172A; line-height: 1.35;">
+                            Đảm bảo tác phong làm việc, phối hợp với Ban Tổ Chức
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quyết định nghiệm thu -->
+            <div>
+                <h6 class="fw-bold text-dark mb-2" style="font-size: 13.5px;">
+                    <i class="bi bi-shield-check me-1 text-primary"></i> Quyết định nghiệm thu
+                </h6>
+                <div class="d-flex flex-column gap-2 mb-2.5">
+                    <label class="p-2.5 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer" id="labelDrawerOptApprove" style="background: #F0FDF4; border-color: #86EFAC !important; cursor: pointer;">
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="radio" name="drawerDecisionRadio" value="approve" checked onchange="handleDrawerDecisionChange('approve')" style="accent-color: #16A34A;">
+                            <div>
+                                <strong class="d-block text-dark" style="font-size: 13px;">Duyệt nghiệm thu</strong>
+                                <small class="text-muted" style="font-size: 11.5px;">Minh chứng đáp ứng đầy đủ tiêu chí, đủ điều kiện thanh toán thù lao.</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-success text-white" style="font-size: 10px;">Khuyên dùng</span>
+                    </label>
+
+                    <label class="p-2.5 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer" id="labelDrawerOptRequestMore" style="background: #FFFFFF; border-color: #E2E8F0; cursor: pointer;">
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="radio" name="drawerDecisionRadio" value="request_more" onchange="handleDrawerDecisionChange('request_more')" style="accent-color: #D97706;">
+                            <div>
+                                <strong class="d-block text-dark" style="font-size: 13px;">Yêu cầu bổ sung</strong>
+                                <small class="text-muted" style="font-size: 11.5px;">Minh chứng chưa rõ hoặc chưa đủ, gửi yêu cầu CTV tải lại.</small>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="form-label text-muted fw-semibold mb-1" style="font-size: 12px;">
+                        Ghi chú / Nhận xét cho CTV <span id="drawerAsterisk" style="display: none; color: #DC2626;">*</span>
+                    </label>
+                    <textarea class="form-control" id="drawerDecisionNote" rows="2" placeholder="Nhập ghi chú cho CTV (nếu có)..." style="font-size: 12.5px; border-color: #CBD5E1;"></textarea>
+                </div>
+            </div>
         </div>
     `;
 
     const footerHtml = `
-        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="closeSaasDrawer()">Đóng</button>
-        <button type="button" class="btn btn-sm btn-primary rounded-pill px-4" onclick="closeSaasDrawer(); openFacilityProofModal(${a.assignment_id})">
-            <i class="bi bi-shield-check me-1"></i> Thẩm Định & Quyết Định
+        <button type="button" class="btn btn-sm btn-outline-secondary rounded-2 px-3" onclick="closeSaasDrawer()">Hủy</button>
+        <button type="button" class="btn btn-sm btn-primary rounded-2 px-3.5 d-inline-flex align-items-center gap-1.5" id="btnSubmitDrawerDecision" style="background: #2563EB; border-color: #2563EB;" onclick="submitProofVerificationFromDrawer(${a.assignment_id})">
+            <i class="bi bi-check-lg"></i>
+            <span>Xác nhận duyệt</span>
         </button>
     `;
 
-    openSaasDrawer('Thẩm Định Minh Chứng', a.shift_name, bodyHtml, footerHtml);
+    openSaasDrawer('Kiểm Tra & Duyệt Minh Chứng', `${a.full_name} (${a.student_code})`, bodyHtml, footerHtml);
+}
+
+function openProofDrawer(assignmentId) {
+    openProofVerificationDrawer(assignmentId);
+}
+
+function toggleDrawerCriterion(rowEl) {
+    rowEl.classList.toggle('is-checked');
+}
+
+function handleDrawerDecisionChange(decision) {
+    currentReviewDecision = decision;
+    const optApprove = document.getElementById('labelDrawerOptApprove');
+    const optReq = document.getElementById('labelDrawerOptRequestMore');
+    const asterisk = document.getElementById('drawerAsterisk');
+    const submitBtn = document.getElementById('btnSubmitDrawerDecision');
+    const noteArea = document.getElementById('drawerDecisionNote');
+
+    if (decision === 'approve') {
+        if (optApprove) { optApprove.style.background = '#F0FDF4'; optApprove.style.borderColor = '#86EFAC'; }
+        if (optReq) { optReq.style.background = '#FFFFFF'; optReq.style.borderColor = '#E2E8F0'; }
+        if (asterisk) asterisk.style.display = 'none';
+        if (submitBtn) {
+            submitBtn.className = 'btn btn-sm btn-primary rounded-2 px-3.5 d-inline-flex align-items-center gap-1.5';
+            submitBtn.style.background = '#2563EB';
+            submitBtn.style.borderColor = '#2563EB';
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i><span>Xác nhận duyệt</span>';
+        }
+    } else {
+        if (optReq) { optReq.style.background = '#FFFBEB'; optReq.style.borderColor = '#FCD34D'; }
+        if (optApprove) { optApprove.style.background = '#FFFFFF'; optApprove.style.borderColor = '#E2E8F0'; }
+        if (asterisk) asterisk.style.display = 'inline';
+        if (noteArea) {
+            noteArea.focus();
+            if (!noteArea.value) noteArea.placeholder = 'Nhập lý do yêu cầu CTV bổ sung minh chứng (bắt buộc)...';
+        }
+        if (submitBtn) {
+            submitBtn.className = 'btn btn-sm btn-warning rounded-2 px-3.5 d-inline-flex align-items-center gap-1.5 text-dark';
+            submitBtn.style.background = '#F59E0B';
+            submitBtn.style.borderColor = '#F59E0B';
+            submitBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i><span>Gửi yêu cầu bổ sung</span>';
+        }
+    }
+}
+
+async function submitProofVerificationFromDrawer(assignmentId) {
+    const submitBtn = document.getElementById('btnSubmitDrawerDecision');
+    const noteArea = document.getElementById('drawerDecisionNote');
+    const noteVal = noteArea ? noteArea.value.trim() : '';
+
+    if (currentReviewDecision === 'request_more' && !noteVal) {
+        showToast('Vui lòng nhập lý do yêu cầu CTV bổ sung minh chứng!', 'warning');
+        if (noteArea) noteArea.focus();
+        return;
+    }
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang xử lý...';
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('assignment_id', assignmentId);
+        formData.append('decision', currentReviewDecision);
+        formData.append('note', noteVal);
+
+        const res = await fetch('index.php?page=dashboard&action=verify_lecturer', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            showToast(data.message || (currentReviewDecision === 'approve' ? 'Đã duyệt nghiệm thu thành công!' : 'Đã gửi yêu cầu bổ sung minh chứng!'), 'success');
+
+            // Cập nhật trạng thái trong rawAccountingList
+            if (typeof rawAccountingList !== 'undefined') {
+                const acc = rawAccountingList.find(a => parseInt(a.assignment_id) === assignmentId);
+                if (acc) {
+                    if (currentReviewDecision === 'approve') {
+                        acc.lecturer_verified = 1;
+                        acc.contract_code = 'HDNT-2026-FPLY-' + String(assignmentId).padStart(3, '0');
+                        acc.accounting_status = 'Approved';
+                    } else {
+                        acc.lecturer_verified = 0;
+                        acc.accounting_status = 'Revision_Required';
+                    }
+                    if (noteVal) acc.proof_note = noteVal;
+                }
+            }
+
+            // Cập nhật dòng bảng nghiệm thu
+            const row = document.getElementById(`subRow_${assignmentId}`);
+            if (row) {
+                const statusCell = row.children[4];
+                const actionCell = row.children[5];
+                if (currentReviewDecision === 'approve') {
+                    if (statusCell) {
+                        statusCell.innerHTML = `
+                            <span class="badge-saas" style="background: #ECFDF5; color: #15803D; border: 1px solid #BBF7D0;">
+                                <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: #16A34A;"></span>
+                                Đã nghiệm thu
+                            </span>
+                            <div class="text-sub font-monospace mt-1" style="font-size: 11px;">
+                                HDNT-2026-FPLY-${String(assignmentId).padStart(3, '0')}
+                            </div>
+                        `;
+                    }
+                    if (actionCell) {
+                        actionCell.innerHTML = `
+                            <div class="d-flex align-items-center justify-content-end gap-1.5">
+                                <button type="button" class="btn-action-secondary" onclick="openProofVerificationDrawer(${assignmentId})" title="Xem lại chi tiết hồ sơ nghiệm thu">
+                                    <i class="bi bi-check-circle text-success"></i> Xem lại
+                                </button>
+                            </div>
+                        `;
+                    }
+                } else {
+                    if (statusCell) {
+                        statusCell.innerHTML = `
+                            <span class="badge-saas" style="background: #FFF7ED; color: #C2410C; border: 1px solid #FFEDD5;">
+                                <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: #EA580C;"></span>
+                                Cần bổ sung
+                            </span>
+                        `;
+                    }
+                }
+            }
+
+            closeSaasDrawer();
+        } else {
+            showToast(data.message || 'Lỗi khi xử lý duyệt nghiệm thu.', 'danger');
+        }
+    } catch (e) {
+        showToast('Lỗi kết nối máy chủ.', 'danger');
+    } finally {
+        if (submitBtn) submitBtn.disabled = false;
+    }
 }
 
 // 6. Chi tiết Hợp Đồng & Thanh Toán Drawer
@@ -8130,14 +8404,179 @@ function changeCalendarView(viewName) {
 }
 
 // =========================================================
-// CÁC HÀM XỬ LÝ CONTEXTUAL POPOVER KHI CÓ TRÙNG LỊCH (IMAGE 10)
+// CÁC HÀM XỬ LÝ CONTEXTUAL POPOVER & DAY INSPECTOR CHUẨN APPLE CALENDAR
 // =========================================================
+let currentCalSidebarMode = 'day'; // 'day' hoặc 'upcoming'
+
+/**
+ * Trả về danh sách hoạt động, sự kiện và ca trực cho BẤT KỲ NGÀY NÀO
+ */
+function getDayActivities(dateStr) {
+    if (dateStr === '2026-11-18') {
+        return day18Activities;
+    }
+
+    const activities = [];
+
+    // 1. Dữ liệu chuẩn các ngày trọng điểm trong tháng 11/2026
+    if (dateStr === '2026-11-15') {
+        activities.push(
+            { id: 'act_15_ev', type: 'event', title: 'Khai mạc TechDay 2026: AI & Chuyển Đổi Số', time: '07:30 – 17:30', location: 'Hội trường Trịnh Văn Bô', description: 'Ngày hội công nghệ quy mô 20 doanh nghiệp CNTT hàng đầu và workshop AI Agent.', status: 'Đang diễn ra', statusBg: '#EFF6FF', statusColor: '#1D4ED8', borderColor: '#2563EB', icon: 'bi-megaphone', iconColor: '#2563EB', eventId: 1, ctvInfo: '12 CTV tham gia' },
+            { id: 'act_15_s1', type: 'shift', title: 'Ca 1: Setup Sân Khấu & Âm Thanh Ánh Sáng', time: '06:30 – 09:30', location: 'Hội trường Trịnh Văn Bô', description: 'Kiểm tra 4 micro không dây và 2 màn hình LED phụ.', status: 'Đã hoàn thành', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#16A34A', icon: 'bi-calendar-event', iconColor: '#16A34A', eventId: 1, ctvInfo: '3/4 CTV', allowance: '150.000 đ' },
+            { id: 'act_15_s2', type: 'shift', title: 'Ca 2: Lễ Tân Đón Khách & Check-in Doanh Nghiệp', time: '07:30 – 11:30', location: 'Sảnh chính Tòa T', description: 'Đón tiếp đại diện các doanh nghiệp CNTT đối tác và phát tài liệu.', status: 'Đã hoàn thành', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#059669', icon: 'bi-calendar-event', iconColor: '#059669', eventId: 1, ctvInfo: '5/6 CTV', allowance: '150.000 đ' },
+            { id: 'act_15_s3', type: 'shift', title: 'Ca 3: Media Phóng Sự Ảnh & Recap Clip', time: '08:00 – 12:00', location: 'Toàn khuôn viên trường', description: 'Chụp ảnh sự kiện và quay recap 60s.', status: 'Đã hoàn thành', statusBg: '#FFFBEB', statusColor: '#B45309', borderColor: '#D97706', icon: 'bi-camera-video', iconColor: '#D97706', eventId: 1, ctvInfo: '2/3 CTV', allowance: '200.000 đ' }
+        );
+        return activities;
+    }
+
+    if (dateStr === '2026-11-20') {
+        activities.push(
+            { id: 'act_20_ev', type: 'event', title: 'Khai Mạc Giải Thể Thao Sinh Viên FPoly 2026', time: '07:00 – 11:30', location: 'Sân Central Yard FPoly', description: 'Giải đấu thể thao Poly Champion môn bóng đá và bóng bàn.', status: 'Sắp diễn ra', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#16A34A', icon: 'bi-trophy', iconColor: '#16A34A', eventId: 3, ctvInfo: '5 CTV' },
+            { id: 'act_20_s1', type: 'shift', title: 'Ca 1: Trọng Tài Bàn & Hậu Cần Khai Mạc', time: '06:30 – 11:30', location: 'Sân Central Yard', description: 'Ghi biên bản thi đấu 8 trận vòng bảng.', status: 'Đã xác nhận', statusBg: '#EFF6FF', statusColor: '#1D4ED8', borderColor: '#2563EB', icon: 'bi-calendar-event', iconColor: '#2563EB', eventId: 3, ctvInfo: '4/8 CTV', allowance: '150.000 đ' },
+            { id: 'act_20_s2', type: 'shift', title: 'Ca 2: Media Phóng Sự Thể Thao', time: '07:30 – 11:30', location: 'Sân bóng đá & Central Yard', description: 'Ghi hình highlight những pha bóng đẹp.', status: 'Đang tuyển', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-camera', iconColor: '#EA580C', eventId: 3, ctvInfo: '1/2 CTV', allowance: '180.000 đ' }
+        );
+        return activities;
+    }
+
+    if (dateStr === '2026-11-22') {
+        activities.push(
+            { id: 'act_22_ev1', type: 'event', title: 'Triển Lãm Đồ Họa & Đa Phương Tiện FPoly Creative', time: '08:00 – 17:00', location: 'Phòng Triển Lãm Tòa B', description: 'Trưng bày hơn 100 tác phẩm đồ họa và phim hoạt hình sinh viên.', status: 'Sắp diễn ra', statusBg: '#FAF5FF', statusColor: '#7E22CE', borderColor: '#9333EA', icon: 'bi-palette', iconColor: '#9333EA', eventId: 4, ctvInfo: '3 ca trực' },
+            { id: 'act_22_ev2', type: 'event', title: 'Workshop: Đổi Mới Đào Tạo & Ứng Dụng AI', time: '13:30 – 17:30', location: 'Hội trường Trịnh Văn Bô', description: 'Tọa đàm chuyên môn cùng các chuyên gia EdTech.', status: 'Sắp diễn ra', statusBg: '#EFF6FF', statusColor: '#1D4ED8', borderColor: '#2563EB', icon: 'bi-laptop', iconColor: '#2563EB', eventId: 7, ctvInfo: '2 ca trực' },
+            { id: 'act_22_s1', type: 'shift', title: 'Ca 1: Hướng Dẫn Khách Tham Quan Triển Lãm', time: '07:30 – 12:00', location: 'Phòng Triển Lãm Tòa B', description: 'Hỗ trợ khách tham quan và bảo quản sản phẩm trưng bày.', status: 'Đang tuyển', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-calendar-event', iconColor: '#EA580C', eventId: 4, ctvInfo: '2/4 CTV', allowance: '150.000 đ' },
+            { id: 'act_22_s2', type: 'shift', title: 'Ca 2: Chụp Ảnh Macro Chi Tiết Tác Phẩm', time: '08:30 – 13:00', location: 'Phòng Triển Lãm Tòa B', description: 'Nhiếp ảnh sản phẩm đồ họa độ phân giải cao.', status: 'Đã xác nhận', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#16A34A', icon: 'bi-camera', iconColor: '#16A34A', eventId: 4, ctvInfo: '1/2 CTV', allowance: '200.000 đ' }
+        );
+        return activities;
+    }
+
+    if (dateStr === '2026-11-25') {
+        activities.push(
+            { id: 'act_25_ev', type: 'event', title: 'Chung Kết Cuộc Thi Khởi Nghiệp FPoly Biz 2026', time: '13:00 – 18:00', location: 'Hội trường Trịnh Văn Bô', description: 'Pitching 10 dự án Startup sinh viên trước Quỹ đầu tư.', status: 'Sắp diễn ra', statusBg: '#FFFBEB', statusColor: '#B45309', borderColor: '#F59E0B', icon: 'bi-award', iconColor: '#F59E0B', eventId: 5, ctvInfo: '6 CTV' },
+            { id: 'act_25_s1', type: 'shift', title: 'Ca 1: Đón Tiếp BGK & Quỹ Đầu Tư', time: '12:30 – 18:00', location: 'Sảnh VIP Hội trường', description: 'Đón tiếp các chuyên gia cố vấn và giám khảo doanh nghiệp.', status: 'Đang tuyển', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-people', iconColor: '#EA580C', eventId: 5, ctvInfo: '2/4 CTV', allowance: '180.000 đ' },
+            { id: 'act_25_s2', type: 'shift', title: 'Ca 2: Kỹ Thuật Trình Chiếu Pitching & Micro', time: '12:30 – 18:00', location: 'Khu vực kỹ thuật Hội trường', description: 'Vận hành slide và micro không dây cho 10 đội thi.', status: 'Đã xác nhận', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#16A34A', icon: 'bi-mic', iconColor: '#16A34A', eventId: 5, ctvInfo: '1/2 CTV', allowance: '180.000 đ' }
+        );
+        return activities;
+    }
+
+    if (dateStr === '2026-11-28') {
+        activities.push(
+            { id: 'act_28_ev', type: 'event', title: 'Ngày Hội Văn Hóa Ẩm Thực & Du Lịch Poly', time: '08:00 – 15:30', location: 'Sân Central Yard', description: 'Không gian văn hóa ẩm thực và hội thi pha chế Bartender.', status: 'Sắp diễn ra', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-cup-hot', iconColor: '#EA580C', eventId: 6, ctvInfo: '8 CTV' },
+            { id: 'act_28_s1', type: 'shift', title: 'Ca 1: Hỗ Trợ Gian Hàng Ẩm Thực Vùng Miền', time: '07:30 – 12:00', location: 'Khu gian hàng sân trường', description: 'Hỗ trợ setup bàn ghế và tiếp nước các gian hàng ẩm thực.', status: 'Đang tuyển', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-basket', iconColor: '#EA580C', eventId: 6, ctvInfo: '2/6 CTV', allowance: '150.000 đ' },
+            { id: 'act_28_s2', type: 'shift', title: 'Ca 2: Media Ghi Hình Hội Thi Bartender', time: '09:00 – 14:00', location: 'Sân khấu biểu diễn Bartender', description: 'Ghi hình các tiết mục pha chế nghệ thuật.', status: 'Đang tuyển', statusBg: '#EFF6FF', statusColor: '#1D4ED8', borderColor: '#2563EB', icon: 'bi-camera-video', iconColor: '#2563EB', eventId: 6, ctvInfo: '1/2 CTV', allowance: '200.000 đ' }
+        );
+        return activities;
+    }
+
+    if (dateStr === '2026-11-30') {
+        activities.push({
+            id: 'act_30_not', type: 'other', title: 'Hạn chót quyết toán thù lao tháng 11', time: '08:00 – 17:00', location: 'Phòng Hành chính - Ban Giám Hiệu', description: 'Ban Giám Hiệu tổng hợp danh sách nghiệm thu và chuyển khoản cho toàn bộ CTV.', status: 'Quan trọng', statusBg: '#FAF5FF', statusColor: '#7E22CE', borderColor: '#8B5CF6', icon: 'bi-wallet2', iconColor: '#8B5CF6', eventId: 1
+        });
+        return activities;
+    }
+
+    if (dateStr === '2026-11-06') {
+        activities.push({
+            id: 'act_06_meet', type: 'event', title: 'Họp Ban Tổ Chức & Phân Công Tháng 11', time: '09:00 – 11:30', location: 'Phòng họp 202, Tòa A', description: 'Phổ biến kế hoạch tháng công nghệ và chốt nhân sự ca trực.', status: 'Đã diễn ra', statusBg: '#F1F5F9', statusColor: '#475569', borderColor: '#94A3B8', icon: 'bi-people', iconColor: '#64748B', eventId: 1
+        });
+        return activities;
+    }
+
+    if (dateStr === '2026-11-13') {
+        activities.push({
+            id: 'act_13_lab', type: 'shift', title: 'Ca trực Lab: Kiểm tra thiết bị phòng máy AI', time: '13:30 – 17:00', location: 'Phòng Lab 405, Tòa B', description: 'Cài đặt và kiểm thử mạng máy trạm cho workshop.', status: 'Đã hoàn thành', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#10B981', icon: 'bi-tools', iconColor: '#10B981', eventId: 2, ctvInfo: '1/2 CTV', allowance: '150.000 đ'
+        });
+        return activities;
+    }
+
+    // 2. Lấy từ rawShifts nếu ngày này có ca
+    if (typeof rawShifts !== 'undefined') {
+        const matchingShifts = rawShifts.filter(s => s.start_time && s.start_time.startsWith(dateStr));
+        matchingShifts.forEach(s => {
+            const isMine = parseInt(s.is_registered_by_me) > 0;
+            const startTime = s.start_time ? s.start_time.substring(11, 16) : '08:00';
+            const endTime = s.end_time ? s.end_time.substring(11, 16) : '12:00';
+            const allowance = s.remuneration_amount ? Number(s.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150.000 đ';
+            activities.push({
+                id: 'dyn_shift_' + s.id,
+                type: 'shift',
+                title: s.name,
+                time: `${startTime} – ${endTime}`,
+                location: s.location_name || 'Cơ sở FPT Polytechnic Đồng Nai',
+                description: s.skill_required ? `Yêu cầu kỹ năng: ${s.skill_required}` : 'Hỗ trợ công tác tổ chức theo phân công BTC.',
+                status: isMine ? 'Đã đăng ký' : 'Đang tuyển',
+                statusBg: isMine ? '#F0FDF4' : '#FFF7ED',
+                statusColor: isMine ? '#15803D' : '#C2410C',
+                borderColor: isMine ? '#16A34A' : '#EA580C',
+                icon: 'bi-calendar-event',
+                iconColor: isMine ? '#16A34A' : '#EA580C',
+                eventId: s.event_id,
+                ctvInfo: `${s.approved_qty || 0}/${s.target_qty || 1} CTV`,
+                allowance: allowance
+            });
+        });
+    }
+
+    // 3. Lấy từ rawEvents nếu ngày này có sự kiện
+    if (typeof rawEvents !== 'undefined') {
+        const matchingEvents = rawEvents.filter(e => e.start_time && e.start_time.startsWith(dateStr));
+        matchingEvents.forEach(e => {
+            if (!activities.some(a => a.eventId === e.id && a.type === 'event')) {
+                const startTime = e.start_time ? e.start_time.substring(11, 16) : '08:00';
+                const endTime = e.end_time ? e.end_time.substring(11, 16) : '17:00';
+                activities.push({
+                    id: 'dyn_event_' + e.id,
+                    type: 'event',
+                    title: e.title,
+                    time: `${startTime} – ${endTime}`,
+                    location: e.location_name || 'Hội trường Trịnh Văn Bô',
+                    description: e.description ? e.description.substring(0, 85) + '...' : 'Sự kiện chính thức tại trường.',
+                    status: 'Sắp diễn ra',
+                    statusBg: '#EFF6FF',
+                    statusColor: '#1D4ED8',
+                    borderColor: '#2563EB',
+                    icon: 'bi-megaphone',
+                    iconColor: '#2563EB',
+                    eventId: e.id,
+                    ctvInfo: 'Sự kiện trường'
+                });
+            }
+        });
+    }
+
+    // 4. Lấy từ rawCalendarNotes
+    if (typeof rawCalendarNotes !== 'undefined') {
+        const matchingNotes = rawCalendarNotes.filter(n => (n.date || n.target_date) === dateStr);
+        matchingNotes.forEach(n => {
+            activities.push({
+                id: 'dyn_note_' + n.id,
+                type: 'other',
+                title: n.title,
+                time: '08:00 – 17:00',
+                location: n.author || 'Ban Tổ Chức FPoly',
+                description: n.content || '',
+                status: 'Ghi chú',
+                statusBg: '#F1F5F9',
+                statusColor: '#475569',
+                borderColor: n.color || '#94A3B8',
+                icon: 'bi-sticky',
+                iconColor: '#64748B',
+                eventId: n.event_id || 1
+            });
+        });
+    }
+
+    return activities;
+}
+
+/**
+ * Hiển thị Contextual Popover tại ô ngày khi nhấp vào (Apple Calendar Style, không bị cắt viền)
+ */
 function showCalendarDayPopover(triggerEl, dateStr) {
     const popover = document.getElementById('calDayPopover');
     const container = document.getElementById('tierMonthView');
     if (!popover || !container || !triggerEl) return;
 
-    if (dateStr !== '2026-11-18') {
+    const acts = getDayActivities(dateStr);
+    if (!acts || acts.length === 0) {
         popover.style.display = 'none';
         return;
     }
@@ -8146,46 +8585,55 @@ function showCalendarDayPopover(triggerEl, dateStr) {
     const cellRect = cell.getBoundingClientRect();
     const parentRect = container.getBoundingClientRect();
 
+    const parts = dateStr.split('-');
+    const dayNames = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+    const dObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    const dayName = dayNames[dObj.getDay()];
+    const dateFormatted = `${dayName}, ${parts[2]}/${parts[1]}/${parts[0]}`;
+
     popover.innerHTML = `
         <div class="d-flex align-items-center justify-content-between mb-1 pb-1">
             <div>
-                <div class="fw-bold text-dark" style="font-size: 13.5px; line-height: 1.2;">Thứ Tư, 18/11/2026</div>
-                <div class="text-muted" style="font-size: 11px;">4 hoạt động trong ngày</div>
+                <div class="fw-bold text-dark" style="font-size: 13.5px; line-height: 1.2;">${dateFormatted}</div>
+                <div class="text-muted" style="font-size: 11px;">${acts.length} hoạt động trong ngày</div>
             </div>
             <button type="button" class="btn-close ms-auto" style="font-size: 8.5px;" onclick="closeCalendarDayPopover(event)"></button>
         </div>
         <div class="d-flex flex-column gap-1 pt-1 border-top" style="border-color: #F1F5F9 !important;">
-            <div class="cal-popover-item" onclick="filterDayDetailTab('other'); openEventDrawer(2);">
-                <span class="text-muted font-monospace" style="font-size: 10.5px; min-width: 78px;">08:00 – 12:00</span>
-                <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: #0284C7; flex-shrink: 0;"></span>
-                <span class="fw-semibold text-dark text-truncate" style="font-size: 12px;">Bảo trì phòng máy Lab AI</span>
-            </div>
-            <div class="cal-popover-item" onclick="filterDayDetailTab('shift'); openEventDrawer(2);">
-                <span class="text-muted font-monospace" style="font-size: 10.5px; min-width: 78px;">13:00 – 17:00</span>
-                <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: #9333EA; flex-shrink: 0;"></span>
-                <span class="fw-semibold text-dark text-truncate" style="font-size: 12px;">Ca 1: Hỗ trợ kỹ thuật</span>
-            </div>
-            <div class="cal-popover-item" onclick="filterDayDetailTab('shift'); openEventDrawer(1);">
-                <span class="text-muted font-monospace" style="font-size: 10.5px; min-width: 78px;">17:30 – 18:30</span>
-                <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: #EA580C; flex-shrink: 0;"></span>
-                <span class="fw-semibold text-dark text-truncate" style="font-size: 12px;">Ca 2: Setup sân khấu</span>
-            </div>
-            <div class="cal-popover-item" onclick="filterDayDetailTab('event'); openEventDrawer(1);">
-                <span class="text-muted font-monospace" style="font-size: 10.5px; min-width: 78px;">19:00 – 21:00</span>
-                <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: #16A34A; flex-shrink: 0;"></span>
-                <span class="fw-semibold text-dark text-truncate" style="font-size: 12px;">Họp tổng kết BTC</span>
-            </div>
+            ${acts.slice(0, 5).map(item => `
+                <div class="cal-popover-item" onclick="filterDayDetailTab('${item.type}'); openEventDrawer(${item.eventId});">
+                    <span class="text-muted font-monospace" style="font-size: 10.5px; min-width: 78px;">${item.time}</span>
+                    <span class="rounded-circle d-inline-block" style="width: 6px; height: 6px; background: ${item.borderColor}; flex-shrink: 0;"></span>
+                    <span class="fw-semibold text-dark text-truncate" style="font-size: 12px;">${item.title}</span>
+                </div>
+            `).join('')}
+            ${acts.length > 5 ? `<div class="text-muted text-center pt-1" style="font-size: 11px;">+${acts.length - 5} hoạt động nữa (xem ở cột bên phải)</div>` : ''}
         </div>
     `;
 
-    // Định vị popover ngay sát bên phải ô ngày
-    let top = (cellRect.top - parentRect.top) + 15;
+    popover.style.display = 'block';
+    popover.classList.add('is-open');
+
+    // Thuật toán định vị thông minh: Giới hạn popover luôn nằm trọn trong #tierMonthView, không bị cắt chân
+    const popoverWidth = 300;
+    const popoverHeight = popover.offsetHeight || (55 + Math.min(acts.length, 5) * 32);
+
+    let top = (cellRect.top - parentRect.top) + 8;
     let left = (cellRect.right - parentRect.left) + 8;
+
+    // Giới hạn theo chiều dọc
+    if (top + popoverHeight > parentRect.height - 12) {
+        top = Math.max(10, parentRect.height - popoverHeight - 12);
+    }
+    if (top < 10) top = 10;
+
+    // Giới hạn theo chiều ngang
+    if (left + popoverWidth > parentRect.width - 12) {
+        left = Math.max(10, (cellRect.left - parentRect.left) - popoverWidth - 8);
+    }
 
     popover.style.top = `${top}px`;
     popover.style.left = `${left}px`;
-    popover.style.display = 'block';
-    popover.classList.add('is-open');
 }
 
 function closeCalendarDayPopover(e) {
@@ -8215,6 +8663,7 @@ function filterDayDetailTab(type, btnEl) {
 function resetCalendarFilters() {
     currentDayFilter = 'all';
     selectedDateStr = '2026-11-18';
+    currentCalSidebarMode = 'day';
     renderMonthGrid(currentYear, currentMonth);
     showToast('Đã đặt lại toàn bộ bộ lọc lịch!', 'info');
 }
@@ -8229,7 +8678,50 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// 1. Render Lưới Tháng (Month Grid) - Thiết kế Mockup 2 Cột
+/**
+ * Chuyển đổi chế độ hiển thị Sidebar: 'day' (Lịch ngày) hoặc 'upcoming' (Lịch sắp tới)
+ */
+function setCalSidebarMode(mode) {
+    currentCalSidebarMode = mode;
+    const btnDay = document.getElementById('btnCalModeDay');
+    const btnUpcoming = document.getElementById('btnCalModeUpcoming');
+    const modeLabel = document.getElementById('calSidebarModeLabel');
+    const navBtns = document.getElementById('calDayNavBtns');
+    const filterTabsEl = document.getElementById('calDayFilterTabs');
+
+    if (mode === 'day') {
+        if (btnDay) btnDay.classList.add('is-active');
+        if (btnUpcoming) btnUpcoming.classList.remove('is-active');
+        if (modeLabel) modeLabel.textContent = 'Chi tiết ngày';
+        if (navBtns) navBtns.style.display = 'flex';
+        renderCalendarSidebarDayDetail(selectedDateStr);
+    } else {
+        if (btnUpcoming) btnUpcoming.classList.add('is-active');
+        if (btnDay) btnDay.classList.remove('is-active');
+        if (modeLabel) modeLabel.textContent = 'Tổng quan';
+        if (navBtns) navBtns.style.display = 'none';
+        if (filterTabsEl) filterTabsEl.style.display = 'none';
+        renderCalendarUpcomingScheduleInContent();
+    }
+}
+
+/**
+ * Chọn ngày từ danh sách sắp tới và tự động chuyển về xem chi tiết ngày đó
+ */
+function selectCalendarDateAndInspect(dateStr) {
+    selectedDateStr = dateStr;
+    const parts = dateStr.split('-');
+    const m = parseInt(parts[1]) - 1;
+    const y = parseInt(parts[0]);
+    if (m !== currentMonth || y !== currentYear) {
+        currentMonth = m;
+        currentYear = y;
+    }
+    setCalSidebarMode('day');
+    renderMonthGrid(currentYear, currentMonth);
+}
+
+// 1. Render Lưới Tháng (Month Grid) - Apple Calendar Style
 function renderMonthGrid(year, month) {
     const container = document.getElementById('monthGridContainer');
     if (!container) return;
@@ -8261,8 +8753,7 @@ function renderMonthGrid(year, month) {
 
     for (let day = 1; day <= totalDaysInMonth; day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const dayShifts = (typeof rawShifts !== 'undefined') ? rawShifts.filter(s => s.start_time.startsWith(dateStr)) : [];
-        const dayNotes = (typeof rawCalendarNotes !== 'undefined') ? rawCalendarNotes.filter(n => (n.date || n.target_date) === dateStr) : [];
+        const dayActs = getDayActivities(dateStr);
         const isSelected = (selectedDateStr === dateStr);
 
         const cell = document.createElement('div');
@@ -8277,7 +8768,7 @@ function renderMonthGrid(year, month) {
                     <i class="bi bi-tools me-1" style="font-size: 9px;"></i>Bảo trì Lab AI
                 </div>
                 <div class="cal-event-pill" style="background: #F3E8FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <i class="bi bi-people me-1" style="font-size: 9px;"></i>Ca 1: Hỗ trợ kỹ thuật
+                    <i class="bi bi-people me-1" style="font-size: 9px;"></i>Ca 1: Kỹ thuật
                 </div>
                 <div class="text-primary fw-bold ps-1 pt-0.5 cursor-pointer d-flex align-items-center" onclick="toggleCalendarDayPopover(event, '2026-11-18', this)" style="font-size: 10px; color: #2563EB !important; cursor: pointer;">
                     +2 lịch khác
@@ -8309,6 +8800,7 @@ function renderMonthGrid(year, month) {
                 <div class="cal-event-pill" style="background: #FFF1EB; color: #C2410C; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
                     <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #EA580C;"></span>Khai mạc Tech...
                 </div>
+                <div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600; color: #64748B;">+3 ca trực</div>
             `;
         } else if (dateStr === '2026-11-20') {
             previewHtml = `
@@ -8330,8 +8822,9 @@ function renderMonthGrid(year, month) {
         } else if (dateStr === '2026-11-25') {
             previewHtml = `
                 <div class="cal-event-pill" style="background: #FAF5FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #9333EA;"></span>Chung kết TechDay
+                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #9333EA;"></span>Chung kết Biz
                 </div>
+                <div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600; color: #64748B;">+2 ca trực</div>
             `;
         } else if (dateStr === '2026-11-28') {
             previewHtml = `
@@ -8342,31 +8835,23 @@ function renderMonthGrid(year, month) {
                     <i class="bi bi-clock me-1"></i>09:00 Ca 2
                 </div>
             `;
-        } else if (dayNotes.length > 0) {
-            dayNotes.forEach(n => {
-                const noteTitle = n.title || n.content || 'Ghi chú';
+        } else if (dateStr === '2026-11-30') {
+            previewHtml = `
+                <div class="cal-event-pill" style="background: #F5F3FF; color: #7C3AED; font-size: 9.5px; font-weight: 600; padding: 2px 6px; border-radius: 6px;">
+                    <i class="bi bi-flag-fill me-1"></i>Hạn chốt quy...
+                </div>
+            `;
+        } else if (dayActs.length > 0) {
+            dayActs.slice(0, 2).forEach(act => {
                 previewHtml += `
-                    <div class="cal-event-pill" style="background: #F0F9FF; color: #0284C7;" title="${noteTitle}">
-                        <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #0284C7;"></span>
-                        <span class="text-truncate">${noteTitle}</span>
+                    <div class="cal-event-pill" style="background: ${act.statusBg}; color: ${act.statusColor}; font-size: 9.5px;" title="${act.title}">
+                        <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: ${act.borderColor};"></span>
+                        <span class="text-truncate">${act.title}</span>
                     </div>
                 `;
             });
-            if (dayShifts.length > 0) {
-                previewHtml += `<div class="text-muted num-tabular ps-1" style="font-size: 9px; font-weight: 600;">+${dayShifts.length} ca nữa</div>`;
-            }
-        } else if (dayShifts.length > 0) {
-            dayShifts.slice(0, 2).forEach(s => {
-                const timePrefix = s.start_time.substring(11, 16);
-                previewHtml += `
-                    <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2);" title="${s.name}">
-                        <i class="bi bi-clock me-1"></i>${timePrefix} ${s.name}
-                    </div>
-                `;
-            });
-            const remaining = dayShifts.length - 2;
-            if (remaining > 0) {
-                previewHtml += `<div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600;">+${remaining} ca nữa</div>`;
+            if (dayActs.length > 2) {
+                previewHtml += `<div class="text-muted num-tabular ps-1" style="font-size: 9px; font-weight: 600;">+${dayActs.length - 2} lịch nữa</div>`;
             }
         }
 
@@ -8389,11 +8874,12 @@ function renderMonthGrid(year, month) {
             const badge = cell.querySelector('.day-number-pill');
             if (badge) badge.classList.add('selected-badge');
 
+            setCalSidebarMode('day');
             renderCalendarSidebarDayDetail(dateStr);
 
-            if (dateStr === '2026-11-18') {
-                const linkEl = cell.querySelector('.text-primary') || cell;
-                showCalendarDayPopover(linkEl, '2026-11-18');
+            const acts = getDayActivities(dateStr);
+            if (acts.length >= 2) {
+                showCalendarDayPopover(cell, dateStr);
             } else {
                 closeCalendarDayPopover();
             }
@@ -8414,47 +8900,24 @@ function renderMonthGrid(year, month) {
         container.appendChild(cell);
     }
 
-    // Render 2 thẻ Sidebar bên phải
-    renderCalendarSidebarDayDetail(selectedDateStr);
-    renderCalendarUpcomingSchedule();
+    // Render nội dung cột phải
+    if (currentCalSidebarMode === 'day') {
+        renderCalendarSidebarDayDetail(selectedDateStr);
+    } else {
+        renderCalendarUpcomingScheduleInContent();
+    }
 
-    // Hiển thị Popover nếu ngày 18 đang được chọn (Chuẩn Image 10)
-    if (selectedDateStr === '2026-11-18') {
+    // Hiển thị Popover cho ngày được chọn nếu có từ 2 hoạt động trở lên
+    const activeActs = getDayActivities(selectedDateStr);
+    if (activeActs.length >= 2) {
         setTimeout(() => {
             const activeCell = container.querySelector('.month-day-cell.is-selected');
             if (activeCell) {
-                const linkEl = activeCell.querySelector('.text-primary') || activeCell;
-                showCalendarDayPopover(linkEl, '2026-11-18');
+                showCalendarDayPopover(activeCell, selectedDateStr);
             }
-        }, 50);
+        }, 60);
     } else {
         closeCalendarDayPopover();
-    }
-}
-
-/**
- * Chuyển Tab phân loại trong Sidebar Inspector (Lịch hoạt động, Ca trực, Minh chứng, Ghi chú)
- */
-function switchSidebarTab(tabName) {
-    currentSidebarTab = tabName;
-    document.querySelectorAll('#calSidebarTabs .cal-tab-pill').forEach(btn => btn.classList.remove('active'));
-    
-    if (tabName === 'activities') {
-        const btn = document.getElementById('tabBtnActivities');
-        if (btn) btn.classList.add('active');
-    } else if (tabName === 'shifts') {
-        const btn = document.getElementById('tabBtnShifts');
-        if (btn) btn.classList.add('active');
-        const ctvCard = document.getElementById('calCtvParticipantCard');
-        if (ctvCard) ctvCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } else if (tabName === 'proofs') {
-        const btn = document.getElementById('tabBtnProofs');
-        if (btn) btn.classList.add('active');
-        const proofCard = document.getElementById('calProofUploadCard');
-        if (proofCard) proofCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } else if (tabName === 'notes') {
-        const btn = document.getElementById('tabBtnNotes');
-        if (btn) btn.classList.add('active');
     }
 }
 
@@ -8465,86 +8928,55 @@ function navigateCalendarDay(delta) {
     const parts = selectedDateStr.split('-');
     const curDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
     curDate.setDate(curDate.getDate() + delta);
-    
+
     const y = curDate.getFullYear();
     const m = String(curDate.getMonth() + 1).padStart(2, '0');
     const d = String(curDate.getDate()).padStart(2, '0');
     selectedDateStr = `${y}-${m}-${d}`;
-    
+
     if (curDate.getMonth() !== currentMonth || curDate.getFullYear() !== currentYear) {
         currentMonth = curDate.getMonth();
         currentYear = curDate.getFullYear();
     }
-    
+
     renderMonthGrid(currentYear, currentMonth);
 }
 
 /**
- * Mở modal sự kiện từ Inspector Sidebar
- */
-function openInspectorEventModal(evId = null) {
-    const id = evId || activeInspectorEventId || 2;
-    openEventDetailsModal(id);
-}
-
-/**
- * Đăng ký nhanh ca trực ngày đang chọn từ nút [+ Đăng ký ca]
- */
-function quickRegisterInspectorShift() {
-    const dayShifts = (typeof rawShifts !== 'undefined') ? rawShifts.filter(s => s.start_time.startsWith(selectedDateStr)) : [];
-    if (dayShifts.length > 0) {
-        const targetShift = dayShifts[0];
-        registerShiftDirectly(targetShift.id, targetShift.event_id);
-    } else {
-        showToast('Không có ca trực khả dụng để đăng ký trong ngày này.', 'warning');
-    }
-}
-
-/**
- * Kích hoạt mở modal tải minh chứng từ Inspector Sidebar
- */
-function triggerProofUploadModal() {
-    showProofSubmissionModal();
-}
-
-/**
- * Render Sidebar Chi tiết ngày (Thiết kế chuẩn UI/UX SaaS Mockup Image 10 khi có trùng lịch, và Image 3, 4, 7 khi bình thường)
+ * Render Sidebar Chi tiết ngày (ÁP DỤNG THIẾT KẾ APPLE CALENDAR CHO TOÀN BỘ CÁC NGÀY TRONG LỊCH)
  */
 function renderCalendarSidebarDayDetail(dateStr) {
     const titleEl = document.getElementById('calSelectedDayTitle');
     const contentEl = document.getElementById('calSelectedDayContent');
     const filterTabsEl = document.getElementById('calDayFilterTabs');
-    const upcomingCardEl = document.getElementById('calUpcomingCard');
-    const dayDetailCardEl = document.getElementById('calDayDetailCard');
     if (!titleEl || !contentEl) return;
 
     const parts = dateStr.split('-');
     const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
     titleEl.textContent = formattedDate;
 
-    // KỊCH BẢN ĐẶC BIỆT: Ngày 18/11/2026 có 4 lịch trùng (Chuẩn Mockup Image 10)
-    if (dateStr === '2026-11-18') {
-        // Mở rộng thẻ chi tiết ngày chiếm toàn bộ cột phải (Image 10)
-        if (upcomingCardEl) upcomingCardEl.style.setProperty('display', 'none', 'important');
-        if (dayDetailCardEl) {
-            dayDetailCardEl.style.setProperty('flex', '1 1 0%', 'important');
-            dayDetailCardEl.style.setProperty('height', '100%', 'important');
-        }
+    const acts = getDayActivities(dateStr);
 
-        // Hiển thị 4 Tabs phân loại nhanh: [ Tất cả (4) ] [ Sự kiện (1) ] [ Ca trực (2) ] [ Khác (1) ]
+    // 1. Phân loại và tạo Filter Tabs
+    if (acts.length > 0) {
+        const totalCount = acts.length;
+        const eventCount = acts.filter(a => a.type === 'event').length;
+        const shiftCount = acts.filter(a => a.type === 'shift').length;
+        const otherCount = acts.filter(a => a.type === 'other').length;
+
         if (filterTabsEl) {
             filterTabsEl.style.display = 'flex';
             filterTabsEl.innerHTML = `
-                <button type="button" class="cal-day-filter-tab ${currentDayFilter === 'all' ? 'active' : ''}" onclick="filterDayDetailTab('all', this)">Tất cả (4)</button>
-                <button type="button" class="cal-day-filter-tab ${currentDayFilter === 'event' ? 'active' : ''}" onclick="filterDayDetailTab('event', this)">Sự kiện (1)</button>
-                <button type="button" class="cal-day-filter-tab ${currentDayFilter === 'shift' ? 'active' : ''}" onclick="filterDayDetailTab('shift', this)">Ca trực (2)</button>
-                <button type="button" class="cal-day-filter-tab ${currentDayFilter === 'other' ? 'active' : ''}" onclick="filterDayDetailTab('other', this)">Khác (1)</button>
+                <button type="button" class="cal-day-filter-tab ${currentDayFilter === 'all' ? 'active' : ''}" onclick="filterDayDetailTab('all', this)">Tất cả (${totalCount})</button>
+                ${eventCount > 0 ? `<button type="button" class="cal-day-filter-tab ${currentDayFilter === 'event' ? 'active' : ''}" onclick="filterDayDetailTab('event', this)">Sự kiện (${eventCount})</button>` : ''}
+                ${shiftCount > 0 ? `<button type="button" class="cal-day-filter-tab ${currentDayFilter === 'shift' ? 'active' : ''}" onclick="filterDayDetailTab('shift', this)">Ca trực (${shiftCount})</button>` : ''}
+                ${otherCount > 0 ? `<button type="button" class="cal-day-filter-tab ${currentDayFilter === 'other' ? 'active' : ''}" onclick="filterDayDetailTab('other', this)">Khác (${otherCount})</button>` : ''}
             `;
         }
 
-        const filtered = (currentDayFilter === 'all') 
-            ? day18Activities 
-            : day18Activities.filter(a => a.type === currentDayFilter);
+        const filtered = (currentDayFilter === 'all')
+            ? acts
+            : acts.filter(a => a.type === currentDayFilter);
 
         let html = '<div class="d-flex flex-column gap-2.5">';
         filtered.forEach(item => {
@@ -8559,7 +8991,7 @@ function renderCalendarSidebarDayDetail(dateStr) {
                         </div>
                         <div class="d-flex align-items-center gap-1.5 flex-shrink-0 ms-2">
                             <span class="badge rounded-pill" style="background: ${item.statusBg}; color: ${item.statusColor}; font-size: 11px; font-weight: 600; padding: 3px 8px;">
-                                ${item.hasDot ? `<span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: ${item.statusColor};"></span>` : ''}${item.status}
+                                <span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: ${item.statusColor};"></span>${item.status}
                             </span>
                             <i class="bi bi-chevron-right text-muted" style="font-size: 11px;"></i>
                         </div>
@@ -8590,107 +9022,43 @@ function renderCalendarSidebarDayDetail(dateStr) {
         });
         html += '</div>';
         contentEl.innerHTML = html;
-        return;
-    }
-
-    // CÁC NGÀY KHÁC (Bình thường: Khôi phục bố cục 2 thẻ Chi tiết ngày + Lịch sắp tới)
-    if (filterTabsEl) {
-        filterTabsEl.style.display = 'none';
-        filterTabsEl.innerHTML = '';
-    }
-    if (upcomingCardEl) upcomingCardEl.style.setProperty('display', 'flex', 'important');
-    if (dayDetailCardEl) {
-        dayDetailCardEl.style.setProperty('flex', '62 62 0%', 'important');
-        dayDetailCardEl.style.setProperty('height', 'auto', 'important');
-    }
-
-    // Lọc các ca trực và sự kiện ngày này
-    const dayShifts = (typeof rawShifts !== 'undefined') ? rawShifts.filter(s => s.start_time.startsWith(dateStr)) : [];
-    const dayNotes = (typeof rawCalendarNotes !== 'undefined') ? rawCalendarNotes.filter(n => (n.date || n.target_date) === dateStr) : [];
-
-    if (dayShifts.length === 0 && dayNotes.length === 0) {
+    } else {
+        // Empty state chuẩn Apple Calendar (Tối giản, tinh tế)
+        if (filterTabsEl) {
+            filterTabsEl.style.display = 'none';
+            filterTabsEl.innerHTML = '';
+        }
         contentEl.innerHTML = `
-            <div class="text-center py-4 h-100 d-flex flex-column align-items-center justify-content-center my-auto">
-                <p class="text-muted small mb-3" style="font-size: 13px;">Chưa có ca trực hoặc sự kiện.</p>
-                <div class="d-flex justify-content-center">
-                    <div class="p-3 rounded-4 d-inline-flex align-items-center justify-content-center" style="background: #FFF7ED; width: 68px; height: 68px; border: 1px solid rgba(234, 88, 12, 0.15);">
-                        <i class="bi bi-calendar2-minus" style="font-size: 32px; color: #EA580C;"></i>
-                    </div>
+            <div class="text-center py-5 h-100 d-flex flex-column align-items-center justify-content-center my-auto">
+                <div class="p-3 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="background: #F8FAFC; width: 60px; height: 60px; border: 1px solid #E2E8F0;">
+                    <i class="bi bi-calendar3" style="font-size: 26px; color: #94A3B8;"></i>
                 </div>
+                <h6 class="fw-semibold text-dark mb-1" style="font-size: 14px;">Không có hoạt động nào</h6>
+                <p class="text-muted small mb-3" style="font-size: 12.5px; max-width: 260px;">Chưa có ca trực hoặc sự kiện nào được lên lịch trong ngày ${formattedDate}.</p>
+                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1.5 fw-medium d-inline-flex align-items-center gap-1.5 shadow-2xs" style="font-size: 12px;" onclick="openInspectorEventModal(2)">
+                    <i class="bi bi-plus-lg"></i> Thêm lịch / Ghi chú
+                </button>
             </div>
         `;
-        return;
     }
-
-    let html = '<div class="d-flex flex-column gap-2">';
-
-    // 1. Hiển thị Ca trực theo Mockup Image 7
-    dayShifts.forEach(s => {
-        const isMine = parseInt(s.is_registered_by_me) > 0;
-        const allowance = s.remuneration_amount ? Number(s.remuneration_amount).toLocaleString('vi-VN') + ' đ' : '150.000 đ';
-        
-        const startTime = s.start_time ? s.start_time.substring(11, 16) : '07:30';
-        const endTime = s.end_time ? s.end_time.substring(11, 16) : '12:00';
-        const isFull = parseInt(s.approved_qty) >= parseInt(s.target_qty);
-
-        html += `
-            <div class="cal-shift-card" style="border-left: 4px solid ${isMine ? '#0284C7' : '#EA580C'} !important;">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="badge border" style="background: #F8FAFC; color: #0F172A; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
-                        ${startTime} – ${endTime}
-                    </span>
-                    <span class="badge rounded-pill" style="background: ${isMine ? '#F0FDF4' : '#FFF7ED'}; color: ${isMine ? '#16A34A' : '#EA580C'}; font-size: 11px; font-weight: 600; padding: 3px 8px;">
-                        <span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: ${isMine ? '#16A34A' : '#EA580C'};"></span>${isMine ? 'Đã xác nhận' : 'Đang tuyển'}
-                    </span>
-                </div>
-                <h6 class="fw-bold text-dark mb-2" style="font-size: 13.5px; line-height: 1.35;">
-                    ${s.name}
-                </h6>
-                <div class="d-flex align-items-center justify-content-between mb-2.5" style="font-size: 12.5px;">
-                    <span class="text-muted"><i class="bi bi-people me-1 text-primary"></i>${s.approved_qty}/${s.target_qty} CTV</span>
-                    <strong style="color: #16A34A; font-size: 13px;">${allowance}</strong>
-                </div>
-                ${isMine ? `
-                    <div class="w-100 py-1.5 rounded-3 text-center fw-semibold text-success border border-success-subtle bg-success-subtle" style="font-size: 12px;">
-                        <i class="bi bi-check2 me-1"></i>Đã Đăng Ký
-                    </div>
-                ` : `
-                    <button type="button" class="btn w-100 fw-bold py-1.5 rounded-3 text-white shadow-2xs" id="calRegBtn_${s.id}" style="background: #EA580C; font-size: 12.5px;" onclick="registerShiftDirectly(${s.id}, ${s.event_id})">
-                        ${isFull ? 'Đăng Ký Dự Phòng' : 'Đăng Ký'}
-                    </button>
-                `}
-            </div>
-        `;
-    });
-
-    // 2. Hiển thị Ghi chú / Hoạt động
-    dayNotes.forEach(n => {
-        html += `
-            <div class="p-2.5 rounded-3 mb-2 bg-light border" onclick="openEventDrawer(${n.event_id || 2})" style="cursor: pointer;">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 10px;">Ghi chú lịch</span>
-                    <span class="badge rounded-pill" style="background: #FFF7ED; color: #EA580C; font-size: 9.5px;">Lưu ý</span>
-                </div>
-                <strong class="d-block text-dark text-truncate" style="font-size: 12.5px;">${n.title}</strong>
-                <small class="text-muted text-truncate d-block" style="font-size: 11px;">${n.content || ''}</small>
-            </div>
-        `;
-    });
-
-    html += '</div>';
-    contentEl.innerHTML = html;
 }
 
 /**
- * Render Sidebar Card 2: Lịch sắp tới (Mockup 1 & 2)
+ * Render Danh sách Lịch sắp tới trong Inspector Content (khi người dùng bấm Tab 'Sắp tới')
  */
-function renderCalendarUpcomingSchedule() {
-    const container = document.getElementById('calUpcomingListContainer');
-    if (!container) return;
+function renderCalendarUpcomingScheduleInContent() {
+    const titleEl = document.getElementById('calSelectedDayTitle');
+    const contentEl = document.getElementById('calSelectedDayContent');
+    const filterTabsEl = document.getElementById('calDayFilterTabs');
+    if (!contentEl) return;
 
-    const items = [
+    if (titleEl) titleEl.textContent = 'Hoạt động sắp diễn ra';
+    if (filterTabsEl) filterTabsEl.style.display = 'none';
+
+    const upcomingItems = [
         {
             date: 'CN, 15/11/2026',
+            targetDate: '2026-11-15',
             title: 'Khai mạc TechDay 2026',
             subtitle: 'Hỗ trợ tổ chức (3 ca)',
             status: 'Đang tuyển',
@@ -8701,8 +9069,9 @@ function renderCalendarUpcomingSchedule() {
         },
         {
             date: 'T4, 18/11/2026',
-            title: 'Bảo trì phòng máy tầng 3',
-            subtitle: 'Hậu cần (1 ca)',
+            targetDate: '2026-11-18',
+            title: 'Bảo trì phòng máy Lab AI',
+            subtitle: 'Hậu cần kỹ thuật (2 ca)',
             status: 'Ca của tôi',
             statusColor: '#0284C7',
             statusBg: '#F0F9FF',
@@ -8711,8 +9080,9 @@ function renderCalendarUpcomingSchedule() {
         },
         {
             date: 'T6, 20/11/2026',
+            targetDate: '2026-11-20',
             title: 'Khai mạc Giải thể thao sinh viên',
-            subtitle: 'Truyền thông (2 ca)',
+            subtitle: 'Truyền thông & trọng tài (2 ca)',
             status: 'Đã xác nhận',
             statusColor: '#16A34A',
             statusBg: '#F0FDF4',
@@ -8720,7 +9090,19 @@ function renderCalendarUpcomingSchedule() {
             eventId: 3
         },
         {
+            date: 'CN, 22/11/2026',
+            targetDate: '2026-11-22',
+            title: 'Triển lãm FPoly Creative',
+            subtitle: 'Hướng dẫn & Media (3 ca)',
+            status: 'Sắp diễn ra',
+            statusColor: '#9333EA',
+            statusBg: '#FAF5FF',
+            borderColor: '#9333EA',
+            eventId: 4
+        },
+        {
             date: 'T7, 28/11/2026',
+            targetDate: '2026-11-28',
             title: 'Hỗ trợ Gian hàng CLB',
             subtitle: 'Tổ chức sự kiện (2 ca)',
             status: 'Đang tuyển',
@@ -8731,22 +9113,33 @@ function renderCalendarUpcomingSchedule() {
         }
     ];
 
-    container.innerHTML = items.map(item => `
-        <div class="upcoming-schedule-item" onclick="openEventDrawer(${item.eventId})" style="border-left: 3.5px solid ${item.borderColor}; cursor: pointer;">
-            <div class="d-flex align-items-center justify-content-between mb-0.5">
-                <span class="text-muted" style="font-size: 11px; font-weight: 500;">
-                    <i class="bi bi-calendar3 me-1"></i>${item.date}
-                </span>
-                <span class="badge rounded-pill" style="background: ${item.statusBg}; color: ${item.statusColor}; font-size: 10px; font-weight: 600; padding: 2px 7px;">
-                    <span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: ${item.statusColor};"></span>${item.status}
-                </span>
-            </div>
-            <strong class="d-block text-dark text-truncate" style="font-size: 13px; line-height: 1.3;">${item.title}</strong>
-            <div class="text-muted" style="font-size: 11.5px; margin-top: 2px;">
-                <i class="bi bi-tag me-1"></i>${item.subtitle}
-            </div>
+    contentEl.innerHTML = `
+        <div class="d-flex flex-column gap-2.5">
+            ${upcomingItems.map(item => `
+                <div class="cal-detail-entry-card" style="border-left: 3.5px solid ${item.borderColor}; cursor: pointer;" onclick="selectCalendarDateAndInspect('${item.targetDate}')" title="Bấm để xem chi tiết ngày ${item.date}">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <span class="text-muted fw-semibold" style="font-size: 11.5px;">
+                            <i class="bi bi-calendar3 me-1 text-primary"></i>${item.date}
+                        </span>
+                        <span class="badge rounded-pill" style="background: ${item.statusBg}; color: ${item.statusColor}; font-size: 10.5px; font-weight: 600; padding: 2.5px 7px;">
+                            <span class="d-inline-block rounded-circle me-1" style="width: 5px; height: 5px; background: ${item.statusColor};"></span>${item.status}
+                        </span>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1" style="font-size: 13.5px; line-height: 1.3;">
+                        ${item.title}
+                    </h6>
+                    <div class="d-flex align-items-center justify-content-between text-muted" style="font-size: 12px;">
+                        <span><i class="bi bi-tag me-1"></i>${item.subtitle}</span>
+                        <span class="text-primary fw-medium" style="font-size: 11.5px;">Xem ngày <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            `).join('')}
         </div>
-    `).join('');
+    `;
+}
+
+function renderCalendarUpcomingSchedule() {
+    renderCalendarUpcomingScheduleInContent();
 }
 
 // 2. Render Lịch Tuần (Week View) - iPadOS 7-Day Grid
