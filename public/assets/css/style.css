@@ -1697,3 +1697,669 @@ table td .btn-fpt-sm {
 
 
 
+
+/* ==========================================================================
+   POLYMEE ENTERPRISE SAAS DESIGN SYSTEM 2.0 (Pixel-Perfect Mockups)
+   ========================================================================== */
+
+/* 1. MÀN HÌNH HỒ SƠ CÁ NHÂN (PROFILE SETTINGS 2-COLUMN) */
+.profile-saas-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+@media (max-width: 991.98px) {
+    .profile-saas-layout {
+        flex-direction: column;
+    }
+}
+.profile-saas-nav {
+    width: 230px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+@media (max-width: 991.98px) {
+    .profile-saas-nav {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+}
+.profile-nav-pill-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #475569;
+    border: none;
+    background: transparent;
+    transition: all 0.15s ease;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.profile-nav-pill-btn:hover {
+    background: #F1F5F9;
+    color: #0F172A;
+}
+.profile-nav-pill-btn.active {
+    background: #EFF6FF;
+    color: #2563EB;
+    font-weight: 600;
+}
+.profile-nav-pill-btn .nav-icon {
+    font-size: 16px;
+    margin-right: 10px;
+    color: inherit;
+}
+.profile-nav-pill-btn .nav-badge-check {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #16A34A;
+    color: #FFFFFF;
+    font-size: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-hero-banner {
+    background: linear-gradient(135deg, #E0F2FE 0%, #EFF6FF 100%);
+    border: 1px solid #BAE6FD;
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+}
+.profile-avatar-wrap {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    flex-shrink: 0;
+}
+.profile-avatar-img {
+    width: 84px;
+    height: 84px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 3px solid #FFFFFF;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+}
+.profile-avatar-cam-btn {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #475569;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.profile-avatar-cam-btn:hover {
+    background: #F8FAFC;
+    color: #2563EB;
+}
+.profile-role-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(37, 99, 235, 0.08);
+    color: #2563EB;
+    font-size: 12px;
+    font-weight: 600;
+}
+.profile-btn-edit-cover {
+    background: #FFFFFF;
+    color: #334155;
+    border: 1px solid #CBD5E1;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.profile-btn-edit-cover:hover {
+    background: #F8FAFC;
+    border-color: #94A3B8;
+}
+
+.profile-chip-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    font-size: 12.5px;
+    color: #334155;
+    font-weight: 500;
+}
+.profile-chip-tag .tag-remove-btn {
+    cursor: pointer;
+    color: #94A3B8;
+    transition: color 0.15s ease;
+}
+.profile-chip-tag .tag-remove-btn:hover {
+    color: #DC2626;
+}
+.profile-chip-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: #FFFFFF;
+    border: 1px dashed #CBD5E1;
+    font-size: 12.5px;
+    color: #2563EB;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.profile-chip-add-btn:hover {
+    border-color: #2563EB;
+    background: #EFF6FF;
+}
+
+.profile-kpi-status-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.profile-kpi-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* 2. MÀN HÌNH CHI TIẾT MINH CHỨNG & DUYỆT NGHIỆM THU (PROOF DETAIL) */
+.proof-detail-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 20px;
+}
+@media (max-width: 1024px) {
+    .proof-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.proof-photo-matrix {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+@media (max-width: 640px) {
+    .proof-photo-matrix {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.proof-photo-item {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    border: 2px solid transparent;
+    cursor: pointer;
+    background: #0F172A;
+    transition: all 0.15s ease;
+}
+.proof-photo-item.is-selected {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+}
+.proof-photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+}
+.proof-photo-item:hover img {
+    transform: scale(1.05);
+}
+.proof-photo-zoom-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.65);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    opacity: 0.85;
+    transition: all 0.15s ease;
+    backdrop-filter: blur(4px);
+}
+.proof-photo-item:hover .proof-photo-zoom-btn {
+    opacity: 1;
+    background: rgba(37, 99, 235, 0.9);
+}
+
+.proof-filmstrip-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+}
+.proof-thumb-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    flex: 1;
+    padding-bottom: 2px;
+}
+.proof-thumb-cell {
+    width: 44px;
+    height: 34px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.7;
+    transition: all 0.15s ease;
+}
+.proof-thumb-cell.active, .proof-thumb-cell:hover {
+    border-color: #2563EB;
+    opacity: 1;
+}
+.proof-thumb-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.proof-criteria-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 18px;
+}
+.proof-criterion-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 13.5px;
+    color: #1E293B;
+}
+.proof-check-badge {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    background: #16A34A;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.proof-uncheck-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 1.5px solid #94A3B8;
+    background: #FFFFFF;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.proof-decision-box {
+    border: 1.5px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+.proof-decision-box.selected {
+    border-color: #2563EB;
+    background: #F0FDF4;
+}
+.proof-decision-box.selected.decision-revision {
+    background: #FFFBEB;
+    border-color: #D97706;
+}
+.proof-decision-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #CBD5E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.proof-decision-box.selected .proof-decision-circle {
+    border-color: #2563EB;
+    background: #2563EB;
+}
+.proof-decision-box.selected .proof-decision-circle::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #FFFFFF;
+}
+
+/* 3. MÀN HÌNH DASHBOARD CỦA TÔI (MY DASHBOARD) */
+.dash-todo-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    transition: all 0.15s ease;
+}
+.dash-todo-card:hover {
+    border-color: #CBD5E1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+.dash-timeline-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    padding-bottom: 20px;
+}
+.dash-timeline-item:last-child {
+    padding-bottom: 0;
+}
+.dash-timeline-date {
+    width: 38px;
+    text-align: center;
+    flex-shrink: 0;
+}
+.dash-timeline-day {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748B;
+    text-transform: uppercase;
+}
+.dash-timeline-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1;
+}
+.dash-timeline-line {
+    position: absolute;
+    left: 55px;
+    top: 24px;
+    bottom: -6px;
+    width: 2px;
+    background: #E2E8F0;
+}
+.dash-timeline-item:last-child .dash-timeline-line {
+    display: none;
+}
+.dash-timeline-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+/* 4. MÀN HÌNH CÔNG VIỆC CỦA TÔI & DRAWER CHI TIẾT (MY SHIFTS & DRAWER) */
+.my-shifts-split-layout {
+    display: flex;
+    gap: 20px;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.my-shifts-main-view {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.my-shifts-detail-drawer {
+    width: 380px;
+    flex-shrink: 0;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (max-width: 1200px) {
+    .my-shifts-detail-drawer {
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1050;
+        width: 400px;
+        box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+        border-radius: 0;
+    }
+}
+.drawer-proof-grid-6 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+.drawer-proof-thumb {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1E293B;
+}
+.drawer-proof-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.drawer-proof-more-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* CALENDAR TOOLBAR 2.0 (Pixel-Perfect Mockup Image 14) */
+.cal-toolbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 16px 0;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.cal-view-segmented {
+    display: inline-flex;
+    background: #F1F5F9;
+    padding: 3px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+}
+.cal-view-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: #475569;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.cal-view-btn.active {
+    background: #FFFFFF;
+    color: #0F172A;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.cal-nav-pill-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.cal-nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.cal-nav-btn:hover {
+    background: #F8FAFC;
+    border-color: #CBD5E1;
+}
+.cal-month-pill {
+    padding: 6px 14px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #0F172A;
+    font-size: 13.5px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cal-btn-filter {
+    padding: 6px 14px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.cal-btn-filter:hover {
+    background: #F8FAFC;
+    border-color: #CBD5E1;
+}
+.cal-btn-more {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #64748B;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.cal-btn-more:hover {
+    background: #F8FAFC;
+}
+
+/* Day cell selected badge */
+.day-number-pill.square-active-badge {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Inspector card item mockup 14 */
+.inspector-event-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+.inspector-event-card:hover {
+    border-color: #CBD5E1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transform: translateY(-1px);
+}
+.inspector-icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}

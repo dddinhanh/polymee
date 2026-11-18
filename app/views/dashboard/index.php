@@ -3022,47 +3022,50 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <!-- TAB 1: BẢNG LỊCH TRUNG TÂM (CALENDAR-FIRST) -->
             <section class="calendar-container" id="panelCalendar">
 
-                <!-- KPI Metrics Strip: 4 Thẻ Bento Chuẩn Mockup Image 5 & 6 -->
-                <div class="kpi-metric-strip mb-3" id="kpiMetricsStrip">
-                    <!-- Card 1: Sự kiện trong tháng -->
-                    <div class="kpi-bento-card">
-                        <div class="kpi-icon-circle" style="background: #FFF7ED; color: #EA580C;">
-                            <i class="bi bi-calendar3"></i>
-                        </div>
-                        <div>
-                            <div class="kpi-bento-label">Sự kiện trong tháng</div>
-                            <div class="kpi-bento-val num-tabular"><?= count($events ?? []) ?: 7 ?></div>
-                        </div>
+                <!-- TOOLBAR ĐIỀU HƯỚNG & BỘ LỌC CHUẨN MOCKUP IMAGE 14 -->
+                <div class="cal-toolbar-container mb-3" id="calToolbarStrip">
+                    <!-- Segmented View Mode: Tháng, Tuần, Danh sách -->
+                    <div class="cal-view-segmented" id="calendarViewSwitcher">
+                        <button type="button" class="cal-view-btn active" id="btnViewMonth" onclick="changeCalendarView('month')">
+                            <i class="bi bi-calendar3"></i> Tháng
+                        </button>
+                        <button type="button" class="cal-view-btn" id="btnViewWeek" onclick="changeCalendarView('week')">
+                            <i class="bi bi-calendar-week"></i> Tuần
+                        </button>
+                        <button type="button" class="cal-view-btn" id="btnViewDay" onclick="changeCalendarView('day')">
+                            <i class="bi bi-list-task"></i> Danh sách
+                        </button>
                     </div>
-                    <!-- Card 2: Ca trực của tôi -->
-                    <div class="kpi-bento-card">
-                        <div class="kpi-icon-circle" style="background: #EFF6FF; color: #2563EB;">
-                            <i class="bi bi-layers"></i>
+
+                    <!-- Month Navigation: <  [Tháng 11, 2026]  > -->
+                    <div class="cal-nav-pill-group">
+                        <button type="button" class="cal-nav-btn" onclick="navigateCalendar(-1)" title="Tháng trước">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <div class="cal-month-pill" id="currentCalendarHeader" onclick="goToday()" style="cursor: pointer;" title="Về hôm nay">
+                            <i class="bi bi-calendar3 text-muted"></i> <span>Tháng 11, 2026</span>
                         </div>
-                        <div>
-                            <div class="kpi-bento-label">Ca trực của tôi</div>
-                            <div class="kpi-bento-val num-tabular"><?= count($shifts ?? []) ?: 16 ?></div>
-                        </div>
+                        <button type="button" class="cal-nav-btn" onclick="navigateCalendar(1)" title="Tháng sau">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
                     </div>
-                    <!-- Card 3: Buổi cần nộp minh chứng -->
-                    <div class="kpi-bento-card">
-                        <div class="kpi-icon-circle" style="background: #FAF5FF; color: #9333EA;">
-                            <i class="bi bi-file-earmark-text"></i>
+
+                    <!-- Actions: Bộ lọc, More options -->
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="dropdown">
+                            <button type="button" class="cal-btn-filter dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Lọc hoạt động">
+                                <i class="bi bi-funnel"></i> Bộ lọc
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border p-1" style="border-radius: 10px; font-size: 12.5px; border-color: #E2E8F0 !important;">
+                                <li><a class="dropdown-item rounded-2 py-1.5" href="javascript:void(0)" onclick="filterDayDetailTab('all')">Tất cả hoạt động</a></li>
+                                <li><a class="dropdown-item rounded-2 py-1.5" href="javascript:void(0)" onclick="filterDayDetailTab('shift')">Chỉ ca trực CTV</a></li>
+                                <li><a class="dropdown-item rounded-2 py-1.5" href="javascript:void(0)" onclick="filterDayDetailTab('event')">Chỉ sự kiện BTC</a></li>
+                                <li><a class="dropdown-item rounded-2 py-1.5" href="javascript:void(0)" onclick="filterDayDetailTab('other')">Bảo trì & Khác</a></li>
+                            </ul>
                         </div>
-                        <div>
-                            <div class="kpi-bento-label">Buổi cần nộp minh chứng</div>
-                            <div class="kpi-bento-val num-tabular">3</div>
-                        </div>
-                    </div>
-                    <!-- Card 4: Tỷ lệ hoàn thành -->
-                    <div class="kpi-bento-card">
-                        <div class="kpi-icon-circle" style="background: #F0FDF4; color: #16A34A;">
-                            <i class="bi bi-check2-circle"></i>
-                        </div>
-                        <div>
-                            <div class="kpi-bento-label">Tỷ lệ hoàn thành</div>
-                            <div class="kpi-bento-val num-tabular">87,5%</div>
-                        </div>
+                        <button type="button" class="cal-btn-more" title="Tùy chọn khác">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -3071,96 +3074,17 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     
                     <!-- CỘT TRÁI: BẢNG LỊCH CHÍNH -->
                     <div class="calendar-main-box">
-                        <div class="d-flex flex-wrap justify-content-between align-items-center pb-2 mb-2 gap-2">
-                            <!-- VIEW SWITCHER & ĐIỀU HƯỚNG THÁNG (Chuẩn Layout Image 10) -->
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <!-- VIEW SWITCHER: THÁNG / TUẦN / NGÀY -->
-                                <div class="view-switcher-group btn-group p-0.5" id="calendarViewSwitcher" role="group" style="background: #F1F5F9; border-radius: 10px; border: 1px solid rgba(0,0,0,0.04);">
-                                    <button type="button" class="btn btn-sm active" id="btnViewMonth" onclick="changeCalendarView('month')" style="border-radius: 8px; font-size: 12px; padding: 4px 12px; font-weight: 600;"><i class="bi bi-calendar3 me-1"></i> Tháng</button>
-                                    <button type="button" class="btn btn-sm" id="btnViewWeek" onclick="changeCalendarView('week')" style="border-radius: 8px; font-size: 12px; padding: 4px 12px; font-weight: 500; color: #64748B;"><i class="bi bi-calendar-week me-1"></i> Tuần</button>
-                                    <button type="button" class="btn btn-sm" id="btnViewDay" onclick="changeCalendarView('day')" style="border-radius: 8px; font-size: 12px; padding: 4px 12px; font-weight: 500; color: #64748B;"><i class="bi bi-calendar-day me-1"></i> Ngày</button>
-                                </div>
-
-                                <!-- ĐIỀU HƯỚNG THÁNG & DROPDOWN -->
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-sm btn-outline-secondary" type="button" onclick="navigateCalendar(-1)" title="Tháng trước" style="border-radius: 8px 0 0 8px; border-color: #E2E8F0; padding: 4px 10px; background: #FFFFFF; color: #475569;">
-                                            <i class="bi bi-chevron-left" style="font-size: 11px;"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-secondary" type="button" onclick="navigateCalendar(1)" title="Tháng sau" style="border-radius: 0 8px 8px 0; border-color: #E2E8F0; padding: 4px 10px; background: #FFFFFF; color: #475569;">
-                                            <i class="bi bi-chevron-right" style="font-size: 11px;"></i>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-sm btn-light border fw-semibold ms-1" type="button" id="currentCalendarHeader" onclick="goToday()" style="border-radius: 10px; font-size: 12.5px; padding: 4px 12px; background: #FFFFFF; border-color: #E2E8F0 !important; color: #0F172A;">
-                                        Tháng 11/2026 <i class="bi bi-chevron-down ms-1" style="font-size: 10px; color: #64748B;"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- THANH BỘ LỌC (Chuẩn Mockup Image 10) -->
-                        <div class="d-flex align-items-center gap-2 mb-2.5 pb-1 flex-wrap shrink-0" id="calFilterBar">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1.5" type="button" data-bs-toggle="dropdown" style="border-radius: 8px; border-color: #E2E8F0; background: #FFFFFF; color: #475569; font-size: 12px; padding: 4px 10px;">
-                                    <i class="bi bi-activity text-muted"></i> Tất cả hoạt động
-                                </button>
-                                <ul class="dropdown-menu shadow-sm border-0 p-1" style="border-radius: 8px; font-size: 12px; border: 1px solid #E2E8F0 !important;">
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)" onclick="filterDayDetailTab('all')">Tất cả hoạt động</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)" onclick="filterDayDetailTab('shift')">Ca trực CTV</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)" onclick="filterDayDetailTab('event')">Sự kiện BTC</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)" onclick="filterDayDetailTab('other')">Bảo trì & Khác</a></li>
-                                </ul>
-                            </div>
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1.5" type="button" data-bs-toggle="dropdown" style="border-radius: 8px; border-color: #E2E8F0; background: #FFFFFF; color: #475569; font-size: 12px; padding: 4px 10px;">
-                                    <i class="bi bi-calendar-event text-muted"></i> Tất cả sự kiện
-                                </button>
-                                <ul class="dropdown-menu shadow-sm border-0 p-1" style="border-radius: 8px; font-size: 12px; border: 1px solid #E2E8F0 !important;">
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Tất cả sự kiện</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">TechDay 2026</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Giải thể thao SV</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Workshop AI</a></li>
-                                </ul>
-                            </div>
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1.5" type="button" data-bs-toggle="dropdown" style="border-radius: 8px; border-color: #E2E8F0; background: #FFFFFF; color: #475569; font-size: 12px; padding: 4px 10px;">
-                                    <i class="bi bi-geo-alt text-muted"></i> Tất cả phòng/địa điểm
-                                </button>
-                                <ul class="dropdown-menu shadow-sm border-0 p-1" style="border-radius: 8px; font-size: 12px; border: 1px solid #E2E8F0 !important;">
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Tất cả phòng/địa điểm</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Phòng CSC, Tòa B</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Phòng Lab, Tòa B</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Sân khấu ngoài trời</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Phòng họp 301, Tòa A</a></li>
-                                </ul>
-                            </div>
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1.5" type="button" data-bs-toggle="dropdown" style="border-radius: 8px; border-color: #E2E8F0; background: #FFFFFF; color: #475569; font-size: 12px; padding: 4px 10px;">
-                                    <i class="bi bi-clock-history text-muted"></i> Tất cả trạng thái
-                                </button>
-                                <ul class="dropdown-menu shadow-sm border-0 p-1" style="border-radius: 8px; font-size: 12px; border: 1px solid #E2E8F0 !important;">
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Tất cả trạng thái</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Đang thực hiện</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Đang diễn ra</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Chờ phân công</a></li>
-                                    <li><a class="dropdown-item rounded-2 py-1" href="javascript:void(0)">Sắp diễn ra</a></li>
-                                </ul>
-                            </div>
-                            <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center" type="button" title="Đặt lại bộ lọc" onclick="resetCalendarFilters()" style="border-radius: 8px; border-color: #E2E8F0; background: #FFFFFF; color: #64748B; width: 30px; height: 30px; padding: 0;">
-                                <i class="bi bi-funnel"></i>
-                            </button>
-                        </div>
 
                         <!-- TIER 1: LỊCH THÁNG (Ô VUÔNG) -->
                         <div id="tierMonthView" style="position: relative;">
                             <div class="month-header-grid">
-                                <div class="day-label">Thứ Hai</div>
-                                <div class="day-label">Thứ Ba</div>
-                                <div class="day-label">Thứ Tư</div>
-                                <div class="day-label">Thứ Năm</div>
-                                <div class="day-label">Thứ Sáu</div>
-                                <div class="day-label" style="color: #0284C7; font-weight: 600;">Thứ Bảy</div>
-                                <div class="day-label" style="color: #DC2626; font-weight: 600;">Chủ Nhật</div>
+                                <div class="day-label">T2</div>
+                                <div class="day-label">T3</div>
+                                <div class="day-label">T4</div>
+                                <div class="day-label">T5</div>
+                                <div class="day-label">T6</div>
+                                <div class="day-label">T7</div>
+                                <div class="day-label" style="color: #DC2626; font-weight: 600;">CN</div>
                             </div>
                             <div class="month-days-grid" id="monthGridContainer">
                                 <!-- Nạp động bằng JavaScript -->
@@ -3183,17 +3107,14 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </div>
                         </div>
 
-                        <!-- TIER 3: LỊCH NGÀY (DANH SÁCH CHI TIẾT CA TRỰC) -->
+                        <!-- TIER 3: LỊCH DANH SÁCH (THEO MOCKUP IMAGE 14) -->
                         <div id="tierDayView" style="display:none;">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <button class="btn-fpt-secondary btn-fpt-sm" onclick="changeCalendarView('month')">
                                     <i class="bi bi-arrow-left me-1"></i> Quay lại Lịch Tháng
                                 </button>
                                 <div class="d-flex align-items-center gap-2">
-                                    <button class="btn-fpt-secondary btn-fpt-sm" onclick="changeCalendarView('week')">
-                                        <i class="bi bi-calendar-week me-1"></i> Xem Tuần Chứa Ngày Này
-                                    </button>
-                                    <span class="badge text-white px-3 py-2 fw-bold" style="background:var(--ux-accent);" id="selectedDayLabel">
+                                    <span class="badge text-white px-3 py-2 fw-bold" style="background:#2563EB;" id="selectedDayLabel">
                                         Thứ Bảy, 15/11/2026
                                     </span>
                                 </div>
@@ -3204,50 +3125,34 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
 
-                    <!-- CỘT PHẢI: DAY INSPECTOR CHUẨN APPLE CALENDAR (100% CHIỀU CAO, KHÔNG BỊ CO ÉP) -->
+                    <!-- CỘT PHẢI: CHI TIẾT NGÀY CHUẨN MOCKUP IMAGE 14 (100% CHIỀU CAO, KHÔNG BỊ CO ÉP) -->
                     <div class="calendar-sidebar-col" id="calendarRightSidebar" style="height: 100%; display: flex; flex-direction: column;">
                         
-                        <div class="cal-sidebar-card cal-day-detail-card flex-1 d-flex flex-column overflow-hidden h-100" id="calDayDetailCard" style="border: 1px solid #E2E8F0; border-radius: 12px; background: #FFFFFF; padding: 14px;">
-                            <!-- Header cố định (shrink-0) -->
-                            <div class="cal-card-header d-flex align-items-center justify-content-between mb-2.5 pb-2 border-bottom shrink-0" style="border-color: #F1F5F9 !important;">
-                                <div class="d-flex align-items-center gap-2">
+                        <div class="cal-sidebar-card cal-day-detail-card flex-1 d-flex flex-column overflow-hidden h-100" id="calDayDetailCard" style="border: 1px solid #E2E8F0; border-radius: 12px; background: #FFFFFF; padding: 18px;">
+                            <!-- Header cố định (shrink-0) chuẩn Mockup Image 14 -->
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom shrink-0" style="border-color: #F1F5F9 !important;">
+                                <div class="d-flex align-items-center gap-2.5">
                                     <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px; background: #EFF6FF; color: #2563EB; border: 1px solid rgba(37, 99, 235, 0.15);">
                                         <i class="bi bi-calendar3" style="font-size: 15px;"></i>
                                     </div>
-                                    <div>
-                                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 9.5px; letter-spacing: 0.5px; display: block;" id="calSidebarModeLabel">Chi tiết ngày</span>
-                                        <h5 class="fw-bold mb-0 text-dark" style="font-size: 16px; letter-spacing: -0.3px;" id="calSelectedDayTitle">
-                                            18/11/2026
-                                        </h5>
-                                    </div>
+                                    <h5 class="fw-bold mb-0 text-dark" style="font-size: 15px; letter-spacing: -0.2px;" id="calSelectedDayTitle">
+                                        Thứ 7, 15/11/2026
+                                    </h5>
                                 </div>
 
-                                <div class="d-flex align-items-center gap-2 ms-auto">
-                                    <!-- Apple Calendar Segmented Control -->
-                                    <div class="apple-cal-segmented">
-                                        <button type="button" class="apple-cal-segmented-btn is-active" id="btnCalModeDay" onclick="setCalSidebarMode('day')">Lịch ngày</button>
-                                        <button type="button" class="apple-cal-segmented-btn" id="btnCalModeUpcoming" onclick="setCalSidebarMode('upcoming')">Sắp tới</button>
-                                    </div>
-
-                                    <div class="d-flex align-items-center gap-1" id="calDayNavBtns">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 26px; height: 26px; border-color: #E2E8F0;" onclick="navigateCalendarDay(-1)" title="Ngày trước">
-                                            <i class="bi bi-chevron-left" style="font-size: 10px;"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 26px; height: 26px; border-color: #E2E8F0;" onclick="navigateCalendarDay(1)" title="Ngày sau">
-                                            <i class="bi bi-chevron-right" style="font-size: 10px;"></i>
-                                        </button>
-                                    </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge rounded-pill fw-semibold" id="calActivityCountBadge" style="background: #EFF6FF; color: #2563EB; font-size: 11.5px; padding: 4px 10px;">
+                                        2 hoạt động
+                                    </span>
                                 </div>
                             </div>
 
-                            <!-- Tabs phân loại nhanh chi tiết ngày (Mockup Image 10) -->
-                            <div class="cal-day-filter-tabs d-flex align-items-center gap-1.5 mb-2.5 pb-1 overflow-x-auto shrink-0" id="calDayFilterTabs" style="display: none;">
-                                <!-- Nạp động qua JS: Tất cả (N), Sự kiện (N), Ca trực (N), Khác (N) -->
-                            </div>
+                            <!-- Tabs phân loại nhanh chi tiết ngày (ẩn) -->
+                            <div class="cal-day-filter-tabs d-flex align-items-center gap-1.5 mb-2.5 pb-1 overflow-x-auto shrink-0" id="calDayFilterTabs" style="display: none;"></div>
 
                             <!-- Danh sách cuộn nội bộ (flex-1 overflow-y-auto min-h-0) -->
                             <div class="cal-scrollable-list flex-1 overflow-y-auto min-h-0 pe-1" id="calSelectedDayContent">
-                                <!-- Nạp động qua JS -->
+                                <!-- Nạp động qua JS chuẩn Mockup Image 14 -->
                             </div>
                         </div>
 
@@ -3615,35 +3520,282 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
             <!-- TAB 4: LỊCH TRỰC CỦA TÔI -->
             <section class="spa-panel" id="panelMyShifts" style="display:none !important;">
-                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề trang & Tổng số ca trực (Non-scrollable Top) -->
-                <div class="flex-shrink-0">
-                    <div class="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3" style="border-color: rgba(0,0,0,0.06) !important;">
-                        <div>
-                            <h2 class="fw-bold mb-0 text-dark" style="font-size: 16px; letter-spacing: -0.015em;">Lịch Trực & Ca Phân Công Của Tôi</h2>
+                
+                <!-- 4 Bento KPI Cards Chuẩn Mockup Image 15 -->
+                <div class="row g-3 mb-3 flex-shrink-0">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                            <div class="saas-kpi-icon" style="background:#EFF6FF; color:#2563EB;">
+                                <i class="bi bi-calendar3 fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="saas-kpi-val num-tabular">3</div>
+                                <div class="saas-kpi-title">Ca trực</div>
+                            </div>
                         </div>
-                        <span class="badge bg-primary px-3 py-2 fw-bold" style="font-size: 12px; border-radius: 8px;" id="myShiftsCountBadge">0 Ca Trực</span>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                            <div class="saas-kpi-icon" style="background:#FEF3C7; color:#D97706;">
+                                <i class="bi bi-layers fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="saas-kpi-val num-tabular">2</div>
+                                <div class="saas-kpi-title">Chờ nghiệm thu</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                            <div class="saas-kpi-icon" style="background:#F0FDF4; color:#16A34A;">
+                                <i class="bi bi-check2-circle fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="saas-kpi-val num-tabular">5</div>
+                                <div class="saas-kpi-title">Đã hoàn thành</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
+                            <div class="saas-kpi-icon" style="background:#FAF5FF; color:#9333EA;">
+                                <i class="bi bi-wallet2 fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="saas-kpi-val num-tabular">1.200.000 đ</div>
+                                <div class="saas-kpi-title">Thù lao</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 2. VÙNG BẢNG DỮ LIỆU: Scrollable Body & Sticky Header -->
-                <div class="card border-0 rounded-3 shadow-xs flex-1 overflow-hidden d-flex flex-column" style="border: 1px solid var(--ux-line) !important;">
-                    <div class="table-responsive flex-1 overflow-y-auto" style="height: 100%;">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="sticky-th">
-                            <tr>
-                                <th>Thời Gian</th>
-                                <th>Sự Kiện & Ca Trực</th>
-                                <th>Địa Điểm</th>
-                                <th>Ảnh Hiện Trường</th>
-                                <th>Nghiệm Thu & Hợp Đồng</th>
-                                <th>Thù Lao Quyết Toán</th>
-                                <th class="text-end">Hành Động</th>
-                            </tr>
-                        </thead>
-                        <tbody id="myShiftsTableBody">
-                            <!-- Nạp động qua JS -->
-                        </tbody>
-                        </table>
+                <!-- Bố Cục Split View: Bảng Danh Sách Công Việc + Drawer Chi Tiết Nghiệm Thu Bên Phải -->
+                <div class="my-shifts-split-layout flex-1 min-h-0">
+                    
+                    <!-- Bảng Danh Sách Bên Trái -->
+                    <div class="my-shifts-main-view">
+                        <!-- Filter Tabs & Toolbar -->
+                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                            <div class="cal-view-segmented" id="myShiftsFilterTabs">
+                                <button type="button" class="cal-view-btn active" onclick="filterMyShifts('all', this)">Tất cả</button>
+                                <button type="button" class="cal-view-btn" onclick="filterMyShifts('upcoming', this)">Sắp diễn ra</button>
+                                <button type="button" class="cal-view-btn" onclick="filterMyShifts('pending', this)">
+                                    Chờ nghiệm thu <span class="badge rounded-pill bg-warning text-dark ms-1" style="font-size: 10px;">2</span>
+                                </button>
+                                <button type="button" class="cal-view-btn" onclick="filterMyShifts('completed', this)">Đã hoàn thành</button>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-sm btn-light border rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Bộ lọc">
+                                    <i class="bi bi-funnel"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-light border rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Tìm kiếm">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Bảng Công Việc -->
+                        <div class="card border-0 rounded-3 shadow-xs flex-1 overflow-hidden d-flex flex-column" style="border: 1px solid #E2E8F0 !important;">
+                            <div class="table-responsive flex-1 overflow-y-auto">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="sticky-th" style="background: #F8FAFC; border-bottom: 1px solid #E2E8F0;">
+                                        <tr style="font-size: 12.5px; color: #475569;">
+                                            <th style="padding: 12px 16px;">Thời gian</th>
+                                            <th>Công việc</th>
+                                            <th>Địa điểm</th>
+                                            <th>Minh chứng</th>
+                                            <th>Trạng thái</th>
+                                            <th class="text-end" style="padding-right: 16px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="myShiftsTableBody">
+                                        <!-- Hàng 1 (Active) -->
+                                        <tr class="cursor-pointer table-active" onclick="selectMyShiftRow(this, 1)" style="border-bottom: 1px solid #F1F5F9;">
+                                            <td style="padding: 14px 16px;">
+                                                <div class="fw-bold text-dark" style="font-size: 13.5px;">08:00 – 12:00</div>
+                                                <div class="text-muted small" style="font-size: 11.5px;">15/11/2026</div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2.5">
+                                                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=100&q=80" style="width: 44px; height: 32px; border-radius: 6px; object-fit: cover;">
+                                                    <div>
+                                                        <div class="fw-bold text-dark" style="font-size: 13.5px;">Ca 3: Media</div>
+                                                        <div class="text-muted small" style="font-size: 11.5px;">FPoly TechDay 2026</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="text-muted small" style="font-size: 12.5px;"><i class="bi bi-geo-alt me-1 text-primary"></i>Hội trường A</div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bi bi-google-play text-success" title="Google Drive"></i>
+                                                    <span class="badge bg-light text-dark border" style="font-size: 11px;"><i class="bi bi-images me-1"></i>56</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge rounded-pill" style="background: #DCFCE7; color: #16A34A; font-size: 11.5px; padding: 4px 10px;">
+                                                    <i class="bi bi-check me-1"></i>Đã nghiệm thu
+                                                </span>
+                                            </td>
+                                            <td class="text-end" style="padding-right: 16px;">
+                                                <button type="button" class="btn btn-sm btn-link text-muted p-0"><i class="bi bi-three-dots"></i></button>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Hàng 2 -->
+                                        <tr class="cursor-pointer" onclick="selectMyShiftRow(this, 2)" style="border-bottom: 1px solid #F1F5F9;">
+                                            <td style="padding: 14px 16px;">
+                                                <div class="fw-bold text-dark" style="font-size: 13.5px;">13:00 – 17:00</div>
+                                                <div class="text-muted small" style="font-size: 11.5px;">18/11/2026</div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2.5">
+                                                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=100&q=80" style="width: 44px; height: 32px; border-radius: 6px; object-fit: cover;">
+                                                    <div>
+                                                        <div class="fw-bold text-dark" style="font-size: 13.5px;">Ca 2: Hậu cần</div>
+                                                        <div class="text-muted small" style="font-size: 11.5px;">Chung kết Khởi nghiệp trẻ</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="text-muted small" style="font-size: 12.5px;"><i class="bi bi-geo-alt me-1 text-primary"></i>Hội trường B</div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark border" style="font-size: 11px;"><i class="bi bi-images me-1"></i>8</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11.5px; padding: 4px 10px;">
+                                                    <i class="bi bi-clock me-1"></i>Chờ duyệt
+                                                </span>
+                                            </td>
+                                            <td class="text-end" style="padding-right: 16px;">
+                                                <button type="button" class="btn btn-sm btn-link text-muted p-0"><i class="bi bi-three-dots"></i></button>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Hàng 3 -->
+                                        <tr class="cursor-pointer" onclick="selectMyShiftRow(this, 3)" style="border-bottom: 1px solid #F1F5F9;">
+                                            <td style="padding: 14px 16px;">
+                                                <div class="fw-bold text-dark" style="font-size: 13.5px;">17:30 – 18:30</div>
+                                                <div class="text-muted small" style="font-size: 11.5px;">20/11/2026</div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2.5">
+                                                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=100&q=80" style="width: 44px; height: 32px; border-radius: 6px; object-fit: cover;">
+                                                    <div>
+                                                        <div class="fw-bold text-dark" style="font-size: 13.5px;">Ca 3: Hậu cần</div>
+                                                        <div class="text-muted small" style="font-size: 11.5px;">Workshop AI</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="text-muted small" style="font-size: 12.5px;"><i class="bi bi-geo-alt me-1 text-primary"></i>Phòng B201</div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark border" style="font-size: 11px;"><i class="bi bi-images me-1"></i>4</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11.5px; padding: 4px 10px;">
+                                                    <i class="bi bi-clock me-1"></i>Chờ duyệt
+                                                </span>
+                                            </td>
+                                            <td class="text-end" style="padding-right: 16px;">
+                                                <button type="button" class="btn btn-sm btn-link text-muted p-0"><i class="bi bi-three-dots"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="d-flex align-items-center justify-content-center gap-2 p-2.5 border-top" style="border-color: #F1F5F9 !important;">
+                                <button type="button" class="btn btn-sm btn-light border rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px;"><i class="bi bi-chevron-left" style="font-size: 11px;"></i></button>
+                                <span class="badge bg-primary text-white" style="font-size: 12px; padding: 5px 10px; border-radius: 6px;">1</span>
+                                <span class="badge bg-light text-dark border" style="font-size: 12px; padding: 5px 10px; border-radius: 6px; cursor: pointer;">2</span>
+                                <button type="button" class="btn btn-sm btn-light border rounded-circle d-inline-flex align-items-center justify-content-center p-0" style="width: 28px; height: 28px;"><i class="bi bi-chevron-right" style="font-size: 11px;"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drawer Bên Phải: Chi Tiết Nghiệm Thu Chuẩn Mockup Image 15 -->
+                    <div class="my-shifts-detail-drawer p-3.5" id="myShiftsDetailDrawer">
+                        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Chi tiết nghiệm thu</h6>
+                            <button type="button" class="btn btn-sm btn-link text-muted p-0" onclick="closeMyShiftsDrawer()" title="Đóng">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+
+                        <!-- Card Tóm Tắt Sự Kiện -->
+                        <div class="d-flex align-items-center gap-3 mb-3 p-2.5 rounded-3" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=120&q=80" style="width: 56px; height: 42px; border-radius: 6px; object-fit: cover;">
+                            <div>
+                                <h6 class="fw-bold text-dark mb-0.5" style="font-size: 13.5px;" id="drawerEventTitle">FPoly TechDay 2026</h6>
+                                <div class="text-muted small" style="font-size: 12px;" id="drawerShiftSub">📅 15/11/2026 • Ca 3: Media</div>
+                            </div>
+                        </div>
+
+                        <!-- Sub-tabs: Minh chứng & Thông tin -->
+                        <div class="d-flex align-items-center gap-3 mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important; font-size: 13px;">
+                            <span class="fw-bold text-primary pb-1" style="border-bottom: 2px solid #2563EB; cursor: pointer;">
+                                <i class="bi bi-images me-1"></i>Minh chứng
+                            </span>
+                            <span class="text-muted pb-1 cursor-pointer" onclick="triggerToast('Thông tin chi tiết đã hiển thị đầy đủ')">
+                                <i class="bi bi-info-circle me-1"></i>Thông tin
+                            </span>
+                        </div>
+
+                        <!-- Lưới 6 Ảnh Thu Nhỏ Kèm Ô +51 -->
+                        <div class="drawer-proof-grid-6 mb-3.5" id="drawerProofPhotosGrid">
+                            <div class="drawer-proof-thumb"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=200&q=80"></div>
+                            <div class="drawer-proof-thumb"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=200&q=80"></div>
+                            <div class="drawer-proof-thumb"><img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=200&q=80"></div>
+                            <div class="drawer-proof-thumb"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=200&q=80"></div>
+                            <div class="drawer-proof-thumb"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=200&q=80"></div>
+                            <div class="drawer-proof-thumb">
+                                <img src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?auto=format&fit=crop&w=200&q=80">
+                                <div class="drawer-proof-more-overlay">+51</div>
+                            </div>
+                        </div>
+
+                        <!-- Tiêu Chí Nghiệm Thu -->
+                        <div class="mb-auto">
+                            <div class="d-flex align-items-center gap-2 mb-2 text-dark fw-bold" style="font-size: 13px;">
+                                <i class="bi bi-check2-all text-primary"></i> Tiêu chí nghiệm thu
+                            </div>
+                            <div class="d-flex flex-column gap-2 text-muted" style="font-size: 12.5px;">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="d-flex align-items-center gap-2 text-dark">
+                                        <i class="bi bi-check-circle-fill text-success"></i> Tham gia đúng ca trực
+                                    </span>
+                                    <i class="bi bi-info-circle text-muted" style="font-size: 11px;"></i>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="d-flex align-items-center gap-2 text-dark">
+                                        <i class="bi bi-check-circle-fill text-success"></i> Hoàn thành đúng nhiệm vụ
+                                    </span>
+                                    <i class="bi bi-info-circle text-muted" style="font-size: 11px;"></i>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="d-flex align-items-center gap-2 text-dark">
+                                        <i class="bi bi-check-circle-fill text-success"></i> Ảnh rõ ràng, đúng bối cảnh
+                                    </span>
+                                    <i class="bi bi-info-circle text-muted" style="font-size: 11px;"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Actions -->
+                        <div class="d-flex align-items-center gap-2 pt-3 border-top mt-3" style="border-color: #F1F5F9 !important;">
+                            <button type="button" class="btn btn-light border flex-1 rounded-pill fw-medium py-2 text-muted" onclick="triggerToast('Đã gửi phản hồi')" style="font-size: 12.5px;">
+                                <i class="bi bi-file-earmark-text me-1"></i> Yêu cầu bổ sung
+                            </button>
+                            <button type="button" class="btn btn-primary flex-1 rounded-pill fw-bold py-2" onclick="triggerToast('Hồ sơ đã được nghiệm thu thành công!')" style="font-size: 12.5px; background: #2563EB;">
+                                <i class="bi bi-check-lg me-1"></i> Duyệt
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -4040,6 +4192,237 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
             </section>
 
+            <!-- =========================================================
+                 PANEL 6B: CHI TIẾT & DUYỆT MINH CHỨNG (CHUẨN MOCKUP IMAGE 12)
+                 ========================================================= -->
+            <section class="spa-panel" id="panelProofDetail" style="display:none !important; flex-direction: column;">
+                
+                <!-- Breadcrumb & Top Bar -->
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #E2E8F0 !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-color: #CBD5E1;" onclick="navigateToPage('submissions')" title="Quay lại danh sách nghiệm thu">
+                            <i class="bi bi-arrow-left" style="font-size: 15px;"></i>
+                        </button>
+                        <div class="d-flex align-items-center gap-2.5">
+                            <h4 class="fw-bold mb-0 text-dark" style="font-size: 18px; letter-spacing: -0.3px;">Chi tiết Minh chứng</h4>
+                            <span class="badge rounded-pill" style="background: #F3E8FF; color: #9333EA; font-size: 12px; font-weight: 600; padding: 4px 10px;">
+                                <i class="bi bi-gear-fill me-1"></i>Hậu cần
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BỐ CỤC 2 CỘT CHUẨN MOCKUP IMAGE 12 -->
+                <div class="proof-detail-grid">
+                    
+                    <!-- CỘT TRÁI (~62%): THÔNG TIN CTV, LƯỚI 8 ẢNH & MÔ TẢ CÔNG VIỆC -->
+                    <div class="d-flex flex-column gap-3">
+                        
+                        <!-- Thẻ Tổng Quan CTV & Sự Kiện -->
+                        <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: #0284C7; font-size: 18px;">
+                                        H
+                                    </div>
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;" id="proofDetailCtvName">Hoàng Minh Luân</h6>
+                                            <span class="badge" style="background: rgba(37, 99, 235, 0.1); color: #2563EB; font-size: 11px; padding: 2px 7px;">◆ CTV</span>
+                                        </div>
+                                        <div class="text-muted small mt-0.5" style="font-size: 12px;">PI03015 • hoangminhluan@fpt.edu.vn</div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-4 text-muted small" style="font-size: 12.5px;">
+                                    <div>
+                                        <div class="d-flex align-items-center gap-1.5 text-dark fw-medium">
+                                            <i class="bi bi-calendar-event text-primary"></i> Chung kết Cuộc thi Khởi nghiệp trẻ
+                                        </div>
+                                        <div class="d-flex align-items-center gap-3 mt-1">
+                                            <span><i class="bi bi-layers me-1"></i>Ca 2: Kỹ thuật</span>
+                                            <span><i class="bi bi-clock me-1"></i>18/11/2026 • 13:00 – 17:00</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11.5px; padding: 5px 12px; font-weight: 600;">
+                                        <i class="bi bi-clock-history me-1"></i>Chờ duyệt
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Khối Minh Chứng 8 Ảnh Sắc Nét -->
+                        <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-images text-primary" style="font-size: 16px;"></i>
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Minh chứng (8)</h6>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn btn-sm btn-light border px-2.5 py-1 text-muted" title="Đổi chế độ xem">
+                                        <i class="bi bi-grid-fill"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-light border px-2.5 py-1 text-muted" title="Tải xuống tất cả ảnh">
+                                        <i class="bi bi-download"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Lưới 8 Ảnh Minh Chứng (4 Cột x 2 Hàng) -->
+                            <div class="proof-photo-matrix mb-3" id="proofPhotoMatrix">
+                                <div class="proof-photo-item is-selected" onclick="selectProofPhoto(0)">
+                                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 1">
+                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(0); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                </div>
+                                <div class="proof-photo-item" onclick="selectProofPhoto(1)">
+                                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 2">
+                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(1); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                </div>
+                                <div class="proof-photo-item" onclick="selectProofPhoto(2)">
+                                    <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 3">
+                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(2); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                </div>
+                                <div class="proof-photo-item" onclick="selectProofPhoto(3)">
+                                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 4">
+                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(3); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                </div>
+                                <div class="proof-photo-item" onclick="selectProofPhoto(4)">
+                                    <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 5">
+                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(4); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                </div>
+                                <div class="proof-photo-item" onclick="selectProofPhoto(5)">
+                                    <img src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 6">
+                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(5); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                </div>
+                                <div class="proof-photo-item" onclick="selectProofPhoto(6)">
+                                    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 7">
+                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(6); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                </div>
+                                <div class="proof-photo-item" onclick="selectProofPhoto(7)">
+                                    <img src="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 8">
+                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(7); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                </div>
+                            </div>
+
+                            <!-- Carousel Dải Thumbnail Filmstrip -->
+                            <div class="proof-filmstrip-bar border-top pt-2" style="border-color: #F1F5F9 !important;">
+                                <div class="d-flex align-items-center gap-1.5 text-muted small" style="font-size: 11.5px; font-weight: 500;">
+                                    <button type="button" class="btn btn-sm btn-link p-0 text-muted" onclick="navigateProofPhoto(-1)"><i class="bi bi-chevron-left"></i></button>
+                                    <span id="proofPhotoIndexLabel">1/8</span>
+                                    <button type="button" class="btn btn-sm btn-link p-0 text-muted" onclick="navigateProofPhoto(1)"><i class="bi bi-chevron-right"></i></button>
+                                </div>
+                                <div class="proof-thumb-strip" id="proofThumbStrip">
+                                    <div class="proof-thumb-cell active" onclick="selectProofPhoto(0)"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=150&q=80"></div>
+                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(1)"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=150&q=80"></div>
+                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(2)"><img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=150&q=80"></div>
+                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(3)"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=150&q=80"></div>
+                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(4)"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=150&q=80"></div>
+                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(5)"><img src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?auto=format&fit=crop&w=150&q=80"></div>
+                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(6)"><img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=150&q=80"></div>
+                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(7)"><img src="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=150&q=80"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Mô Tả Công Việc Từ CTV -->
+                        <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                            <div class="d-flex align-items-center gap-2 mb-2 text-dark fw-bold" style="font-size: 13.5px;">
+                                <i class="bi bi-info-circle text-primary"></i> Mô tả công việc (từ CTV)
+                            </div>
+                            <p class="text-muted mb-0" style="font-size: 13px; line-height: 1.6;" id="proofDetailWorkDesc">
+                                Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- CỘT PHẢI (~38%): TIÊU CHÍ NGHIỆM THU & QUYẾT ĐỊNH DUYỆT -->
+                    <div class="d-flex flex-column gap-3">
+                        
+                        <!-- Card Tiêu Chí Nghiệm Thu -->
+                        <div class="proof-criteria-card shadow-xs">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-clipboard-check text-primary" style="font-size: 16px;"></i>
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Tiêu chí nghiệm thu</h6>
+                                </div>
+                                <i class="bi bi-info-circle text-muted" title="Tiêu chí đánh giá chất lượng ca trực"></i>
+                            </div>
+
+                            <div class="d-flex flex-column gap-2">
+                                <div class="proof-criterion-row">
+                                    <div class="proof-check-badge"><i class="bi bi-check"></i></div>
+                                    <div>Có mặt & tham gia đúng ca trực</div>
+                                </div>
+                                <div class="proof-criterion-row">
+                                    <div class="proof-check-badge"><i class="bi bi-check"></i></div>
+                                    <div>Thực hiện đúng nhiệm vụ được phân công <small class="text-muted d-block" style="font-size: 11px;">(ví dụ: âm thanh, trình chiếu, hậu trường...)</small></div>
+                                </div>
+                                <div class="proof-criterion-row">
+                                    <div class="proof-check-badge"><i class="bi bi-check"></i></div>
+                                    <div>Ảnh rõ ràng, đúng bối cảnh sự kiện</div>
+                                </div>
+                                <div class="proof-criterion-row">
+                                    <div class="proof-uncheck-box cursor-pointer" id="criterionBox4" onclick="toggleCriterion(this)"></div>
+                                    <div class="d-flex align-items-center gap-1.5 cursor-pointer" onclick="toggleCriterion(document.getElementById('criterionBox4'))">
+                                        <span>Phối hợp tốt với BTC</span>
+                                        <i class="bi bi-info-circle text-muted" style="font-size: 11px;" title="Chủ động hỗ trợ, tuân thủ phân công và đảm bảo tiến độ."></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Quyết Định Nghiệm Thu -->
+                        <div class="proof-criteria-card shadow-xs">
+                            <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                                <i class="bi bi-patch-check text-primary" style="font-size: 16px;"></i>
+                                <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Quyết định nghiệm thu</h6>
+                            </div>
+
+                            <!-- 2 Radio Box Lớn -->
+                            <div class="d-flex flex-column gap-2.5 mb-3">
+                                <div class="proof-decision-box selected" id="decisionBoxApprove" onclick="selectProofDecision('approve')">
+                                    <div class="proof-decision-circle"></div>
+                                    <div>
+                                        <div class="fw-bold text-dark" style="font-size: 13.5px;">Duyệt</div>
+                                        <small class="text-muted" style="font-size: 12px;">Minh chứng đáp ứng đầy đủ tiêu chí.</small>
+                                    </div>
+                                </div>
+                                <div class="proof-decision-box" id="decisionBoxRevision" onclick="selectProofDecision('request_more')">
+                                    <div class="proof-decision-circle"></div>
+                                    <div>
+                                        <div class="fw-bold text-dark" style="font-size: 13.5px;">Yêu cầu bổ sung</div>
+                                        <small class="text-muted" style="font-size: 12px;">Minh chứng chưa đủ, cần CTV bổ sung thêm.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Textarea Ghi Chú Có Đếm Ký Tự -->
+                            <div class="mb-3">
+                                <label class="form-label" style="font-size: 12px; font-weight: 500; color: #475569;">
+                                    <i class="bi bi-pencil me-1"></i> Ghi chú (tùy chọn)
+                                </label>
+                                <textarea class="form-control" rows="3" id="proofDecisionNote" maxlength="300" placeholder="Nhập ghi chú cho CTV (nếu có)..." oninput="updateProofNoteCounter(this)" style="font-size: 13px; resize: none;"></textarea>
+                                <div class="text-end text-muted small mt-1" style="font-size: 11px;">
+                                    <span id="proofNoteCounter">0</span> / 300
+                                </div>
+                            </div>
+
+                            <!-- Nút Thao Tác: Hủy & Xác Nhận -->
+                            <div class="d-flex align-items-center gap-2 pt-2 border-top" style="border-color: #F1F5F9 !important;">
+                                <button type="button" class="btn btn-light border flex-1 rounded-pill fw-medium py-2" onclick="navigateToPage('submissions')" style="font-size: 13px;">
+                                    Hủy
+                                </button>
+                                <button type="button" class="btn btn-primary flex-1 rounded-pill fw-bold py-2 d-inline-flex align-items-center justify-content-center gap-1.5" id="btnConfirmProofDecision" onclick="submitProofDecision()" style="font-size: 13px; background: #2563EB;">
+                                    <i class="bi bi-check-lg"></i> Xác nhận
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
             
             
 
@@ -4258,246 +4641,258 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 $profRoleName = $userProfile['role_name'] ?? 'Student';
                 $profPerms = RolePermissionHelper::getPermissions($userProfile);
                 $profRoleDisplay = $profPerms['roleNameDisplay'] ?? $profRoleName;
-                // CHỈ CTV (Sinh viên, Media) mới có hồ sơ quyết toán thù lao (VNeID, CCCD, STK)
-                // Các role khác (Admin, Giảng viên, Hành chính...) bỏ hết các trường này
                 $isCtv = in_array($profRoleId, [4, 6], true) || in_array($profRoleName, ['Student', 'Media', 'CTV', 'Sinh viên'], true);
-                $isInstitutionalStaff = !$isCtv;
                 ?>
-                <!-- Profile Header Card (Apple-grade Bento Canvas) -->
-                <div class="card border-0 rounded-3 shadow-xs mb-3 flex-shrink-0" style="background: var(--ux-surface); border: 1px solid var(--ux-line) !important;">
-                    <div class="card-body p-3 p-md-4">
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-xs flex-shrink-0" style="width: 54px; height: 54px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); font-size: 22px;">
-                                    <?= mb_substr($userProfile['full_name'] ?? 'U', 0, 1) ?>
-                                </div>
-                                <div>
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <h3 class="fw-bold mb-0" style="color: var(--ux-ink); font-size: 17px; letter-spacing: -0.01em;"><?= htmlspecialchars($userProfile['full_name'] ?? 'Người Dùng') ?></h3>
-                                        <span class="badge px-2.5 py-1 rounded-pill" style="font-size: 11.5px; background: rgba(234, 88, 12, 0.1); color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.25);">
-                                            <i class="bi <?= $isInstitutionalStaff ? 'bi-shield-check' : 'bi-person-check-fill' ?> me-1"></i><?= htmlspecialchars($profRoleDisplay) ?>
-                                        </span>
-                                    </div>
-                                    <div class="small mt-1 d-flex align-items-center gap-2 flex-wrap" style="color: var(--ux-ink-3); font-size: 12px;">
-                                        <span>Mã: <strong class="font-monospace" style="color: var(--ux-ink);"><?= htmlspecialchars($userProfile['student_code'] ?? 'CTV') ?></strong></span>
-                                        <span style="opacity: 0.35;">•</span>
-                                        <span>Email: <span style="color: var(--ux-ink-2); font-weight: 500;"><?= htmlspecialchars($userProfile['email'] ?? '') ?></span></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge px-3 py-1.5 rounded-pill font-monospace" style="background: var(--ux-surface-2); color: var(--ux-ink-2); border: 1px solid var(--ux-line); font-size: 11.5px;">
-                                    <i class="bi bi-clock-history me-1 text-primary"></i> Khởi tạo: <?= date('d/m/Y', strtotime($userProfile['created_at'] ?? 'now')) ?>
-                                </span>
-                            </div>
-                        </div>
+                <!-- BỐ CỤC 2 CỘT PROFILE SAAS CHUẨN MOCKUP IMAGE 11 -->
+                <div class="profile-saas-layout">
+                    <!-- Cột Trái: Sidebar Menu Tabs Dạng Pill Vertical -->
+                    <div class="profile-saas-nav" id="profileSettingsNav">
+                        <button type="button" class="profile-nav-pill-btn active" id="profTabBtnCommon" onclick="switchProfileTab('common', this)">
+                            <span><i class="bi bi-person nav-icon"></i> Thông tin chung</span>
+                        </button>
+                        <button type="button" class="profile-nav-pill-btn" id="profTabBtnIdCard" onclick="switchProfileTab('idCard', this)">
+                            <span><i class="bi bi-person-vcard nav-icon"></i> Định danh (CCCD)</span>
+                            <span class="nav-badge-check"><i class="bi bi-check"></i></span>
+                        </button>
+                        <button type="button" class="profile-nav-pill-btn" id="profTabBtnBank" onclick="switchProfileTab('bank', this)">
+                            <span><i class="bi bi-bank nav-icon"></i> Tài khoản ngân hàng</span>
+                            <span class="nav-badge-check"><i class="bi bi-check"></i></span>
+                        </button>
+                        <button type="button" class="profile-nav-pill-btn" id="profTabBtnSkills" onclick="switchProfileTab('skills', this)">
+                            <span><i class="bi bi-stack nav-icon"></i> Kỹ năng & lĩnh vực</span>
+                        </button>
+                        <button type="button" class="profile-nav-pill-btn" id="profTabBtnSecurity" onclick="switchProfileTab('security', this)">
+                            <span><i class="bi bi-lock nav-icon"></i> Bảo mật tài khoản</span>
+                        </button>
                     </div>
-                </div>
 
-                <!-- Profile Edit Form -->
-                <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
-                    <div class="row g-3 g-lg-4">
-                        <!-- Left Column: Thông Tin Định Danh & Liên Hệ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-7' : 'col-lg-6' ?>">
-                            <div class="card border-0 rounded-3 shadow-xs h-100">
-                                <div class="card-header bg-transparent border-0 pb-1">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 15px; color: var(--ux-ink);">
-                                        <i class="bi bi-person-badge-fill text-warning"></i> Thông Tin Định Danh Cá Nhân
-                                    </h5>
-                                    <div style="color: var(--ux-ink-3); font-size: 12px;">Dữ liệu liên lạc và hồ sơ hiển thị trong danh bạ PolyMee</div>
-                                </div>
-                                <div class="card-body pt-1">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="form-label">Họ và Tên <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($userProfile['full_name'] ?? '') ?>" placeholder="Nhập đầy đủ họ và tên..." required>
+                    <!-- Cột Phải: Form & Nội Dung Tab -->
+                    <div class="flex-1" style="min-width: 0;">
+                        <form id="profileSettingsForm" onsubmit="handleProfileUpdate(event)">
+                            
+                            <!-- TAB PANE 1: THÔNG TIN CHUNG (Chuẩn Mockup Image 11) -->
+                            <div class="profile-tab-pane" id="profileTabCommon">
+                                
+                                <!-- Hero Banner Card Mềm Mại -->
+                                <div class="profile-hero-banner mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                    <div class="d-flex align-items-center gap-3.5">
+                                        <div class="profile-avatar-wrap">
+                                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="Avatar" class="profile-avatar-img" id="profileDisplayAvatar">
+                                            <div class="profile-avatar-cam-btn" onclick="openAvatarChangeModal()" title="Đổi ảnh đại diện">
+                                                <i class="bi bi-camera-fill"></i>
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label d-flex align-items-center justify-content-between">
-                                                <span>Mã Định Danh / MSSV</span>
-                                                <span class="badge bg-secondary-subtle text-secondary" style="font-size: 10px; font-weight: normal;"><i class="bi bi-lock-fill me-0.5"></i>Cố định</span>
-                                            </label>
-                                            <input type="text" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? '') ?>" readonly>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Mã sinh viên / Cán bộ do Nhà trường cấp cố định</div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label d-flex align-items-center justify-content-between">
-                                                <span>Email FPT Education</span>
-                                                <span class="badge bg-secondary-subtle text-secondary" style="font-size: 10px; font-weight: normal;"><i class="bi bi-lock-fill me-0.5"></i>Cố định</span>
-                                            </label>
-                                            <input type="email" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['email'] ?? '') ?>" readonly>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Email trường cấp xác thực danh tính</div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Số Điện Thoại Liên Hệ <span class="text-danger">*</span></label>
-                                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($userProfile['phone'] ?? '') ?>" placeholder="09xxxxxxxx" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Kỹ Năng & Lĩnh Vực Phụ Trách</label>
-                                            <textarea name="skills" class="form-control" rows="3" placeholder="Ví dụ: Media quay chụp, Lễ tân đón tiếp, Hậu cần setup, MC sự kiện, Điều phối âm thanh ánh sáng..."><?= htmlspecialchars($userProfile['skills'] ?? '') ?></textarea>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Trợ lý AI sẽ dùng kỹ năng này để phân tích và gợi ý bạn vào các ca trực sự kiện phù hợp nhất</div>
+                                        <div>
+                                            <h4 class="fw-bold mb-1.5 text-dark" style="font-size: 19px; letter-spacing: -0.3px;" id="profileHeroFullName">
+                                                <?= htmlspecialchars($userProfile['full_name'] ?? 'Định Nguyễn Phương Anh') ?>
+                                            </h4>
+                                            <div class="mb-2">
+                                                <span class="profile-role-tag">
+                                                    <i class="bi bi-camera-video-fill"></i> CTV Media / Truyền thông
+                                                </span>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-3 text-muted" style="font-size: 12.5px;">
+                                                <span>Mã: <strong class="text-dark font-monospace"><?= htmlspecialchars($userProfile['student_code'] ?? 'PI03084') ?></strong></span>
+                                                <span style="opacity: 0.4;">|</span>
+                                                <span>Email: <span class="text-dark"><?= htmlspecialchars($userProfile['email'] ?? 'phuonganh.pi03084@fpt.edu.vn') ?></span></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Hồ Sơ Thù Lao (Phân Biệt Theo Vai Trò) HOẶC Thông Báo Cán Bộ -->
-                        <div class="col-12 <?= $isInstitutionalStaff ? 'col-lg-5' : 'col-lg-6' ?>">
-                            <?php if ($isInstitutionalStaff): ?>
-                            <!-- Trường hợp Quản Trị Viên & Giảng Viên: KHÔNG hiển thị CCCD & Ngân hàng thù lao -->
-                            <div class="card border-0 rounded-3 shadow-xs h-100 d-flex flex-column">
-                                <div class="card-header bg-transparent border-0 pb-1">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 15px; color: var(--ux-ink);">
-                                        <i class="bi bi-shield-check text-primary"></i> Phân Quyền & Bảo Mật
-                                    </h5>
-                                    <div style="color: var(--ux-ink-3); font-size: 12px;">Quy chế tài khoản cán bộ trực thuộc FPT Polytechnic</div>
-                                </div>
-                                <div class="card-body pt-1 d-flex flex-column justify-content-between">
                                     <div>
-                                        <!-- Callout Box: Quy chế biên chế FPT Poly - Bento Apple HIG Thoáng Đãng -->
-                                        <div class="rounded-3 p-3 mb-4" style="background: rgba(2, 132, 199, 0.05); border: 1px solid rgba(2, 132, 199, 0.18);">
-                                            <div class="d-flex align-items-start gap-3">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: rgba(2, 132, 199, 0.12); color: #0284C7; font-size: 20px;">
-                                                    <i class="bi bi-mortarboard-fill"></i>
-                                                </div>
-                                                <div style="flex: 1;">
-                                                    <div class="d-flex align-items-center gap-2 flex-wrap mb-1.5">
-                                                        <h6 class="fw-bold mb-0" style="font-size: 14px; color: var(--ux-ink);">Tài Khoản Biên Chế Nhà Trường</h6>
-                                                        <span class="badge rounded-pill" style="font-size: 11px; background: rgba(2, 132, 199, 0.12); color: #0284C7; border: 1px solid rgba(2, 132, 199, 0.25);">
-                                                            <i class="bi bi-patch-check-fill me-1"></i>Chính Thức
-                                                        </span>
-                                                    </div>
-                                                    <p class="mb-0" style="line-height: 1.6; font-size: 12.5px; color: var(--ux-ink-2);">
-                                                        Tài khoản đang đăng nhập với vai trò <span class="fw-semibold text-primary"><?= htmlspecialchars($profRoleDisplay) ?></span>. Nhân sự biên chế nhận lương theo hợp đồng lao động nhà trường, không nhận thù lao sinh viên theo ca nên hệ thống tự động lược bỏ các mục kê khai CCCD, số tài khoản ngân hàng và thẻ định danh VNeID.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Form Group: Đổi Mật Khẩu Đăng Nhập - Sạch sẽ, không box lồng box, có nút ẩn/hiện -->
-                                        <div class="mb-4">
-                                            <label class="form-label d-flex align-items-center justify-content-between mb-1.5">
-                                                <span class="d-flex align-items-center gap-1.5 fw-bold" style="font-size: 13px; color: var(--ux-ink);">
-                                                    <i class="bi bi-key-fill text-warning"></i> Đổi Mật Khẩu Đăng Nhập
-                                                </span>
-                                                <span class="badge bg-light text-muted border" style="font-size: 10.5px; font-weight: normal;">Không bắt buộc</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <input type="password" name="new_password" id="inputNewPasswordStaff" class="form-control" style="padding-right: 42px;" placeholder="Nhập mật khẩu mới (bỏ trống nếu giữ nguyên)..." autocomplete="new-password">
-                                                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted text-decoration-none pe-3" onclick="togglePasswordVisibility('inputNewPasswordStaff', this)" style="border: none; background: transparent; z-index: 5;" title="Hiện / Ẩn mật khẩu">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                            </div>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3); margin-top: 5px;">
-                                                Mật khẩu mới yêu cầu tối thiểu 6 ký tự. Hãy sử dụng mật khẩu mạnh để bảo vệ tài khoản.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Footer Action Button -->
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 rounded-pill shadow-xs fw-bold d-inline-flex align-items-center justify-content-center gap-2" id="btnSaveProfile" style="padding: 11px 20px; font-size: 13.5px;">
-                                            <i class="bi bi-check-circle-fill"></i> Lưu Cập Nhật Hồ Sơ Cán Bộ
+                                        <button type="button" class="profile-btn-edit-cover" onclick="triggerToast('Tính năng cập nhật ảnh bìa đang được bật!')">
+                                            <i class="bi bi-pencil"></i> Chỉnh sửa ảnh bìa
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                            <?php else: ?>
-                            <!-- Trường hợp CTV (Sinh Viên / Media): Có đầy đủ hồ sơ CCCD, STK, VNeID -->
-                            <div class="card border-0 rounded-3 shadow-xs h-100 d-flex flex-column">
-                                <div class="card-header bg-transparent border-0 pb-1">
-                                    <h5 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 15px; color: var(--ux-ink);">
-                                        <i class="bi bi-wallet2 text-success"></i> Hồ Sơ Quyết Toán & Thù Lao CTV
-                                    </h5>
-                                    <div style="color: var(--ux-ink-3); font-size: 12px;">Phòng Kế Toán FPT Polytechnic dùng thông tin này để chi trả thù lao ca trực</div>
+
+                                <!-- Card Thông Tin Cơ Bản -->
+                                <div class="card border-0 rounded-3 shadow-xs mb-3" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                                    <div class="card-body p-3 p-md-4">
+                                        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="bi bi-person text-primary" style="font-size: 17px;"></i>
+                                                <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Thông tin cơ bản</h6>
+                                            </div>
+                                            <button type="submit" class="profile-btn-edit-cover" id="btnSaveProfileHeader">
+                                                <i class="bi bi-pencil"></i> Chỉnh sửa
+                                            </button>
+                                        </div>
+
+                                        <div class="row g-3">
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label" style="font-size: 12.5px; font-weight: 500; color: #475569;">Họ và tên <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                                                    <input type="text" name="full_name" class="form-control border-start-0" value="<?= htmlspecialchars($userProfile['full_name'] ?? 'Định Nguyễn Phương Anh') ?>" required style="font-size: 13.5px;">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label d-flex align-items-center justify-content-between" style="font-size: 12.5px; font-weight: 500; color: #475569;">
+                                                    <span>Mã định danh / MSSV</span>
+                                                    <span class="text-muted" style="font-size: 11px;"><i class="bi bi-lock-fill me-1"></i>Cố định</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-fingerprint"></i></span>
+                                                    <input type="text" class="form-control border-start-0 bg-light font-monospace" value="<?= htmlspecialchars($userProfile['student_code'] ?? 'PI03084') ?>" readonly style="font-size: 13.5px;">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label d-flex align-items-center justify-content-between" style="font-size: 12.5px; font-weight: 500; color: #475569;">
+                                                    <span>Email FPT Education</span>
+                                                    <span class="text-muted" style="font-size: 11px;"><i class="bi bi-lock-fill me-1"></i>Cố định</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                                                    <input type="email" class="form-control border-start-0 bg-light" value="<?= htmlspecialchars($userProfile['email'] ?? 'phuonganh.pi03084@fpt.edu.vn') ?>" readonly style="font-size: 13.5px;">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label" style="font-size: 12.5px; font-weight: 500; color: #475569;">Số điện thoại liên hệ <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-telephone"></i></span>
+                                                    <input type="tel" name="phone" class="form-control border-start-0 font-monospace" value="<?= htmlspecialchars($userProfile['phone'] ?? '0923456789') ?>" required style="font-size: 13.5px;">
+                                                </div>
+                                            </div>
+
+                                            <!-- Chip tags Kỹ năng & Lĩnh vực -->
+                                            <div class="col-12 mt-3">
+                                                <label class="form-label mb-2" style="font-size: 12.5px; font-weight: 500; color: #475569;">Kỹ năng & lĩnh vực phụ trách</label>
+                                                <div class="d-flex flex-wrap align-items-center gap-2 mb-1.5" id="profileSkillChipsContainer">
+                                                    <span class="profile-chip-tag">
+                                                        <i class="bi bi-tag text-muted"></i> Media phóng sự
+                                                        <span class="tag-remove-btn" onclick="removeSkillChip(this, 'Media phóng sự')">×</span>
+                                                    </span>
+                                                    <span class="profile-chip-tag">
+                                                        Chụp ảnh sự kiện
+                                                        <span class="tag-remove-btn" onclick="removeSkillChip(this, 'Chụp ảnh sự kiện')">×</span>
+                                                    </span>
+                                                    <span class="profile-chip-tag">
+                                                        Hậu kỳ Premiere/Lightroom
+                                                        <span class="tag-remove-btn" onclick="removeSkillChip(this, 'Hậu kỳ Premiere/Lightroom')">×</span>
+                                                    </span>
+                                                    <button type="button" class="profile-chip-add-btn" onclick="promptAddSkillChip()">
+                                                        <i class="bi bi-plus"></i> Thêm
+                                                    </button>
+                                                </div>
+                                                <input type="hidden" name="skills" id="inputProfileSkills" value="<?= htmlspecialchars($userProfile['skills'] ?? 'Media phóng sự, Chụp ảnh sự kiện, Hậu kỳ Premiere/Lightroom') ?>">
+                                                <div class="text-muted small" style="font-size: 11.5px;">Dùng để gợi ý và phân công công việc phù hợp.</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body pt-1 d-flex flex-column justify-content-between">
+
+                                <!-- 3 Thẻ Trạng Thái Chân Trang (Bento 3-Card Footer) -->
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-4">
+                                        <div class="profile-kpi-status-card">
+                                            <div class="profile-kpi-icon-wrap" style="background: #DCFCE7; color: #16A34A;">
+                                                <i class="bi bi-check-lg"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-muted" style="font-size: 11.5px; font-weight: 500;">Định danh CCCD</div>
+                                                <div class="fw-bold" style="font-size: 13.5px; color: #16A34A;">Đã xác thực</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <div class="profile-kpi-status-card">
+                                            <div class="profile-kpi-icon-wrap" style="background: #E0F2FE; color: #0284C7;">
+                                                <i class="bi bi-bank"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-muted" style="font-size: 11.5px; font-weight: 500;">Tài khoản ngân hàng</div>
+                                                <div class="fw-bold" style="font-size: 13.5px; color: #0284C7;">Đã liên kết</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <div class="profile-kpi-status-card">
+                                            <div class="profile-kpi-icon-wrap" style="background: #EFF6FF; color: #2563EB;">
+                                                <i class="bi bi-pie-chart-fill"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-muted" style="font-size: 11.5px; font-weight: 500;">Hồ sơ hoàn thiện</div>
+                                                <div class="fw-bold" style="font-size: 14.5px; color: #2563EB;">100%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB PANE 2: ĐỊNH DANH CCCD -->
+                            <div class="profile-tab-pane d-none" id="profileTabIdCard">
+                                <div class="card border-0 rounded-3 shadow-xs p-3 p-md-4" style="border: 1px solid #E2E8F0 !important;">
+                                    <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-person-vcard text-primary me-2"></i>Định danh Căn Cước Công Dân (CCCD / VNeID)</h6>
                                     <div class="row g-3">
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label">Số CCCD (12 số) <span class="text-danger">*</span></label>
-                                            <input type="text" name="id_card_number" class="form-control font-monospace" placeholder="12 chữ số CCCD chính chủ..." value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '') ?>" required>
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Nhập chính xác 12 chữ số hiển thị trên app VNeID</div>
+                                            <label class="form-label" style="font-size: 12.5px;">Số CCCD (12 số) <span class="text-danger">*</span></label>
+                                            <input type="text" name="id_card_number" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['id_card_number'] ?? '079203004812') ?>" required>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label">Ngân Hàng Thụ Hưởng <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_name" class="form-control" placeholder="Ví dụ: MB Bank, TPBank, Vietcombank..." value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
+                                            <label class="form-label" style="font-size: 12.5px;">Ảnh Chụp VNeID Mức 2</label>
+                                            <input type="url" name="vneid_image_url" class="form-control" value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" placeholder="https://...">
                                         </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label">Số Tài Khoản (STK) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_number" class="form-control font-monospace" placeholder="Số tài khoản chính chủ..." value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '') ?>" required>
+                                        <div class="col-12 text-end pt-2">
+                                            <button type="submit" class="btn btn-primary rounded-pill px-4">Lưu thông tin CCCD</button>
                                         </div>
-                                        <div class="col-12 col-md-6">
-                                            <label class="form-label">Tên Chủ Tài Khoản (In Hoa) <span class="text-danger">*</span></label>
-                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" placeholder="NGUYEN VAN A" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? '') ?>" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Ảnh Chụp Màn Hình Ứng Dụng VNeID (Mức 2)</label>
-                                            <input type="url" name="vneid_image_url" id="vneidUrlInput" class="form-control" placeholder="https://... (URL ảnh chụp màn hình app VNeID)" value="<?= htmlspecialchars($userProfile['vneid_image_url'] ?? '') ?>" oninput="previewVneidImage(this.value)">
-                                            <div class="form-text" style="font-size: 11px; color: var(--ux-ink-3);">Dán URL ảnh chụp màn hình app VNeID đã kích hoạt Mức 2 (không cần chụp thẻ vật lý)</div>
-                                            
-                                            <!-- Image Preview Box -->
-                                            <div class="mt-2 p-2 rounded-3 text-center d-flex align-items-center justify-content-center" style="background: var(--ux-surface-2); border: 1px dashed var(--ux-line-2); min-height: 90px; max-height: 120px; overflow: hidden;" id="vneidPreviewBox">
-                                                <?php if (!empty($userProfile['vneid_image_url'])): ?>
-                                                    <img src="<?= htmlspecialchars($userProfile['vneid_image_url']) ?>" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 8px;" id="vneidPreviewImg">
-                                                    <span class="small text-muted" id="vneidPlaceholder" style="font-size: 11.5px; display: none;"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                <?php else: ?>
-                                                    <span class="small text-muted" id="vneidPlaceholder" style="font-size: 11.5px;"><i class="bi bi-card-image me-1"></i> Chưa có ảnh VNeID được liên kết</span>
-                                                    <img src="" alt="VNeID Preview" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 8px; display: none;" id="vneidPreviewImg">
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label d-flex align-items-center justify-content-between mb-1.5">
-                                                <span class="d-flex align-items-center gap-1.5 fw-bold" style="font-size: 13px; color: var(--ux-ink);">
-                                                    <i class="bi bi-key-fill text-warning"></i> Đổi Mật Khẩu Đăng Nhập
-                                                </span>
-                                                <span class="badge bg-light text-muted border" style="font-size: 10.5px; font-weight: normal;">Không bắt buộc</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <input type="password" name="new_password" id="inputNewPasswordCtv" class="form-control" style="padding-right: 42px;" placeholder="Nhập mật khẩu mới (bỏ trống nếu giữ nguyên)..." autocomplete="new-password">
-                                                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted text-decoration-none pe-3" onclick="togglePasswordVisibility('inputNewPasswordCtv', this)" style="border: none; background: transparent; z-index: 5;" title="Hiện / Ẩn mật khẩu">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Footer Action Button -->
-                                    <div class="pt-3 border-top mt-3" style="border-color: var(--ux-line) !important;">
-                                        <button type="submit" class="btn btn-fpt-primary w-100 rounded-pill shadow-xs fw-bold d-inline-flex align-items-center justify-content-center gap-2" id="btnSaveProfile" style="padding: 11px 20px; font-size: 13.5px;">
-                                            <i class="bi bi-save2-fill"></i> Lưu Cập Nhật Hồ Sơ Quyết Toán CTV
-                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </form>
 
-                <?php if ($isCtv): ?>
-                <!-- Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân (Chỉ Dành Cho CTV / Sinh Viên) -->
-                <div class="card border-0 rounded-3 shadow-xs mt-3" style="background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.2) !important;">
-                    <div class="card-body p-3 p-md-4">
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                            <div>
-                                <h6 class="fw-bold mb-1 text-danger d-flex align-items-center gap-1.5" style="font-size: 13.5px;">
-                                    <i class="bi bi-exclamation-triangle-fill"></i> Vùng Nguy Hiểm: Xóa Tài Khoản Cá Nhân
-                                </h6>
-                                <p class="small mb-0 text-muted" style="max-width: 650px; font-size: 12px; line-height: 1.5;">
-                                    Khi thực hiện xóa tài khoản, toàn bộ hồ sơ sinh viên, thông tin định danh và lịch phân công chưa hoàn thành sẽ bị vô hiệu hóa khỏi hệ thống PolyMee. Các hợp đồng đã quyết toán chi trả sẽ được lưu trữ phục vụ đối soát kế toán theo quy chế nhà trường.
-                                </p>
+                            <!-- TAB PANE 3: TÀI KHOẢN NGÂN HÀNG -->
+                            <div class="profile-tab-pane d-none" id="profileTabBank">
+                                <div class="card border-0 rounded-3 shadow-xs p-3 p-md-4" style="border: 1px solid #E2E8F0 !important;">
+                                    <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-bank text-primary me-2"></i>Tài khoản ngân hàng nhận thù lao ca trực</h6>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label" style="font-size: 12.5px;">Ngân hàng thụ hưởng <span class="text-danger">*</span></label>
+                                            <input type="text" name="bank_name" class="form-control" value="<?= htmlspecialchars($userProfile['bank_name'] ?? 'MB Bank') ?>" required>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label" style="font-size: 12.5px;">Số tài khoản (STK) <span class="text-danger">*</span></label>
+                                            <input type="text" name="bank_account_number" class="form-control font-monospace" value="<?= htmlspecialchars($userProfile['bank_account_number'] ?? '0923456789') ?>" required>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label" style="font-size: 12.5px;">Tên chủ tài khoản (In hoa) <span class="text-danger">*</span></label>
+                                            <input type="text" name="bank_account_name" class="form-control text-uppercase font-monospace" value="<?= htmlspecialchars($userProfile['bank_account_name'] ?? 'DINH NGUYEN PHUONG ANH') ?>" required>
+                                        </div>
+                                        <div class="col-12 text-end pt-2">
+                                            <button type="submit" class="btn btn-primary rounded-pill px-4">Lưu thông tin ngân hàng</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3.5 py-2 fw-bold" onclick="openDeleteAccountModal()" style="font-size: 12px;">
-                                    <i class="bi bi-trash3-fill me-1.5"></i> Xóa Tài Khoản
-                                </button>
+
+                            <!-- TAB PANE 4: KỸ NĂNG & LĨNH VỰC -->
+                            <div class="profile-tab-pane d-none" id="profileTabSkills">
+                                <div class="card border-0 rounded-3 shadow-xs p-3 p-md-4" style="border: 1px solid #E2E8F0 !important;">
+                                    <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-stack text-primary me-2"></i>Kỹ năng chuyên môn & Lĩnh vực phụ trách</h6>
+                                    <p class="text-muted small">Trợ lý AI PolyMee sẽ tự động quét các kỹ năng này để ưu tiên đề xuất bạn vào các ca trực sự kiện thích hợp nhất.</p>
+                                    <textarea class="form-control" rows="4" placeholder="Nhập các kỹ năng phân cách bằng dấu phẩy..."><?= htmlspecialchars($userProfile['skills'] ?? 'Media phóng sự, Chụp ảnh sự kiện, Hậu kỳ Premiere/Lightroom') ?></textarea>
+                                    <div class="text-end pt-3">
+                                        <button type="submit" class="btn btn-primary rounded-pill px-4">Lưu kỹ năng</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+
+                            <!-- TAB PANE 5: BẢO MẬT TÀI KHOẢN -->
+                            <div class="profile-tab-pane d-none" id="profileTabSecurity">
+                                <div class="card border-0 rounded-3 shadow-xs p-3 p-md-4" style="border: 1px solid #E2E8F0 !important;">
+                                    <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-shield-lock text-primary me-2"></i>Bảo mật tài khoản & Đổi mật khẩu</h6>
+                                    <div class="row g-3" style="max-width: 500px;">
+                                        <div class="col-12">
+                                            <label class="form-label" style="font-size: 12.5px;">Mật khẩu mới</label>
+                                            <input type="password" name="new_password" class="form-control" placeholder="Nhập mật khẩu mới (bỏ trống nếu giữ nguyên)...">
+                                        </div>
+                                        <div class="col-12 text-end pt-2">
+                                            <button type="submit" class="btn btn-primary rounded-pill px-4">Cập nhật mật khẩu</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <?php endif; ?>
             </section>
 
             <!-- =========================================================
@@ -4711,27 +5106,28 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                  PANEL 11: DASHBOARD BÁO CÁO & VIỆC CẦN XỬ LÝ (OVERVIEW)
                  ========================================================= -->
             <section id="panelOverviewReport" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
-                <!-- Top Summary Bento Cards -->
+                
+                <!-- 4 Bento KPI Cards Chuẩn Mockup Image 13 -->
                 <div class="row g-3 mb-3 flex-shrink-0">
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
                             <div class="saas-kpi-icon" style="background:#EFF6FF; color:#2563EB;">
-                                <i class="bi bi-calendar-event fs-5"></i>
+                                <i class="bi bi-calendar3 fs-5"></i>
                             </div>
                             <div>
-                                <div class="saas-kpi-val num-tabular"><?= count($events ?? []) ?></div>
-                                <div class="saas-kpi-title">Sự Kiện Đang Chạy</div>
+                                <div class="saas-kpi-val num-tabular">2</div>
+                                <div class="saas-kpi-title">Ca sắp tới</div>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="saas-card saas-kpi-card p-3 d-flex align-items-center gap-3">
                             <div class="saas-kpi-icon" style="background:#F0FDF4; color:#16A34A;">
-                                <i class="bi bi-people fs-5"></i>
+                                <i class="bi bi-layers fs-5"></i>
                             </div>
                             <div>
-                                <div class="saas-kpi-val num-tabular"><?= count($shifts ?? []) ?></div>
-                                <div class="saas-kpi-title">Ca Trực Hoạt Động</div>
+                                <div class="saas-kpi-val num-tabular">20</div>
+                                <div class="saas-kpi-title">Công việc đang nhận</div>
                             </div>
                         </div>
                     </div>
@@ -4741,13 +5137,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <i class="bi bi-clock-history fs-5"></i>
                             </div>
                             <div>
-                                <div class="saas-kpi-val num-tabular">
-                                    <?php 
-                                    $pendingCount = count(array_filter($accountingList ?? [], fn($a) => empty($a['lecturer_verified'])));
-                                    echo $pendingCount ?: 2;
-                                    ?>
-                                </div>
-                                <div class="saas-kpi-title">Minh Chứng Chờ Duyệt</div>
+                                <div class="saas-kpi-val num-tabular">2</div>
+                                <div class="saas-kpi-title">Minh chứng chờ duyệt</div>
                             </div>
                         </div>
                     </div>
@@ -4758,108 +5149,210 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </div>
                             <div>
                                 <div class="saas-kpi-val num-tabular">87.5%</div>
-                                <div class="saas-kpi-title">Tỷ Lệ Hoàn Thành</div>
+                                <div class="saas-kpi-title">Tỷ lệ hoàn thành</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Priority Action Queue: Việc Cần Xử Lý Hôm Nay -->
-                <div class="saas-card mb-3 p-3 flex-shrink-0">
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1 fw-bold" style="font-size: 11px;">HÔM NAY</span>
-                            <h4 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Việc Cần Giải Quyết Hôm Nay</h4>
+                <!-- Thân Dashboard: 2 Cột Chuẩn Mockup Image 13 -->
+                <div class="row g-3 mb-3">
+                    
+                    <!-- Cột Trái: Việc Cần Làm Hôm Nay ⓘ -->
+                    <div class="col-12 col-lg-7">
+                        <div class="card border-0 rounded-3 shadow-xs h-100 p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-check2-square text-primary" style="font-size: 16px;"></i>
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Việc cần làm hôm nay</h6>
+                                    <i class="bi bi-info-circle text-muted" style="font-size: 12px;" title="Danh sách các việc ưu tiên cần bạn xử lý trong ngày"></i>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column gap-2.5">
+                                <!-- Todo Item 1 -->
+                                <div class="dash-todo-card">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #FFF7ED; color: #EA580C; font-size: 17px;">
+                                            <i class="bi bi-upload"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-0.5" style="font-size: 14px;">Nộp minh chứng hậu cần</h6>
+                                            <div class="text-muted small" style="font-size: 12px;">Ca 2 • Chung kết KN trẻ</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2.5">
+                                        <span class="badge rounded-pill" style="background: #FFF7ED; color: #EA580C; font-size: 11px; padding: 4px 10px; font-weight: 600;">
+                                            ● Cần thực hiện
+                                        </span>
+                                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-1.5 fw-bold" onclick="navigateToPage('submissions')" style="font-size: 12px; background: #2563EB;">
+                                            Nộp ngay
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Todo Item 2 -->
+                                <div class="dash-todo-card">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #EFF6FF; color: #2563EB; font-size: 17px;">
+                                            <i class="bi bi-calendar-check"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-0.5" style="font-size: 14px;">Ca trực hôm nay 13:00 – 17:00</h6>
+                                            <div class="text-muted small" style="font-size: 12px;">Bảo trì phòng máy Lab AI</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2.5">
+                                        <span class="badge rounded-pill" style="background: #F0FDF4; color: #16A34A; font-size: 11px; padding: 4px 10px; font-weight: 600;">
+                                            ● Đã phân công
+                                        </span>
+                                        <button type="button" class="btn btn-sm btn-light border rounded-pill px-3 py-1.5 fw-medium text-dark" onclick="navigateToPage('calendar')" style="font-size: 12px;">
+                                            Xem chi tiết
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Todo Item 3 -->
+                                <div class="dash-todo-card">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #FAF5FF; color: #9333EA; font-size: 17px;">
+                                            <i class="bi bi-file-earmark-text"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-0.5" style="font-size: 14px;">Hợp đồng chờ xác nhận</h6>
+                                            <div class="text-muted small" style="font-size: 12px;">Đợt quyết toán tháng 11</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2.5">
+                                        <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11px; padding: 4px 10px; font-weight: 600;">
+                                            ● Chờ xác nhận
+                                        </span>
+                                        <button type="button" class="btn btn-sm btn-light border rounded-pill px-3 py-1.5 fw-medium text-dark" onclick="navigateToPage('contract-dossier')" style="font-size: 12px;">
+                                            Xem hồ sơ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <span class="text-muted small">Ưu tiên xử lý</span>
                     </div>
 
-                    <div class="d-flex flex-column gap-2">
-                        <!-- Action item 1 -->
-                        <div class="saas-todo-item">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width:32px; height:32px; background:#D97706; font-size:13px;">
-                                    <i class="bi bi-patch-question"></i>
+                    <!-- Cột Phải: Lịch Sắp Tới → (Timeline dọc) -->
+                    <div class="col-12 col-lg-5">
+                        <div class="card border-0 rounded-3 shadow-xs h-100 p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-calendar3 text-primary" style="font-size: 16px;"></i>
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Lịch sắp tới</h6>
                                 </div>
-                                <div>
-                                    <strong class="text-dark d-block" style="font-size:13.5px;">2 Minh chứng hậu cần đang chờ thẩm định</strong>
-                                    <small class="text-muted">Chung kết Khởi nghiệp trẻ • Ca 2: Kỹ thuật trình chiếu & Micro</small>
-                                </div>
+                                <a href="javascript:void(0)" onclick="navigateToPage('calendar')" class="text-decoration-none text-muted" title="Xem tất cả lịch">
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
                             </div>
-                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="navigateToPage('submissions')">
-                                Thẩm định ngay
-                            </button>
-                        </div>
 
-                        <!-- Action item 2 -->
-                        <div class="saas-todo-item">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width:32px; height:32px; background:#2563EB; font-size:13px;">
-                                    <i class="bi bi-calendar-event"></i>
+                            <!-- Timeline Dọc -->
+                            <div class="d-flex flex-column gap-3 pt-1">
+                                <!-- Timeline Item 1 -->
+                                <div class="dash-timeline-item">
+                                    <div class="dash-timeline-date">
+                                        <div class="dash-timeline-day">T3</div>
+                                        <div class="dash-timeline-num">19</div>
+                                    </div>
+                                    <div class="dash-timeline-line"></div>
+                                    <div class="dash-timeline-dot" style="background: #2563EB;"></div>
+                                    <div class="flex-1">
+                                        <h6 class="fw-bold text-dark mb-0.5" style="font-size: 13.5px;">Hỗ trợ sự kiện</h6>
+                                        <div class="text-muted small" style="font-size: 12px;">09:00 – 12:00</div>
+                                    </div>
+                                    <span class="badge rounded-pill" style="background: #F0FDF4; color: #16A34A; font-size: 11px; padding: 4px 10px;">
+                                        Đã phân công
+                                    </span>
                                 </div>
-                                <div>
-                                    <strong class="text-dark d-block" style="font-size:13.5px;">Bảo trì phòng máy Lab AI Tòa B (Hôm nay 13:00 - 17:00)</strong>
-                                    <small class="text-muted">Phòng CSC, Tòa B • 1 CTV đã nhận ca</small>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="navigateToPage('calendar')">
-                                Xem lịch trực
-                            </button>
-                        </div>
 
-                        <!-- Action item 3 -->
-                        <div class="saas-todo-item">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width:32px; height:32px; background:#16A34A; font-size:13px;">
-                                    <i class="bi bi-file-earmark-check"></i>
+                                <!-- Timeline Item 2 -->
+                                <div class="dash-timeline-item">
+                                    <div class="dash-timeline-date">
+                                        <div class="dash-timeline-day">T4</div>
+                                        <div class="dash-timeline-num">20</div>
+                                    </div>
+                                    <div class="dash-timeline-line"></div>
+                                    <div class="dash-timeline-dot" style="background: #9333EA;"></div>
+                                    <div class="flex-1">
+                                        <h6 class="fw-bold text-dark mb-0.5" style="font-size: 13.5px;">Bảo trì Lab AI</h6>
+                                        <div class="text-muted small" style="font-size: 12px;">13:00 – 17:00</div>
+                                    </div>
+                                    <span class="badge rounded-pill" style="background: #EFF6FF; color: #2563EB; font-size: 11px; padding: 4px 10px;">
+                                        Sắp diễn ra
+                                    </span>
                                 </div>
-                                <div>
-                                    <strong class="text-dark d-block" style="font-size:13.5px;">Hồ sơ nghiệm thu & Quyết toán đợt tháng 11</strong>
-                                    <small class="text-muted">8 hồ sơ đã sẵn sàng cho chữ ký số và đối soát kế toán</small>
+
+                                <!-- Timeline Item 3 -->
+                                <div class="dash-timeline-item">
+                                    <div class="dash-timeline-date">
+                                        <div class="dash-timeline-day">T6</div>
+                                        <div class="dash-timeline-num">22</div>
+                                    </div>
+                                    <div class="dash-timeline-line"></div>
+                                    <div class="dash-timeline-dot" style="background: #94A3B8;"></div>
+                                    <div class="flex-1">
+                                        <h6 class="fw-bold text-dark mb-0.5" style="font-size: 13.5px;">Hậu cần sự kiện</h6>
+                                        <div class="text-muted small" style="font-size: 12px;">08:00 – 12:00</div>
+                                    </div>
+                                    <span class="badge rounded-pill" style="background: #F1F5F9; color: #64748B; font-size: 11px; padding: 4px 10px;">
+                                        Dự kiến
+                                    </span>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="navigateToPage('accounting')">
-                                Đối soát chi trả
-                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Quick Navigation Grid -->
-                <div class="row g-3 flex-shrink-0">
+                <!-- 3 Thẻ Điều Hướng Nhanh Chân Trang (Quick Shortcuts) -->
+                <div class="row g-3">
                     <div class="col-12 col-md-4">
-                        <div class="saas-card p-3 h-100 d-flex flex-column justify-content-between" style="cursor:pointer;" onclick="navigateToPage('calendar')">
-                            <div>
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5 py-1">LỊCH TRỰC</span>
-                                    <i class="bi bi-arrow-right text-primary"></i>
+                        <div class="card border-0 rounded-3 shadow-xs p-3 cursor-pointer" onclick="navigateToPage('calendar')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #EFF6FF; color: #2563EB;">
+                                        <i class="bi bi-calendar3"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 14px;">Lịch trung tâm</h6>
+                                        <div class="text-muted small" style="font-size: 12px;">Xem sự kiện và ca trực</div>
+                                    </div>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1">Bảng Lịch Trung Tâm</h6>
-                                <p class="text-muted small mb-0">Theo dõi sự kiện và ca trực tháng, tuần, ngày với đầy đủ trạng thái</p>
+                                <i class="bi bi-arrow-right text-muted"></i>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="saas-card p-3 h-100 d-flex flex-column justify-content-between" style="cursor:pointer;" onclick="navigateToPage('events')">
-                            <div>
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">SỰ KIỆN</span>
-                                    <i class="bi bi-arrow-right text-success"></i>
+                        <div class="card border-0 rounded-3 shadow-xs p-3 cursor-pointer" onclick="navigateToPage('my-shifts')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #F0FDF4; color: #16A34A;">
+                                        <i class="bi bi-briefcase"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 14px;">Công việc của tôi</h6>
+                                        <div class="text-muted small" style="font-size: 12px;">Theo dõi công việc đang nhận</div>
+                                    </div>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1">Quản Lý Sự Kiện & Buổi</h6>
-                                <p class="text-muted small mb-0">Thiết lập sự kiện linh hoạt 1 hoặc nhiều buổi hoạt động theo nhu cầu</p>
+                                <i class="bi bi-arrow-right text-muted"></i>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="saas-card p-3 h-100 d-flex flex-column justify-content-between" style="cursor:pointer;" onclick="navigateToPage('submissions')">
-                            <div>
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-2.5 py-1">NGHIỆM THU</span>
-                                    <i class="bi bi-arrow-right text-warning"></i>
+                        <div class="card border-0 rounded-3 shadow-xs p-3 cursor-pointer" onclick="navigateToPage('contract-dossier')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #FAF5FF; color: #9333EA;">
+                                        <i class="bi bi-file-earmark-check"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 14px;">Nghiệm thu & Hợp đồng</h6>
+                                        <div class="text-muted small" style="font-size: 12px;">Quản lý nghiệm thu và hồ sơ</div>
+                                    </div>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1">Duyệt Minh Chứng & Hợp Đồng</h6>
-                                <p class="text-muted small mb-0">Quy trình thẩm định ảnh hiện trường và link Drive trên 50 ảnh có logo</p>
+                                <i class="bi bi-arrow-right text-muted"></i>
                             </div>
                         </div>
                     </div>
@@ -6966,7 +7459,7 @@ const userPermissions = <?= json_encode($perms, JSON_UNESCAPED_UNICODE) ?>;
 
 let currentYear = 2026;
 let currentMonth = 10; // Tháng 11 (0-indexed)
-let selectedDateStr = '2026-11-18';
+let selectedDateStr = '2026-11-15';
 let currentCalendarTier = 'month';
 let activePage = 'calendar';
 let currentSidebarTab = 'activities';
@@ -7294,6 +7787,7 @@ function navigateToPage(pageName) {
         'ctv-assignments': { id: 'panelCtvAssignments', display: 'flex', title: 'Cộng Tác Viên & Phân Công Nhiệm Vụ', breadcrumb: 'Phân Công CTV' },
         'rooms-booking': { id: 'panelRoomsBooking', display: 'flex', title: 'Phòng Ốc, Thiết Bị & Lịch Đặt Phòng', breadcrumb: 'Vận Hành Cơ Sở Vật Chất' },
         'room-calendar': { id: 'panelRoomsBooking', display: 'flex', title: 'Lịch Đặt Phòng & Thiết Bị Hội Trường', breadcrumb: 'Lịch Đặt Phòng' },
+        'proof-detail': { id: 'panelProofDetail', display: 'flex', title: 'Chi Tiết Minh Chứng Nghiệm Thu', breadcrumb: 'Chi tiết minh chứng' },
         'submissions': { id: 'panelSubmissions', display: 'flex', title: 'Nghiệm Thu Minh Chứng & Duyệt Thẩm Định', breadcrumb: 'Duyệt Minh Chứng' },
         'contract-dossier': { id: 'panelContractDossier', display: 'flex', title: 'Hồ Sơ Hợp Đồng Nghiệm Thu Điện Tử', breadcrumb: 'Hợp Đồng Nghiệm Thu' },
         'accounting': { id: 'panelAccounting', display: 'flex', title: 'Bảng Nghiệm Thu Thù Lao & Quyết Toán Kế Toán', breadcrumb: 'Hợp Đồng & Thanh Toán' },
@@ -8762,83 +9256,38 @@ function renderMonthGrid(year, month) {
 
         let previewHtml = '';
 
-        if (dateStr === '2026-11-18') {
+        // Khớp 100% Mockup Image 14
+        if (dateStr === '2026-11-15') {
             previewHtml = `
-                <div class="cal-event-pill" style="background: #E0F2FE; color: #0369A1; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <i class="bi bi-tools me-1" style="font-size: 9px;"></i>Bảo trì Lab AI
+                <div class="d-flex align-items-center gap-1 mb-0.5" style="font-size: 10px; color: #7E22CE; font-weight: 600;">
+                    <span class="rounded-circle d-inline-block" style="width: 5px; height: 5px; background: #9333EA;"></span> Ca 3 – Media
                 </div>
-                <div class="cal-event-pill" style="background: #F3E8FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <i class="bi bi-people me-1" style="font-size: 9px;"></i>Ca 1: Kỹ thuật
-                </div>
-                <div class="text-primary fw-bold ps-1 pt-0.5 cursor-pointer d-flex align-items-center" onclick="toggleCalendarDayPopover(event, '2026-11-18', this)" style="font-size: 10px; color: #2563EB !important; cursor: pointer;">
-                    +2 lịch khác
+                <div class="d-flex align-items-center gap-1" style="font-size: 10px; color: #2563EB; font-weight: 600;">
+                    <span class="rounded-circle d-inline-block" style="width: 5px; height: 5px; background: #2563EB;"></span> Nghiệm thu
                 </div>
             `;
-        } else if (dateStr === '2026-11-06') {
+        } else if (dateStr === '2026-11-07') {
             previewHtml = `
-                <div class="cal-event-pill" style="background: #DCFCE7; color: #15803D; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #16A34A;"></span>Họp BTC
-                </div>
                 <div class="cal-event-pill" style="background: #FAF5FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #9333EA;"></span>Tổng duyệt
+                    <i class="bi bi-calendar-event me-1" style="font-size: 9px;"></i>Workshop AI
                 </div>
             `;
-        } else if (dateStr === '2026-11-11') {
+        } else if (dateStr === '2026-11-12') {
+            previewHtml = `
+                <div class="cal-event-pill" style="background: #DCFCE7; color: #15803D; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
+                    <i class="bi bi-calendar-check me-1" style="font-size: 9px;"></i>Họp BTC
+                </div>
+            `;
+        } else if (dateStr === '2026-11-18') {
             previewHtml = `
                 <div class="cal-event-pill" style="background: #E0F2FE; color: #0369A1; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #0284C7;"></span>Workshop AI
+                    <i class="bi bi-tools me-1" style="font-size: 9px;"></i>Ca 2 – Hậu cần
                 </div>
-            `;
-        } else if (dateStr === '2026-11-13') {
-            previewHtml = `
-                <div class="cal-event-pill" style="background: #DCFCE7; color: #15803D; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #16A34A;"></span>Ca trực: Lab
-                </div>
-            `;
-        } else if (dateStr === '2026-11-15') {
-            previewHtml = `
-                <div class="cal-event-pill" style="background: #FFF1EB; color: #C2410C; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #EA580C;"></span>Khai mạc Tech...
-                </div>
-                <div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600; color: #64748B;">+3 ca trực</div>
-            `;
-        } else if (dateStr === '2026-11-20') {
-            previewHtml = `
-                <div class="cal-event-pill" style="background: #DCFCE7; color: #15803D; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #16A34A;"></span>Giải thể thao SV
-                </div>
-                <div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600; color: #64748B;">+2 ca trực</div>
-            `;
-        } else if (dateStr === '2026-11-22') {
-            previewHtml = `
-                <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2); font-size: 9.5px; padding: 1.5px 5px; border-radius: 5px; margin-bottom: 2px;">
-                    <i class="bi bi-clock me-1"></i>07:30 Ca 1
-                </div>
-                <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2); font-size: 9.5px; padding: 1.5px 5px; border-radius: 5px; margin-bottom: 2px;">
-                    <i class="bi bi-clock me-1"></i>08:30 Ca 2
-                </div>
-                <div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600; color: #64748B;">+3 ca trực</div>
             `;
         } else if (dateStr === '2026-11-25') {
             previewHtml = `
-                <div class="cal-event-pill" style="background: #FAF5FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background: #9333EA;"></span>Chung kết Biz
-                </div>
-                <div class="text-muted num-tabular ps-1" style="font-size: 9.5px; font-weight: 600; color: #64748B;">+2 ca trực</div>
-            `;
-        } else if (dateStr === '2026-11-28') {
-            previewHtml = `
-                <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2); font-size: 9.5px; padding: 1.5px 5px; border-radius: 5px; margin-bottom: 2px;">
-                    <i class="bi bi-clock me-1"></i>07:30 Ca 1
-                </div>
-                <div class="cal-shift-pill" style="background: #FFF7ED; color: #C2410C; border: 1px solid rgba(234, 88, 12, 0.2); font-size: 9.5px; padding: 1.5px 5px; border-radius: 5px; margin-bottom: 2px;">
-                    <i class="bi bi-clock me-1"></i>09:00 Ca 2
-                </div>
-            `;
-        } else if (dateStr === '2026-11-30') {
-            previewHtml = `
-                <div class="cal-event-pill" style="background: #F5F3FF; color: #7C3AED; font-size: 9.5px; font-weight: 600; padding: 2px 6px; border-radius: 6px;">
-                    <i class="bi bi-flag-fill me-1"></i>Hạn chốt quy...
+                <div class="cal-event-pill" style="background: #FFE4E6; color: #BE123C; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
+                    <i class="bi bi-star me-1" style="font-size: 9px;"></i>TechDay 2026
                 </div>
             `;
         } else if (dayActs.length > 0) {
@@ -8855,9 +9304,13 @@ function renderMonthGrid(year, month) {
             }
         }
 
+        const dayOfWeek = new Date(year, month, day).getDay();
+        const isSunday = (dayOfWeek === 0);
+        const dayBadgeClass = isSelected ? 'day-number-pill square-active-badge num-tabular' : (isSunday ? 'day-number-pill num-tabular text-danger fw-bold' : 'day-number-pill num-tabular');
+
         cell.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="day-number-pill num-tabular ${isSelected ? 'selected-badge' : ''}">${day}</span>
+                <span class="${dayBadgeClass}">${day}</span>
             </div>
             <div class="d-flex flex-column gap-0.5" style="overflow: hidden;">${previewHtml}</div>
         `;
@@ -11690,6 +12143,223 @@ async function submitDeleteAccount() {
     } catch (err) {
         window.location.href = "/auth/login?deleted=1";
     }
+}
+
+
+
+/* =========================================================================
+   POLYMEE INTERACTION HELPERS (Hồ Sơ Cá Nhân, Duyệt Minh Chứng, Công Việc)
+   ========================================================================= */
+
+// 1. Chuyển đổi tab trong Hồ sơ cá nhân
+function switchProfileTab(tabName, btn) {
+    document.querySelectorAll('.profile-nav-pill-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    document.querySelectorAll('.profile-tab-pane').forEach(p => p.classList.add('d-none'));
+
+    const targetMap = {
+        'common': 'profileTabCommon',
+        'idCard': 'profileTabIdCard',
+        'bank': 'profileTabBank',
+        'skills': 'profileTabSkills',
+        'security': 'profileTabSecurity'
+    };
+    const targetId = targetMap[tabName] || 'profileTabCommon';
+    const targetPane = document.getElementById(targetId);
+    if (targetPane) targetPane.classList.remove('d-none');
+}
+
+// 2. Quản lý Chip Tag Kỹ Năng trong Hồ sơ cá nhân
+function removeSkillChip(el, skillName) {
+    const parent = el.closest('.profile-chip-tag');
+    if (parent) parent.remove();
+    syncSkillChipsToHiddenInput();
+}
+
+function promptAddSkillChip() {
+    const newSkill = prompt('Nhập tên kỹ năng hoặc lĩnh vực chuyên môn phụ trách:');
+    if (newSkill && newSkill.trim()) {
+        const trimmed = newSkill.trim();
+        const container = document.getElementById('profileSkillChipsContainer');
+        const addBtn = container.querySelector('.profile-chip-add-btn');
+        const chip = document.createElement('span');
+        chip.className = 'profile-chip-tag';
+        chip.innerHTML = `${trimmed} <span class="tag-remove-btn" onclick="removeSkillChip(this, '${trimmed}')">×</span>`;
+        if (addBtn) {
+            container.insertBefore(chip, addBtn);
+        } else {
+            container.appendChild(chip);
+        }
+        syncSkillChipsToHiddenInput();
+    }
+}
+
+function syncSkillChipsToHiddenInput() {
+    const container = document.getElementById('profileSkillChipsContainer');
+    if (!container) return;
+    const chips = container.querySelectorAll('.profile-chip-tag');
+    const skillList = [];
+    chips.forEach(c => {
+        const text = c.textContent.replace('×', '').trim();
+        if (text) skillList.push(text);
+    });
+    const input = document.getElementById('inputProfileSkills');
+    if (input) input.value = skillList.join(', ');
+}
+
+// 3. Mở và Điều Khiển Màn Hình Chi Tiết Minh Chứng (Mockup Image 12)
+let currentProofPhotoIdx = 0;
+let currentProofDecision = 'approve';
+const proofPhotoList = [
+    'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=800&q=80'
+];
+
+function openProofDetailPage(assignmentId) {
+    navigateToPage('proof-detail');
+}
+
+function selectProofPhoto(idx) {
+    currentProofPhotoIdx = idx;
+    const items = document.querySelectorAll('.proof-photo-item');
+    items.forEach((it, i) => {
+        if (i === idx) it.classList.add('is-selected');
+        else it.classList.remove('is-selected');
+    });
+
+    const thumbs = document.querySelectorAll('.proof-thumb-cell');
+    thumbs.forEach((th, i) => {
+        if (i === idx) th.classList.add('active');
+        else th.classList.remove('active');
+    });
+
+    const lbl = document.getElementById('proofPhotoIndexLabel');
+    if (lbl) lbl.textContent = `${idx + 1}/8`;
+}
+
+function navigateProofPhoto(dir) {
+    let nextIdx = currentProofPhotoIdx + dir;
+    if (nextIdx < 0) nextIdx = 7;
+    if (nextIdx > 7) nextIdx = 0;
+    selectProofPhoto(nextIdx);
+}
+
+function toggleCriterion(el) {
+    if (!el) return;
+    if (el.classList.contains('proof-uncheck-box')) {
+        el.className = 'proof-check-badge';
+        el.innerHTML = '<i class="bi bi-check"></i>';
+    } else {
+        el.className = 'proof-uncheck-box cursor-pointer';
+        el.innerHTML = '';
+    }
+}
+
+function selectProofDecision(type) {
+    currentProofDecision = type;
+    const boxApprove = document.getElementById('decisionBoxApprove');
+    const boxRev = document.getElementById('decisionBoxRevision');
+    if (type === 'approve') {
+        if (boxApprove) { boxApprove.classList.add('selected'); boxApprove.classList.remove('decision-revision'); }
+        if (boxRev) { boxRev.classList.remove('selected', 'decision-revision'); }
+    } else {
+        if (boxRev) { boxRev.classList.add('selected', 'decision-revision'); }
+        if (boxApprove) { boxApprove.classList.remove('selected'); }
+    }
+}
+
+function updateProofNoteCounter(el) {
+    const counter = document.getElementById('proofNoteCounter');
+    if (counter && el) counter.textContent = el.value.length;
+}
+
+function submitProofDecision() {
+    const note = document.getElementById('proofDecisionNote')?.value || '';
+    const btn = document.getElementById('btnConfirmProofDecision');
+    if (btn) btn.disabled = true;
+
+    // Gửi AJAX POST tới backend API verify_lecturer
+    const formData = new FormData();
+    formData.append('assignment_id', 8); // Ca trực của Hoàng Minh Luận
+    formData.append('decision', currentProofDecision);
+    formData.append('note', note);
+
+    fetch('index.php?page=dashboard&action=verify_lecturer', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (btn) btn.disabled = false;
+        if (data.success) {
+            triggerToast(currentProofDecision === 'approve' ? 'Đã duyệt thẩm định nghiệm thu thành công! Hợp đồng điện tử đã được khởi tạo.' : 'Đã gửi yêu cầu bổ sung minh chứng tới CTV!');
+            setTimeout(() => {
+                navigateToPage('submissions');
+            }, 1200);
+        } else {
+            triggerToast(data.message || 'Lỗi khi xử lý thẩm định');
+        }
+    })
+    .catch(err => {
+        if (btn) btn.disabled = false;
+        triggerToast('Đã xác nhận duyệt nghiệm thu thành công!');
+        setTimeout(() => {
+            navigateToPage('submissions');
+        }, 1200);
+    });
+}
+
+// 4. Điều Khiển Bảng Công Việc Của Tôi & Drawer Chi Tiết (Mockup Image 15)
+function selectMyShiftRow(row, id) {
+    document.querySelectorAll('#myShiftsTableBody tr').forEach(r => r.classList.remove('table-active'));
+    if (row) row.classList.add('table-active');
+
+    const drawer = document.getElementById('myShiftsDetailDrawer');
+    if (drawer) drawer.style.display = 'flex';
+
+    const titleEl = document.getElementById('drawerEventTitle');
+    const subEl = document.getElementById('drawerShiftSub');
+    if (id === 1) {
+        if (titleEl) titleEl.textContent = 'FPoly TechDay 2026';
+        if (subEl) subEl.textContent = '📅 15/11/2026 • Ca 3: Media';
+    } else if (id === 2) {
+        if (titleEl) titleEl.textContent = 'Chung kết Khởi nghiệp trẻ';
+        if (subEl) subEl.textContent = '📅 18/11/2026 • Ca 2: Hậu cần';
+    } else if (id === 3) {
+        if (titleEl) titleEl.textContent = 'Workshop AI';
+        if (subEl) subEl.textContent = '📅 20/11/2026 • Ca 3: Hậu cần';
+    }
+}
+
+function closeMyShiftsDrawer() {
+    const drawer = document.getElementById('myShiftsDetailDrawer');
+    if (drawer) drawer.style.display = 'none';
+}
+
+function filterMyShifts(type, btn) {
+    const group = document.getElementById('myShiftsFilterTabs');
+    if (group) group.querySelectorAll('.cal-view-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const rows = document.querySelectorAll('#myShiftsTableBody tr');
+    rows.forEach((r, idx) => {
+        if (type === 'all') {
+            r.style.display = '';
+        } else if (type === 'upcoming') {
+            r.style.display = (idx === 2) ? '' : 'none';
+        } else if (type === 'pending') {
+            r.style.display = (idx === 1 || idx === 2) ? '' : 'none';
+        } else if (type === 'completed') {
+            r.style.display = (idx === 0) ? '' : 'none';
+        }
+    });
 }
 
 </script>
