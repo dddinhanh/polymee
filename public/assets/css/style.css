@@ -602,6 +602,83 @@ table td .btn-fpt-sm {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
+/* Tabs phân loại nhanh chi tiết ngày (Mockup Image Trùng Lịch) */
+.cal-day-filter-tab {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    font-size: 11.5px;
+    font-weight: 600;
+    border-radius: 20px;
+    background: #F1F5F9;
+    color: #64748B;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+.cal-day-filter-tab:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+.cal-day-filter-tab.active {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* Card hoạt động chi tiết ngày (Mockup Image Trùng Lịch) */
+.cal-detail-entry-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 11px 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    position: relative;
+}
+.cal-detail-entry-card:hover {
+    border-color: #CBD5E1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Contextual Popover khi có 3 4 lịch trùng */
+.calendar-context-popover {
+    position: absolute;
+    z-index: 1070;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+    padding: 12px 14px;
+    min-width: 290px;
+    max-width: 350px;
+    display: none;
+    animation: popoverFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.calendar-context-popover.is-open {
+    display: block;
+}
+@keyframes popoverFadeIn {
+    from { opacity: 0; transform: translateY(4px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.cal-popover-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background-color 0.12s ease;
+    cursor: pointer;
+}
+.cal-popover-item:hover {
+    background-color: #F8FAFC;
+}
+
 /* Item danh sách CTV trong Modal Duyệt minh chứng (Mockup Image 9) */
 .vf-ctv-item {
     display: flex;
