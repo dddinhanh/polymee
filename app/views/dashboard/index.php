@@ -2863,83 +2863,10 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                     <i class="bi bi-plus-lg"></i> Tạo lịch
                 </button>
 
-                <!-- ROLE SWITCHER DROPDOWN (1-Click Chuyển Đổi Nhanh Tài Khoản Demo Cho Hội Đồng Chấm Thi) -->
-                <div class="dropdown">
-                    <button class="btn btn-fpt-secondary btn-fpt-sm dropdown-toggle d-flex align-items-center gap-1.5 shadow-xs" type="button" id="topbarRoleSwitcher" data-bs-toggle="dropdown" aria-expanded="false" title="Chuyển đổi nhanh vai trò tài khoản demo (1-Click)">
-                        <i class="bi bi-person-badge-fill text-primary"></i>
-                        <span class="d-none d-lg-inline fw-semibold text-truncate" style="max-width: 140px; font-size: 12px;"><?= htmlspecialchars($currentUser['full_name'] ?? 'Chuyển Vai') ?></span>
-                        <span class="badge rounded-pill" style="font-size: 10px; background: rgba(234, 88, 12, 0.12); color: #EA580C; border: 1px solid rgba(234, 88, 12, 0.25);"><?= htmlspecialchars($perms['roleNameDisplay'] ?? ($currentUser['role_name'] ?? 'Role')) ?></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 p-2" aria-labelledby="topbarRoleSwitcher" style="min-width: 290px; border-radius: 14px; background: var(--ux-surface); border: 1px solid var(--ux-line) !important; z-index: 1060;">
-                        <li class="px-2.5 py-1.5 border-bottom mb-1" style="border-color: var(--ux-line) !important;">
-                            <div class="fw-bold d-flex align-items-center justify-content-between" style="font-size: 11.5px; color: var(--ux-ink);">
-                                <span><i class="bi bi-arrow-left-right me-1 text-primary"></i>Chuyển Vai Demo (1-Click)</span>
-                                <span class="badge bg-light text-muted border" style="font-size: 9.5px;">5 Roles</span>
-                            </div>
-                            <div style="font-size: 10.5px; color: var(--ux-ink-3);">Dành cho Thầy/Cô và Hội đồng bảo vệ</div>
-                        </li>
-                        <li>
-                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 3) ? 'active' : '' ?>" href="/auth/quickLogin/3">
-                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(2, 132, 199, 0.15); color: #0284C7;">PA</span>
-                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
-                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Đinh Nguyễn Phương Anh</div>
-                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">PI03084 • CTV Media & Nhiếp Ảnh</div>
-                                </div>
-                                <?php if ((int)($currentUser['id'] ?? 0) === 3): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 4) ? 'active' : '' ?>" href="/auth/quickLogin/4">
-                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(16, 185, 129, 0.15); color: #059669;">ĐM</span>
-                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
-                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Lê Đức Mạnh</div>
-                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">PI03067 • Sinh Viên CTV Sự Kiện</div>
-                                </div>
-                                <?php if ((int)($currentUser['id'] ?? 0) === 4): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 2) ? 'active' : '' ?>" href="/auth/quickLogin/2">
-                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(245, 158, 11, 0.15); color: #D97706;">GV</span>
-                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
-                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Thầy Phan Hoàng Khải</div>
-                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">GV0102 • Giảng Viên / Ban Tổ Chức</div>
-                                </div>
-                                <?php if ((int)($currentUser['id'] ?? 0) === 2): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 13) ? 'active' : '' ?>" href="/auth/quickLogin/13">
-                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(14, 165, 233, 0.15); color: #0284C7;">HC</span>
-                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
-                                    <div class="fw-bold text-truncate" style="font-size: 12px;">ThS. Phạm Hồng Sơn</div>
-                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">HC0001 • Cán Bộ Hành Chính (Trưởng phòng)</div>
-                                </div>
-                                <?php if ((int)($currentUser['id'] ?? 0) === 13): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 8) ? 'active' : '' ?>" href="/auth/quickLogin/8">
-                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(14, 165, 233, 0.15); color: #0284C7;">HC</span>
-                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
-                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Lê Đình Tuấn</div>
-                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">HC0201 • Cán Bộ Hành Chính (CSVC)</div>
-                                </div>
-                                <?php if ((int)($currentUser['id'] ?? 0) === 8): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item rounded-2 py-1.5 px-2 d-flex align-items-center gap-2 <?= ((int)($currentUser['id'] ?? 0) === 1) ? 'active' : '' ?>" href="/auth/quickLogin/1">
-                                <span class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 28px; height: 28px; font-size: 10.5px; background: rgba(239, 68, 68, 0.15); color: #DC2626;">AD</span>
-                                <div class="flex-grow-1 overflow-hidden" style="line-height: 1.25;">
-                                    <div class="fw-bold text-truncate" style="font-size: 12px;">Quản Trị Viên (Admin)</div>
-                                    <div style="font-size: 10.5px; color: var(--ux-ink-3);">ADMIN001 • Toàn Quyền Hệ Thống</div>
-                                </div>
-                                <?php if ((int)($currentUser['id'] ?? 0) === 1): ?><i class="bi bi-check-lg text-primary ms-auto"></i><?php endif; ?>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <!-- USER AVATAR (Chuẩn Mockup Apple / Linear) -->
+                <button type="button" class="btn btn-sm p-0 rounded-circle border-0 shadow-2xs overflow-hidden" onclick="navigateToPage('profile-settings')" title="Hồ sơ cá nhân: <?= htmlspecialchars($currentUser['full_name'] ?? 'Người dùng') ?>">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%;">
+                </button>
 
                 <!-- NÚT THÔNG BÁO HỆ THỐNG (Apple HIG Bell Notification Center - Nền Xanh Dịu Mắt #0284C7) -->
                 <div class="dropdown">
@@ -4187,445 +4114,690 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             </section>
 
             <!-- =========================================================
-                 PANEL 6B: CHI TIẾT & DUYỆT MINH CHỨNG (CHUẨN MOCKUP IMAGE 12)
+                 PANEL 6B: CHI TIẾT NGHIỆM THU (ROLE BTC & ADMIN)
+                 Theo thiết kế chuẩn pixel-perfect Mockup media_1794988195961_12918230.jpg
                  ========================================================= -->
-            <section class="spa-panel" id="panelProofDetail" style="display:none !important; flex-direction: column;">
+            <section class="spa-panel fade-in-up" id="panelProofDetail" style="display:none !important; flex-direction: column;">
                 
-                <!-- Breadcrumb & Top Bar -->
-                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #E2E8F0 !important;">
-                    <div class="d-flex align-items-center gap-3">
-                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-color: #CBD5E1;" onclick="navigateToPage('submissions')" title="Quay lại danh sách nghiệm thu">
-                            <i class="bi bi-arrow-left" style="font-size: 15px;"></i>
+                <!-- Thanh Tiêu Đề Điều Hướng Quay Lại -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-0.5">
+                        <button type="button" class="btn btn-sm btn-link p-0 text-dark text-decoration-none" onclick="navigateToPage('submissions')" title="Quay lại danh sách nghiệm thu">
+                            <i class="bi bi-arrow-left fs-5"></i>
                         </button>
-                        <div class="d-flex align-items-center gap-2.5">
-                            <h4 class="fw-bold mb-0 text-dark" style="font-size: 18px; letter-spacing: -0.3px;">Chi tiết Minh chứng</h4>
-                            <span class="badge rounded-pill" style="background: #F3E8FF; color: #9333EA; font-size: 12px; font-weight: 600; padding: 4px 10px;">
-                                <i class="bi bi-gear-fill me-1"></i>Hậu cần
-                            </span>
-                        </div>
+                        <h4 class="fw-bold mb-0 text-dark" style="font-size: 19px; letter-spacing: -0.2px;">Chi tiết nghiệm thu</h4>
                     </div>
+                    <div class="text-muted small ms-4" style="font-size: 13px;">Xem và xét duyệt</div>
                 </div>
 
-                <!-- BỐ CỤC 2 CỘT CHUẨN MOCKUP IMAGE 12 -->
-                <div class="proof-detail-grid">
-                    
-                    <!-- CỘT TRÁI (~62%): THÔNG TIN CTV, LƯỚI 8 ẢNH & MÔ TẢ CÔNG VIỆC -->
-                    <div class="d-flex flex-column gap-3">
-                        
-                        <!-- Thẻ Tổng Quan CTV & Sự Kiện -->
-                        <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
-                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: #0284C7; font-size: 18px;">
-                                        H
-                                    </div>
-                                    <div>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;" id="proofDetailCtvName">Hoàng Minh Luân</h6>
-                                            <span class="badge" style="background: rgba(37, 99, 235, 0.1); color: #2563EB; font-size: 11px; padding: 2px 7px;">◆ CTV</span>
-                                        </div>
-                                        <div class="text-muted small mt-0.5" style="font-size: 12px;">PI03015 • hoangminhluan@fpt.edu.vn</div>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex align-items-center gap-4 text-muted small" style="font-size: 12.5px;">
-                                    <div>
-                                        <div class="d-flex align-items-center gap-1.5 text-dark fw-medium">
-                                            <i class="bi bi-calendar-event text-primary"></i> Chung kết Cuộc thi Khởi nghiệp trẻ
-                                        </div>
-                                        <div class="d-flex align-items-center gap-3 mt-1">
-                                            <span><i class="bi bi-layers me-1"></i>Ca 2: Kỹ thuật</span>
-                                            <span><i class="bi bi-clock me-1"></i>18/11/2026 • 13:00 – 17:00</span>
-                                        </div>
-                                    </div>
-                                    <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11.5px; padding: 5px 12px; font-weight: 600;">
-                                        <i class="bi bi-clock-history me-1"></i>Chờ duyệt
-                                    </span>
-                                </div>
+                <!-- Thẻ Tóm Tắt CTV & Ca Trực Sự Kiện -->
+                <div class="card border-0 rounded-3 shadow-xs p-3 mb-3" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <!-- CTV Info -->
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle fw-bold d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: #E0E7FF; color: #3730A3; font-size: 15px;">
+                                HL
                             </div>
-                        </div>
-
-                        <!-- Khối Minh Chứng 8 Ảnh Sắc Nét -->
-                        <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
-                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-images text-primary" style="font-size: 16px;"></i>
-                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Minh chứng (8)</h6>
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <button type="button" class="btn btn-sm btn-light border px-2.5 py-1 text-muted" title="Đổi chế độ xem">
-                                        <i class="bi bi-grid-fill"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-light border px-2.5 py-1 text-muted" title="Tải xuống tất cả ảnh">
-                                        <i class="bi bi-download"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Lưới 8 Ảnh Minh Chứng (4 Cột x 2 Hàng) -->
-                            <div class="proof-photo-matrix mb-3" id="proofPhotoMatrix">
-                                <div class="proof-photo-item is-selected" onclick="selectProofPhoto(0)">
-                                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 1">
-                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(0); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
-                                </div>
-                                <div class="proof-photo-item" onclick="selectProofPhoto(1)">
-                                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 2">
-                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(1); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
-                                </div>
-                                <div class="proof-photo-item" onclick="selectProofPhoto(2)">
-                                    <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 3">
-                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(2); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
-                                </div>
-                                <div class="proof-photo-item" onclick="selectProofPhoto(3)">
-                                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 4">
-                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(3); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
-                                </div>
-                                <div class="proof-photo-item" onclick="selectProofPhoto(4)">
-                                    <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 5">
-                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(4); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
-                                </div>
-                                <div class="proof-photo-item" onclick="selectProofPhoto(5)">
-                                    <img src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 6">
-                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(5); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
-                                </div>
-                                <div class="proof-photo-item" onclick="selectProofPhoto(6)">
-                                    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 7">
-                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(6); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
-                                </div>
-                                <div class="proof-photo-item" onclick="selectProofPhoto(7)">
-                                    <img src="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 8">
-                                    <div class="proof-photo-zoom-btn" onclick="openLightbox(7); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
-                                </div>
-                            </div>
-
-                            <!-- Carousel Dải Thumbnail Filmstrip -->
-                            <div class="proof-filmstrip-bar border-top pt-2" style="border-color: #F1F5F9 !important;">
-                                <div class="d-flex align-items-center gap-1.5 text-muted small" style="font-size: 11.5px; font-weight: 500;">
-                                    <button type="button" class="btn btn-sm btn-link p-0 text-muted" onclick="navigateProofPhoto(-1)"><i class="bi bi-chevron-left"></i></button>
-                                    <span id="proofPhotoIndexLabel">1/8</span>
-                                    <button type="button" class="btn btn-sm btn-link p-0 text-muted" onclick="navigateProofPhoto(1)"><i class="bi bi-chevron-right"></i></button>
-                                </div>
-                                <div class="proof-thumb-strip" id="proofThumbStrip">
-                                    <div class="proof-thumb-cell active" onclick="selectProofPhoto(0)"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=150&q=80"></div>
-                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(1)"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=150&q=80"></div>
-                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(2)"><img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=150&q=80"></div>
-                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(3)"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=150&q=80"></div>
-                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(4)"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=150&q=80"></div>
-                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(5)"><img src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?auto=format&fit=crop&w=150&q=80"></div>
-                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(6)"><img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=150&q=80"></div>
-                                    <div class="proof-thumb-cell" onclick="selectProofPhoto(7)"><img src="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=150&q=80"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Mô Tả Công Việc Từ CTV -->
-                        <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
-                            <div class="d-flex align-items-center gap-2 mb-2 text-dark fw-bold" style="font-size: 13.5px;">
-                                <i class="bi bi-info-circle text-primary"></i> Mô tả công việc (từ CTV)
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 13px; line-height: 1.6;" id="proofDetailWorkDesc">
-                                Hỗ trợ lắp đặt, vận hành hệ thống âm thanh và trình chiếu cho chương trình. Có mặt từ 12:30, kiểm tra thiết bị, điều chỉnh âm lượng trong suốt thời gian diễn ra sự kiện và thu dọn sau chương trình.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- CỘT PHẢI (~38%): TIÊU CHÍ NGHIỆM THU & QUYẾT ĐỊNH DUYỆT -->
-                    <div class="d-flex flex-column gap-3">
-                        
-                        <!-- Card Tiêu Chí Nghiệm Thu -->
-                        <div class="proof-criteria-card shadow-xs">
-                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-clipboard-check text-primary" style="font-size: 16px;"></i>
-                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Tiêu chí nghiệm thu</h6>
-                                </div>
-                                <i class="bi bi-info-circle text-muted" title="Tiêu chí đánh giá chất lượng ca trực"></i>
-                            </div>
-
-                            <div class="d-flex flex-column gap-2">
-                                <div class="proof-criterion-row">
-                                    <div class="proof-check-badge"><i class="bi bi-check"></i></div>
-                                    <div>Có mặt & tham gia đúng ca trực</div>
-                                </div>
-                                <div class="proof-criterion-row">
-                                    <div class="proof-check-badge"><i class="bi bi-check"></i></div>
-                                    <div>Thực hiện đúng nhiệm vụ được phân công <small class="text-muted d-block" style="font-size: 11px;">(ví dụ: âm thanh, trình chiếu, hậu trường...)</small></div>
-                                </div>
-                                <div class="proof-criterion-row">
-                                    <div class="proof-check-badge"><i class="bi bi-check"></i></div>
-                                    <div>Ảnh rõ ràng, đúng bối cảnh sự kiện</div>
-                                </div>
-                                <div class="proof-criterion-row">
-                                    <div class="proof-uncheck-box cursor-pointer" id="criterionBox4" onclick="toggleCriterion(this)"></div>
-                                    <div class="d-flex align-items-center gap-1.5 cursor-pointer" onclick="toggleCriterion(document.getElementById('criterionBox4'))">
-                                        <span>Phối hợp tốt với BTC</span>
-                                        <i class="bi bi-info-circle text-muted" style="font-size: 11px;" title="Chủ động hỗ trợ, tuân thủ phân công và đảm bảo tiến độ."></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Quyết Định Nghiệm Thu -->
-                        <div class="proof-criteria-card shadow-xs">
-                            <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
-                                <i class="bi bi-patch-check text-primary" style="font-size: 16px;"></i>
-                                <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Quyết định nghiệm thu</h6>
-                            </div>
-
-                            <!-- 2 Radio Box Lớn -->
-                            <div class="d-flex flex-column gap-2.5 mb-3">
-                                <div class="proof-decision-box selected" id="decisionBoxApprove" onclick="selectProofDecision('approve')">
-                                    <div class="proof-decision-circle"></div>
-                                    <div>
-                                        <div class="fw-bold text-dark" style="font-size: 13.5px;">Duyệt</div>
-                                        <small class="text-muted" style="font-size: 12px;">Minh chứng đáp ứng đầy đủ tiêu chí.</small>
-                                    </div>
-                                </div>
-                                <div class="proof-decision-box" id="decisionBoxRevision" onclick="selectProofDecision('request_more')">
-                                    <div class="proof-decision-circle"></div>
-                                    <div>
-                                        <div class="fw-bold text-dark" style="font-size: 13.5px;">Yêu cầu bổ sung</div>
-                                        <small class="text-muted" style="font-size: 12px;">Minh chứng chưa đủ, cần CTV bổ sung thêm.</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Textarea Ghi Chú Có Đếm Ký Tự -->
-                            <div class="mb-3">
-                                <label class="form-label" style="font-size: 12px; font-weight: 500; color: #475569;">
-                                    <i class="bi bi-pencil me-1"></i> Ghi chú (tùy chọn)
-                                </label>
-                                <textarea class="form-control" rows="3" id="proofDecisionNote" maxlength="300" placeholder="Nhập ghi chú cho CTV (nếu có)..." oninput="updateProofNoteCounter(this)" style="font-size: 13px; resize: none;"></textarea>
-                                <div class="text-end text-muted small mt-1" style="font-size: 11px;">
-                                    <span id="proofNoteCounter">0</span> / 300
-                                </div>
-                            </div>
-
-                            <!-- Nút Thao Tác: Hủy & Xác Nhận -->
-                            <div class="d-flex align-items-center gap-2 pt-2 border-top" style="border-color: #F1F5F9 !important;">
-                                <button type="button" class="btn btn-light border flex-1 rounded-pill fw-medium py-2" onclick="navigateToPage('submissions')" style="font-size: 13px;">
-                                    Hủy
-                                </button>
-                                <button type="button" class="btn btn-primary flex-1 rounded-pill fw-bold py-2 d-inline-flex align-items-center justify-content-center gap-1.5" id="btnConfirmProofDecision" onclick="submitProofDecision()" style="font-size: 13px; background: #2563EB;">
-                                    <i class="bi bi-check-lg"></i> Xác nhận
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-
-            
-            
-
-            <!-- TAB 7: HỒ SƠ HỢP ĐỒNG NGHIỆM THU HIỆN TRƯỜNG -->
-            <section class="spa-panel" id="panelContractDossier" style="display:none !important;">
-                <!-- 1. VÙNG CỐ ĐỊNH: Tiêu đề & KPI (Non-scrollable Top) -->
-                <div class="flex-shrink-0">
-                <div class="d-flex flex-wrap justify-content-between align-items-center pb-2.5 border-bottom mb-3 gap-3" style="border-color: rgba(0,0,0,0.06) !important;">
-                    <div>
-                        <h2 class="fw-bold mb-0 text-dark" style="font-size: 16px; letter-spacing: -0.015em;">Hồ Sơ Hợp Đồng Nghiệm Thu & Trình Ký Nhà Trường</h2>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <button type="button" class="btn-fpt-secondary btn-fpt-sm" onclick="exportAccountingCSV()">
-                            <i class="bi bi-file-earmark-excel me-1 text-success"></i> Xuất Bảng Kê (CSV)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 4 KPI Thẻ Nghiệm Thu -->
-                <div class="kpi-metric-strip mb-3">
-                    <div class="kpi-mini-card">
-                        <div>
-                            <div class="kpi-mini-label">Tổng Hồ Sơ HĐ</div>
-                            <div class="kpi-mini-val num-tabular"><?= count($accountingList) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">bộ</small></div>
-                        </div>
-                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                            <i class="bi bi-folder2-open"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-mini-card">
-                        <div>
-                            <div class="kpi-mini-label">Ảnh Hiện Trường</div>
-                            <div class="kpi-mini-val num-tabular text-info"><?= count(array_filter($accountingList, fn($a) => !empty($a['proof_image_url']))) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">đã nộp</small></div>
-                        </div>
-                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                            <i class="bi bi-camera"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-mini-card">
-                        <div>
-                            <div class="kpi-mini-label">GV Đã Nghiệm Thu</div>
-                            <div class="kpi-mini-val num-tabular text-success"><?= count(array_filter($accountingList, fn($a) => !empty($a['lecturer_verified']) && $a['lecturer_verified'] == 1)) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">hợp lệ</small></div>
-                        </div>
-                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                            <i class="bi bi-patch-check"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-mini-card">
-                        <div>
-                            <div class="kpi-mini-label">Trường Đã Chi Tiền</div>
-                            <div class="kpi-mini-val num-tabular text-primary"><?= count(array_filter($accountingList, fn($a) => ($a['school_status'] ?? '') === 'Signed_Paid')) ?> <small style="font-size:12px; font-weight:500; color:var(--ux-ink-3);">đã chi</small></div>
-                        </div>
-                        <div class="kpi-mini-icon text-dark" style="background: #F4F4F6;">
-                            <i class="bi bi-cash-stack"></i>
-                        </div>
-                    </div>
-                </div>
-
-                </div>
-                <!-- 2. Danh sách Hợp Đồng Dossier Cards: Scrollable Body -->
-                <div class="row g-2.5" id="contractDossierContainer">
-                    <?php if (empty($accountingList)): ?>
-                    <div class="col-12 text-center py-5 rounded-4 border bg-white shadow-xs">
-                        <i class="bi bi-file-earmark-check text-muted display-4 mb-3 d-block"></i>
-                        <h6 class="fw-bold text-dark">Chưa có hồ sơ hợp đồng nào</h6>
-                        <p class="text-muted small mb-0">Hồ sơ nghiệm thu và hợp đồng sẽ tự động hiển thị sau khi ca trực được sinh viên đăng ký hoàn tất.</p>
-                    </div>
-                    <?php else: ?>
-                    <?php foreach ($accountingList as $acc): ?>
-                    <?php
-                    $isVerified = !empty($acc['lecturer_verified']) && (int)$acc['lecturer_verified'] === 1;
-                    $hasProof = !empty($acc['proof_image_url']);
-                    $hasCccd = !empty($acc['id_card_number']);
-                    $hasBank = !empty($acc['bank_account_number']);
-                    $isReadyToExport = $isVerified && $hasProof && $hasCccd && $hasBank;
-                    $proofUrl = $acc['proof_image_url'] ?? '';
-                    $isDriveLink = !empty($proofUrl) && (str_contains($proofUrl, 'drive.google.com') || str_contains($proofUrl, 'docs.google.com') || (!preg_match('/\.(jpg|jpeg|png|webp|gif)/i', $proofUrl) && str_starts_with($proofUrl, 'http')));
-                    ?>
-                    <div class="col-12 col-md-6 col-xl-4">
-                        <div class="card h-100 border rounded-4 p-3 bg-white d-flex flex-column justify-content-between shadow-xs" style="border-color: rgba(0,0,0,0.08) !important;">
                             <div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace px-2 py-0.5" style="font-size: 11px;">
-                                        <?= htmlspecialchars($acc['contract_code'] ?? ('HDNT-2026-FPLY-' . str_pad((string)$acc['assignment_id'], 3, '0', STR_PAD_LEFT))) ?>
-                                    </span>
-                                    <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5" style="font-size: 10.5px;">
-                                        <i class="bi bi-check2-all me-1"></i>Trường Đã Chi Tiền
-                                    </span>
-                                    <?php elseif ($isVerified): ?>
-                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-0.5" style="font-size: 10.5px;">
-                                        <i class="bi bi-hourglass-split me-1"></i>Chờ Trường Ký
-                                    </span>
-                                    <?php else: ?>
-                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-0.5" style="font-size: 10.5px;">
-                                        <i class="bi bi-clock me-1"></i>Chờ GV Duyệt Ảnh
-                                    </span>
-                                    <?php endif; ?>
-                                </div>
+                                <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;" id="proofAdminCtvName">Hoàng Minh Luân</h6>
+                                <span class="badge rounded-pill mt-0.5" style="background: #EFF6FF; color: #2563EB; font-size: 11px; padding: 2px 8px; font-weight: 600;">Hậu cần</span>
+                            </div>
+                        </div>
 
-                                <div class="d-flex align-items-center gap-2 mb-2.5">
-                                    <?php if (!empty($proofUrl)): ?>
-                                        <?php if ($isDriveLink): ?>
-                                        <div style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px; background: #F0F9FF; border: 1.5px solid #BAE6FD; display: grid; place-items: center; cursor: pointer;" onclick="window.open('<?= htmlspecialchars($proofUrl) ?>', '_blank')" title="Mở Drive bộ ảnh Media">
-                                            <i class="fa-brands fa-google-drive text-primary fs-5"></i>
-                                        </div>
-                                        <?php else: ?>
-                                        <div style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); cursor: pointer;" onclick="previewProofModal('<?= htmlspecialchars(addslashes($acc['full_name'])) ?>', '<?= htmlspecialchars(addslashes($acc['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($proofUrl)) ?>', '<?= htmlspecialchars(addslashes($acc['proof_note'] ?? 'Hiện trường trực')) ?>')">
-                                            <img src="<?= htmlspecialchars($proofUrl) ?>" alt="Ảnh Hiện Trường" style="width: 100%; height: 100%; object-fit: cover;">
-                                        </div>
-                                        <?php endif; ?>
-                                    <?php else: ?>
-                                    <div style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px; background: #F4F4F6; display: grid; place-items: center; border: 1.5px dashed #CBD5E1;">
-                                        <i class="bi bi-camera text-muted fs-5"></i>
-                                    </div>
-                                    <?php endif; ?>
-                                    <div class="overflow-hidden flex-grow-1">
-                                        <div class="d-flex align-items-center justify-content-between mb-0.5">
-                                            <h6 class="fw-bold text-dark mb-0 text-truncate" style="font-size: 13.5px;"><?= htmlspecialchars($acc['full_name']) ?></h6>
-                                            <?php if ($isDriveLink): ?>
-                                            <span class="badge rounded-pill" style="background: rgba(2, 132, 199, 0.12); color: #0284C7; font-size: 9.5px; font-weight: 600; padding: 2px 6px;">Media</span>
-                                            <?php endif; ?>
-                                        </div>
-                                        <small class="text-muted d-block text-truncate" style="font-size: 11px;"><?= htmlspecialchars($acc['student_code']) ?> • CCCD: <?= htmlspecialchars($acc['id_card_number'] ?? '079203014589') ?></small>
-                                        <small class="text-primary fw-semibold d-block text-truncate" style="font-size: 11px;">STK: <?= htmlspecialchars($acc['bank_account_number'] ?? '') ?> (<?= htmlspecialchars($acc['bank_name'] ?? 'NH') ?>)</small>
+                        <div class="d-flex flex-wrap align-items-center gap-3 text-muted small" style="font-size: 12.5px;">
+                            <span><i class="bi bi-calendar-event me-1.5 text-muted"></i><span id="proofAdminEventTitle">Ngày hội Sinh viên FP...</span></span>
+                            <span class="opacity-40">|</span>
+                            <span><i class="bi bi-layers me-1.5 text-muted"></i><span id="proofAdminShiftName">Ca 2</span></span>
+                            <span class="opacity-40">|</span>
+                            <span><i class="bi bi-clock me-1.5 text-muted"></i><span id="proofAdminShiftTime">13:00 – 17:00</span></span>
+                        </div>
+
+                        <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11.5px; padding: 5px 12px; font-weight: 600;">
+                            <i class="bi bi-clock-history me-1"></i>Chờ duyệt
+                        </span>
+                    </div>
+                </div>
+
+                <!-- BỐ CỤC 2 CỘT: NỘI DUNG XÉT DUYỆT (~70%) & CHI TIẾT DRAWER (~30%) -->
+                <div class="proof-admin-split-layout">
+                    
+                    <!-- LEFT MAIN CONTENT (~70%) -->
+                    <div class="d-flex flex-column gap-3">
+                        <div class="proof-admin-main-grid">
+                            
+                            <!-- CỘT 1 TRONG MAIN: LƯỚI 6 ẢNH MINH CHỨNG -->
+                            <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Minh chứng (6 ảnh)</h6>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button type="button" class="btn btn-sm btn-light border px-2 py-1 text-muted" title="Xem toàn màn hình" onclick="openLightbox(0)">
+                                            <i class="bi bi-arrows-angle-expand" style="font-size: 12px;"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-light border px-2 py-1 text-muted" title="Tải xuống tất cả ảnh" onclick="downloadAllProofPhotos()">
+                                            <i class="bi bi-download" style="font-size: 12px;"></i>
+                                        </button>
                                     </div>
                                 </div>
 
-                                <div class="p-2 rounded-3 mb-2.5 small" style="background: #F8F8FA; border: 1px solid rgba(0,0,0,0.05); font-size: 11.5px;">
-                                    <div class="d-flex justify-content-between mb-0.5">
-                                        <span class="text-muted">Sự kiện:</span>
-                                        <strong class="text-dark text-truncate ms-2" style="max-width: 65%;" title="<?= htmlspecialchars($acc['event_title']) ?>"><?= htmlspecialchars($acc['event_title']) ?></strong>
+                                <!-- Lưới 6 Ảnh Minh Chứng (3 Cột x 2 Hàng) -->
+                                <div class="proof-admin-photo-grid-6 mb-3">
+                                    <div class="proof-photo-item is-selected" onclick="selectProofPhotoAdmin(0)">
+                                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 1">
+                                        <div class="proof-photo-zoom-btn" onclick="openLightbox(0); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
                                     </div>
-                                    <div class="d-flex justify-content-between mb-0.5">
-                                        <span class="text-muted">Ca trực:</span>
-                                        <span class="text-dark fw-semibold text-truncate ms-2" style="max-width: 65%;" title="<?= htmlspecialchars($acc['shift_name']) ?>"><?= htmlspecialchars($acc['shift_name']) ?></span>
+                                    <div class="proof-photo-item" onclick="selectProofPhotoAdmin(1)">
+                                        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 2">
+                                        <div class="proof-photo-zoom-btn" onclick="openLightbox(1); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
                                     </div>
-                                    <div class="d-flex justify-content-between mb-0.5">
-                                        <span class="text-muted">Địa điểm:</span>
-                                        <span class="text-dark text-truncate ms-2" style="max-width: 65%;" title="<?= htmlspecialchars($acc['location_name'] ?? 'Hội trường') ?>"><?= htmlspecialchars($acc['location_name'] ?? 'Hội trường') ?></span>
+                                    <div class="proof-photo-item" onclick="selectProofPhotoAdmin(2)">
+                                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 3">
+                                        <div class="proof-photo-zoom-btn" onclick="openLightbox(2); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
                                     </div>
-                                    <div class="d-flex justify-content-between border-top pt-1 mt-1">
-                                        <span class="text-muted fw-bold">Thù lao:</span>
-                                        <strong class="text-success num-tabular" style="font-size: 13px;"><?= number_format((int)$acc['remuneration_amount']) ?> đ</strong>
+                                    <div class="proof-photo-item" onclick="selectProofPhotoAdmin(3)">
+                                        <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 4">
+                                        <div class="proof-photo-zoom-btn" onclick="openLightbox(3); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                    </div>
+                                    <div class="proof-photo-item" onclick="selectProofPhotoAdmin(4)">
+                                        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 5">
+                                        <div class="proof-photo-zoom-btn" onclick="openLightbox(4); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                    </div>
+                                    <div class="proof-photo-item" onclick="selectProofPhotoAdmin(5)">
+                                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80" alt="Minh chứng 6">
+                                        <div class="proof-photo-zoom-btn" onclick="openLightbox(5); event.stopPropagation();"><i class="bi bi-arrows-angle-expand"></i></div>
+                                    </div>
+                                </div>
+
+                                <!-- Carousel Dải Thumbnail Filmstrip -->
+                                <div class="proof-filmstrip-bar border-top pt-2" style="border-color: #F1F5F9 !important;">
+                                    <div class="proof-thumb-strip">
+                                        <div class="proof-thumb-cell active" onclick="selectProofPhotoAdmin(0)"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=150&q=80" alt="T1"></div>
+                                        <div class="proof-thumb-cell" onclick="selectProofPhotoAdmin(1)"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=150&q=80" alt="T2"></div>
+                                        <div class="proof-thumb-cell" onclick="selectProofPhotoAdmin(2)"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=150&q=80" alt="T3"></div>
+                                        <div class="proof-thumb-cell" onclick="selectProofPhotoAdmin(3)"><img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=150&q=80" alt="T4"></div>
+                                        <div class="proof-thumb-cell" onclick="selectProofPhotoAdmin(4)"><img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=150&q=80" alt="T5"></div>
+                                        <div class="proof-thumb-cell" onclick="selectProofPhotoAdmin(5)"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=150&q=80" alt="T6"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="d-flex flex-column gap-2 pt-2 border-top mt-auto" style="border-color: rgba(0,0,0,0.06) !important;">
-                                <!-- Trạng thái điều kiện xuất hợp đồng -->
-                                <div class="d-flex align-items-center justify-content-between" style="font-size: 11px;">
-                                    <span class="text-muted">Điều kiện xuất HĐ:</span>
-                                    <?php if ($isReadyToExport): ?>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5" style="font-size: 10px;">
-                                        <i class="bi bi-patch-check-fill me-1"></i>Đủ điều kiện xuất HĐ
-                                    </span>
-                                    <?php else: ?>
-                                    <span class="badge bg-warning-subtle text-dark border border-warning-subtle px-2 py-0.5" style="font-size: 10px;" title="Cần GV duyệt và đủ CCCD + STK">
-                                        <i class="bi bi-exclamation-triangle-fill me-1 text-warning"></i>Chưa đủ điều kiện
-                                    </span>
-                                    <?php endif; ?>
+                            <!-- CỘT 2 TRONG MAIN: TIÊU CHÍ & QUYẾT ĐỊNH -->
+                            <div class="d-flex flex-column gap-3">
+                                
+                                <!-- Card Tiêu chí -->
+                                <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                                    <h6 class="fw-bold mb-3 pb-2 border-bottom text-dark" style="font-size: 14.5px; border-color: #F1F5F9 !important;">Tiêu chí</h6>
+
+                                    <div class="d-flex flex-column gap-2.5">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input class="form-check-input mt-0" type="checkbox" checked id="tcCheck1" style="width: 17px; height: 17px;">
+                                            <label class="form-check-label text-dark fw-medium cursor-pointer" for="tcCheck1" style="font-size: 13px;">Có mặt đúng ca</label>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 position-relative">
+                                            <input class="form-check-input mt-0" type="checkbox" checked id="tcCheck2" style="width: 17px; height: 17px;">
+                                            <label class="form-check-label text-dark fw-medium d-inline-flex align-items-center gap-1 cursor-pointer" for="tcCheck2" style="font-size: 13px;">
+                                                <span>Hoàn thành nhiệm vụ</span>
+                                                <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Đảm bảo các đầu việc được giao trong ca đã hoàn tất." style="font-size: 12px; cursor: pointer;"></i>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input class="form-check-input mt-0" type="checkbox" id="tcCheck3" style="width: 17px; height: 17px;">
+                                            <label class="form-check-label text-dark fw-medium d-inline-flex align-items-center gap-1 cursor-pointer" for="tcCheck3" style="font-size: 13px;">
+                                                <span>Phối hợp tốt</span>
+                                                <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Chủ động hỗ trợ và hợp tác tích cực với BTC." style="font-size: 12px; cursor: pointer;"></i>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input class="form-check-input mt-0" type="checkbox" id="tcCheck4" style="width: 17px; height: 17px;">
+                                            <label class="form-check-label text-dark fw-medium cursor-pointer" for="tcCheck4" style="font-size: 13px;">Minh chứng hợp lệ</label>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="d-grid gap-1.5" style="grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));">
-                                    <!-- Nút Xem / In Hợp Đồng -->
-                                    <?php if (($acc['school_status'] ?? '') === 'Signed_Paid'): ?>
-                                    <button type="button" class="btn btn-sm btn-fpt-secondary text-truncate" onclick="openContractModal(<?= $acc['assignment_id'] ?>)" style="font-size: 11.5px; padding: 5px 8px; border-radius: 8px;" title="Xem & In Hợp Đồng Đã Ký">
-                                        <i class="bi bi-printer me-1"></i> In / Xem HĐ
-                                    </button>
-                                    <?php else: ?>
-                                    <button type="button" class="btn btn-sm btn-fpt-secondary text-truncate" onclick="openContractModal(<?= $acc['assignment_id'] ?>)" style="font-size: 11.5px; padding: 5px 8px; border-radius: 8px;" title="Xem Hợp Đồng Nghiệm Thu">
-                                        <i class="bi bi-file-earmark-text me-1"></i> Xem Hợp Đồng
-                                    </button>
-                                    <?php endif; ?>
-                                    
-                                    <!-- Nút Nộp / Cập nhật Minh Chứng cho CTV -->
-                                    <?php if ((int)$acc['user_id'] === (int)($currentUser['id'] ?? 0) || empty($perms['canVerifyLecturer'])): ?>
-                                    <button type="button" class="btn btn-sm btn-fpt-primary text-truncate" onclick="openSubmitProofModal(<?= $acc['assignment_id'] ?>, '<?= htmlspecialchars(addslashes($acc['shift_name'])) ?>', '<?= htmlspecialchars(addslashes($acc['start_time'])) ?>')" style="font-size: 11.5px; padding: 5px 8px; border-radius: 8px;">
-                                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> <?= $hasProof ? 'Đổi Minh Chứng' : 'Nộp Minh Chứng' ?>
-                                    </button>
-                                    <?php endif; ?>
+                                <!-- Card Quyết định -->
+                                <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                                    <h6 class="fw-bold mb-3 pb-2 border-bottom text-dark" style="font-size: 14.5px; border-color: #F1F5F9 !important;">Quyết định</h6>
 
-                                    <!-- Nút Duyệt Nghiệm Thu HOẶC Nhắc Nhở Nộp Minh Chứng: Dành riêng cho Giảng viên / Quản trị viên -->
-                                    <?php if (!$isVerified && !empty($perms['canVerifyLecturer'])): ?>
-                                        <?php if ($hasProof): ?>
-                                        <button type="button" class="btn btn-sm btn-fpt-emerald text-truncate" onclick="verifyLecturerInCard(<?= $acc['assignment_id'] ?>)" style="font-size: 11px; padding: 4px 6px; border-radius: 7px;">
-                                            <i class="bi bi-patch-check-fill me-1"></i> Duyệt Nghiệm Thu
+                                    <!-- 2 Nút Toggle: Duyệt / Bổ sung -->
+                                    <div class="proof-decision-toggle-group mb-3">
+                                        <button type="button" class="proof-decision-btn active btn-approve" id="btnAdminApprove" onclick="setAdminDecision('approve')">
+                                            <i class="bi bi-check-circle-fill text-primary"></i> Duyệt
                                         </button>
-                                        <?php else: ?>
-                                        <button type="button" class="btn btn-sm btn-outline-warning text-truncate fw-semibold" onclick="sendProofReminder(<?= $acc['assignment_id'] ?>, '<?= htmlspecialchars(addslashes($acc['full_name'])) ?>', '<?= htmlspecialchars(addslashes($acc['email'] ?? '')) ?>', this)" style="font-size: 11px; padding: 4px 6px; border-radius: 7px;" title="Tự động gửi email nhắc sinh viên nộp minh chứng">
-                                            <i class="bi bi-bell-fill me-1 text-warning"></i> Nhắc Nộp MC
+                                        <button type="button" class="proof-decision-btn btn-revision" id="btnAdminRevision" onclick="setAdminDecision('revision')">
+                                            <i class="bi bi-circle text-muted"></i> Bổ sung
                                         </button>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
+                                    </div>
 
-                                    <!-- Nút Trình Trường Ký: CHỈ Cán bộ Hành chính & Quản trị viên khi ca ĐÃ ĐƯỢC NGHIỆM THU (CTV TUYỆT ĐỐI KHÔNG CÓ) -->
-                                    <?php if ($isVerified && !empty($perms['canSubmitSchoolSigning']) && ($acc['school_status'] ?? '') !== 'Signed_Paid'): ?>
-                                    <button type="button" class="btn btn-sm btn-fpt-primary text-truncate" <?= $isReadyToExport ? '' : 'disabled title="Cần hoàn thiện đủ CCCD & STK trước khi trình ký"' ?> onclick="submitToSchool(<?= $acc['assignment_id'] ?>)" style="font-size: 11.5px; padding: 5px 8px; border-radius: 8px;">
-                                        <i class="bi bi-send-check me-1"></i> Trình Trường Ký
-                                    </button>
-                                    <?php endif; ?>
+                                    <!-- Textarea Ghi Chú -->
+                                    <div class="mb-3">
+                                        <textarea class="form-control" rows="3" id="adminProofNote" placeholder="Ghi chú (tùy chọn)..." style="font-size: 13px; resize: none; border-color: #E2E8F0;"></textarea>
+                                    </div>
+
+                                    <!-- 3 Nút Thao Tác: Hủy / Lưu nháp / Xác nhận -->
+                                    <div class="d-flex align-items-center justify-content-between pt-2 border-top" style="border-color: #F1F5F9 !important;">
+                                        <button type="button" class="btn btn-link text-muted p-0 text-decoration-none" onclick="navigateToPage('submissions')" style="font-size: 13px;">Hủy</button>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button type="button" class="btn btn-sm btn-light border rounded-pill px-3 py-1.5 fw-medium" onclick="saveAdminDraft()" style="font-size: 12.5px;">Lưu nháp</button>
+                                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3.5 py-1.5 fw-bold" onclick="submitAdminDecision()" style="background: #2563EB; font-size: 12.5px;">Xác nhận</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT DRAWER: CHI TIẾT (~30%) -->
+                    <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; height: fit-content;">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Chi tiết</h6>
+                            <button type="button" class="btn btn-sm btn-link text-muted p-0" onclick="navigateToPage('submissions')"><i class="bi bi-x-lg"></i></button>
+                        </div>
+
+                        <!-- 3 Tabs: Thông tin / Lịch sử / Tệp -->
+                        <div class="proof-inspector-tabs">
+                            <button type="button" class="proof-inspector-tab-btn active" id="tabAdminInfo" onclick="switchInspectorTab('info', this)">Thông tin</button>
+                            <button type="button" class="proof-inspector-tab-btn" id="tabAdminHistory" onclick="switchInspectorTab('history', this)">Lịch sử</button>
+                            <button type="button" class="proof-inspector-tab-btn" id="tabAdminFiles" onclick="switchInspectorTab('files', this)">Tệp</button>
+                        </div>
+
+                        <div id="inspectorTabInfo">
+                            <!-- Thông tin sự kiện -->
+                            <div class="d-flex flex-column gap-3 mb-3 pb-3 border-bottom" style="border-color: #F1F5F9 !important;">
+                                <div class="d-flex align-items-start gap-2.5">
+                                    <i class="bi bi-calendar3 text-muted mt-0.5" style="font-size: 14px;"></i>
+                                    <div>
+                                        <div class="text-muted small" style="font-size: 11px;">Sự kiện</div>
+                                        <div class="fw-semibold text-dark" style="font-size: 13px;" id="inspectorEventTitle">Ngày hội Sinh viên FPT Polytechnic 2024</div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-start gap-2.5">
+                                    <i class="bi bi-geo-alt text-muted mt-0.5" style="font-size: 14px;"></i>
+                                    <div>
+                                        <div class="text-muted small" style="font-size: 11px;">Địa điểm</div>
+                                        <div class="fw-medium text-dark" style="font-size: 13px;" id="inspectorLocation">Sân trường FPT Polytechnic Hà Nội</div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-start gap-2.5">
+                                    <i class="bi bi-list-task text-muted mt-0.5" style="font-size: 14px;"></i>
+                                    <div>
+                                        <div class="text-muted small" style="font-size: 11px;">Mô tả công việc</div>
+                                        <div class="text-dark" style="font-size: 12.5px; line-height: 1.5;" id="inspectorWorkDesc">Hỗ trợ setup, vận hành thiết bị, hậu trường.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- File Section -->
+                            <div class="mb-3 pb-3 border-bottom" style="border-color: #F1F5F9 !important;">
+                                <div class="text-muted small fw-bold mb-2" style="font-size: 11.5px; text-transform: uppercase;">File</div>
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded-2" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-file-earmark-image text-primary fs-5"></i>
+                                        <span class="fw-medium text-dark" style="font-size: 12.5px;">6 ảnh • 12,4 MB</span>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-link text-muted p-0" onclick="downloadAllProofPhotos()"><i class="bi bi-download"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Thông tin file Section -->
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="text-muted small fw-bold" style="font-size: 11.5px; text-transform: uppercase;">Thông tin file</span>
+                                    <i class="bi bi-info-circle text-muted" style="font-size: 11.5px;"></i>
+                                </div>
+                                <div class="d-flex flex-column gap-1.5 text-muted small" style="font-size: 12px;">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Người gửi</span>
+                                        <span class="text-dark fw-medium" id="inspectorSender">Hoàng Minh Luân</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Thời gian gửi</span>
+                                        <span class="text-dark font-monospace" id="inspectorSendTime">14:23, 20/04/2024</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Định dạng</span>
+                                        <span class="text-dark fw-medium">JPG</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Dung lượng</span>
+                                        <span class="text-dark fw-medium">12,4 MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Lịch Sử -->
+                        <div id="inspectorTabHistory" style="display: none;">
+                            <div class="d-flex flex-column gap-2 text-muted small" style="font-size: 12px;">
+                                <div class="p-2 rounded bg-light border">
+                                    <div class="fw-bold text-dark">14:23, 20/04/2024</div>
+                                    <div>Sinh viên Hoàng Minh Luân đã nộp 6 ảnh minh chứng.</div>
+                                </div>
+                                <div class="p-2 rounded bg-light border">
+                                    <div class="fw-bold text-dark">13:00, 20/04/2024</div>
+                                    <div>Check-in bắt đầu ca trực kỹ thuật.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Tệp -->
+                        <div id="inspectorTabFiles" style="display: none;">
+                            <div class="d-flex flex-column gap-2">
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded bg-light border" style="font-size: 12px;">
+                                    <span class="text-truncate">photo_stage_setup_01.jpg</span>
+                                    <span class="text-muted">2.1 MB</span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded bg-light border" style="font-size: 12px;">
+                                    <span class="text-truncate">photo_stage_setup_02.jpg</span>
+                                    <span class="text-muted">1.8 MB</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <?php endforeach; ?>
-                    <?php endif; ?>
+
                 </div>
             </section>
+
+            <!-- =========================================================
+                 PANEL 7: HỒ SƠ HỢP ĐỒNG (MASTER-DETAIL)
+                 Theo thiết kế chuẩn pixel-perfect Mockup media_1794988361234_02c85246.jpg
+                 ========================================================= -->
+            <section class="spa-panel fade-in-up" id="panelContractDossier" style="display:none !important; flex-direction: column;">
+                <?php
+                // Chuẩn bị dữ liệu danh sách hợp đồng
+                $contractListSource = !empty($accountingList) ? $accountingList : [];
+                // Nếu rỗng, tạo mẫu hợp đồng chuẩn bám sát Mockup 02c85246
+                if (empty($contractListSource)) {
+                    $contractListSource = [
+                        [
+                            'assignment_id' => 1,
+                            'contract_code' => 'HĐ-20261115-001',
+                            'full_name' => $currentUser['full_name'] ?? 'Định Nguyễn Phương Anh',
+                            'student_code' => $currentUser['student_code'] ?? 'PI03084',
+                            'id_card_number' => $currentUser['id_card_number'] ?? '079203014589',
+                            'bank_name' => $currentUser['bank_name'] ?? 'MB Bank (Ngân hàng Quân Đội)',
+                            'bank_account_number' => $currentUser['bank_account_number'] ?? '098765432199',
+                            'bank_account_name' => $currentUser['bank_account_name'] ?? 'ĐINH NGUYEN PHUONG ANH',
+                            'event_title' => 'FPoly TechDay 2026: Trí Tuệ Nhân Tạo & Chuyển Đổi Số',
+                            'shift_name' => 'Ca 3: Media Phóng Sự Ảnh & Quay Phim Recap',
+                            'location_name' => 'Hội trường Trịnh Văn Bô (Tòa A)',
+                            'start_time' => '2026-11-15 08:30:00',
+                            'end_time' => '2026-11-15 12:00:00',
+                            'remuneration_amount' => 200000,
+                            'school_status' => 'Signed_Paid',
+                            'payment_date' => '22/11/2026',
+                            'lecturer_verified' => 1,
+                            'tag' => 'Media',
+                            'pdf_file' => 'Hop_dong_HD-20261115-001.pdf',
+                            'pdf_size' => '1.2 MB'
+                        ]
+                    ];
+                }
+
+                $totalContractsCount = count($contractListSource);
+                $verifiedContractsCount = count(array_filter($contractListSource, fn($c) => !empty($c['lecturer_verified']) && (int)$c['lecturer_verified'] === 1));
+                $paidContractsCount = count(array_filter($contractListSource, fn($c) => ($c['school_status'] ?? '') === 'Signed_Paid'));
+                $pendingContractsCount = $totalContractsCount - $verifiedContractsCount;
+                if ($pendingContractsCount < 0) $pendingContractsCount = 0;
+                ?>
+
+                <!-- Tiêu đề & Breadcrumb của panel -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center gap-1.5 text-muted mb-1" style="font-size: 13px;">
+                        <a href="javascript:void(0)" onclick="navigateToPage('overview')" class="text-decoration-none text-muted">PolyMee</a>
+                        <span>/</span>
+                        <span class="text-dark fw-medium">Hồ sơ hợp đồng</span>
+                    </div>
+                    <h3 class="fw-bold text-dark mb-1" style="font-size: 22px; letter-spacing: -0.3px;">Hồ sơ hợp đồng</h3>
+                    <p class="text-muted small mb-0" style="font-size: 13.5px;">Quản lý hợp đồng, nghiệm thu và đề nghị chi trả thù lao của bạn.</p>
+                </div>
+
+                <!-- 4 Bento KPI Metric Cards -->
+                <div class="contract-bento-grid">
+                    <div class="contract-bento-card">
+                        <div class="contract-bento-icon" style="background: #EFF6FF; color: #2563EB;">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <div>
+                            <div class="contract-bento-title">Tổng hồ sơ hợp đồng</div>
+                            <div class="contract-bento-num" id="kpiTotalContracts"><?= $totalContractsCount ?></div>
+                        </div>
+                    </div>
+
+                    <div class="contract-bento-card">
+                        <div class="contract-bento-icon" style="background: #ECFDF5; color: #059669;">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div>
+                            <div class="contract-bento-title">Đã nghiệm thu</div>
+                            <div class="contract-bento-num text-success" id="kpiVerifiedContracts"><?= $verifiedContractsCount ?></div>
+                        </div>
+                    </div>
+
+                    <div class="contract-bento-card">
+                        <div class="contract-bento-icon" style="background: #FFFBEB; color: #D97706;">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+                        <div>
+                            <div class="contract-bento-title">Đã chi trả</div>
+                            <div class="contract-bento-num text-warning" id="kpiPaidContracts"><?= $paidContractsCount ?></div>
+                        </div>
+                    </div>
+
+                    <div class="contract-bento-card">
+                        <div class="contract-bento-icon" style="background: #FFF7ED; color: #EA580C;">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <div>
+                            <div class="contract-bento-title">Chờ xử lý</div>
+                            <div class="contract-bento-num text-secondary" id="kpiPendingContracts"><?= $pendingContractsCount ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BỐ CỤC MASTER-DETAIL 2 CỘT -->
+                <div class="contract-master-layout">
+                    
+                    <!-- CỘT TRÁI: DANH SÁCH HỢP ĐỒNG (MASTER) -->
+                    <div class="d-flex flex-column">
+                        <!-- 3 Tab Lọc Pills -->
+                        <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                            <button type="button" class="contract-filter-pill active" onclick="filterContractList('all', this)">
+                                Tất cả (<?= $totalContractsCount ?>)
+                            </button>
+                            <button type="button" class="contract-filter-pill" onclick="filterContractList('pending', this)">
+                                Đang xử lý (<?= $pendingContractsCount ?>)
+                            </button>
+                            <button type="button" class="contract-filter-pill" onclick="filterContractList('completed', this)">
+                                Đã hoàn thành (<?= $paidContractsCount ?>)
+                            </button>
+                        </div>
+
+                        <!-- Ô Tìm Kiếm Mã HĐ & Nút Lọc -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <div class="position-relative flex-grow-1">
+                                <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" style="font-size: 13px;"></i>
+                                <input type="text" class="form-control form-control-sm ps-5 rounded-3" id="contractSearchInput" placeholder="Tìm theo mã HĐ, sự kiện..." oninput="searchContractList(this.value)" style="border-color: #E2E8F0; font-size: 13px; height: 38px;">
+                            </div>
+                            <button type="button" class="btn btn-light border rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; color: #64748B;" title="Bộ lọc nâng cao" onclick="triggerToast('Đang áp dụng bộ lọc theo đợt thanh toán tháng 11/2026')">
+                                <i class="bi bi-funnel"></i>
+                            </button>
+                        </div>
+
+                        <!-- Danh Sách Các Thẻ Hợp Đồng Item -->
+                        <div class="d-flex flex-column" id="contractItemsList">
+                            <?php foreach ($contractListSource as $idx => $c): ?>
+                            <?php
+                            $cCode = !empty($c['contract_code']) && str_starts_with($c['contract_code'], 'H') ? $c['contract_code'] : ('HĐ-20261115-' . str_pad((string)($idx + 1), 3, '0', STR_PAD_LEFT));
+                            $cPaid = ($c['school_status'] ?? '') === 'Signed_Paid';
+                            $cDate = !empty($c['start_time']) ? date('d/m/Y', strtotime($c['start_time'])) : '15/11/2026';
+                            $cAmount = !empty($c['remuneration_amount']) ? (int)$c['remuneration_amount'] : 200000;
+                            $cLocation = $c['location_name'] ?? 'Hội trường Trịnh Văn Bô (Tòa A)';
+                            $cEvent = $c['event_title'] ?? 'FPoly TechDay 2026';
+                            $cTag = !empty($c['tag']) ? $c['tag'] : (!empty($c['shift_type']) ? $c['shift_type'] : 'Media');
+                            ?>
+                            <div class="contract-card-item <?= $idx === 0 ? 'active' : '' ?>" onclick="selectContractDetail(<?= $idx ?>, this)" data-idx="<?= $idx ?>" data-status="<?= $cPaid ? 'completed' : 'pending' ?>" data-search="<?= strtolower(htmlspecialchars($cCode . ' ' . $cEvent . ' ' . $cLocation)) ?>">
+                                <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div style="width: 28px; height: 28px; border-radius: 6px; background: #EFF6FF; color: #2563EB; display: grid; place-items: center; font-size: 13px;">
+                                            <i class="bi bi-file-earmark-text"></i>
+                                        </div>
+                                        <span class="fw-bold text-dark font-monospace" style="font-size: 13px;"><?= htmlspecialchars($cCode) ?></span>
+                                        <span class="badge rounded-pill" style="background: #E0F2FE; color: #0284C7; font-size: 10px; padding: 2px 7px;"><?= htmlspecialchars($cTag) ?></span>
+                                    </div>
+                                    <span class="badge rounded-pill" style="background: <?= $cPaid ? '#ECFDF5' : '#FEF3C7' ?>; color: <?= $cPaid ? '#059669' : '#D97706' ?>; font-size: 11px; font-weight: 600; padding: 2px 8px;">
+                                        ● <?= $cPaid ? 'Đã chi trả' : 'Đang xử lý' ?>
+                                    </span>
+                                </div>
+                                <div class="fw-semibold text-dark mb-1 text-truncate" style="font-size: 13px;"><?= htmlspecialchars($cEvent) ?></div>
+                                <div class="d-flex align-items-center justify-content-between text-muted" style="font-size: 11.5px;">
+                                    <div><i class="bi bi-calendar3 me-1"></i><?= htmlspecialchars($cDate) ?></div>
+                                    <div class="fw-bold text-success" style="font-size: 13.5px;"><?= number_format($cAmount) ?> đ</div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between text-muted mt-1" style="font-size: 11.5px;">
+                                    <div class="text-truncate" style="max-width: 90%;"><i class="bi bi-geo-alt me-1"></i><?= htmlspecialchars($cLocation) ?></div>
+                                    <i class="bi bi-chevron-right text-muted opacity-50" style="font-size: 11px;"></i>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- CỘT PHẢI: CHI TIẾT HỢP ĐỒNG (DETAIL) -->
+                    <div class="card border-0 rounded-4 shadow-xs p-4 bg-white" style="border: 1px solid #E2E8F0 !important;">
+                        
+                        <!-- Header Chi Tiết Hợp Đồng Đang Chọn -->
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: #EFF6FF; color: #2563EB; display: grid; place-items: center; font-size: 20px;">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-0.5">
+                                        <h5 class="fw-bold text-dark mb-0 font-monospace" style="font-size: 17px;" id="detailContractCode">HĐ-20261115-001</h5>
+                                        <span class="badge rounded-pill" id="detailContractBadge" style="background: #ECFDF5; color: #059669; font-size: 11.5px; font-weight: 600; padding: 3px 9px;">
+                                            ● Đã chi trả
+                                        </span>
+                                    </div>
+                                    <div class="text-muted small" id="detailEventTitle" style="font-size: 13px;">FPoly TechDay 2026</div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-sm btn-light border rounded-3 px-3 py-2 fw-medium text-dark d-flex align-items-center gap-1.5" onclick="previewContractPdf()" style="font-size: 13px;">
+                                    <i class="bi bi-download"></i> In / Xem HĐ
+                                </button>
+                                <button type="button" class="btn btn-sm btn-primary rounded-3 px-3 py-2 fw-semibold d-flex align-items-center gap-1.5" onclick="openSubmitProofModalFromDossier()" style="background: #2563EB; font-size: 13px;">
+                                    <i class="bi bi-cloud-arrow-up"></i> Đổi minh chứng
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 4 Tabs Chi Tiết -->
+                        <div class="contract-detail-tabs">
+                            <button type="button" class="contract-detail-tab-btn active" id="cTabBtnGeneral" onclick="switchContractTab('general', this)">Thông tin chung</button>
+                            <button type="button" class="contract-detail-tab-btn" id="cTabBtnProof" onclick="switchContractTab('proof', this)">Minh chứng</button>
+                            <button type="button" class="contract-detail-tab-btn" id="cTabBtnPayment" onclick="switchContractTab('payment', this)">Thanh toán</button>
+                            <button type="button" class="contract-detail-tab-btn" id="cTabBtnHistory" onclick="switchContractTab('history', this)">Lịch sử xử lý</button>
+                        </div>
+
+                        <!-- TAB 1: THÔNG TIN CHUNG (MOCKUP 02c85246) -->
+                        <div id="contractTabGeneralContent">
+                            <div class="d-flex flex-column gap-3">
+                                
+                                <!-- Hàng 1: 2 Cards (Thông tin hợp đồng & Thù lao) -->
+                                <div class="row g-3">
+                                    <!-- Card Thông Tin Hợp Đồng (~65%) -->
+                                    <div class="col-12 col-lg-8">
+                                        <div class="contract-sub-card h-100">
+                                            <div class="d-flex align-items-center gap-2 mb-3 fw-bold text-dark" style="font-size: 14px;">
+                                                <i class="bi bi-file-earmark-person text-primary"></i> Thông tin hợp đồng
+                                            </div>
+                                            <div class="contract-kv-row">
+                                                <span class="contract-kv-label">Người ký hợp đồng</span>
+                                                <span class="contract-kv-val" id="detailSignerName">Định Nguyễn Phương Anh</span>
+                                            </div>
+                                            <div class="contract-kv-row">
+                                                <span class="contract-kv-label">Mã sinh viên / CCCD</span>
+                                                <span class="contract-kv-val" id="detailMssvCccd">PI03084 • 079203014589</span>
+                                            </div>
+                                            <div class="contract-kv-row">
+                                                <span class="contract-kv-label">Số tài khoản (STK)</span>
+                                                <span class="contract-kv-val font-monospace" id="detailStk">098765432199</span>
+                                            </div>
+                                            <div class="contract-kv-row">
+                                                <span class="contract-kv-label">Ngân hàng</span>
+                                                <span class="contract-kv-val" id="detailBankName">MB Bank (Ngân hàng Quân Đội)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Thù Lao (~35%) -->
+                                    <div class="col-12 col-lg-4">
+                                        <div class="contract-sub-card h-100 d-flex flex-column justify-content-between">
+                                            <div>
+                                                <div class="d-flex align-items-center gap-2 mb-2 fw-bold text-dark" style="font-size: 14px;">
+                                                    <i class="bi bi-database text-primary"></i> Thù lao
+                                                </div>
+                                                <div class="fw-bold text-primary mb-1.5" style="font-size: 24px;" id="detailRemuneration">200,000 đ</div>
+                                                <div class="d-inline-flex align-items-center gap-1 rounded-pill mb-2 px-2.5 py-1" id="detailPaymentBadge" style="background: #ECFDF5; color: #059669; font-weight: 600; font-size: 11.5px;">
+                                                    <i class="bi bi-check-lg"></i> Đã chi trả
+                                                </div>
+                                            </div>
+                                            <div class="text-muted small pt-2 border-top" style="font-size: 12px;" id="detailPaymentDate">
+                                                Ngày chi trả: 22/11/2026
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Hàng 2: Card Công Việc & Sự Kiện -->
+                                <div class="contract-sub-card">
+                                    <div class="d-flex align-items-center gap-2 mb-3 fw-bold text-dark" style="font-size: 14px;">
+                                        <i class="bi bi-calendar-event text-primary"></i> Công việc & sự kiện
+                                    </div>
+                                    <div class="contract-kv-row">
+                                        <span class="contract-kv-label">Sự kiện</span>
+                                        <span class="contract-kv-val fw-semibold" id="detailFullEventTitle">FPoly TechDay 2026: Trí Tuệ Nhân Tạo & Chuyển Đổi Số</span>
+                                    </div>
+                                    <div class="contract-kv-row">
+                                        <span class="contract-kv-label">Ca trực</span>
+                                        <span class="contract-kv-val" id="detailShiftName">Ca 3: Media Phóng Sự Ảnh & Quay Phim Recap</span>
+                                    </div>
+                                    <div class="contract-kv-row">
+                                        <span class="contract-kv-label">Địa điểm</span>
+                                        <span class="contract-kv-val" id="detailLocation">Hội trường Trịnh Văn Bô (Tòa A)</span>
+                                    </div>
+                                    <div class="contract-kv-row">
+                                        <span class="contract-kv-label">Thời gian</span>
+                                        <span class="contract-kv-val" id="detailShiftTime">15/11/2026 • 08:30 – 12:00</span>
+                                    </div>
+                                </div>
+
+                                <!-- Hàng 3: Card Tệp Đính Kèm -->
+                                <div class="contract-sub-card">
+                                    <div class="d-flex align-items-center gap-2 mb-2.5 fw-bold text-dark" style="font-size: 14px;">
+                                        <i class="bi bi-paperclip text-primary"></i> Tệp đính kèm
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 bg-light border" style="border-color: #E2E8F0 !important;">
+                                        <div class="d-flex align-items-center gap-2.5 overflow-hidden">
+                                            <div style="width: 32px; height: 38px; border-radius: 4px; background: #EF4444; color: #FFFFFF; display: grid; place-items: center; font-weight: 700; font-size: 10px; flex-shrink: 0;">
+                                                PDF
+                                            </div>
+                                            <div class="overflow-hidden">
+                                                <div class="fw-semibold text-dark text-truncate" style="font-size: 13px;" id="detailPdfName">Hop_dong_HD-20261115-001.pdf</div>
+                                                <div class="text-muted small" style="font-size: 11.5px;" id="detailPdfSize">1.2 MB</div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
+                                            <button type="button" class="btn btn-sm btn-light border p-1.5 text-muted rounded-2" title="Xem trước tài liệu" onclick="previewContractPdf()">
+                                                <i class="bi bi-eye fs-6"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-light border p-1.5 text-muted rounded-2" title="Tải xuống tệp PDF" onclick="downloadContractPdf()">
+                                                <i class="bi bi-download fs-6"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: MINH CHỨNG -->
+                        <div id="contractTabProofContent" style="display: none;">
+                            <div class="contract-sub-card mb-3">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class="fw-bold text-dark" style="font-size: 14px;"><i class="bi bi-camera me-1.5 text-primary"></i> Bộ ảnh hiện trường đã nghiệm thu (6 ảnh)</div>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1">Đã GV duyệt</span>
+                                </div>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-4"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80" class="rounded-3 w-100" style="height: 110px; object-fit: cover;" alt="MC 1"></div>
+                                    <div class="col-4"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=400&q=80" class="rounded-3 w-100" style="height: 110px; object-fit: cover;" alt="MC 2"></div>
+                                    <div class="col-4"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=400&q=80" class="rounded-3 w-100" style="height: 110px; object-fit: cover;" alt="MC 3"></div>
+                                    <div class="col-4"><img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=400&q=80" class="rounded-3 w-100" style="height: 110px; object-fit: cover;" alt="MC 4"></div>
+                                    <div class="col-4"><img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=400&q=80" class="rounded-3 w-100" style="height: 110px; object-fit: cover;" alt="MC 5"></div>
+                                    <div class="col-4"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80" class="rounded-3 w-100" style="height: 110px; object-fit: cover;" alt="MC 6"></div>
+                                </div>
+                                <div class="p-2.5 rounded-3 bg-light border small text-muted">
+                                    <i class="bi bi-info-circle me-1 text-primary"></i> Ghi chú nghiệm thu của Giảng viên phụ trách: <em>"Sinh viên có mặt đúng giờ, hỗ trợ chụp phóng sự ảnh và quay recap sự kiện rất nhiệt tình, chất lượng hình ảnh sắc nét đạt yêu cầu nghiệm thu."</em>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 3: THANH TOÁN -->
+                        <div id="contractTabPaymentContent" style="display: none;">
+                            <div class="contract-sub-card">
+                                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                    <div class="fw-bold text-dark" style="font-size: 14px;"><i class="bi bi-credit-card-2-front me-1.5 text-primary"></i> Lệnh chuyển khoản thù lao</div>
+                                    <span class="badge bg-success text-white px-2.5 py-1">Giao dịch thành công</span>
+                                </div>
+                                <div class="contract-kv-row">
+                                    <span class="contract-kv-label">Mã giao dịch ngân hàng</span>
+                                    <span class="contract-kv-val font-monospace">FT26322998492001</span>
+                                </div>
+                                <div class="contract-kv-row">
+                                    <span class="contract-kv-label">Số tiền thực nhận</span>
+                                    <span class="contract-kv-val text-success fw-bold">200,000 đ</span>
+                                </div>
+                                <div class="contract-kv-row">
+                                    <span class="contract-kv-label">Thời gian chuyển khoản</span>
+                                    <span class="contract-kv-val">10:30:15 - 22/11/2026</span>
+                                </div>
+                                <div class="contract-kv-row">
+                                    <span class="contract-kv-label">Nội dung chuyển khoản</span>
+                                    <span class="contract-kv-val font-monospace">FPT POLY CHUYEN THU LAO CTV HDNT-20261115-001</span>
+                                </div>
+                                <div class="contract-kv-row">
+                                    <span class="contract-kv-label">Đơn vị chi trả</span>
+                                    <span class="contract-kv-val">Phòng Kế hoạch - Tài chính FPT Polytechnic</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 4: LỊCH SỬ XỬ LÝ -->
+                        <div id="contractTabHistoryContent" style="display: none;">
+                            <div class="contract-sub-card">
+                                <div class="fw-bold text-dark mb-3" style="font-size: 14px;"><i class="bi bi-clock-history me-1.5 text-primary"></i> Tiến trình xử lý hồ sơ hợp đồng</div>
+                                <div class="position-relative ps-4 border-start ms-2" style="border-color: #CBD5E1 !important;">
+                                    <div class="mb-3 position-relative">
+                                        <div class="position-absolute rounded-circle bg-success" style="width: 10px; height: 10px; left: -21px; top: 5px;"></div>
+                                        <div class="fw-bold text-dark" style="font-size: 13px;">Phòng Kế hoạch - Tài chính chi trả thù lao</div>
+                                        <div class="text-muted small">22/11/2026 10:30 • Hoàn tất chuyển khoản 200,000 đ qua MB Bank</div>
+                                    </div>
+                                    <div class="mb-3 position-relative">
+                                        <div class="position-absolute rounded-circle bg-success" style="width: 10px; height: 10px; left: -21px; top: 5px;"></div>
+                                        <div class="fw-bold text-dark" style="font-size: 13px;">Nhà trường ký duyệt hợp đồng điện tử</div>
+                                        <div class="text-muted small">18/11/2026 15:45 • Ban Giám Hiệu phê duyệt tờ trình thanh toán</div>
+                                    </div>
+                                    <div class="mb-3 position-relative">
+                                        <div class="position-absolute rounded-circle bg-success" style="width: 10px; height: 10px; left: -21px; top: 5px;"></div>
+                                        <div class="fw-bold text-dark" style="font-size: 13px;">Giảng viên nghiệm thu đạt chuẩn</div>
+                                        <div class="text-muted small">16/11/2026 09:20 • Giảng viên kiểm tra 6 ảnh minh chứng & duyệt 4/4 tiêu chí</div>
+                                    </div>
+                                    <div class="mb-3 position-relative">
+                                        <div class="position-absolute rounded-circle bg-primary" style="width: 10px; height: 10px; left: -21px; top: 5px;"></div>
+                                        <div class="fw-bold text-dark" style="font-size: 13px;">Sinh viên nộp minh chứng hiện trường</div>
+                                        <div class="text-muted small">15/11/2026 12:15 • Định Nguyễn Phương Anh tải lên 6 ảnh minh chứng ca trực</div>
+                                    </div>
+                                    <div class="position-relative">
+                                        <div class="position-absolute rounded-circle bg-secondary" style="width: 10px; height: 10px; left: -21px; top: 5px;"></div>
+                                        <div class="fw-bold text-dark" style="font-size: 13px;">Đăng ký ca trực thành công</div>
+                                        <div class="text-muted small">08/11/2026 14:00 • Hệ thống phân công ca trực Ca 3 Media TechDay</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Export Data Script cho Master-Detail Contracts -->
+                <script>
+                const currentContractList = <?= json_encode($contractListSource, JSON_UNESCAPED_UNICODE) ?>;
+                </script>
+            </section>
+
 <!-- =========================================================
                  PANEL 8: CÀI ĐẶT TÀI KHOẢN CÁ NHÂN (PROFILE & SETTINGS)
                  ========================================================= -->
@@ -5726,26 +5898,18 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                  ========================================================= -->
             <section id="panelExploreJobs" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
                 
-                <!-- Header Tiêu Đề & Bộ Lọc Khám Phá Công Việc -->
-                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 pb-2.5 border-bottom" style="border-color: #E2E8F0 !important;">
-                    <div>
-                        <h4 class="fw-bold mb-1 text-dark" style="font-size: 17px; letter-spacing: -0.2px;">Khám Phá Công Việc & Ca Trực Mở Tuyển</h4>
-                        <div class="text-muted small" style="font-size: 12.5px;">Đăng ký ca trực linh hoạt, nhận thù lao và tích lũy điểm uy tín rèn luyện.</div>
+                <!-- Category Filter Pills & Status -->
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5 mb-3.5">
+                    <div class="cal-view-segmented" id="exploreCategoryFilters">
+                        <button type="button" class="cal-view-btn active" onclick="filterExploreJobs('all', this)">Tất cả công việc</button>
+                        <button type="button" class="cal-view-btn" onclick="filterExploreJobs('media', this)"><i class="bi bi-camera-video me-1"></i>Media & Quay chụp</button>
+                        <button type="button" class="cal-view-btn" onclick="filterExploreJobs('tech', this)"><i class="bi bi-tools me-1"></i>Kỹ thuật & Âm thanh</button>
+                        <button type="button" class="cal-view-btn" onclick="filterExploreJobs('reception', this)"><i class="bi bi-people me-1"></i>Lễ tân & Đón tiếp</button>
+                        <button type="button" class="cal-view-btn" onclick="filterExploreJobs('logistics', this)"><i class="bi bi-box-seam me-1"></i>Hậu cần & Setup</button>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge rounded-pill fw-semibold px-3 py-1.5" style="background: #EFF6FF; color: #2563EB; font-size: 12px; border: 1px solid #BFDBFE;">
-                            <i class="bi bi-briefcase-fill me-1"></i><?= count($shifts ?? []) ?> ca trực sẵn sàng
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Category Filter Pills -->
-                <div class="cal-view-segmented mb-3.5" id="exploreCategoryFilters">
-                    <button type="button" class="cal-view-btn active" onclick="filterExploreJobs('all', this)">Tất cả công việc</button>
-                    <button type="button" class="cal-view-btn" onclick="filterExploreJobs('media', this)"><i class="bi bi-camera-video me-1"></i>Media & Quay chụp</button>
-                    <button type="button" class="cal-view-btn" onclick="filterExploreJobs('tech', this)"><i class="bi bi-tools me-1"></i>Kỹ thuật & Âm thanh</button>
-                    <button type="button" class="cal-view-btn" onclick="filterExploreJobs('reception', this)"><i class="bi bi-people me-1"></i>Lễ tân & Đón tiếp</button>
-                    <button type="button" class="cal-view-btn" onclick="filterExploreJobs('logistics', this)"><i class="bi bi-box-seam me-1"></i>Hậu cần & Setup</button>
+                    <span class="badge rounded-pill fw-semibold px-3 py-1.5" style="background: #EFF6FF; color: #2563EB; font-size: 12px; border: 1px solid #BFDBFE;">
+                        <i class="bi bi-briefcase-fill me-1"></i><?= count($shifts ?? []) ?> ca trực sẵn sàng
+                    </span>
                 </div>
 
                 <!-- Lưới Thẻ Công Việc (Job Cards Grid - 3 Cột) -->
@@ -12526,6 +12690,219 @@ function filterMyShifts(type, btn) {
             r.style.display = (idx === 0) ? '' : 'none';
         }
     });
+}
+
+function triggerToast(msg, type = 'info') {
+    if (typeof showToast === 'function') {
+        showToast(msg, type);
+    } else {
+        alert(msg);
+    }
+}
+
+// 5. Điều Khiển Màn Hình Chi Tiết Nghiệm Thu Role BTC / Admin (Mockup 12918230)
+function switchInspectorTab(tabName, el) {
+    document.querySelectorAll('.proof-inspector-tab-btn').forEach(b => b.classList.remove('active'));
+    if (el) el.classList.add('active');
+    
+    const infoEl = document.getElementById('inspectorTabInfo');
+    const histEl = document.getElementById('inspectorTabHistory');
+    const filesEl = document.getElementById('inspectorTabFiles');
+    if (infoEl) infoEl.style.display = (tabName === 'info') ? 'block' : 'none';
+    if (histEl) histEl.style.display = (tabName === 'history') ? 'block' : 'none';
+    if (filesEl) filesEl.style.display = (tabName === 'files') ? 'block' : 'none';
+}
+
+function selectProofPhotoAdmin(idx) {
+    const photos = document.querySelectorAll('.proof-admin-photo-grid-6 .proof-photo-item');
+    photos.forEach((p, i) => {
+        if (i === idx) p.classList.add('is-selected');
+        else p.classList.remove('is-selected');
+    });
+    const thumbs = document.querySelectorAll('.proof-filmstrip-bar .proof-thumb-cell');
+    thumbs.forEach((t, i) => {
+        if (i === idx) t.classList.add('active');
+        else t.classList.remove('active');
+    });
+}
+
+let currentAdminDecision = 'approve';
+function setAdminDecision(type) {
+    currentAdminDecision = type;
+    const btnApprove = document.getElementById('btnAdminApprove');
+    const btnRev = document.getElementById('btnAdminRevision');
+    if (type === 'approve') {
+        if (btnApprove) {
+            btnApprove.classList.add('active');
+            btnApprove.innerHTML = '<i class="bi bi-check-circle-fill text-primary"></i> Duyệt';
+        }
+        if (btnRev) {
+            btnRev.classList.remove('active');
+            btnRev.innerHTML = '<i class="bi bi-circle text-muted"></i> Bổ sung';
+        }
+    } else {
+        if (btnRev) {
+            btnRev.classList.add('active');
+            btnRev.innerHTML = '<i class="bi bi-check-circle-fill text-warning"></i> Bổ sung';
+        }
+        if (btnApprove) {
+            btnApprove.classList.remove('active');
+            btnApprove.innerHTML = '<i class="bi bi-circle text-muted"></i> Duyệt';
+        }
+    }
+}
+
+function saveAdminDraft() {
+    triggerToast('Đã lưu nháp kết quả thẩm định minh chứng thành công!');
+}
+
+function submitAdminDecision() {
+    triggerToast(currentAdminDecision === 'approve' 
+        ? 'Đã duyệt thẩm định nghiệm thu thành công! Hợp đồng điện tử đã được chuyển bước trình ký.'
+        : 'Đã gửi yêu cầu bổ sung minh chứng tới sinh viên CTV!');
+    setTimeout(() => {
+        navigateToPage('submissions');
+    }, 1000);
+}
+
+function downloadAllProofPhotos() {
+    triggerToast('Đang tạo tệp nén ZIP tải xuống toàn bộ 6 ảnh minh chứng độ phân giải cao...');
+}
+
+// 6. Điều Khiển Màn Hình Hồ Sơ Hợp Đồng Master-Detail (Mockup 02c85246)
+function selectContractDetail(idx, el) {
+    document.querySelectorAll('.contract-card-item').forEach(c => c.classList.remove('active'));
+    if (el) el.classList.add('active');
+    
+    const list = typeof currentContractList !== 'undefined' ? currentContractList : [];
+    const c = list[idx] || (list.length > 0 ? list[0] : null);
+    if (!c) return;
+
+    const code = c.contract_code && c.contract_code.startsWith('H') ? c.contract_code : ('HĐ-20261115-' + String(idx + 1).padStart(3, '0'));
+    const isPaid = (c.school_status === 'Signed_Paid');
+    const amount = Number(c.remuneration_amount || 200000).toLocaleString('vi-VN') + ' đ';
+    const date = c.start_time ? new Date(c.start_time).toLocaleDateString('vi-VN') : '15/11/2026';
+    const event = c.event_title || 'FPoly TechDay 2026';
+    const shift = c.shift_name || 'Ca 3: Media Phóng Sự Ảnh & Quay Phim Recap';
+    const loc = c.location_name || 'Hội trường Trịnh Văn Bô (Tòa A)';
+    const signer = c.full_name || 'Định Nguyễn Phương Anh';
+    const mssv = (c.student_code || 'PI03084') + ' • ' + (c.id_card_number || '079203014589');
+    const stk = c.bank_account_number || '098765432199';
+    const bank = c.bank_name || 'MB Bank (Ngân hàng Quân Đội)';
+
+    const codeEl = document.getElementById('detailContractCode');
+    if (codeEl) codeEl.textContent = code;
+
+    const badgeEl = document.getElementById('detailContractBadge');
+    if (badgeEl) {
+        badgeEl.style.background = isPaid ? '#ECFDF5' : '#FEF3C7';
+        badgeEl.style.color = isPaid ? '#059669' : '#D97706';
+        badgeEl.textContent = isPaid ? '● Đã chi trả' : '● Đang xử lý';
+    }
+
+    const evEl = document.getElementById('detailEventTitle');
+    if (evEl) evEl.textContent = event;
+
+    const signerEl = document.getElementById('detailSignerName');
+    if (signerEl) signerEl.textContent = signer;
+
+    const mssvEl = document.getElementById('detailMssvCccd');
+    if (mssvEl) mssvEl.textContent = mssv;
+
+    const stkEl = document.getElementById('detailStk');
+    if (stkEl) stkEl.textContent = stk;
+
+    const bankEl = document.getElementById('detailBankName');
+    if (bankEl) bankEl.textContent = bank;
+
+    const remEl = document.getElementById('detailRemuneration');
+    if (remEl) remEl.textContent = amount;
+
+    const payBadge = document.getElementById('detailPaymentBadge');
+    if (payBadge) {
+        payBadge.style.background = isPaid ? '#ECFDF5' : '#FEF3C7';
+        payBadge.style.color = isPaid ? '#059669' : '#D97706';
+        payBadge.innerHTML = isPaid ? '<i class="bi bi-check-lg"></i> Đã chi trả' : '<i class="bi bi-hourglass-split"></i> Đang xử lý';
+    }
+
+    const fullEvEl = document.getElementById('detailFullEventTitle');
+    if (fullEvEl) fullEvEl.textContent = event;
+
+    const shiftEl = document.getElementById('detailShiftName');
+    if (shiftEl) shiftEl.textContent = shift;
+
+    const locEl = document.getElementById('detailLocation');
+    if (locEl) locEl.textContent = loc;
+
+    const timeEl = document.getElementById('detailShiftTime');
+    if (timeEl) timeEl.textContent = date + ' • 08:30 – 12:00';
+
+    const pdfName = document.getElementById('detailPdfName');
+    if (pdfName) pdfName.textContent = 'Hop_dong_' + code + '.pdf';
+}
+
+function switchContractTab(tab, el) {
+    document.querySelectorAll('.contract-detail-tab-btn').forEach(b => b.classList.remove('active'));
+    if (el) el.classList.add('active');
+
+    const genEl = document.getElementById('contractTabGeneralContent');
+    const proofEl = document.getElementById('contractTabProofContent');
+    const payEl = document.getElementById('contractTabPaymentContent');
+    const histEl = document.getElementById('contractTabHistoryContent');
+
+    if (genEl) genEl.style.display = (tab === 'general') ? 'block' : 'none';
+    if (proofEl) proofEl.style.display = (tab === 'proof') ? 'block' : 'none';
+    if (payEl) payEl.style.display = (tab === 'payment') ? 'block' : 'none';
+    if (histEl) histEl.style.display = (tab === 'history') ? 'block' : 'none';
+}
+
+function filterContractList(status, el) {
+    document.querySelectorAll('.contract-filter-pill').forEach(b => b.classList.remove('active'));
+    if (el) el.classList.add('active');
+
+    const cards = document.querySelectorAll('#contractItemsList .contract-card-item');
+    cards.forEach(card => {
+        const cardStatus = card.getAttribute('data-status');
+        if (status === 'all' || cardStatus === status) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function searchContractList(query) {
+    const q = (query || '').toLowerCase().trim();
+    const cards = document.querySelectorAll('#contractItemsList .contract-card-item');
+    cards.forEach(card => {
+        const text = card.getAttribute('data-search') || '';
+        if (!q || text.includes(q)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function previewContractPdf() {
+    const code = document.getElementById('detailContractCode')?.textContent || 'HĐ-20261115-001';
+    triggerToast('Đang mở bản in & xem trước hợp đồng điện tử ' + code);
+    if (typeof openContractModal === 'function') {
+        openContractModal(1);
+    }
+}
+
+function downloadContractPdf() {
+    const code = document.getElementById('detailContractCode')?.textContent || 'HĐ-20261115-001';
+    triggerToast('Đang tải xuống tệp PDF hợp đồng ' + code + '...');
+}
+
+function openSubmitProofModalFromDossier() {
+    if (typeof openSubmitProofModal === 'function') {
+        openSubmitProofModal(1, 'Ca 3: Media Phóng Sự Ảnh & Quay Phim Recap', '2026-11-15 08:30:00');
+    } else {
+        navigateToPage('submissions');
+    }
 }
 
 </script>

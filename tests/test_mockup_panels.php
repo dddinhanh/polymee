@@ -30,7 +30,9 @@ $check_list = [
     'panelMyShifts' => ['my-shifts-split-layout', 'myShiftsDetailDrawer', 'Ca 3: Media', 'FPoly TechDay 2026'],
     'panelExploreJobs' => ['exploreJobCardsContainer', 'saas-job-card', 'Khám Phá Công Việc'],
     'panelCalendar' => ['cal-toolbar-container', 'Thứ 7, 15/11/2026', 'Ca 3: Media'],
-    'panelProfileSettings' => ['profile-saas-layout', 'profile-hero-banner', 'Định Nguyễn Phương Anh']
+    'panelProfileSettings' => ['profile-saas-layout', 'profile-hero-banner', 'Định Nguyễn Phương Anh'],
+    'panelProofDetail' => ['proof-admin-split-layout', 'proof-admin-photo-grid-6', 'Hoàng Minh Luân', 'proof-filmstrip-bar', 'Tiêu chí', 'Quyết định', 'proof-inspector-tabs'],
+    'panelContractDossier' => ['contract-bento-grid', 'contract-master-layout', 'HĐ-20261115-001', 'Thông tin chung', 'Thông tin hợp đồng', 'MB Bank', 'Hop_dong_HD-20261115-001.pdf']
 ];
 
 $allOk = true;

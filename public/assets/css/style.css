@@ -2800,3 +2800,272 @@ table td .btn-fpt-sm {
     font-weight: 700;
     color: #16A34A;
 }
+
+/* =========================================================
+   CHI TIẾT NGHIỆM THU (ROLE BTC & ADMIN) - MOCKUP 12918230
+   ========================================================= */
+.proof-admin-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.proof-admin-split-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+}
+@media (max-width: 1200px) {
+    .proof-admin-split-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.proof-admin-main-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+}
+@media (max-width: 900px) {
+    .proof-admin-main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.proof-admin-photo-grid-6 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+@media (max-width: 640px) {
+    .proof-admin-photo-grid-6 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.proof-decision-toggle-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.proof-decision-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1.5px solid #E2E8F0;
+    background: #FFFFFF;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.proof-decision-btn.active.btn-approve {
+    background: #EFF6FF;
+    border-color: #2563EB;
+    color: #2563EB;
+}
+.proof-decision-btn.active.btn-revision {
+    background: #FFFBEB;
+    border-color: #D97706;
+    color: #D97706;
+}
+
+.proof-inspector-tabs {
+    display: flex;
+    border-bottom: 1.5px solid #E2E8F0;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.proof-inspector-tab-btn {
+    background: none;
+    border: none;
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748B;
+    cursor: pointer;
+    position: relative;
+}
+.proof-inspector-tab-btn.active {
+    color: #2563EB;
+    font-weight: 600;
+}
+.proof-inspector-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1.5px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #2563EB;
+    border-radius: 2px;
+}
+
+/* =========================================================
+   HỒ SƠ HỢP ĐỒNG (MASTER-DETAIL) - MOCKUP 02c85246
+   ========================================================= */
+.contract-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+@media (max-width: 992px) {
+    .contract-bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 576px) {
+    .contract-bento-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contract-bento-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.contract-bento-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 19px;
+    flex-shrink: 0;
+}
+.contract-bento-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748B;
+    margin-bottom: 2px;
+}
+.contract-bento-num {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.contract-master-layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+@media (max-width: 1024px) {
+    .contract-master-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contract-filter-pill {
+    background: #F1F5F9;
+    color: #475569;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.contract-filter-pill:hover {
+    background: #E2E8F0;
+    color: #1E293B;
+}
+.contract-filter-pill.active {
+    background: #2563EB;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.contract-card-item {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin-bottom: 10px;
+}
+.contract-card-item:hover {
+    border-color: #CBD5E1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.contract-card-item.active {
+    border-color: #2563EB;
+    background: #F8FAFC;
+    box-shadow: 0 0 0 1px #2563EB;
+}
+
+.contract-detail-tabs {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1.5px solid #E2E8F0;
+    margin-bottom: 20px;
+}
+.contract-detail-tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 0;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #64748B;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+.contract-detail-tab-btn:hover {
+    color: #1E293B;
+}
+.contract-detail-tab-btn.active {
+    color: #2563EB;
+    font-weight: 600;
+}
+.contract-detail-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1.5px;
+    left: 0;
+    right: 0;
+    height: 2.5px;
+    background: #2563EB;
+    border-radius: 2px;
+}
+
+.contract-sub-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 18px;
+}
+.contract-kv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+.contract-kv-row:last-child {
+    margin-bottom: 0;
+}
+.contract-kv-label {
+    color: #64748B;
+    font-size: 12.5px;
+    min-width: 140px;
+}
+.contract-kv-val {
+    color: #0F172A;
+    font-weight: 500;
+    text-align: right;
+}
