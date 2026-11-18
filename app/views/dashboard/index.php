@@ -6113,19 +6113,28 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <section id="panelMyProofSubmission" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
                 
                 <!-- Sub-header & Breadcrumb Navigation -->
-                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #E2E8F0 !important;">
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom flex-wrap gap-2" style="border-color: #E2E8F0 !important;">
                     <div class="d-flex align-items-center gap-3">
                         <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-color: #CBD5E1; color: #475569;" onclick="navigateToPage('my-shifts')" title="Quay lại công việc của tôi">
                             <i class="bi bi-arrow-left" style="font-size: 15px;"></i>
                         </button>
                         <div class="d-flex align-items-center gap-2.5">
-                            <h4 class="fw-bold mb-0 text-dark" style="font-size: 18px; letter-spacing: -0.3px;">Chi tiết nghiệm thu</h4>
+                            <h4 class="fw-bold mb-0 text-dark" style="font-size: 18px; letter-spacing: -0.3px;" id="proofScreenTitle">Chi tiết nghiệm thu</h4>
                             <span class="badge rounded-pill" style="background: #F3E8FF; color: #9333EA; font-size: 12px; font-weight: 600; padding: 4px 10px;">
                                 <i class="bi bi-gear-fill me-1"></i>Hậu cần
                             </span>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <!-- Mode Switcher: Sinh viên (Mockup 5) vs Thẩm định viên (Mockup 1) -->
+                        <div class="cal-view-segmented" id="proofViewModeToggle" style="font-size: 12px;">
+                            <button type="button" class="cal-view-btn active" id="btnProofModeStudent" onclick="setProofDetailMode('student', this)" title="Giao diện sinh viên nộp minh chứng & theo dõi tiến trình (Mockup 5)">
+                                <i class="bi bi-person me-1"></i>Sinh viên (Mockup 5)
+                            </button>
+                            <button type="button" class="cal-view-btn" id="btnProofModeReviewer" onclick="setProofDetailMode('reviewer', this)" title="Giao diện Ban tổ chức / Giảng viên duyệt thẩm định (Mockup 1)">
+                                <i class="bi bi-shield-check me-1"></i>Thẩm định viên (Mockup 1)
+                            </button>
+                        </div>
                         <button type="button" class="btn btn-sm btn-light border rounded-pill px-3 py-1.5 fw-medium text-muted d-inline-flex align-items-center gap-1.5" onclick="openSubmitProofModalForUser()" title="Nộp thêm ảnh hoặc dán link Drive" style="font-size: 12px;">
                             <i class="bi bi-cloud-arrow-up text-primary"></i> Nộp thêm ảnh / Drive
                         </button>
@@ -6133,7 +6142,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- HÀNG 1: THẺ THÔNG TIN CTV & STEPPER 5 BƯỚC TIẾN TRÌNH NGHIỆM THU -->
-                <div class="proof-top-info-grid mb-3">
+                <div class="proof-top-info-grid mb-3" id="proofStudentTopStepper">
                     
                     <!-- Card Trái: Thông tin CTV & Sự kiện -->
                     <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
@@ -6211,7 +6220,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                 </div>
 
                 <!-- HÀNG 2: THẺ CALL TO ACTION "NỘP MINH CHỨNG" NỔI BẬT -->
-                <div class="proof-cta-box mb-3 shadow-xs">
+                <div class="proof-cta-box mb-3 shadow-xs" id="proofStudentCtaBanner">
                     <div class="d-flex align-items-center gap-3">
                         <div class="proof-cta-icon">
                             <i class="bi bi-cloud-arrow-up"></i>
@@ -6305,8 +6314,8 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                             </div>
                         </div>
 
-                        <!-- Card Mô Tả Công Việc Từ CTV -->
-                        <div class="card border-0 rounded-3 shadow-xs p-3.5" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
+                        <!-- Card Mô Tả Công Việc Từ CTV (Mockup Image 5) -->
+                        <div class="card border-0 rounded-3 shadow-xs p-3.5" id="proofStudentWorkDescCard" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
                             <div class="d-flex align-items-center gap-2 mb-2 text-dark fw-bold" style="font-size: 13.5px;">
                                 <i class="bi bi-info-circle text-primary"></i> Mô tả công việc
                             </div>
@@ -6316,53 +6325,60 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         </div>
                     </div>
 
-                    <!-- CỘT PHẢI (~38%): TIÊU CHÍ NGHIỆM THU & TRẠNG THÁI XỬ LÝ -->
+                    <!-- CỘT PHẢI (~38%): TIÊU CHÍ NGHIỆM THU & TRẠNG THÁI XỬ LÝ / QUYẾT ĐỊNH -->
                     <div class="d-flex flex-column gap-3">
                         
-                        <!-- Card Tiêu Chí Nghiệm Thu -->
+                        <!-- Card Tiêu Chí Nghiệm Thu (Chuẩn cả Mockup Image 1 & Mockup Image 5) -->
                         <div class="proof-criteria-card shadow-xs">
                             <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-clipboard-check text-primary" style="font-size: 16px;"></i>
                                     <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Tiêu chí nghiệm thu</h6>
                                 </div>
-                                <i class="bi bi-info-circle text-muted cursor-pointer" title="Tiêu chí đánh giá chất lượng ca trực"></i>
+                                <i class="bi bi-info-circle text-muted cursor-pointer" onclick="toggleProofCriterionTooltip()" title="Tiêu chí đánh giá chất lượng ca trực"></i>
                             </div>
 
                             <div class="d-flex flex-column gap-2">
                                 <div class="d-flex align-items-center justify-content-between py-1.5 border-bottom" style="border-color: #F8FAFC !important;">
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="proof-check-badge"><i class="bi bi-check-lg"></i></div>
-                                        <span class="text-dark fw-medium" style="font-size: 13px;">Có mặt đúng ca trực</span>
+                                        <span class="text-dark fw-medium" style="font-size: 13px;">Có mặt & tham gia đúng ca trực</span>
                                     </div>
                                     <i class="bi bi-info-circle text-muted" style="font-size: 13px;" title="Check-in và tham gia xuyên suốt ca trực"></i>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between py-1.5 border-bottom" style="border-color: #F8FAFC !important;">
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="proof-check-badge"><i class="bi bi-check-lg"></i></div>
-                                        <span class="text-dark fw-medium" style="font-size: 13px;">Thực hiện đúng nhiệm vụ</span>
+                                        <span class="text-dark fw-medium" style="font-size: 13px;">Thực hiện đúng nhiệm vụ được phân công</span>
                                     </div>
                                     <i class="bi bi-info-circle text-muted" style="font-size: 13px;" title="Hoàn thành đầy đủ các đầu việc được giao"></i>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between py-1.5 border-bottom" style="border-color: #F8FAFC !important;">
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="proof-check-badge"><i class="bi bi-check-lg"></i></div>
-                                        <span class="text-dark fw-medium" style="font-size: 13px;">Ảnh rõ ràng, đúng bối cảnh</span>
+                                        <span class="text-dark fw-medium" style="font-size: 13px;">Ảnh rõ ràng, đúng bối cảnh sự kiện</span>
                                     </div>
                                     <i class="bi bi-info-circle text-muted" style="font-size: 13px;" title="Ảnh minh chứng sắc nét, thấy rõ vị trí làm việc"></i>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-between py-1.5">
+                                <div class="d-flex align-items-center justify-content-between py-1.5 position-relative">
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="proof-uncheck-box cursor-pointer" onclick="toggleCriterion(this)"></div>
                                         <span class="text-dark fw-medium cursor-pointer" style="font-size: 13px;" onclick="toggleCriterion(this.previousElementSibling)">Phối hợp tốt với BTC</span>
                                     </div>
-                                    <i class="bi bi-info-circle text-muted" style="font-size: 13px;" title="Chủ động hỗ trợ, tuân thủ phân công và đảm bảo tiến độ."></i>
+                                    <div class="position-relative">
+                                        <i class="bi bi-info-circle text-muted cursor-pointer" id="btnCriterionTooltip" onclick="toggleProofCriterionTooltip()" style="font-size: 13px;" title="Bấm để xem giải thích tiêu chí"></i>
+                                        <!-- Tooltip Popover Chuẩn Mockup Image 1 -->
+                                        <div class="proof-popover-bubble shadow-sm" id="proofCriterionPopover" style="display: none;">
+                                            <div class="fw-bold text-dark mb-0.5" style="font-size: 12px;">Phối hợp tốt với BTC</div>
+                                            <div class="text-muted" style="font-size: 11px; line-height: 1.4;">Chủ động hỗ trợ, tuân thủ phân công và đảm bảo tiến độ.</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Card Trạng Thái Xử Lý -->
-                        <div class="proof-status-card shadow-xs">
+                        <!-- Card Trạng Thái Xử Lý (Dành Cho Sinh Viên - Chuẩn Mockup Image 5) -->
+                        <div class="proof-status-card shadow-xs" id="proofStudentStatusCard">
                             <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
                                 <i class="bi bi-layers text-primary" style="font-size: 16px;"></i>
                                 <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Trạng thái xử lý</h6>
@@ -6376,6 +6392,41 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                     <div class="fw-bold" style="font-size: 14.5px; color: #92400E;">Chờ duyệt</div>
                                     <div class="small mt-0.5" style="font-size: 12.5px; color: #B45309;">Đang chờ GV/Organizer kiểm tra minh chứng.</div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Quyết Định Nghiệm Thu (Dành Cho Thẩm Định Viên - Chuẩn Mockup Image 1) -->
+                        <div class="card border-0 rounded-3 shadow-xs p-3.5" id="proofDecisionCard" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; display: none;">
+                            <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                                <i class="bi bi-patch-check text-primary" style="font-size: 16px;"></i>
+                                <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Quyết định nghiệm thu</h6>
+                            </div>
+
+                            <!-- 2 Lựa Chọn: Duyệt vs Yêu cầu bổ sung -->
+                            <div class="d-flex gap-2.5 mb-3">
+                                <button type="button" class="proof-decision-btn active-approve" id="btnStudentDecisionApprove" onclick="setStudentProofDecision('approve')">
+                                    <i class="bi bi-check-circle-fill"></i> Duyệt
+                                </button>
+                                <button type="button" class="proof-decision-btn" id="btnStudentDecisionRequest" onclick="setStudentProofDecision('request')">
+                                    <i class="bi bi-circle"></i> Yêu cầu bổ sung
+                                </button>
+                            </div>
+
+                            <!-- Ô Ghi Chú Tùy Chọn Kèm Biểu Tượng Bút & Đếm Ký Tự 0 / 300 -->
+                            <div class="position-relative mb-3">
+                                <i class="bi bi-pencil position-absolute text-muted" style="top: 10px; left: 12px; font-size: 13px;"></i>
+                                <textarea class="form-control rounded-3 ps-5 pe-3 py-2 text-dark" id="studentProofDecisionNotes" rows="3" placeholder="Ghi chú (tùy chọn)" maxlength="300" oninput="updateStudentNotesCounter(this)" style="font-size: 12.5px; border-color: #E2E8F0; resize: none;"></textarea>
+                                <div class="text-end text-muted small mt-1 pe-1 font-monospace" style="font-size: 11px;" id="studentProofNotesCount">0 / 300</div>
+                            </div>
+
+                            <!-- Hai Nút Thao Tác Chân Trang: Hủy & Xác Nhận -->
+                            <div class="d-flex align-items-center justify-content-end gap-2 pt-2 border-top" style="border-color: #F1F5F9 !important;">
+                                <button type="button" class="btn btn-sm btn-light border rounded-pill px-3 py-1.5 fw-medium text-dark" onclick="navigateToPage('my-shifts')" style="font-size: 12.5px;">
+                                    Hủy
+                                </button>
+                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3.5 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5" onclick="submitStudentProofDecision()" style="background: #2563EB; font-size: 12.5px;">
+                                    <i class="bi bi-check-lg"></i> Xác nhận
+                                </button>
                             </div>
                         </div>
 
@@ -9820,13 +9871,68 @@ function renderCalendarSidebarDayDetail(dateStr) {
     const titleEl = document.getElementById('calSelectedDayTitle');
     const contentEl = document.getElementById('calSelectedDayContent');
     const filterTabsEl = document.getElementById('calDayFilterTabs');
+    const badgeEl = document.getElementById('calActivityCountBadge');
     if (!titleEl || !contentEl) return;
+
+    if (dateStr === '2026-11-15') {
+        titleEl.textContent = 'Thứ 7, 15/11/2026';
+        if (badgeEl) badgeEl.textContent = '2 hoạt động';
+        if (filterTabsEl) filterTabsEl.style.display = 'none';
+
+        contentEl.innerHTML = `
+            <div class="d-flex flex-column gap-2.5">
+                <!-- Hoạt động 1: Ca 3 Media Chuẩn Mockup Image 4 -->
+                <div class="p-3 rounded-3 d-flex align-items-center justify-content-between transition-all" style="background: #FFFFFF; border: 1px solid #E2E8F0; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03);" onclick="navigateToPage('my-shifts')">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: #F3E8FF; color: #9333EA; font-size: 18px;">
+                            <i class="bi bi-camera-video"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small" style="font-size: 11.5px; font-weight: 500;">08:00 – 12:00</div>
+                            <div class="fw-bold text-dark" style="font-size: 14px;">Ca 3: Media</div>
+                            <div class="text-muted small" style="font-size: 11.5px;">FPoly TechDay 2026</div>
+                        </div>
+                    </div>
+                    <i class="bi bi-chevron-right text-muted opacity-60" style="font-size: 13px;"></i>
+                </div>
+
+                <!-- Hoạt động 2: Hạn nghiệm thu ca 3 Chuẩn Mockup Image 4 -->
+                <div class="p-3 rounded-3 d-flex align-items-center justify-content-between transition-all" style="background: #FFFFFF; border: 1px solid #E2E8F0; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03);" onclick="navigateToPage('my-proof-submission')">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: #DCFCE7; color: #16A34A; font-size: 18px;">
+                            <i class="bi bi-clipboard-check"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark" style="font-size: 14px;">Hạn nghiệm thu</div>
+                            <div class="text-muted small" style="font-size: 12px;">Nộp minh chứng ca 3</div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge rounded-pill fw-semibold" style="background: #FEF3C7; color: #D97706; font-size: 11px; padding: 4px 9px;">
+                            <i class="bi bi-clock me-1"></i>Còn 6 giờ
+                        </span>
+                        <i class="bi bi-chevron-right text-muted opacity-60" style="font-size: 13px;"></i>
+                    </div>
+                </div>
+
+                <!-- Empty state illustration bên dưới Chuẩn Mockup Image 4 -->
+                <div class="text-center py-4 d-flex flex-column align-items-center justify-content-center mt-3">
+                    <div class="mb-2.5 rounded-circle d-inline-flex align-items-center justify-content-center" style="background: #F1F5F9; width: 64px; height: 64px;">
+                        <i class="bi bi-calendar-check" style="font-size: 28px; color: #94A3B8;"></i>
+                    </div>
+                    <span class="text-muted small" style="font-size: 12.5px;">Không còn hoạt động khác</span>
+                </div>
+            </div>
+        `;
+        return;
+    }
 
     const parts = dateStr.split('-');
     const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
     titleEl.textContent = formattedDate;
 
     const acts = getDayActivities(dateStr);
+    if (badgeEl) badgeEl.textContent = `${acts.length} hoạt động`;
 
     // 1. Phân loại và tạo Filter Tabs
     if (acts.length > 0) {
@@ -12907,6 +13013,91 @@ function openSubmitProofModalFromDossier() {
         navigateToPage('submissions');
     }
 }
+
+/**
+ * =========================================================
+ * CHI TIẾT MINH CHỨNG & CHUYỂN ĐỔI CHẾ ĐỘ XEM (MOCKUP 1 & 5)
+ * =========================================================
+ */
+function setProofDetailMode(mode, el) {
+    document.querySelectorAll('#proofViewModeToggle .cal-view-btn').forEach(b => b.classList.remove('active'));
+    if (el) el.classList.add('active');
+
+    const stepperEl = document.getElementById('proofStudentTopStepper');
+    const ctaEl = document.getElementById('proofStudentCtaBanner');
+    const statusCard = document.getElementById('proofStudentStatusCard');
+    const decisionCard = document.getElementById('proofDecisionCard');
+    const popover = document.getElementById('proofCriterionPopover');
+    const descCard = document.getElementById('proofStudentWorkDescCard');
+    const emailSub = document.getElementById('proofStudentEmailSub');
+    const titleEl = document.getElementById('proofScreenTitle');
+
+    if (mode === 'reviewer') {
+        // Mockup Image 1: media_1794984199844_56903cd6.jpg (Thẩm định viên)
+        if (titleEl) titleEl.textContent = 'Chi tiết Minh chứng';
+        if (stepperEl) stepperEl.style.display = 'none';
+        if (ctaEl) ctaEl.style.display = 'none';
+        if (statusCard) statusCard.style.display = 'none';
+        if (decisionCard) decisionCard.style.display = 'block';
+        if (popover) popover.style.display = 'block';
+        if (descCard) descCard.style.display = 'none';
+        if (emailSub) emailSub.textContent = 'PI03015 ◆ CTV';
+    } else {
+        // Mockup Image 5: media_1794986669899_cfaac146.jpg (Sinh viên CTV)
+        if (titleEl) titleEl.textContent = 'Chi tiết nghiệm thu';
+        if (stepperEl) stepperEl.style.display = 'grid';
+        if (ctaEl) ctaEl.style.display = 'flex';
+        if (statusCard) statusCard.style.display = 'block';
+        if (decisionCard) decisionCard.style.display = 'none';
+        if (popover) popover.style.display = 'none';
+        if (descCard) descCard.style.display = 'block';
+        if (emailSub) emailSub.textContent = 'PI03015 • hoangminhluan@fpt.edu.vn';
+    }
+}
+
+function toggleProofCriterionTooltip() {
+    const popover = document.getElementById('proofCriterionPopover');
+    if (popover) {
+        popover.style.display = (popover.style.display === 'none' || !popover.style.display) ? 'block' : 'none';
+    }
+}
+
+let studentProofDecisionState = 'approve';
+function setStudentProofDecision(type) {
+    studentProofDecisionState = type;
+    const btnApprove = document.getElementById('btnStudentDecisionApprove');
+    const btnRequest = document.getElementById('btnStudentDecisionRequest');
+    if (btnApprove && btnRequest) {
+        if (type === 'approve') {
+            btnApprove.className = 'proof-decision-btn active-approve';
+            btnApprove.innerHTML = '<i class="bi bi-check-circle-fill"></i> Duyệt';
+            btnRequest.className = 'proof-decision-btn';
+            btnRequest.innerHTML = '<i class="bi bi-circle"></i> Yêu cầu bổ sung';
+        } else {
+            btnApprove.className = 'proof-decision-btn';
+            btnApprove.innerHTML = '<i class="bi bi-circle"></i> Duyệt';
+            btnRequest.className = 'proof-decision-btn active-request';
+            btnRequest.innerHTML = '<i class="bi bi-exclamation-circle-fill"></i> Yêu cầu bổ sung';
+        }
+    }
+}
+
+function updateStudentNotesCounter(el) {
+    const countEl = document.getElementById('studentProofNotesCount');
+    if (countEl && el) {
+        countEl.textContent = `${el.value.length} / 300`;
+    }
+}
+
+function submitStudentProofDecision() {
+    const notes = document.getElementById('studentProofDecisionNotes')?.value || '';
+    if (studentProofDecisionState === 'approve') {
+        triggerToast('Đã xác nhận nghiệm thu thành công! Minh chứng đã được phê duyệt.', 'success');
+    } else {
+        triggerToast('Đã gửi yêu cầu bổ sung minh chứng tới sinh viên. Ghi chú: ' + (notes || 'Chưa có ghi chú'), 'warning');
+    }
+}
+
 
 </script>
 

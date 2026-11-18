@@ -3416,3 +3416,60 @@ table td .btn-fpt-sm {
     flex-shrink: 0 !important;
     padding: 8px 16px !important;
 }
+
+/* 10. Popover Tooltip & Review Decision Cards (Chuẩn Mockup Image 1) */
+.proof-popover-bubble {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    z-index: 1050;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 10px 14px;
+    width: 240px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #475569;
+}
+.proof-popover-bubble::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: 14px;
+    width: 8px;
+    height: 8px;
+    background: #FFFFFF;
+    border-top: 1px solid #E2E8F0;
+    border-left: 1px solid #E2E8F0;
+    transform: rotate(45deg);
+}
+
+.proof-decision-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1.5px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #475569;
+}
+.proof-decision-btn.active-approve {
+    background: #F0FDF4 !important;
+    border-color: #22C55E !important;
+    color: #15803D !important;
+}
+.proof-decision-btn.active-request {
+    background: #FEF2F2 !important;
+    border-color: #EF4444 !important;
+    color: #B91C1C !important;
+}
+
