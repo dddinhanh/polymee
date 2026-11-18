@@ -2490,7 +2490,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & phân rã ca trực">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
                             <span>Lịch Hoạt Động</span>
-                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
                         </button>
                     </li>
 
@@ -2499,7 +2498,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" data-page="user-roles" onclick="navigateToPage('user-roles')" title="Quản lý tài khoản & phân quyền">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
                             <span>Tài Khoản & Phân Quyền</span>
-                            <em class="u040-bd"><?= count($allUsers ?? []) ?></em>
                         </button>
                     </li>
                     <li>
@@ -2512,14 +2510,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" data-page="events" onclick="navigateToPage('events')" title="Quản lý sự kiện">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>
                             <span>Sự Kiện</span>
-                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
                         </button>
                     </li>
                     <li>
                         <button class="u040-it" type="button" data-page="student-payroll-profile" onclick="navigateToPage('student-payroll-profile')" title="Cộng tác viên & Hồ sơ định danh">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                             <span>Cộng Tác Viên</span>
-                            <em class="u040-bd"><?= count($ctvRoster ?? []) ?></em>
                         </button>
                     </li>
 
@@ -2534,17 +2530,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" data-page="submissions" onclick="navigateToPage('submissions')" title="Thẩm định nghiệm thu minh chứng">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5V13M5 9V4.5M12 19.5V11M12 7V4.5M19 19.5V15M19 11V4.5M3 13h4M10 7h4M17 15h4"/></svg>
                             <span>Nghiệm Thu</span>
-                            <?php 
-                            $subsCount = count(array_filter($accountingList ?? [], fn($a) => !empty($a['proof_image_url']) || !empty($a['drive_url'])));
-                            if ($subsCount > 0): ?><em class="u040-bd"><?= $subsCount ?></em><?php endif; 
-                            ?>
                         </button>
                     </li>
                     <li>
                         <button class="u040-it" type="button" data-page="accounting" onclick="navigateToPage('accounting')" title="Hợp đồng & Thanh toán quyết toán">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7h6M9 11h6M9 15h4M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
                             <span>Hợp Đồng & Thanh Toán</span>
-                            <em class="u040-bd"><?= count($accountingList) ?></em>
                         </button>
                     </li>
 
@@ -2569,7 +2560,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & phân rã ca trực">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
                             <span>Lịch Hoạt Động</span>
-                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
                         </button>
                     </li>
 
@@ -2578,14 +2568,12 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" data-page="events" onclick="navigateToPage('events')" title="Quản lý sự kiện">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>
                             <span>Quản Lý Sự Kiện</span>
-                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
                         </button>
                     </li>
                     <li>
                         <button class="u040-it" type="button" data-page="shifts-sessions" onclick="navigateToPage('shifts-sessions')" title="Buổi hoạt động & ca trực">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                             <span>Buổi Hoạt Động & Ca Trực</span>
-                            <em class="u040-bd"><?= count($shifts ?? []) ?></em>
                         </button>
                     </li>
                     <li>
@@ -2600,10 +2588,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" data-page="submissions" onclick="navigateToPage('submissions')" title="Duyệt minh chứng ảnh hiện trường & Google Drive">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5V13M5 9V4.5M12 19.5V11M12 7V4.5M19 19.5V15M19 11V4.5M3 13h4M10 7h4M17 15h4"/></svg>
                             <span>Duyệt Minh Chứng</span>
-                            <?php 
-                            $pendingVerifyCount = count(array_filter($accountingList ?? [], fn($a) => empty($a['lecturer_verified'])));
-                            if ($pendingVerifyCount > 0): ?><em class="u040-bd"><?= $pendingVerifyCount ?></em><?php endif; 
-                            ?>
                         </button>
                     </li>
                     <li>
@@ -2634,7 +2618,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & CSVC">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
                             <span>Lịch Hoạt Động</span>
-                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
                         </button>
                     </li>
 
@@ -2669,7 +2652,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" data-page="accounting" onclick="navigateToPage('accounting')" title="Thanh toán & Quyết toán thù lao">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7h6M9 11h6M9 15h4M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
                             <span>Thanh Toán & Quyết Toán</span>
-                            <em class="u040-bd"><?= count($accountingList) ?></em>
                         </button>
                     </li>
 
@@ -2700,7 +2682,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" aria-current="page" data-page="calendar" onclick="navigateToPage('calendar')" title="Lịch hoạt động & đăng ký ca">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
                             <span>Lịch Hoạt Động</span>
-                            <?php if (!empty($events)): ?><em class="u040-bd"><?= count($events) ?></em><?php endif; ?>
                         </button>
                     </li>
 
@@ -2715,10 +2696,6 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                         <button class="u040-it" type="button" data-page="my-shifts" onclick="navigateToPage('my-shifts')" title="Công việc của tôi đã đăng ký">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>
                             <span>Công Việc Của Tôi</span>
-                            <?php 
-                            $myRegisteredShiftsCount = count(array_filter($shifts ?? [], fn($s) => !empty($s['is_registered_by_me']) || !empty($s['is_registered'])));
-                            if ($myRegisteredShiftsCount > 0): ?><em class="u040-bd"><?= $myRegisteredShiftsCount ?></em><?php endif; 
-                            ?>
                         </button>
                     </li>
                     <li>
