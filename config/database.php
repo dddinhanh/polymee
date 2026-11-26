@@ -7,7 +7,7 @@
 declare(strict_types=1);
 
 // Chế độ CSDL: 'sqlite' (chạy ngay không cần cài đặt MySQL), 'mysql', hoặc 'sqlsrv'
-define('DB_CONNECTION', getenv('DB_CONNECTION') ?: 'sqlite');
+define('DB_CONNECTION', getenv('DB_CONNECTION') ?: 'sqlsrv');
 
 // Cấu hình SQLite (tệp lưu trong thư mục database)
 define('DB_SQLITE_PATH', APP_ROOT . '/database/polymee.sqlite');
@@ -20,8 +20,8 @@ define('DB_USERNAME', getenv('DB_USERNAME') ?: 'root');
 define('DB_PASSWORD', getenv('DB_PASSWORD') ?: '');
 
 // Cấu hình Microsoft SQL Server (khi dùng sqlsrv)
-define('DB_SQLSRV_HOST', getenv('DB_SQLSRV_HOST') ?: 'localhost');
-define('DB_SQLSRV_PORT', getenv('DB_SQLSRV_PORT') ?: '1433');
-define('DB_SQLSRV_DB', getenv('DB_SQLSRV_DB') ?: 'PolyMee_DB');
+define('DB_SQLSRV_HOST', getenv('DB_SQLSRV_HOST') ?: '127.0.0.1');
+define('DB_SQLSRV_PORT', getenv('DB_SQLSRV_PORT') ?: '14331');
+define('DB_SQLSRV_DB', getenv('DB_SQLSRV_DB') ?: 'Polymeet');
 define('DB_SQLSRV_USER', getenv('DB_SQLSRV_USER') ?: 'sa');
-define('DB_SQLSRV_PASS', getenv('DB_SQLSRV_PASS') ?: 'Fpoly@2026!');
+define('DB_SQLSRV_PASS', getenv('DB_SQLSRV_PASS') ?: 'ThayBangMatKhauManh123!');

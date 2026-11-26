@@ -128,7 +128,11 @@ class DashboardController extends BaseController
         $roles = $stmtRoles->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
         // 9. Lấy nhật ký lịch sử thao tác hệ thống (Audit Trail)
-        $stmtLogs = $db->query("SELECT * FROM activity_logs ORDER BY created_at DESC LIMIT 60");
+        $isSqlsrv = $db->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlsrv';
+        $sqlLogs = $isSqlsrv 
+            ? "SELECT TOP (50) * FROM activity_logs ORDER BY created_at DESC" 
+            : "SELECT * FROM activity_logs ORDER BY created_at DESC LIMIT 50";
+        $stmtLogs = $db->query($sqlLogs);
         $activityLogs = $stmtLogs->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
         // Render view chuyên biệt Bootstrap 5 & Apple macOS Sonoma / iPadOS
@@ -353,7 +357,7 @@ class DashboardController extends BaseController
                                 proof_drive_url = :drive,
                                 ctv_type = :ctv_type,
                                 proof_note = :note, 
-                                proof_submitted_at = datetime('now', 'localtime') 
+                                proof_submitted_at = GETDATE() 
                               WHERE id = :id");
         $stmt->execute([
             ':img' => $proofImageUrl,
@@ -444,7 +448,7 @@ class DashboardController extends BaseController
         $stmt = $db->prepare("UPDATE shift_assignments SET 
                                 lecturer_verified = 1, 
                                 lecturer_name = :lname, 
-                                lecturer_verified_at = datetime('now', 'localtime'),
+                                lecturer_verified_at = GETDATE(),
                                 contract_code = :ccode,
                                 accounting_status = 'Approved',
                                 school_status = 'Pending'
@@ -568,7 +572,7 @@ class DashboardController extends BaseController
         // Ghi nhật ký vào activity_logs (Audit Trail)
         try {
             $stmtLog = $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at)
-                                     VALUES (:user_id, :user_name, :user_role, 'REMIND_PROOF', 'ASSIGNMENT', :target_id, :details, :ip_address, datetime('now', 'localtime'))");
+                                     VALUES (:user_id, :user_name, :user_role, 'REMIND_PROOF', 'ASSIGNMENT', :target_id, :details, :ip_address, GETDATE())");
             $stmtLog->execute([
                 ':user_id' => $this->currentUser['id'] ?? 1,
                 ':user_name' => $lecturerName,
@@ -882,7 +886,7 @@ class DashboardController extends BaseController
         $passwordHash = password_hash($rawPassword, PASSWORD_DEFAULT);
 
         $stmtInsert = $db->prepare("INSERT INTO users (student_code, full_name, email, password_hash, phone, role_id, department, skills, is_active, created_at)
-                                     VALUES (:student_code, :full_name, :email, :password_hash, :phone, :role_id, :department, :skills, 1, datetime('now', 'localtime'))");
+                                     VALUES (:student_code, :full_name, :email, :password_hash, :phone, :role_id, :department, :skills, 1, GETDATE())");
         $stmtInsert->execute([
             ':student_code' => $studentCode,
             ':full_name' => $fullName,
@@ -980,7 +984,7 @@ class DashboardController extends BaseController
     {
         try {
             $db = Database::getInstance()->getConnection();
-            $stmt = $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (:user_id, :user_name, :user_role, :action, :target_type, :target_id, :details, :ip_address, datetime('now', 'localtime'))");
+            $stmt = $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (:user_id, :user_name, :user_role, :action, :target_type, :target_id, :details, :ip_address, GETDATE())");
             $stmt->execute([
                 ':user_id' => $this->currentUser['id'] ?? null,
                 ':user_name' => $this->currentUser['full_name'] ?? 'Hệ thống',
@@ -1041,7 +1045,7 @@ class DashboardController extends BaseController
 
         // 1. Ghi nhật ký kiểm toán hệ thống
         try {
-            $stmtLog = $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (:uid, :uname, :urole, 'DELETE_ACCOUNT', 'USER', :tid, :details, :ip, datetime('now', 'localtime'))");
+            $stmtLog = $db->prepare("INSERT INTO activity_logs (user_id, user_name, user_role, action, target_type, target_id, details, ip_address, created_at) VALUES (:uid, :uname, :urole, 'DELETE_ACCOUNT', 'USER', :tid, :details, :ip, GETDATE())");
             $stmtLog->execute([
                 ":uid" => $userId,
                 ":uname" => $this->currentUser["full_name"] ?? "User",
@@ -1055,7 +1059,7 @@ class DashboardController extends BaseController
         }
 
         // 2. Vô hiệu hóa tài khoản (Soft delete bảo toàn dữ liệu đối soát kế toán)
-        $stmtDel = $db->prepare("UPDATE users SET is_active = 0, updated_at = datetime('now', 'localtime') WHERE id = :uid");
+        $stmtDel = $db->prepare("UPDATE users SET is_active = 0, updated_at = GETDATE() WHERE id = :uid");
         $stmtDel->execute([":uid" => $userId]);
 
         // 3. Xóa session

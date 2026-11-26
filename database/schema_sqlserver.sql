@@ -3,13 +3,13 @@
 -- SCRIPT CƠ SỞ DỮ LIỆU MICROSOFT SQL SERVER 2022 (T-SQL) CHUẨN 3NF
 -- =====================================================================
 
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'PolyMee_DB')
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Polymeet')
 BEGIN
-    CREATE DATABASE PolyMee_DB COLLATE Vietnamese_CI_AS;
+    CREATE DATABASE Polymeet COLLATE Vietnamese_CI_AS;
 END;
 GO
 
-USE PolyMee_DB;
+USE Polymeet;
 GO
 
 -- XÓA BẢNG NẾU ĐÃ TỒN TẠI THEO THỨ TỰ RÀNG BUỘC

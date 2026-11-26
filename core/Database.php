@@ -35,7 +35,7 @@ class Database
                 $this->pdo = new PDO($dsn, DB_USERNAME, DB_PASSWORD);
             } elseif ($connection === 'sqlsrv') {
                 $dsn = sprintf(
-                    'sqlsrv:Server=%s,%s;Database=%s;TrustServerCertificate=true',
+                    'sqlsrv:Server=%s,%s;Database=%s;Encrypt=0;TrustServerCertificate=1',
                     DB_SQLSRV_HOST,
                     DB_SQLSRV_PORT,
                     DB_SQLSRV_DB

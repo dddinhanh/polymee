@@ -14,10 +14,10 @@ class UserModel extends BaseModel
 
     public function findById(int $id): ?array
     {
-        $sql = "SELECT u.*, r.name as role_name 
+        $sql = "SELECT {$this->oneRowSelectPrefix()}u.*, r.name as role_name 
                 FROM users u 
                 LEFT JOIN roles r ON u.role_id = r.id 
-                WHERE u.id = :id LIMIT 1";
+                WHERE u.id = :id{$this->oneRowSelectSuffix()}";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -27,10 +27,10 @@ class UserModel extends BaseModel
 
     public function findByEmail(string $email): ?array
     {
-        $sql = "SELECT u.*, r.name as role_name 
+        $sql = "SELECT {$this->oneRowSelectPrefix()}u.*, r.name as role_name 
                 FROM users u 
                 LEFT JOIN roles r ON u.role_id = r.id 
-                WHERE u.email = :email LIMIT 1";
+                WHERE u.email = :email{$this->oneRowSelectSuffix()}";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
@@ -40,10 +40,10 @@ class UserModel extends BaseModel
 
     public function findByStudentCode(string $code): ?array
     {
-        $sql = "SELECT u.*, r.name as role_name 
+        $sql = "SELECT {$this->oneRowSelectPrefix()}u.*, r.name as role_name 
                 FROM users u 
                 LEFT JOIN roles r ON u.role_id = r.id 
-                WHERE u.student_code = :code LIMIT 1";
+                WHERE u.student_code = :code{$this->oneRowSelectSuffix()}";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':code', $code, PDO::PARAM_STR);
         $stmt->execute();
@@ -56,12 +56,13 @@ class UserModel extends BaseModel
      */
     public function authenticate(string $account, string $password): ?array
     {
-        $sql = "SELECT u.*, r.name as role_name 
+        $sql = "SELECT {$this->oneRowSelectPrefix()}u.*, r.name as role_name 
                 FROM users u 
                 LEFT JOIN roles r ON u.role_id = r.id 
-                WHERE u.email = :acc OR u.student_code = :acc LIMIT 1";
+                WHERE u.email = :email_acc OR u.student_code = :code_acc{$this->oneRowSelectSuffix()}";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':acc', $account, PDO::PARAM_STR);
+        $stmt->bindValue(':email_acc', $account, PDO::PARAM_STR);
+        $stmt->bindValue(':code_acc', $account, PDO::PARAM_STR);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

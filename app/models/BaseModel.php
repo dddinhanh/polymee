@@ -17,6 +17,23 @@ abstract class BaseModel
     }
 
     /**
+     * Chọn một bản ghi theo cú pháp tương ứng với hệ quản trị CSDL.
+     */
+    protected function oneRowSelectPrefix(): string
+    {
+        return $this->db->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlsrv'
+            ? 'TOP (1) '
+            : '';
+    }
+
+    protected function oneRowSelectSuffix(): string
+    {
+        return $this->db->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlsrv'
+            ? ''
+            : ' LIMIT 1';
+    }
+
+    /**
      * Lấy toàn bộ bản ghi trong bảng
      */
     public function all(): array
@@ -31,7 +48,7 @@ abstract class BaseModel
      */
     public function find(int $id): ?array
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = :id LIMIT 1";
+        $sql = "SELECT {$this->oneRowSelectPrefix()}* FROM {$this->table} WHERE id = :id{$this->oneRowSelectSuffix()}";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();

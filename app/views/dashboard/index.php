@@ -2862,7 +2862,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
             <!-- Right: Action Controls (Apple macOS Menubar Standard - AI & Notifications On Top) -->
             <div class="d-flex align-items-center gap-2 ms-auto flex-nowrap flex-shrink-0">
                 <!-- NÚT TẠO LỊCH (Chuẩn Mockup Image 10) -->
-                <button type="button" class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1.5 fw-semibold shadow-xs" id="btnCreateCalendarSchedule" onclick="showAddNoteModal()" style="border-radius: 8px; background: #2563EB; border: none; font-size: 12.5px; padding: 6px 14px;">
+                <button type="button" class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1.5 fw-semibold shadow-xs" id="btnCreateCalendarSchedule" onclick="openCreateShiftModal()" style="border-radius: 8px; background: #2563EB; border: none; font-size: 12.5px; padding: 6px 14px;">
                     <i class="bi bi-plus-lg"></i> Tạo lịch
                 </button>
 
@@ -5275,8 +5275,129 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                  PANEL 11: DASHBOARD BÁO CÁO & VIỆC CẦN XỬ LÝ (OVERVIEW)
                  ========================================================= -->
             <section id="panelOverviewReport" style="display:none !important; flex-direction: column;" class="spa-panel fade-in-up">
-                
-                <!-- 4 Bento KPI Cards Chuẩn Mockup Image 13 -->
+                <?php
+                $ovShifts      = is_array($shifts ?? null) ? $shifts : [];
+                $ovAssignments = is_array($accountingList ?? null) ? $accountingList : [];
+                $ovUserId      = (int)($currentUser['id'] ?? 0);
+                $ovRoleId      = (int)($currentUser['role_id'] ?? 4);
+                $isPersonalOv  = in_array($ovRoleId, [4, 6], true); // CTV / Media chỉ xem dữ liệu của mình
+
+                // Lọc phân công theo vai trò
+                $myAssignments = $isPersonalOv
+                    ? array_values(array_filter($ovAssignments, fn($a) => (int)($a['user_id'] ?? 0) === $ovUserId))
+                    : $ovAssignments;
+
+                // 1. Tính 4 chỉ số KPI từ DB
+                $nowTs = time();
+                $upcomingShifts = array_values(array_filter($ovShifts, function ($s) use ($nowTs, $isPersonalOv) {
+                    $startTs = !empty($s['start_time']) ? strtotime($s['start_time']) : 0;
+                    if ($startTs < $nowTs) return false;
+                    if ($isPersonalOv && empty($s['is_registered_by_me'])) return false;
+                    return true;
+                }));
+                usort($upcomingShifts, fn($a, $b) => strtotime($a['start_time']) <=> strtotime($b['start_time']));
+
+                $kpiUpcomingCount     = count($upcomingShifts);
+                $kpiActiveJobsCount   = count($myAssignments);
+                $kpiPendingProofCount = count(array_filter($myAssignments, fn($a) => empty($a['lecturer_verified'])));
+                $verifiedCount        = count(array_filter($myAssignments, fn($a) => !empty($a['lecturer_verified'])));
+                $kpiCompletionRate    = $kpiActiveJobsCount > 0 ? round(($verifiedCount / $kpiActiveJobsCount) * 100, 1) : 0;
+
+                // 2. Tổng hợp danh sách "Việc cần làm" từ dữ liệu thật
+                $ovTodoItems = [];
+                foreach ($myAssignments as $a) {
+                    $hasProof   = !empty($a['proof_image_url']) || !empty($a['proof_drive_url']);
+                    $isVerified = !empty($a['lecturer_verified']);
+                    $isPaid     = ($a['school_status'] ?? '') === 'Signed_Paid' || ($a['accounting_status'] ?? '') === 'Paid';
+
+                    if (!$hasProof) {
+                        $ovTodoItems[] = [
+                            'icon'       => 'bi-upload',
+                            'icon_bg'    => '#FFF7ED',
+                            'icon_color' => '#EA580C',
+                            'title'      => 'Nộp minh chứng: ' . ($a['shift_name'] ?? 'Ca trực'),
+                            'sub'        => ($a['event_title'] ?? 'Sự kiện') . (!empty($a['start_time']) ? ' • ' . date('d/m/Y', strtotime($a['start_time'])) : ''),
+                            'badge'      => 'Cần thực hiện',
+                            'badge_bg'   => '#FFF7ED',
+                            'badge_color'=> '#EA580C',
+                            'btn_text'   => 'Nộp ngay',
+                            'btn_class'  => 'btn-primary fw-bold',
+                            'btn_style'  => 'background: #2563EB;',
+                            'page'       => $isPersonalOv ? 'my-proof-submission' : 'submissions',
+                        ];
+                    } elseif (!$isVerified) {
+                        $ovTodoItems[] = [
+                            'icon'       => 'bi-clock-history',
+                            'icon_bg'    => '#FEF3C7',
+                            'icon_color' => '#D97706',
+                            'title'      => ($isPersonalOv ? 'Chờ duyệt minh chứng: ' : 'Cần duyệt minh chứng: ') . ($a['shift_name'] ?? 'Ca trực'),
+                            'sub'        => ($a['full_name'] ?? '') . ' • ' . ($a['event_title'] ?? ''),
+                            'badge'      => 'Chờ duyệt',
+                            'badge_bg'   => '#FEF3C7',
+                            'badge_color'=> '#D97706',
+                            'btn_text'   => $isPersonalOv ? 'Xem tiến độ' : 'Duyệt ngay',
+                            'btn_class'  => $isPersonalOv ? 'btn-light border fw-medium text-dark' : 'btn-primary fw-bold',
+                            'btn_style'  => $isPersonalOv ? '' : 'background: #2563EB;',
+                            'page'       => $isPersonalOv ? 'my-proof-submission' : 'submissions',
+                        ];
+                    } elseif (!$isPaid) {
+                        $ovTodoItems[] = [
+                            'icon'       => 'bi-file-earmark-text',
+                            'icon_bg'    => '#FAF5FF',
+                            'icon_color' => '#9333EA',
+                            'title'      => 'Hợp đồng chờ chi trả: ' . ($a['contract_code'] ?? $a['shift_name'] ?? 'Hồ sơ'),
+                            'sub'        => ($a['event_title'] ?? 'Sự kiện') . ' • ' . number_format((float)($a['remuneration_amount'] ?? 0)) . ' đ',
+                            'badge'      => 'Chờ xác nhận',
+                            'badge_bg'   => '#FEF3C7',
+                            'badge_color'=> '#D97706',
+                            'btn_text'   => 'Xem hồ sơ',
+                            'btn_class'  => 'btn-light border fw-medium text-dark',
+                            'btn_style'  => '',
+                            'page'       => 'contract-dossier',
+                        ];
+                    } else {
+                        $ovTodoItems[] = [
+                            'icon'       => 'bi-patch-check-fill',
+                            'icon_bg'    => '#F0FDF4',
+                            'icon_color' => '#16A34A',
+                            'title'      => ($a['shift_name'] ?? 'Ca trực'),
+                            'sub'        => ($a['event_title'] ?? 'Sự kiện') . ' • ' . number_format((float)($a['remuneration_amount'] ?? 0)) . ' đ',
+                            'badge'      => 'Đã hoàn tất & Chi trả',
+                            'badge_bg'   => '#F0FDF4',
+                            'badge_color'=> '#16A34A',
+                            'btn_text'   => 'Xem hợp đồng',
+                            'btn_class'  => 'btn-light border fw-medium text-dark',
+                            'btn_style'  => '',
+                            'page'       => 'contract-dossier',
+                        ];
+                    }
+                }
+
+                // Bổ sung các ca sắp tới vào đầu việc nếu danh sách còn ngắn
+                foreach (array_slice($upcomingShifts, 0, 3) as $s) {
+                    $ovTodoItems[] = [
+                        'icon'       => 'bi-calendar-check',
+                        'icon_bg'    => '#EFF6FF',
+                        'icon_color' => '#2563EB',
+                        'title'      => 'Ca trực ' . date('H:i', strtotime($s['start_time'])) . ' – ' . date('H:i', strtotime($s['end_time'])),
+                        'sub'        => ($s['name'] ?? '') . ' • ' . ($s['event_title'] ?? ''),
+                        'badge'      => !empty($s['is_registered_by_me']) ? 'Đã phân công' : 'Sắp diễn ra',
+                        'badge_bg'   => '#F0FDF4',
+                        'badge_color'=> '#16A34A',
+                        'btn_text'   => 'Xem chi tiết',
+                        'btn_class'  => 'btn-light border fw-medium text-dark',
+                        'btn_style'  => '',
+                        'page'       => 'calendar',
+                    ];
+                }
+                $ovTodoItems = array_slice($ovTodoItems, 0, 6);
+
+                // Helper đổi thứ sang tiếng Việt (CN, T2..T7)
+                $vnWeekdays = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+                $timelineShifts = array_slice($upcomingShifts, 0, 5);
+                ?>
+
+                <!-- 4 Bento KPI Cards (Dữ liệu thật từ SQL Server) -->
                 <div class="row g-2.5 mb-2 flex-shrink-0">
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="saas-card saas-kpi-card p-2.5 d-flex align-items-center gap-2.5">
@@ -5284,7 +5405,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <i class="bi bi-calendar3 fs-5"></i>
                             </div>
                             <div>
-                                <div class="saas-kpi-val num-tabular">2</div>
+                                <div class="saas-kpi-val num-tabular"><?= $kpiUpcomingCount ?></div>
                                 <div class="saas-kpi-title">Ca sắp tới</div>
                             </div>
                         </div>
@@ -5295,7 +5416,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <i class="bi bi-layers fs-5"></i>
                             </div>
                             <div>
-                                <div class="saas-kpi-val num-tabular">20</div>
+                                <div class="saas-kpi-val num-tabular"><?= $kpiActiveJobsCount ?></div>
                                 <div class="saas-kpi-title">Công việc đang nhận</div>
                             </div>
                         </div>
@@ -5306,7 +5427,7 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <i class="bi bi-clock-history fs-5"></i>
                             </div>
                             <div>
-                                <div class="saas-kpi-val num-tabular">2</div>
+                                <div class="saas-kpi-val num-tabular"><?= $kpiPendingProofCount ?></div>
                                 <div class="saas-kpi-title">Minh chứng chờ duyệt</div>
                             </div>
                         </div>
@@ -5317,95 +5438,62 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
                                 <i class="bi bi-patch-check fs-5"></i>
                             </div>
                             <div>
-                                <div class="saas-kpi-val num-tabular">87.5%</div>
+                                <div class="saas-kpi-val num-tabular"><?= $kpiCompletionRate ?>%</div>
                                 <div class="saas-kpi-title">Tỷ lệ hoàn thành</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Thân Dashboard: 2 Cột Chuẩn Mockup Image 13 -->
+                <!-- Thân Dashboard: 2 Cột -->
                 <div class="row g-2.5 mb-2 flex-1 min-h-0 overflow-hidden">
                     
-                    <!-- Cột Trái: Việc Cần Làm Hôm Nay ⓘ -->
+                    <!-- Cột Trái: Việc Cần Làm -->
                     <div class="col-12 col-lg-7 h-100 min-h-0 d-flex flex-column">
                         <div class="card border-0 rounded-3 shadow-xs h-100 p-3 d-flex flex-column overflow-hidden" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
                             <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom flex-shrink-0" style="border-color: #F1F5F9 !important;">
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-check2-square text-primary" style="font-size: 16px;"></i>
-                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Việc cần làm hôm nay</h6>
-                                    <i class="bi bi-info-circle text-muted" style="font-size: 12px;" title="Danh sách các việc ưu tiên cần bạn xử lý trong ngày"></i>
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 14.5px;">Việc cần làm</h6>
+                                    <i class="bi bi-info-circle text-muted" style="font-size: 12px;" title="Danh sách các việc ưu tiên cần xử lý từ hệ thống"></i>
                                 </div>
                             </div>
 
                             <div class="d-flex flex-column gap-2 overflow-y-auto flex-1 min-h-0 pe-1">
-                                <!-- Todo Item 1 -->
-                                <div class="dash-todo-card">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #FFF7ED; color: #EA580C; font-size: 17px;">
-                                            <i class="bi bi-upload"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="fw-bold text-dark mb-0.5" style="font-size: 14px;">Nộp minh chứng hậu cần</h6>
-                                            <div class="text-muted small" style="font-size: 12px;">Ca 2 • Chung kết KN trẻ</div>
-                                        </div>
+                                <?php if (empty($ovTodoItems)): ?>
+                                    <div class="text-center text-muted py-5 my-auto">
+                                        <i class="bi bi-check-circle fs-2 d-block mb-2 text-success opacity-75"></i>
+                                        <div class="fw-semibold text-dark" style="font-size: 13.5px;">Không có việc cần xử lý</div>
+                                        <small>Tất cả ca trực và hồ sơ nghiệm thu hiện đã hoàn tất.</small>
                                     </div>
-                                    <div class="d-flex align-items-center gap-2.5">
-                                        <span class="badge rounded-pill" style="background: #FFF7ED; color: #EA580C; font-size: 11px; padding: 4px 10px; font-weight: 600;">
-                                            ● Cần thực hiện
-                                        </span>
-                                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-1.5 fw-bold" onclick="navigateToPage('submissions')" style="font-size: 12px; background: #2563EB;">
-                                            Nộp ngay
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Todo Item 2 -->
-                                <div class="dash-todo-card">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #EFF6FF; color: #2563EB; font-size: 17px;">
-                                            <i class="bi bi-calendar-check"></i>
+                                <?php else: ?>
+                                    <?php foreach ($ovTodoItems as $todo): ?>
+                                    <div class="dash-todo-card">
+                                        <div class="d-flex align-items-center gap-3 min-w-0">
+                                            <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; background: <?= $todo['icon_bg'] ?>; color: <?= $todo['icon_color'] ?>; font-size: 17px;">
+                                                <i class="bi <?= $todo['icon'] ?>"></i>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <h6 class="fw-bold text-dark mb-0.5 text-truncate" style="font-size: 14px;"><?= htmlspecialchars($todo['title']) ?></h6>
+                                                <div class="text-muted small text-truncate" style="font-size: 12px;"><?= htmlspecialchars($todo['sub']) ?></div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h6 class="fw-bold text-dark mb-0.5" style="font-size: 14px;">Ca trực hôm nay 13:00 – 17:00</h6>
-                                            <div class="text-muted small" style="font-size: 12px;">Bảo trì phòng máy Lab AI</div>
+                                        <div class="d-flex align-items-center gap-2.5 flex-shrink-0">
+                                            <span class="badge rounded-pill" style="background: <?= $todo['badge_bg'] ?>; color: <?= $todo['badge_color'] ?>; font-size: 11px; padding: 4px 10px; font-weight: 600;">
+                                                ● <?= htmlspecialchars($todo['badge']) ?>
+                                            </span>
+                                            <button type="button" class="btn btn-sm <?= $todo['btn_class'] ?> rounded-pill px-3 py-1.5" onclick="navigateToPage('<?= $todo['page'] ?>')" style="font-size: 12px; <?= $todo['btn_style'] ?>">
+                                                <?= htmlspecialchars($todo['btn_text']) ?>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-2.5">
-                                        <span class="badge rounded-pill" style="background: #F0FDF4; color: #16A34A; font-size: 11px; padding: 4px 10px; font-weight: 600;">
-                                            ● Đã phân công
-                                        </span>
-                                        <button type="button" class="btn btn-sm btn-light border rounded-pill px-3 py-1.5 fw-medium text-dark" onclick="navigateToPage('calendar')" style="font-size: 12px;">
-                                            Xem chi tiết
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Todo Item 3 -->
-                                <div class="dash-todo-card">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #FAF5FF; color: #9333EA; font-size: 17px;">
-                                            <i class="bi bi-file-earmark-text"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="fw-bold text-dark mb-0.5" style="font-size: 14px;">Hợp đồng chờ xác nhận</h6>
-                                            <div class="text-muted small" style="font-size: 12px;">Đợt quyết toán tháng 11</div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2.5">
-                                        <span class="badge rounded-pill" style="background: #FEF3C7; color: #D97706; font-size: 11px; padding: 4px 10px; font-weight: 600;">
-                                            ● Chờ xác nhận
-                                        </span>
-                                        <button type="button" class="btn btn-sm btn-light border rounded-pill px-3 py-1.5 fw-medium text-dark" onclick="navigateToPage('contract-dossier')" style="font-size: 12px;">
-                                            Xem hồ sơ
-                                        </button>
-                                    </div>
-                                </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Cột Phải: Lịch Sắp Tới → (Timeline dọc) -->
+                    <!-- Cột Phải: Lịch Sắp Tới (Timeline dọc) -->
                     <div class="col-12 col-lg-5 h-100 min-h-0 d-flex flex-column">
                         <div class="card border-0 rounded-3 shadow-xs h-100 p-3 d-flex flex-column overflow-hidden" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF;">
                             <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom flex-shrink-0" style="border-color: #F1F5F9 !important;">
@@ -5420,113 +5508,45 @@ $ctvRoster = array_values(array_filter($allUsers ?? [], fn($u) => in_array((int)
 
                             <!-- Timeline Dọc -->
                             <div class="d-flex flex-column gap-2.5 pt-1 overflow-y-auto flex-1 min-h-0 pe-1">
-                                <!-- Timeline Item 1 -->
-                                <div class="dash-timeline-item">
-                                    <div class="dash-timeline-date">
-                                        <div class="dash-timeline-day">T3</div>
-                                        <div class="dash-timeline-num">19</div>
+                                <?php if (empty($timelineShifts)): ?>
+                                    <div class="text-center text-muted py-5 my-auto">
+                                        <i class="bi bi-calendar-x fs-2 d-block mb-2 opacity-50"></i>
+                                        <div class="fw-semibold text-dark" style="font-size: 13.5px;">Chưa có lịch sắp tới</div>
+                                        <small>Các ca trực mới tạo sẽ tự động hiển thị tại đây.</small>
                                     </div>
-                                    <div class="dash-timeline-line"></div>
-                                    <div class="dash-timeline-dot" style="background: #2563EB;"></div>
-                                    <div class="flex-1">
-                                        <h6 class="fw-bold text-dark mb-0.5" style="font-size: 13.5px;">Hỗ trợ sự kiện</h6>
-                                        <div class="text-muted small" style="font-size: 12px;">09:00 – 12:00</div>
+                                <?php else: ?>
+                                    <?php foreach ($timelineShifts as $idx => $s):
+                                        $ts        = strtotime($s['start_time']);
+                                        $dayLabel  = $vnWeekdays[(int)date('w', $ts)];
+                                        $dayNum    = date('d', $ts);
+                                        $timeRange = date('H:i', $ts) . ' – ' . date('H:i', strtotime($s['end_time']));
+                                        $isMine    = !empty($s['is_registered_by_me']);
+                                        $dotColor  = $isMine ? '#16A34A' : (($s['shift_type'] ?? '') === 'MEDIA' ? '#9333EA' : '#2563EB');
+                                        $badgeBg   = $isMine ? '#F0FDF4' : '#EFF6FF';
+                                        $badgeText = $isMine ? '#16A34A' : '#2563EB';
+                                        $badgeLbl  = $isMine ? 'Đã phân công' : 'Sắp diễn ra';
+                                    ?>
+                                    <div class="dash-timeline-item" style="cursor: pointer;" onclick="openShiftDrawer(<?= (int)$s['id'] ?>)">
+                                        <div class="dash-timeline-date">
+                                            <div class="dash-timeline-day"><?= $dayLabel ?></div>
+                                            <div class="dash-timeline-num"><?= $dayNum ?></div>
+                                        </div>
+                                        <div class="dash-timeline-line"></div>
+                                        <div class="dash-timeline-dot" style="background: <?= $dotColor ?>;"></div>
+                                        <div class="flex-1 min-w-0">
+                                            <h6 class="fw-bold text-dark mb-0.5 text-truncate" style="font-size: 13.5px;"><?= htmlspecialchars($s['name'] ?? 'Ca trực') ?></h6>
+                                            <div class="text-muted small text-truncate" style="font-size: 12px;"><?= $timeRange ?> • <?= htmlspecialchars($s['event_title'] ?? '') ?></div>
+                                        </div>
+                                        <span class="badge rounded-pill flex-shrink-0" style="background: <?= $badgeBg ?>; color: <?= $badgeText ?>; font-size: 11px; padding: 4px 10px;">
+                                            <?= $badgeLbl ?>
+                                        </span>
                                     </div>
-                                    <span class="badge rounded-pill" style="background: #F0FDF4; color: #16A34A; font-size: 11px; padding: 4px 10px;">
-                                        Đã phân công
-                                    </span>
-                                </div>
-
-                                <!-- Timeline Item 2 -->
-                                <div class="dash-timeline-item">
-                                    <div class="dash-timeline-date">
-                                        <div class="dash-timeline-day">T4</div>
-                                        <div class="dash-timeline-num">20</div>
-                                    </div>
-                                    <div class="dash-timeline-line"></div>
-                                    <div class="dash-timeline-dot" style="background: #9333EA;"></div>
-                                    <div class="flex-1">
-                                        <h6 class="fw-bold text-dark mb-0.5" style="font-size: 13.5px;">Bảo trì Lab AI</h6>
-                                        <div class="text-muted small" style="font-size: 12px;">13:00 – 17:00</div>
-                                    </div>
-                                    <span class="badge rounded-pill" style="background: #EFF6FF; color: #2563EB; font-size: 11px; padding: 4px 10px;">
-                                        Sắp diễn ra
-                                    </span>
-                                </div>
-
-                                <!-- Timeline Item 3 -->
-                                <div class="dash-timeline-item">
-                                    <div class="dash-timeline-date">
-                                        <div class="dash-timeline-day">T6</div>
-                                        <div class="dash-timeline-num">22</div>
-                                    </div>
-                                    <div class="dash-timeline-line"></div>
-                                    <div class="dash-timeline-dot" style="background: #94A3B8;"></div>
-                                    <div class="flex-1">
-                                        <h6 class="fw-bold text-dark mb-0.5" style="font-size: 13.5px;">Hậu cần sự kiện</h6>
-                                        <div class="text-muted small" style="font-size: 12px;">08:00 – 12:00</div>
-                                    </div>
-                                    <span class="badge rounded-pill" style="background: #F1F5F9; color: #64748B; font-size: 11px; padding: 4px 10px;">
-                                        Dự kiến
-                                    </span>
-                                </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 3 Thẻ Điều Hướng Nhanh Chân Trang (Quick Shortcuts) -->
-                <div class="row g-2.5 flex-shrink-0">
-                    <div class="col-12 col-md-4">
-                        <div class="card border-0 rounded-3 shadow-xs p-2.5 cursor-pointer" onclick="navigateToPage('calendar')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2.5">
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; background: #EFF6FF; color: #2563EB;">
-                                        <i class="bi bi-calendar3"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 13.5px;">Lịch trung tâm</h6>
-                                        <div class="text-muted small" style="font-size: 11.5px;">Xem sự kiện và ca trực</div>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-right text-muted"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="card border-0 rounded-3 shadow-xs p-2.5 cursor-pointer" onclick="navigateToPage('my-shifts')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2.5">
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; background: #F0FDF4; color: #16A34A;">
-                                        <i class="bi bi-briefcase"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 13.5px;">Công việc của tôi</h6>
-                                        <div class="text-muted small" style="font-size: 11.5px;">Theo dõi công việc đang nhận</div>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-right text-muted"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="card border-0 rounded-3 shadow-xs p-2.5 cursor-pointer" onclick="navigateToPage('contract-dossier')" style="border: 1px solid #E2E8F0 !important; background: #FFFFFF; transition: all 0.15s ease;">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2.5">
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; background: #FAF5FF; color: #9333EA;">
-                                        <i class="bi bi-file-earmark-check"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold mb-0.5 text-dark" style="font-size: 13.5px;">Nghiệm thu & Hợp đồng</h6>
-                                        <div class="text-muted small" style="font-size: 11.5px;">Quản lý nghiệm thu và hồ sơ</div>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-right text-muted"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <!-- =========================================================
                  PANEL 12: BUỔI HOẠT ĐỘNG & CA TRỰC PHÂN RÃ (SHIFTS & SESSIONS)
@@ -7931,76 +7951,6 @@ let currentSidebarTab = 'activities';
 let activeInspectorEventId = 2;
 let currentDayFilter = 'all';
 
-// Mock dữ liệu 4 hoạt động ngày 18/11/2026 giải quyết bài toán trùng lịch (Chuẩn Image 10)
-const day18Activities = [
-    {
-        id: 'act_lab_ai',
-        type: 'other', // Khác
-        title: 'Bảo trì phòng máy Lab AI',
-        time: '08:00 – 12:00',
-        location: 'Phòng CSC, Tòa B',
-        description: 'Kiểm tra đường truyền và bổ sung mô hình AI.',
-        status: 'Đang thực hiện',
-        statusBg: '#E0F2FE',
-        statusColor: '#0369A1',
-        hasDot: true,
-        borderColor: '#0284C7',
-        icon: 'bi-calendar3',
-        iconColor: '#0284C7',
-        eventId: 2
-    },
-    {
-        id: 'act_shift_1',
-        type: 'shift', // Ca trực
-        title: 'Ca 1: Hỗ trợ kỹ thuật',
-        time: '13:00 – 17:00',
-        location: 'Phòng Lab, Tòa B',
-        ctvInfo: '1/3 CTV',
-        allowance: '150.000 đ',
-        status: 'Đang diễn ra',
-        statusBg: '#DCFCE7',
-        statusColor: '#15803D',
-        hasDot: false,
-        borderColor: '#9333EA',
-        icon: 'bi-clock-history',
-        iconColor: '#9333EA',
-        shiftId: 101,
-        eventId: 2
-    },
-    {
-        id: 'act_shift_2',
-        type: 'shift', // Ca trực
-        title: 'Ca 2: Setup sân khấu',
-        time: '17:30 – 18:30',
-        location: 'Sân khấu ngoài trời',
-        ctvInfo: '0/2 CTV',
-        status: 'Chờ phân công',
-        statusBg: '#FFF7ED',
-        statusColor: '#EA580C',
-        hasDot: false,
-        borderColor: '#EA580C',
-        icon: 'bi-calendar3',
-        iconColor: '#EA580C',
-        shiftId: 102,
-        eventId: 1
-    },
-    {
-        id: 'act_event_btc',
-        type: 'event', // Sự kiện
-        title: 'Họp tổng kết BTC',
-        time: '19:00 – 21:00',
-        location: 'Phòng họp 301, Tòa A',
-        description: 'Họp rà soát công tác chuẩn bị.',
-        status: 'Sắp diễn ra',
-        statusBg: '#FAF5FF',
-        statusColor: '#7E22CE',
-        hasDot: false,
-        borderColor: '#16A34A',
-        icon: 'bi-calendar-check',
-        iconColor: '#16A34A',
-        eventId: 1
-    }
-];
 
 let shiftModalInstance = null;
 let aiModalInstance = null;
@@ -9375,80 +9325,9 @@ let currentCalSidebarMode = 'day'; // 'day' hoặc 'upcoming'
  * Trả về danh sách hoạt động, sự kiện và ca trực cho BẤT KỲ NGÀY NÀO
  */
 function getDayActivities(dateStr) {
-    if (dateStr === '2026-11-18') {
-        return day18Activities;
-    }
-
     const activities = [];
 
-    // 1. Dữ liệu chuẩn các ngày trọng điểm trong tháng 11/2026
-    if (dateStr === '2026-11-15') {
-        activities.push(
-            { id: 'act_15_ev', type: 'event', title: 'Khai mạc TechDay 2026: AI & Chuyển Đổi Số', time: '07:30 – 17:30', location: 'Hội trường Trịnh Văn Bô', description: 'Ngày hội công nghệ quy mô 20 doanh nghiệp CNTT hàng đầu và workshop AI Agent.', status: 'Đang diễn ra', statusBg: '#EFF6FF', statusColor: '#1D4ED8', borderColor: '#2563EB', icon: 'bi-megaphone', iconColor: '#2563EB', eventId: 1, ctvInfo: '12 CTV tham gia' },
-            { id: 'act_15_s1', type: 'shift', title: 'Ca 1: Setup Sân Khấu & Âm Thanh Ánh Sáng', time: '06:30 – 09:30', location: 'Hội trường Trịnh Văn Bô', description: 'Kiểm tra 4 micro không dây và 2 màn hình LED phụ.', status: 'Đã hoàn thành', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#16A34A', icon: 'bi-calendar-event', iconColor: '#16A34A', eventId: 1, ctvInfo: '3/4 CTV', allowance: '150.000 đ' },
-            { id: 'act_15_s2', type: 'shift', title: 'Ca 2: Lễ Tân Đón Khách & Check-in Doanh Nghiệp', time: '07:30 – 11:30', location: 'Sảnh chính Tòa T', description: 'Đón tiếp đại diện các doanh nghiệp CNTT đối tác và phát tài liệu.', status: 'Đã hoàn thành', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#059669', icon: 'bi-calendar-event', iconColor: '#059669', eventId: 1, ctvInfo: '5/6 CTV', allowance: '150.000 đ' },
-            { id: 'act_15_s3', type: 'shift', title: 'Ca 3: Media Phóng Sự Ảnh & Recap Clip', time: '08:00 – 12:00', location: 'Toàn khuôn viên trường', description: 'Chụp ảnh sự kiện và quay recap 60s.', status: 'Đã hoàn thành', statusBg: '#FFFBEB', statusColor: '#B45309', borderColor: '#D97706', icon: 'bi-camera-video', iconColor: '#D97706', eventId: 1, ctvInfo: '2/3 CTV', allowance: '200.000 đ' }
-        );
-        return activities;
-    }
-
-    if (dateStr === '2026-11-20') {
-        activities.push(
-            { id: 'act_20_ev', type: 'event', title: 'Khai Mạc Giải Thể Thao Sinh Viên FPoly 2026', time: '07:00 – 11:30', location: 'Sân Central Yard FPoly', description: 'Giải đấu thể thao Poly Champion môn bóng đá và bóng bàn.', status: 'Sắp diễn ra', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#16A34A', icon: 'bi-trophy', iconColor: '#16A34A', eventId: 3, ctvInfo: '5 CTV' },
-            { id: 'act_20_s1', type: 'shift', title: 'Ca 1: Trọng Tài Bàn & Hậu Cần Khai Mạc', time: '06:30 – 11:30', location: 'Sân Central Yard', description: 'Ghi biên bản thi đấu 8 trận vòng bảng.', status: 'Đã xác nhận', statusBg: '#EFF6FF', statusColor: '#1D4ED8', borderColor: '#2563EB', icon: 'bi-calendar-event', iconColor: '#2563EB', eventId: 3, ctvInfo: '4/8 CTV', allowance: '150.000 đ' },
-            { id: 'act_20_s2', type: 'shift', title: 'Ca 2: Media Phóng Sự Thể Thao', time: '07:30 – 11:30', location: 'Sân bóng đá & Central Yard', description: 'Ghi hình highlight những pha bóng đẹp.', status: 'Đang tuyển', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-camera', iconColor: '#EA580C', eventId: 3, ctvInfo: '1/2 CTV', allowance: '180.000 đ' }
-        );
-        return activities;
-    }
-
-    if (dateStr === '2026-11-22') {
-        activities.push(
-            { id: 'act_22_ev1', type: 'event', title: 'Triển Lãm Đồ Họa & Đa Phương Tiện FPoly Creative', time: '08:00 – 17:00', location: 'Phòng Triển Lãm Tòa B', description: 'Trưng bày hơn 100 tác phẩm đồ họa và phim hoạt hình sinh viên.', status: 'Sắp diễn ra', statusBg: '#FAF5FF', statusColor: '#7E22CE', borderColor: '#9333EA', icon: 'bi-palette', iconColor: '#9333EA', eventId: 4, ctvInfo: '3 ca trực' },
-            { id: 'act_22_ev2', type: 'event', title: 'Workshop: Đổi Mới Đào Tạo & Ứng Dụng AI', time: '13:30 – 17:30', location: 'Hội trường Trịnh Văn Bô', description: 'Tọa đàm chuyên môn cùng các chuyên gia EdTech.', status: 'Sắp diễn ra', statusBg: '#EFF6FF', statusColor: '#1D4ED8', borderColor: '#2563EB', icon: 'bi-laptop', iconColor: '#2563EB', eventId: 7, ctvInfo: '2 ca trực' },
-            { id: 'act_22_s1', type: 'shift', title: 'Ca 1: Hướng Dẫn Khách Tham Quan Triển Lãm', time: '07:30 – 12:00', location: 'Phòng Triển Lãm Tòa B', description: 'Hỗ trợ khách tham quan và bảo quản sản phẩm trưng bày.', status: 'Đang tuyển', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-calendar-event', iconColor: '#EA580C', eventId: 4, ctvInfo: '2/4 CTV', allowance: '150.000 đ' },
-            { id: 'act_22_s2', type: 'shift', title: 'Ca 2: Chụp Ảnh Macro Chi Tiết Tác Phẩm', time: '08:30 – 13:00', location: 'Phòng Triển Lãm Tòa B', description: 'Nhiếp ảnh sản phẩm đồ họa độ phân giải cao.', status: 'Đã xác nhận', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#16A34A', icon: 'bi-camera', iconColor: '#16A34A', eventId: 4, ctvInfo: '1/2 CTV', allowance: '200.000 đ' }
-        );
-        return activities;
-    }
-
-    if (dateStr === '2026-11-25') {
-        activities.push(
-            { id: 'act_25_ev', type: 'event', title: 'Chung Kết Cuộc Thi Khởi Nghiệp FPoly Biz 2026', time: '13:00 – 18:00', location: 'Hội trường Trịnh Văn Bô', description: 'Pitching 10 dự án Startup sinh viên trước Quỹ đầu tư.', status: 'Sắp diễn ra', statusBg: '#FFFBEB', statusColor: '#B45309', borderColor: '#F59E0B', icon: 'bi-award', iconColor: '#F59E0B', eventId: 5, ctvInfo: '6 CTV' },
-            { id: 'act_25_s1', type: 'shift', title: 'Ca 1: Đón Tiếp BGK & Quỹ Đầu Tư', time: '12:30 – 18:00', location: 'Sảnh VIP Hội trường', description: 'Đón tiếp các chuyên gia cố vấn và giám khảo doanh nghiệp.', status: 'Đang tuyển', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-people', iconColor: '#EA580C', eventId: 5, ctvInfo: '2/4 CTV', allowance: '180.000 đ' },
-            { id: 'act_25_s2', type: 'shift', title: 'Ca 2: Kỹ Thuật Trình Chiếu Pitching & Micro', time: '12:30 – 18:00', location: 'Khu vực kỹ thuật Hội trường', description: 'Vận hành slide và micro không dây cho 10 đội thi.', status: 'Đã xác nhận', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#16A34A', icon: 'bi-mic', iconColor: '#16A34A', eventId: 5, ctvInfo: '1/2 CTV', allowance: '180.000 đ' }
-        );
-        return activities;
-    }
-
-    if (dateStr === '2026-11-28') {
-        activities.push(
-            { id: 'act_28_ev', type: 'event', title: 'Ngày Hội Văn Hóa Ẩm Thực & Du Lịch Poly', time: '08:00 – 15:30', location: 'Sân Central Yard', description: 'Không gian văn hóa ẩm thực và hội thi pha chế Bartender.', status: 'Sắp diễn ra', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-cup-hot', iconColor: '#EA580C', eventId: 6, ctvInfo: '8 CTV' },
-            { id: 'act_28_s1', type: 'shift', title: 'Ca 1: Hỗ Trợ Gian Hàng Ẩm Thực Vùng Miền', time: '07:30 – 12:00', location: 'Khu gian hàng sân trường', description: 'Hỗ trợ setup bàn ghế và tiếp nước các gian hàng ẩm thực.', status: 'Đang tuyển', statusBg: '#FFF7ED', statusColor: '#C2410C', borderColor: '#EA580C', icon: 'bi-basket', iconColor: '#EA580C', eventId: 6, ctvInfo: '2/6 CTV', allowance: '150.000 đ' },
-            { id: 'act_28_s2', type: 'shift', title: 'Ca 2: Media Ghi Hình Hội Thi Bartender', time: '09:00 – 14:00', location: 'Sân khấu biểu diễn Bartender', description: 'Ghi hình các tiết mục pha chế nghệ thuật.', status: 'Đang tuyển', statusBg: '#EFF6FF', statusColor: '#1D4ED8', borderColor: '#2563EB', icon: 'bi-camera-video', iconColor: '#2563EB', eventId: 6, ctvInfo: '1/2 CTV', allowance: '200.000 đ' }
-        );
-        return activities;
-    }
-
-    if (dateStr === '2026-11-30') {
-        activities.push({
-            id: 'act_30_not', type: 'other', title: 'Hạn chót quyết toán thù lao tháng 11', time: '08:00 – 17:00', location: 'Phòng Hành chính - Ban Giám Hiệu', description: 'Ban Giám Hiệu tổng hợp danh sách nghiệm thu và chuyển khoản cho toàn bộ CTV.', status: 'Quan trọng', statusBg: '#FAF5FF', statusColor: '#7E22CE', borderColor: '#8B5CF6', icon: 'bi-wallet2', iconColor: '#8B5CF6', eventId: 1
-        });
-        return activities;
-    }
-
-    if (dateStr === '2026-11-06') {
-        activities.push({
-            id: 'act_06_meet', type: 'event', title: 'Họp Ban Tổ Chức & Phân Công Tháng 11', time: '09:00 – 11:30', location: 'Phòng họp 202, Tòa A', description: 'Phổ biến kế hoạch tháng công nghệ và chốt nhân sự ca trực.', status: 'Đã diễn ra', statusBg: '#F1F5F9', statusColor: '#475569', borderColor: '#94A3B8', icon: 'bi-people', iconColor: '#64748B', eventId: 1
-        });
-        return activities;
-    }
-
-    if (dateStr === '2026-11-13') {
-        activities.push({
-            id: 'act_13_lab', type: 'shift', title: 'Ca trực Lab: Kiểm tra thiết bị phòng máy AI', time: '13:30 – 17:00', location: 'Phòng Lab 405, Tòa B', description: 'Cài đặt và kiểm thử mạng máy trạm cho workshop.', status: 'Đã hoàn thành', statusBg: '#F0FDF4', statusColor: '#15803D', borderColor: '#10B981', icon: 'bi-tools', iconColor: '#10B981', eventId: 2, ctvInfo: '1/2 CTV', allowance: '150.000 đ'
-        });
-        return activities;
-    }
+    
 
     // 2. Lấy từ rawShifts nếu ngày này có ca
     if (typeof rawShifts !== 'undefined') {
@@ -9725,41 +9604,8 @@ function renderMonthGrid(year, month) {
 
         let previewHtml = '';
 
-        // Khớp 100% Mockup Image 14
-        if (dateStr === '2026-11-15') {
-            previewHtml = `
-                <div class="d-flex align-items-center gap-1 mb-0.5" style="font-size: 10px; color: #7E22CE; font-weight: 600;">
-                    <span class="rounded-circle d-inline-block" style="width: 5px; height: 5px; background: #9333EA;"></span> Ca 3 – Media
-                </div>
-                <div class="d-flex align-items-center gap-1" style="font-size: 10px; color: #2563EB; font-weight: 600;">
-                    <span class="rounded-circle d-inline-block" style="width: 5px; height: 5px; background: #2563EB;"></span> Nghiệm thu
-                </div>
-            `;
-        } else if (dateStr === '2026-11-07') {
-            previewHtml = `
-                <div class="cal-event-pill" style="background: #FAF5FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <i class="bi bi-calendar-event me-1" style="font-size: 9px;"></i>Workshop AI
-                </div>
-            `;
-        } else if (dateStr === '2026-11-12') {
-            previewHtml = `
-                <div class="cal-event-pill" style="background: #DCFCE7; color: #15803D; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <i class="bi bi-calendar-check me-1" style="font-size: 9px;"></i>Họp BTC
-                </div>
-            `;
-        } else if (dateStr === '2026-11-18') {
-            previewHtml = `
-                <div class="cal-event-pill" style="background: #E0F2FE; color: #0369A1; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <i class="bi bi-tools me-1" style="font-size: 9px;"></i>Ca 2 – Hậu cần
-                </div>
-            `;
-        } else if (dateStr === '2026-11-25') {
-            previewHtml = `
-                <div class="cal-event-pill" style="background: #FFE4E6; color: #BE123C; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; display: flex; align-items: center;">
-                    <i class="bi bi-star me-1" style="font-size: 9px;"></i>TechDay 2026
-                </div>
-            `;
-        } else if (dayActs.length > 0) {
+        
+        if (dayActs.length > 0) {
             dayActs.slice(0, 2).forEach(act => {
                 previewHtml += `
                     <div class="cal-event-pill" style="background: ${act.statusBg}; color: ${act.statusColor}; font-size: 9.5px;" title="${act.title}">
@@ -9771,7 +9617,8 @@ function renderMonthGrid(year, month) {
             if (dayActs.length > 2) {
                 previewHtml += `<div class="text-muted num-tabular ps-1" style="font-size: 9px; font-weight: 600;">+${dayActs.length - 2} lịch nữa</div>`;
             }
-        }
+        }  
+    
 
         const dayOfWeek = new Date(year, month, day).getDay();
         const isSunday = (dayOfWeek === 0);
@@ -9874,59 +9721,6 @@ function renderCalendarSidebarDayDetail(dateStr) {
     const badgeEl = document.getElementById('calActivityCountBadge');
     if (!titleEl || !contentEl) return;
 
-    if (dateStr === '2026-11-15') {
-        titleEl.textContent = 'Thứ 7, 15/11/2026';
-        if (badgeEl) badgeEl.textContent = '2 hoạt động';
-        if (filterTabsEl) filterTabsEl.style.display = 'none';
-
-        contentEl.innerHTML = `
-            <div class="d-flex flex-column gap-2.5">
-                <!-- Hoạt động 1: Ca 3 Media Chuẩn Mockup Image 4 -->
-                <div class="p-3 rounded-3 d-flex align-items-center justify-content-between transition-all" style="background: #FFFFFF; border: 1px solid #E2E8F0; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03);" onclick="navigateToPage('my-shifts')">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: #F3E8FF; color: #9333EA; font-size: 18px;">
-                            <i class="bi bi-camera-video"></i>
-                        </div>
-                        <div>
-                            <div class="text-muted small" style="font-size: 11.5px; font-weight: 500;">08:00 – 12:00</div>
-                            <div class="fw-bold text-dark" style="font-size: 14px;">Ca 3: Media</div>
-                            <div class="text-muted small" style="font-size: 11.5px;">FPoly TechDay 2026</div>
-                        </div>
-                    </div>
-                    <i class="bi bi-chevron-right text-muted opacity-60" style="font-size: 13px;"></i>
-                </div>
-
-                <!-- Hoạt động 2: Hạn nghiệm thu ca 3 Chuẩn Mockup Image 4 -->
-                <div class="p-3 rounded-3 d-flex align-items-center justify-content-between transition-all" style="background: #FFFFFF; border: 1px solid #E2E8F0; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03);" onclick="navigateToPage('my-proof-submission')">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: #DCFCE7; color: #16A34A; font-size: 18px;">
-                            <i class="bi bi-clipboard-check"></i>
-                        </div>
-                        <div>
-                            <div class="fw-bold text-dark" style="font-size: 14px;">Hạn nghiệm thu</div>
-                            <div class="text-muted small" style="font-size: 12px;">Nộp minh chứng ca 3</div>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge rounded-pill fw-semibold" style="background: #FEF3C7; color: #D97706; font-size: 11px; padding: 4px 9px;">
-                            <i class="bi bi-clock me-1"></i>Còn 6 giờ
-                        </span>
-                        <i class="bi bi-chevron-right text-muted opacity-60" style="font-size: 13px;"></i>
-                    </div>
-                </div>
-
-                <!-- Empty state illustration bên dưới Chuẩn Mockup Image 4 -->
-                <div class="text-center py-4 d-flex flex-column align-items-center justify-content-center mt-3">
-                    <div class="mb-2.5 rounded-circle d-inline-flex align-items-center justify-content-center" style="background: #F1F5F9; width: 64px; height: 64px;">
-                        <i class="bi bi-calendar-check" style="font-size: 28px; color: #94A3B8;"></i>
-                    </div>
-                    <span class="text-muted small" style="font-size: 12.5px;">Không còn hoạt động khác</span>
-                </div>
-            </div>
-        `;
-        return;
-    }
-
     const parts = dateStr.split('-');
     const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
     titleEl.textContent = formattedDate;
@@ -10012,7 +9806,7 @@ function renderCalendarSidebarDayDetail(dateStr) {
                 </div>
                 <h6 class="fw-semibold text-dark mb-1" style="font-size: 14px;">Không có hoạt động nào</h6>
                 <p class="text-muted small mb-3" style="font-size: 12.5px; max-width: 260px;">Chưa có ca trực hoặc sự kiện nào được lên lịch trong ngày ${formattedDate}.</p>
-                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1.5 fw-medium d-inline-flex align-items-center gap-1.5 shadow-2xs" style="font-size: 12px;" onclick="openInspectorEventModal(2)">
+                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1.5 fw-medium d-inline-flex align-items-center gap-1.5 shadow-2xs" style="font-size: 12px;" onclick="openAddNoteModal()">
                     <i class="bi bi-plus-lg"></i> Thêm lịch / Ghi chú
                 </button>
             </div>
@@ -10032,63 +9826,7 @@ function renderCalendarUpcomingScheduleInContent() {
     if (titleEl) titleEl.textContent = 'Hoạt động sắp diễn ra';
     if (filterTabsEl) filterTabsEl.style.display = 'none';
 
-    const upcomingItems = [
-        {
-            date: 'CN, 15/11/2026',
-            targetDate: '2026-11-15',
-            title: 'Khai mạc TechDay 2026',
-            subtitle: 'Hỗ trợ tổ chức (3 ca)',
-            status: 'Đang tuyển',
-            statusColor: '#EA580C',
-            statusBg: '#FFF1EB',
-            borderColor: '#EA580C',
-            eventId: 1
-        },
-        {
-            date: 'T4, 18/11/2026',
-            targetDate: '2026-11-18',
-            title: 'Bảo trì phòng máy Lab AI',
-            subtitle: 'Hậu cần kỹ thuật (2 ca)',
-            status: 'Ca của tôi',
-            statusColor: '#0284C7',
-            statusBg: '#F0F9FF',
-            borderColor: '#0284C7',
-            eventId: 2
-        },
-        {
-            date: 'T6, 20/11/2026',
-            targetDate: '2026-11-20',
-            title: 'Khai mạc Giải thể thao sinh viên',
-            subtitle: 'Truyền thông & trọng tài (2 ca)',
-            status: 'Đã xác nhận',
-            statusColor: '#16A34A',
-            statusBg: '#F0FDF4',
-            borderColor: '#16A34A',
-            eventId: 3
-        },
-        {
-            date: 'CN, 22/11/2026',
-            targetDate: '2026-11-22',
-            title: 'Triển lãm FPoly Creative',
-            subtitle: 'Hướng dẫn & Media (3 ca)',
-            status: 'Sắp diễn ra',
-            statusColor: '#9333EA',
-            statusBg: '#FAF5FF',
-            borderColor: '#9333EA',
-            eventId: 4
-        },
-        {
-            date: 'T7, 28/11/2026',
-            targetDate: '2026-11-28',
-            title: 'Hỗ trợ Gian hàng CLB',
-            subtitle: 'Tổ chức sự kiện (2 ca)',
-            status: 'Đang tuyển',
-            statusColor: '#EA580C',
-            statusBg: '#FFF1EB',
-            borderColor: '#EA580C',
-            eventId: 6
-        }
-    ];
+    const upcomingItems = [];
 
     contentEl.innerHTML = `
         <div class="d-flex flex-column gap-2.5">
