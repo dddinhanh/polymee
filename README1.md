@@ -35,7 +35,7 @@ Image SQL Server của Microsoft hiện chỉ hỗ trợ kiến trúc `amd64`. N
 3. Khi khởi tạo container SQL Server bằng lệnh, thêm cờ `--platform linux/amd64`:
 
 ```bash
-docker run --platform linux/amd64 -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<Mật_khẩu_SA_Docker>" \
+docker run --platform linux/amd64 -e "ACCEPT_EULA=Y" -e "ThayBangMatKhauManh123!" \
   -p 14331:1433 --name polymee-sqlserver \
   -d mcr.microsoft.com/mssql/server:2022-latest
 ```
