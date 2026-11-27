@@ -141,3 +141,6 @@ Tất cả tài khoản mẫu sau khi nạp Seed data dùng chung mật khẩu: 
 * **Chạy script SQL bị lỗi `Invalid object name` hoặc thiếu cột:**
   * Kiểm tra xem đã kết nối đúng cổng Docker `127.0.0.1,14331` (tránh nhầm với SQL Server cài sẵn trên cổng `1433`) và đúng database `Polymeet` (không phải `master`) hay chưa.
   * Nếu SSMS (Windows) hiện gạch chân đỏ ảo ngay sau khi tạo bảng, nhấn **`Ctrl + Shift + R`** để làm mới bộ nhớ đệm IntelliSense.
+
+Lệnh tạo database docker cho window
+  docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=ThayBangMatKhauManh123!" -p 127.0.0.1:14331:1433 --name polymee-sql -v polymee_sql_data:/var/opt/mssql -d mcr.microsoft.com/mssql/server:2022-latest
